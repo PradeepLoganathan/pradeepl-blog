@@ -13,9 +13,9 @@ summary: The Open Policy Agent (OPA) is an open-source engine to author declarat
 ShowToc: true
 TocOpen: false
 images:
-  - https://pradeeploganathan.com/wp-content/uploads/2021/12/kristin-wilson-z3htkdHUh5w-unsplash-1280x640.jpg
+  - introduction-to-open-policy-agent-opa-cover.jpg
 cover:
-    image: "https://pradeeploganathan.com/wp-content/uploads/2021/12/kristin-wilson-z3htkdHUh5w-unsplash-1280x640.jpg"
+    image: "introduction-to-open-policy-agent-opa-cover.jpg"
     alt: "Introduction to Open Policy Agent (OPA)"
     caption: "Introduction to Open Policy Agent (OPA)"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
@@ -33,7 +33,7 @@ A modern approach to resolve this is to enable entitlement externalization. Enti
 3. Policy Decision Point (PDP) – The PDP provides the actual entitlement decision. The PDP applies a set of policies to the request to determine an allow or deny outcome.
 4. Policy Information Point (PIP) – The PIP supplies additional data and information to the PDP to make entitlement decisions.
 
-![Policy externalization - Architecture](https://pradeeploganathan.com/wp-content/uploads/2021/12/Policy-externalization-Architecture1-1024x683.png)
+![Policy externalization - Architecture](Policy-externalization-Architecture.png)
 
 Entitlement Externalization – Services
 
@@ -41,7 +41,7 @@ OPA follows a similar architecture. OPA accepts structured data as input (JSON) 
 
 OPA can be used to define and enforce policies across microservices components, CI/CD pipelines, API gateways et al. OPA is utilized for several use cases like authorizing terraform based infrastructure changes, REST API authorization etc. OPA is additionally used for Kubernetes policy enforcement as an Admission Controller. Many enterprises use OPA to fulfil the above use cases. Chef uses OPA to bake in IAM capabilities in their [Chef automate product](https://www.youtube.com/watch?v=jrrW855xL3s). Netflix uses OPA to regulate access to its API resources. Other than Netflix, Cloudflare, Pinterest, Intuit, Capital One, State Street, and many others use OPA as a policy definition and enforcement tool. OPA became a CNCF sandbox project in 2018 and graduated from CMCF in February 2021.
 
-![](https://pradeeploganathan.com/wp-content/uploads/2021/12/OPA-Everywhere-1024x521.png)
+![](OPA-Everywhere.png)
 
 Add fine grained policy management to multiple projects
 
@@ -57,7 +57,7 @@ Using OPA provides the following benefits
 
 ## OPA Architecture
 
-![](https://pradeeploganathan.com/wp-content/uploads/2021/12/OPA-design.png)
+![](OPA-design.png)
 
 Image source : <https://www.openpolicyagent.org/docs/>
 
@@ -132,7 +132,7 @@ We can run OPA as a server using the –server flag as below.
 
 This starts a server which runs by default at port 8181. We can use this to build policies and test them.
 
-![](https://pradeeploganathan.com/wp-content/uploads/2021/12/OPA-Server.png)
+![](OPA-Server.png)
 
 ## OPA Server
 
