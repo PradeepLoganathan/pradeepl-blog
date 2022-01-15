@@ -8,6 +8,7 @@ resources
 .firebase
 .firebase/**
 
+
 *.cache
 *.identifier
 .firebase/hosting.cHVibGlj.cache
