@@ -9,16 +9,20 @@ tags:
   - Gatekeeper
   - Kubernetes
 slug: kubernetes/introduction-to-open-policy-agent-opa/
-summary: The Open Policy Agent (OPA) is an open-source engine to author declarative policies as code and use those policies as a component of the decision-making process. OPA provides a high-level declarative language ‘Rego’ to author policy as code. Declaring policies as code allows us to persist them in source control and version them.
+summary: The Open Policy Agent (OPA) is an open-source engine to author declarative policies as code and use those policies as a component of the decision-making process. OPA provides a high-level declarative language ‘Rego’ to author policy as code.
 ShowToc: true
 TocOpen: false
 images:
-  - introduction-to-open-policy-agent-opa-cover.jpg
+  - blog/kubernetes/introduction-to-open-policy-agent-opa/introduction-to-open-policy-agent-opa-cover.jpg
 cover:
-    image: "introduction-to-open-policy-agent-opa-cover.jpg"
+    image: "blog/kubernetes/introduction-to-open-policy-agent-opa/introduction-to-open-policy-agent-opa-cover.jpg"
     alt: "Introduction to Open Policy Agent (OPA)"
     caption: "Introduction to Open Policy Agent (OPA)"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 
 ---
 

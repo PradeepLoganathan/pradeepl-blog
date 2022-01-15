@@ -55,7 +55,7 @@ params:
   author: Pradeep Loganathan
   comments: true
   images:
-    - /images/rizin_preview.png
+    - Pradeep-Loganathan.jpeg
   DateFormat: 'January 2, 2006'
   timeFormat: 'h:mm a'
   dateTimeFormat: 'MMMM Do, YYYY h:mm a'
@@ -68,9 +68,9 @@ params:
 
   
   header:
-    title: 'rizin'
-    imageUrl: '/images/rizin.svg'
-    subtitle: 'Free and Open Source Reverse Engineering Framework'
+    title: 'Pradeep Loganathan'
+    imageUrl: 'Pradeep-Loganathan.jpeg'
+    subtitle: 'cc'
 
   ShowShareButtons: true
   ShowReadingTime: true
