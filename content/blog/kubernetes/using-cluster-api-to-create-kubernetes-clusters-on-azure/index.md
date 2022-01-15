@@ -1,7 +1,7 @@
 ---
 title: "Using Cluster Api to Create Kubernetes Clusters on Azure"
-lastmod: 2022-01-12T15:55:13+10:00
-date: 2022-01-11T15:55:13+10:00
+lastmod: 2021-12-14T15:55:13+10:00
+date: 2021-12-14T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
 tags: 

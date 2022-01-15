@@ -1,7 +1,7 @@
 ---
 title: "Getting started with GraphQL"
-lastmod: 2022-01-12T15:55:13+10:00
-date: 2022-01-11T15:55:13+10:00
+lastmod: 2021-04-28T15:55:13+10:00
+date: 2021-04-28T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
 tags: 

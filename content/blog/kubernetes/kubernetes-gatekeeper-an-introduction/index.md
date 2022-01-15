@@ -1,7 +1,7 @@
 ---
 title: "Kubernetes Gatekeeper – An introduction"
-lastmod: 2022-01-12T15:55:13+10:00
-date: 2022-01-11T15:55:13+10:00
+lastmod: 2022-01-07T15:55:13+10:00
+date: 2022-01-07T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
 tags: 
