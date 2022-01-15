@@ -12,23 +12,26 @@ summary: Cluster API aims to simplify the creation, configuration, upgrade, down
 ShowToc: true
 TocOpen: false
 images:
-  - https://pradeeploganathan.com/wp-content/uploads/2021/12/datacenter-racks-1280x640.jpg
+  - datacenter-racks.jpg
 cover:
-    image: "https://pradeeploganathan.com/wp-content/uploads/2021/12/datacenter-racks-1280x640.jpg"
+    image: "datacenter-racks.jpg"
     alt: "Kubernetes Cluster API - CAPI - An Introduction"
     caption: "Kubernetes Cluster API - CAPI - An Introduction"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 ## Introduction
 
-There are many ways to get a Kubernetes cluster up and running. There are over 125+ different K8s certified distributions, hosting providers, and installers. A comprehensive list is [here](https://www.cncf.io/certification/software-conformance/). Most of the public cloud providers offer managed Kubernetes solutions (AKS, EKS, GKE…) that abstract away the K8s cluster creation process behind their proprietary APIs. These offer you a fantastic way to get started on creating and running K8s cluster workloads on their specific platforms. Another option is to use tooling such as [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/),[kOps](https://kops.sigs.k8s.io/), [Kubespray](https://github.com/kubernetes-sigs/kubespray), and many others. These tools provide the necessary functionality to create clusters on different cloud providers as well as on-premises infrastructure, enabling multi-cloud and hybrid-cloud scenarios. If you are of the more adventurous kind, then you can try and create it from scratch. [Kelsey Hightower](https://twitter.com/kelseyhightower) demonstrates one such method [here](https://github.com/kelseyhightower/kubernetes-the-hard-way). This involves everything from installing custom Linux services, generating TLS certificates, and a host of other steps.
+There are many ways to get a Kubernetes cluster up and running. There are over 125+ different K8s certified distributions, hosting providers, and installers. A comprehensive list is [here](https://www.cncf.io/certification/software-conformance/). Most of the public cloud providers offer managed Kubernetes solutions (AKS, EKS, GKE…) that abstract away the K8s cluster creation process behind their proprietary APIs. These offer you a fantastic way to get started on creating and running K8s cluster workloads on their specific platforms. Another option is to use tooling such as [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/),[kOps](https://kops.sigs.k8s.io/), [Kubespray](https://github.com/kubernetes-sigs/kubespray), and many others. These tools provide the necessary functionality to create clusters on different cloud providers as well as on-premises infrastructure, enabling multi-cloud and hybrid-cloud scenarios. If you are of the more adventurous kind, then you can try and create it from scratch. [Kelsey Hightower](https://twitter.com/kelseyhightower) demonstrates one such method [here](https://github.com/kelseyhightower/kubernetes-the-hard-way). This involves everything from installing custom Linux services, generating TLS certificates, and a host of other steps.
 
 ## Platform Diversity
 
 A survey by [Anchore](https://anchore.com/software-supply-chain-security-report/) demonstrates the diversity of Kubernetes platforms used across the board.
 
-![Container platform diversity](https://pradeeploganathan.com/wp-content/uploads/2021/12/Container_platforms_used-1024x574.png)
+![Container platform diversity](Container_platforms_used.png)
 
 While having multiple options to create a Kubernetes cluster is great, it results in massive operational and governance challenges. If you want to migrate your K8s cluster to a different cloud provider, you will need to rewrite your IaC code completely. If you need to change your bootstrap tool you would need to rewrite your IaC code again. Cluster creation is just one part of the problem, we need to perform cluster upgrades, deletion, scaling operations, etc. Cluster lifecycle management is challenging, especially if you are managing a fleet of clusters. Each of the above cluster creation options has strong opinions on the lifecycle management process of the cluster. All these problems become exacerbated as we create multiple clusters sometimes across cloud providers and on-premises systems. Additionally, a cluster requires other components such as load balancers, VPC/VNET and many others to provide the necessary functionality. Each of the above providers has highly opinionated and proprietary mechanisms to provision these into the cluster.
 
@@ -77,7 +80,7 @@ The Cluster API is implemented as several custom resource definitions (CRD) and 
 
 The Cluster API provides four new CRD’s which map closely to familiar resources such as Pods, Replicasets and Deployments. It uses a Cluster resource at the highest level, and then MachineDeployments and MachineSets, and lastly Machines at the lowest level.
 
-![](https://pradeeploganathan.com/wp-content/uploads/2021/12/CAPI-CRD-types-1-1024x296.png)
+![](CAPI-CRD-types.png)
 
 Let us now understand each of these CRD’s better.
 
@@ -85,209 +88,210 @@ Let us now understand each of these CRD’s better.
 
 The _Cluster_ resource represents a Kubernetes cluster with necessary configuration parameters such as pod network CIDR, service network CIDR, API endpoints, Service domains etc. An infrastructure provider uses this information to create a Kubernetes cluster. This template was generated to deploy a cluster on azure.
 
-{{< highlight yaml "linenos=table, linenostart=1" >}}
-    apiVersion: cluster.x-k8s.io/v1beta1
-    kind: Cluster
-    metadata:
-      labels:
-        cni: calico
-      name: pradeepl-cluster
-      namespace: default
-    spec:
-      clusterNetwork:
-        pods:
-          cidrBlocks:
-          - 192.168.0.0/16
-      controlPlaneRef:
-        apiVersion: controlplane.cluster.x-k8s.io/v1beta1
-        kind: KubeadmControlPlane
-        name: pradeepl-cluster-control-plane
-      infrastructureRef:
-        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-        kind: AzureCluster
-        name: pradeepl-cluster
-    ---
+```yaml
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  labels:
+    cni: calico
+  name: pradeepl-cluster
+  namespace: default
+spec:
+  clusterNetwork:
+    pods:
+      cidrBlocks:
+      - 192.168.0.0/16
+  controlPlaneRef:
     apiVersion: controlplane.cluster.x-k8s.io/v1beta1
     kind: KubeadmControlPlane
-    metadata:
-      name: pradeepl-cluster-control-plane
-      namespace: default
-    spec:
-      kubeadmConfigSpec:
-        clusterConfiguration:
-          apiServer:
-            extraArgs:
-              cloud-config: /etc/kubernetes/azure.json
-              cloud-provider: azure
-            extraVolumes:
-            - hostPath: /etc/kubernetes/azure.json
-              mountPath: /etc/kubernetes/azure.json
-              name: cloud-config
-              readOnly: true
-            timeoutForControlPlane: 20m
-          controllerManager:
-            extraArgs:
-              allocate-node-cidrs: "false"
-              cloud-config: /etc/kubernetes/azure.json
-              cloud-provider: azure
-              cluster-name: pradeepl-cluster
-            extraVolumes:
-            - hostPath: /etc/kubernetes/azure.json
-              mountPath: /etc/kubernetes/azure.json
-              name: cloud-config
-              readOnly: true
-          etcd:
-            local:
-              dataDir: /var/lib/etcddisk/etcd
-              extraArgs:
-                quota-backend-bytes: "8589934592"
-        diskSetup:
-          filesystems:
-          - device: /dev/disk/azure/scsi1/lun0
-            extraOpts:
-            - -E
-            - lazy_itable_init=1,lazy_journal_init=1
-            filesystem: ext4
-            label: etcd_disk
-          - device: ephemeral0.1
-            filesystem: ext4
-            label: ephemeral0
-            replaceFS: ntfs
-          partitions:
-          - device: /dev/disk/azure/scsi1/lun0
-            layout: true
-            overwrite: false
-            tableType: gpt
-        files:
-        - contentFrom:
-            secret:
-              key: control-plane-azure.json
-              name: pradeepl-cluster-control-plane-azure-json
-          owner: root:root
-          path: /etc/kubernetes/azure.json
-          permissions: "0644"
-        initConfiguration:
-          nodeRegistration:
-            kubeletExtraArgs:
-              azure-container-registry-config: /etc/kubernetes/azure.json
-              cloud-config: /etc/kubernetes/azure.json
-              cloud-provider: azure
-            name: '{{ ds.meta_data["local_hostname"] }}'
-        joinConfiguration:
-          nodeRegistration:
-            kubeletExtraArgs:
-              azure-container-registry-config: /etc/kubernetes/azure.json
-              cloud-config: /etc/kubernetes/azure.json
-              cloud-provider: azure
-            name: '{{ ds.meta_data["local_hostname"] }}'
-        mounts:
-        - - LABEL=etcd_disk
-          - /var/lib/etcddisk
-        postKubeadmCommands: []
-        preKubeadmCommands: []
-      machineTemplate:
-        infrastructureRef:
-          apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-          kind: AzureMachineTemplate
-          name: pradeepl-cluster-control-plane
-      replicas: 3
-      version: v1.22.0
-    ---
+    name: pradeepl-cluster-control-plane
+  infrastructureRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AzureCluster
-    metadata:
-      name: pradeepl-cluster
-      namespace: default
-    spec:
-      identityRef:
-        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-        kind: AzureClusterIdentity
-        name: cluster-identity
-      location: eastus
-      networkSpec:
-        subnets:
-        - name: control-plane-subnet
-          role: control-plane
-        - name: node-subnet
-          natGateway:
-            name: node-natgateway
-          role: node
-        vnet:
-          name: pradeepl-cluster-vnet
-      resourceGroup: pradeepl-cluster
-      subscriptionID: 345345345-4545-454545-7567657-345345345
-{{< / highlight >}}
+    name: pradeepl-cluster
+---
+apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+kind: KubeadmControlPlane
+metadata:
+  name: pradeepl-cluster-control-plane
+  namespace: default
+spec:
+  kubeadmConfigSpec:
+    clusterConfiguration:
+      apiServer:
+        extraArgs:
+          cloud-config: /etc/kubernetes/azure.json
+          cloud-provider: azure
+        extraVolumes:
+        - hostPath: /etc/kubernetes/azure.json
+          mountPath: /etc/kubernetes/azure.json
+          name: cloud-config
+          readOnly: true
+        timeoutForControlPlane: 20m
+      controllerManager:
+        extraArgs:
+          allocate-node-cidrs: "false"
+          cloud-config: /etc/kubernetes/azure.json
+          cloud-provider: azure
+          cluster-name: pradeepl-cluster
+        extraVolumes:
+        - hostPath: /etc/kubernetes/azure.json
+          mountPath: /etc/kubernetes/azure.json
+          name: cloud-config
+          readOnly: true
+      etcd:
+        local:
+          dataDir: /var/lib/etcddisk/etcd
+          extraArgs:
+            quota-backend-bytes: "8589934592"
+    diskSetup:
+      filesystems:
+      - device: /dev/disk/azure/scsi1/lun0
+        extraOpts:
+        - -E
+        - lazy_itable_init=1,lazy_journal_init=1
+        filesystem: ext4
+        label: etcd_disk
+      - device: ephemeral0.1
+        filesystem: ext4
+        label: ephemeral0
+        replaceFS: ntfs
+      partitions:
+      - device: /dev/disk/azure/scsi1/lun0
+        layout: true
+        overwrite: false
+        tableType: gpt
+    files:
+    - contentFrom:
+        secret:
+          key: control-plane-azure.json
+          name: pradeepl-cluster-control-plane-azure-json
+      owner: root:root
+      path: /etc/kubernetes/azure.json
+      permissions: "0644"
+    initConfiguration:
+      nodeRegistration:
+        kubeletExtraArgs:
+          azure-container-registry-config: /etc/kubernetes/azure.json
+          cloud-config: /etc/kubernetes/azure.json
+          cloud-provider: azure
+        name: '{{ ds.meta_data["local_hostname"] }}'
+    joinConfiguration:
+      nodeRegistration:
+        kubeletExtraArgs:
+          azure-container-registry-config: /etc/kubernetes/azure.json
+          cloud-config: /etc/kubernetes/azure.json
+          cloud-provider: azure
+        name: '{{ ds.meta_data["local_hostname"] }}'
+    mounts:
+    - - LABEL=etcd_disk
+      - /var/lib/etcddisk
+    postKubeadmCommands: []
+    preKubeadmCommands: []
+  machineTemplate:
+    infrastructureRef:
+      apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+      kind: AzureMachineTemplate
+      name: pradeepl-cluster-control-plane
+  replicas: 3
+  version: v1.22.0
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: AzureCluster
+metadata:
+  name: pradeepl-cluster
+  namespace: default
+spec:
+  identityRef:
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+    kind: AzureClusterIdentity
+    name: cluster-identity
+  location: eastus
+  networkSpec:
+    subnets:
+    - name: control-plane-subnet
+      role: control-plane
+    - name: node-subnet
+      natGateway:
+        name: node-natgateway
+      role: node
+    vnet:
+      name: pradeepl-cluster-vnet
+  resourceGroup: pradeepl-cluster
+  subscriptionID: 345345345-4545-454545-7567657-345345345
+
+```
 
 #### MachineDeployment
 
 A _MachineDeployment_ is a definition for a well-managed set of machines. It is similar to a deployment. It manages the MachineSet and allows for rollout/rollback. Each change to a MachineDeployment creates and scales up a new MachineSet to replace the old one. It reconciles changes to the Machine resources, by having a solid rolling-out strategy between MachineSets configurations similar to Deployments.
 
-{{< highlight yaml "linenos=table, linenostart=1" >}}
-    apiVersion: cluster.x-k8s.io/v1beta1
-    kind: MachineDeployment
-    metadata:
-      name: pradeepl-cluster-md-0
-      namespace: default
+```yaml
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachineDeployment
+metadata:
+  name: pradeepl-cluster-md-0
+  namespace: default
+spec:
+  clusterName: pradeepl-cluster
+  replicas: 3
+  selector:
+    matchLabels: null
+  template:
     spec:
+      bootstrap:
+        configRef:
+          apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+          kind: KubeadmConfigTemplate
+          name: pradeepl-cluster-md-0
       clusterName: pradeepl-cluster
-      replicas: 3
-      selector:
-        matchLabels: null
-      template:
-        spec:
-          bootstrap:
-            configRef:
-              apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
-              kind: KubeadmConfigTemplate
-              name: pradeepl-cluster-md-0
-          clusterName: pradeepl-cluster
-          infrastructureRef:
-            apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-            kind: AzureMachineTemplate
-            name: pradeepl-cluster-md-0
-          version: v1.22.0
-    
-    ---
-    apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-    kind: AzureMachineTemplate
-    metadata:
-      name: pradeepl-cluster-md-0
-      namespace: default
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+        kind: AzureMachineTemplate
+        name: pradeepl-cluster-md-0
+      version: v1.22.0
+
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: AzureMachineTemplate
+metadata:
+  name: pradeepl-cluster-md-0
+  namespace: default
+spec:
+  template:
     spec:
-      template:
-        spec:
-          osDisk:
-            diskSizeGB: 128
-            osType: Linux
-          sshPublicKey: ""
-          vmSize: Standard_D2s_v3
-    
-    ---
-    apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
-    kind: KubeadmConfigTemplate
-    metadata:
-      name: pradeepl-cluster-md-0
-      namespace: default
+      osDisk:
+        diskSizeGB: 128
+        osType: Linux
+      sshPublicKey: ""
+      vmSize: Standard_D2s_v3
+
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+kind: KubeadmConfigTemplate
+metadata:
+  name: pradeepl-cluster-md-0
+  namespace: default
+spec:
+  template:
     spec:
-      template:
-        spec:
-          files:
-          - contentFrom:
-              secret:
-                key: worker-node-azure.json
-                name: pradeepl-cluster-md-0-azure-json
-            owner: root:root
-            path: /etc/kubernetes/azure.json
-            permissions: "0644"
-          joinConfiguration:
-            nodeRegistration:
-              kubeletExtraArgs:
-                azure-container-registry-config: /etc/kubernetes/azure.json
-                cloud-config: /etc/kubernetes/azure.json
-                cloud-provider: azure
-              name: '{{ ds.meta_data["local_hostname"] }}'
-          preKubeadmCommands: []
-{{< /highlight >}}
+      files:
+      - contentFrom:
+          secret:
+            key: worker-node-azure.json
+            name: pradeepl-cluster-md-0-azure-json
+        owner: root:root
+        path: /etc/kubernetes/azure.json
+        permissions: "0644"
+      joinConfiguration:
+        nodeRegistration:
+          kubeletExtraArgs:
+            azure-container-registry-config: /etc/kubernetes/azure.json
+            cloud-config: /etc/kubernetes/azure.json
+            cloud-provider: azure
+          name: '{{ ds.meta_data["local_hostname"] }}'
+      preKubeadmCommands: []
+```
 
 #### MachineSet
 

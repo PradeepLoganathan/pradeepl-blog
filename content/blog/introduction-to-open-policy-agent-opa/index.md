@@ -13,9 +13,9 @@ summary: The Open Policy Agent (OPA) is an open-source engine to author declarat
 ShowToc: true
 TocOpen: false
 images:
-  - blog/kubernetes/introduction-to-open-policy-agent-opa/introduction-to-open-policy-agent-opa-cover.jpg
+  - introduction-to-open-policy-agent-opa-cover.jpg
 cover:
-    image: "blog/kubernetes/introduction-to-open-policy-agent-opa/introduction-to-open-policy-agent-opa-cover.jpg"
+    image: "introduction-to-open-policy-agent-opa-cover.jpg"
     alt: "Introduction to Open Policy Agent (OPA)"
     caption: "Introduction to Open Policy Agent (OPA)"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
