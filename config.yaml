@@ -1,0 +1,141 @@
+baseURL: https://pradeepl.com
+title: Pradeep Loganathan's Blog
+paginate: 5
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+enableGitInfo: true
+
+googleAnalytics: G-LB9Q9F622G
+
+minify:
+  minifyOutput: true
+  minifyCSS: true
+  minifyJS: true
+  minifyHTML: true
+  minifyURLs: true
+
+outputs:
+    home:
+        - HTML
+        - RSS
+        - JSON # is necessary
+
+menu:
+  main:
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 50
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 40
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 30
+    - identifier: blog
+      name: Blog
+      url: /blog/
+      weight: 20
+    - identifier: Search
+      name: Search
+      url: /search/
+      weight: 10
+
+params:
+  env: production
+  title: Pradeep Loganathan's Blog
+  description: 'My technical notes and thoughts on software engineering, programming, and life.'
+  author: Pradeep Loganathan
+  comments: true
+  images:
+    - /images/rizin_preview.png
+  DateFormat: 'January 2, 2006'
+  timeFormat: 'h:mm a'
+  dateTimeFormat: 'MMMM Do, YYYY h:mm a'
+  language: en
+
+  editPost:
+    URL: "https://github.com/blog_content/content"
+    Text: "Edit this post on github" # edit text
+    appendFilePath: true # to append file path to Edit link
+
+  
+  header:
+    title: 'rizin'
+    imageUrl: '/images/rizin.svg'
+    subtitle: 'Free and Open Source Reverse Engineering Framework'
+
+  ShowShareButtons: true
+  ShowReadingTime: true
+  ShowAuthor: true
+  ShowBreadCrumbs: true
+  ShowTags: true
+  ShowCategories: true
+  ShowDate: true
+  ShowPostNavLinks: true
+
+
+  homeInfoParams:
+      Title: "Hi there \U0001F44B"
+      Content: Welcome to my blog.
+     
+
+  socialIcons: # optional
+    - name: "twitter"
+      url: "https://twitter.com/pradeepl"
+    - name: "facebook"
+      url: "https://facebook.com/pradeepl"
+    - name: "linkedin"
+      url: "https://www.linkedin.com/in/pradeeploganathan/"
+    - name: "github"
+      url: "https://github.com/pradeeploganathan"
+    - name: stackoverflow
+      url: "https://stackoverflow.com"
+  
+  # analytics:
+  #   google:
+  #     SiteVerificationTag: "XYZabc"
+  #   bing:
+  #     SiteVerificationTag: "XYZabc"
+    
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
+
+
+  profileMode:
+    enabled: true
+    title: "Notes from my journey designing and building amazing systems with amazing teams" # optional default will be site title
+    subtitle: "Software engineering notes"
+    imageUrl: "Pradeep-Loganathan.jpeg" # optional
+    imageTitle: "<title of image as alt>" # optional
+    imageWidth: 120 # custom size
+    imageHeight: 120 # custom size
+    buttons:
+      - name: feed
+        url: "/index.xml"
+      - name: tags
+        url: "/tags/"
+  
+  
+assets:
+    favicon: "/favicon.ico"
+    favicon16x16:  "/favicon-16x16.png"
+    favicon32x32:  "/favicon-32x32.png"
+    apple_touch_icon:  "/apple-touch-icon.png"
+   
+module:
+  imports:
+    - path: github.com/adityatelange/hugo-PaperMod
