@@ -13,9 +13,9 @@ summary: Gatekeeper is a Kubernetes-native policy controller that enables resour
 ShowToc: true
 TocOpen: false
 images:
-  - https://pradeeploganathan.com/wp-content/uploads/2021/12/rafael-hoyos-weht-FnabIfupjwo-unsplash-scaled.jpg
+  - rafael-hoyos-weht-FnabIfupjwo-unsplash.jpg
 cover:
-    image: "https://pradeeploganathan.com/wp-content/uploads/2021/12/rafael-hoyos-weht-FnabIfupjwo-unsplash-scaled.jpg"
+    image: "rafael-hoyos-weht-FnabIfupjwo-unsplash.jpg"
     alt: "Kubernetes Gatekeeper – An introduction"
     caption: "Kubernetes Gatekeeper – An introduction"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
@@ -48,39 +48,39 @@ A constraint template is a custom resource definition (CRD) and follows the stan
 
 The constraint template to implement the above policy can be defined as below
 
-{{< highlight yaml "linenos=table, linenostart=1" >}}
-    apiVersion: templates.gatekeeper.sh/v1beta1
-    kind: ConstraintTemplate
-    metadata:
-      name: clusterrequiredlabels
-      annotations:
-       description: "Constraint to enforce required labels"
+```yaml
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: clusterrequiredlabels
+  annotations:
+   description: "Constraint to enforce required labels"
+spec:
+  crd:
     spec:
-      crd:
-        spec:
-          names:
-            kind: ClusterRequiredLabels
-          validation:
-            # Schema defn for 'parameters' field
-            openAPIV3Schema:
-              properties:
-                labels:
-                  type: array
-                  items: 
-                    type: string
-      targets:
-        - target: admission.k8s.gatekeeper.sh
-          rego: |
-            package clusterrequiredlabels
-    
-            violation[{"msg": msg, "details": {"missing_labels": missing}}] {
-              provided := {label | input.review.object.metadata.labels[label]}
-              required := {label | label := input.parameters.labels[_]}
-              missing := required - provided
-              count(missing) > 0
-              msg := sprintf("you must provide labels: %v", [missing])
-            }     
-{{< /highlight >}}
+      names:
+        kind: ClusterRequiredLabels
+      validation:
+        # Schema defn for 'parameters' field
+        openAPIV3Schema:
+          properties:
+            labels:
+              type: array
+              items: 
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package clusterrequiredlabels
+
+        violation[{"msg": msg, "details": {"missing_labels": missing}}] {
+          provided := {label | input.review.object.metadata.labels[label]}
+          required := {label | label := input.parameters.labels[_]}
+          missing := required - provided
+          count(missing) > 0
+          msg := sprintf("you must provide labels: %v", [missing])
+        }     
+```
 
 Let us understand the above constraint template definition in detail. It is composed of three main parts.
 
@@ -96,21 +96,21 @@ A constraint is an instance of the constraint template. It supplies the constrai
 
 Let us now create a constraint resource to implement the constraint template defined above. The constraint template checks for the presence of required labels on the Kubernetes resources being created. We can use this constraint template to ensure that any namespace created has a costcenter label. The constraint resource is defined as below
 
-{{< highlight yaml "linenos=table, linenostart=1" >}}
-    apiVersion: constraints.gatekeeper.sh/v1beta1
-    kind: ClusterRequiredLabels
-    metadata:
-      name: costcenterlabelrequired
-      annotations:
-        description: "Constraint to enforce required labels"
-    spec:
-      match:
-        kinds:
-          - apiGroups: [""]
-            kinds: ["Namespace"]
-      parameters:
-        labels: ["costcenter"]
-{{< /highlight >}}
+```yaml
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: ClusterRequiredLabels
+metadata:
+  name: costcenterlabelrequired
+  annotations:
+    description: "Constraint to enforce required labels"
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Namespace"]
+  parameters:
+    labels: ["costcenter"]
+```
 
 The constraint CRD is composed of two main parts
 
@@ -119,21 +119,21 @@ The constraint CRD is composed of two main parts
 
 We can use the same constraint template to define another constraint specifying environment as a required label. The constraint definition is below
 
-{{< highlight yaml "linenos=table, linenostart=1" >}}
-    apiVersion: constraints.gatekeeper.sh/v1beta1
-    kind: ClusterRequiredLabels
-    metadata:
-      name: costcenterlabelrequired
-      annotations:
-        description: "Constraint to enforce required labels"
-    spec:
-      match:
-        kinds:
-          - apiGroups: [""]
-            kinds: ["Namespace"]
-      parameters:
-        labels: ["environment"]
-{{< /highlight >}}
+```yaml
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: ClusterRequiredLabels
+metadata:
+  name: costcenterlabelrequired
+  annotations:
+    description: "Constraint to enforce required labels"
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Namespace"]
+  parameters:
+    labels: ["environment"]
+```
 
 The above constraints can be used to ensure that namespaces created in a cluster have the necessary labels. The constraints are parameterized and are portable. They can be tested easily as they use rego to define the policy.
 
