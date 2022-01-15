@@ -1,0 +1,36 @@
+baseURL: https://pradeepl.com
+title: Pradeep Loganathan's Blog
+paginate: 5
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+enableGitInfo: true
+
+googleAnalytics: G-LB9Q9F622G
+
+minify:
+  minifyOutput: true
+  minifyCSS: true
+  minifyJS: true
+  minifyHTML: true
+  minifyURLs: true
+
+outputs:
+    home:
+        - HTML
+        - RSS
+        - JSON # is necessary
+
+assets:
+    favicon: "/favicon.ico"
+    favicon16x16:  "/favicon-16x16.png"
+    favicon32x32:  "/favicon-32x32.png"
+    apple_touch_icon:  "/apple-touch-icon.png"
+   
+module:
+  imports:
+    - path: github.com/adityatelange/hugo-PaperMod
