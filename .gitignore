@@ -6,6 +6,8 @@ resources
 
 #ignore firebase cache
 .firebase
+.firebase/**
 
 *.cache
 *.identifier
+.firebase/hosting.cHVibGlj.cache
