@@ -27,7 +27,7 @@ editPost:
   appendFilePath: true # to append file path to Edit link
 ---
 
-This blog post is a follow up to my [previous post](https://pradeepl.com/kubernetes/opa-gatekeeper-an-introduction/) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster locally.
+This blog post is a follow up to my [previous post](https://pradeepl.com/blog/kubernetes/kubernetes-gatekeeper-an-introduction/) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster locally.
 
 ## Create Cluster
 
