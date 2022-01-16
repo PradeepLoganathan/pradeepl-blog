@@ -7,4 +7,4 @@ categories:
   - "video"
 ---
 
-https://www.youtube.com/watch?v=3smeKjD7MCE&t=2169s
+[![Youtube Video](https://www.youtube.com/watch?v=3smeKjD7MCE/0.jpg)](https://www.youtube.com/watch?v=3smeKjD7MCE)

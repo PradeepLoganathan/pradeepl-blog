@@ -6,4 +6,6 @@ categories:
   - "video"
 ---
 
-https://www.youtube.com/watch?v=wuBArX8FuCw%20
+[![Youtube Video](https://www.youtube.com/watch?v=wuBArX8FuCw/0.jpg)](https://www.youtube.com/watch?v=wuBArX8FuCw)
+
+https://www.youtube.com/watch?v=wuBArX8FuCw

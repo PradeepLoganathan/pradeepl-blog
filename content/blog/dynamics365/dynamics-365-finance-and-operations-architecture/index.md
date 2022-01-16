@@ -1,11 +1,29 @@
 ---
 title: "Dynamics 365 Finance and operations - Architecture"
-date: "2021-03-26"
+lastmod: 2021-03-26T15:55:13+10:00
+date: 2021-03-26T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
 categories: 
-  - "dynamics"
+  - "dynamics365"
 tags: 
   - "architecture"
   - "d365"
+#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+summary: "Dynamics 365 for Finance and Operations is designed and architected for the cloud. It can be deployed as an on-premises system or on the cloud."
+ShowToc: true
+TocOpen: false
+images:
+  - Dynamics-365.jpg
+cover:
+    image: "Dynamics-365.jpg"
+    alt: "Dynamics 365 Finance and operations - Architecture"
+    caption: "Dynamics 365 Finance and operations - Architecture"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 ## Introduction
