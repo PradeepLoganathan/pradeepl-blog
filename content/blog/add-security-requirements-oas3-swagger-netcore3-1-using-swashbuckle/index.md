@@ -1,11 +1,10 @@
 ---
 title: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
-date: "2020-06-25"
-categories: 
-  - "api"
-  - "aspnetcore"
-  - "rest"
-tags: 
+lastmod: 2020-06-25T15:55:13+10:00
+date: 2020-06-25T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
+tags:
   - "api"
   - "oas"
   - "oas-3-0"
@@ -14,6 +13,24 @@ tags:
   - "securityrequirement"
   - "securityscheme"
   - "swagger"
+categories: 
+  - "oas"
+  - "api"
+#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+summary: A group of people within Heroku developed the 12 Factors in 2012. This is essentially a manifesto describing the rules and guidelines that needed to be followed to build a microservices based cloud-native application.
+ShowToc: true
+TocOpen: false
+images:
+  - JWT-token-Swagger.jpg
+cover:
+    image: "JWT-token-Swagger.jpg"
+    alt: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
+    caption: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 ## OpenAPI Security Schemes
@@ -46,9 +63,44 @@ Swashbuckle uses the OpenAPISecurityScheme object to specify the security scheme
 
 The code below specifies a bearer security scheme and the associated parameters for this security scheme. We are specifying the name of the http authorization scheme as defined in RFC7235 to be bearer, we are specifying that the bearer token is in the header with the scheme type of http.
 
-<script src="https://gist.github.com/PradeepLoganathan/5d5572eff6d67af1051b4e0e4face10d.js"></script>
+```csharp
+services.AddSwaggerGen(options =>
+{
+    var apiinfo = new OpenApiInfo
+    {
+        Title = "theta-CandidateAPI",
+        Version = "v1",
+        Description = "Candidate API for thetalentbot",
+        Contact = new OpenApiContact
+        { Name = "thetalentbot", Url = new Uri("https://thetalentbot.com/developers/contact") },
+            License = new OpenApiLicense()
+            {
+                Name = "Commercial",
+                Url = new Uri("https://thetalentbot.com/developers/license")
+             }
+        };
 
-<a href="https://gist.github.com/PradeepLoganathan/5d5572eff6d67af1051b4e0e4face10d">View this gist on GitHub</a>
+        OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
+        {
+            Name = "Bearer",
+            BearerFormat = "JWT",
+            Scheme = "bearer",
+            Description = "Specify the authorization token.",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+        };
+
+        OpenApiSecurityRequirement securityRequirements = new OpenApiSecurityRequirement()
+        {
+            {securityScheme, new string[] { }},
+        };
+
+        options.SwaggerDoc("v1", apiinfo);
+        options.AddSecurityDefinition("jwt_auth", securityDefinition);
+        // Make sure swagger UI requires a Bearer token to be specified
+        options.AddSecurityRequirement(securityRequirements);               
+});
+```
 
 The above code results in the swagger UI requiring a [JWT bearer token](https://pradeeploganathan.com/security/jwt/) to authorize requests to the API as below
 
@@ -60,16 +112,75 @@ Bearer token - Swagger UI
 
 The code below specifies an API key security scheme. This code can be used when we use an API key to authenticate requests to the API.
 
-<script src="https://gist.github.com/PradeepLoganathan/a802c9b469c1eccef5a3457f585f587b.js"></script>
+```csharp
+services.AddSwaggerGen(c =>
+{
+    var apiinfo = new OpenApiInfo
+    {
+        Title = "theta-CandidateAPI",
+        Version = "v1",
+        Description = "Candidate API for thetalentbot",
+        Contact = new OpenApiContact
+        { Name = "thetalentbot", Url = new Uri("https://thetalentbot.com/developers/contact") },
+            License = new OpenApiLicense()
+            {
+                Name = "Commercial",
+                Url = new Uri("https://thetalentbot.com/developers/license")
+             }
+    };
 
-<a href="https://gist.github.com/PradeepLoganathan/a802c9b469c1eccef5a3457f585f587b">View this gist on GitHub</a>
+    c.AddSecurityDefinition(ApiKeyConstants.HeaderName, new OpenApiSecurityScheme
+    {
+        Description = "Api key needed to access the endpoints. X-Api-Key: My_API_Key",
+        In = ParameterLocation.Header,
+        Name = ApiKeyConstants.HeaderName,
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { 
+            new OpenApiSecurityScheme 
+            {
+                Name = ApiKeyConstants.HeaderName,
+                Type = SecuritySchemeType.ApiKey,
+                In = ParameterLocation.Header,
+                Reference = new OpenApiReference
+                { 
+                    Type = ReferenceType.SecurityScheme,
+                    Id = ApiKeyConstants.HeaderName
+                },
+             },
+             new string[] {}
+         }
+    });
+});
+```
 
 ### OAuth2 Security Scheme
 
 We can also add an implicit flow grant as a security scheme using the code below.
 
-<script src="https://gist.github.com/PradeepLoganathan/aeedbdfc22fcf936ea78c5fee2ba4203.js"></script>
+```csharp
+OpenApiSecurityScheme securityScheme = new OpenApiSecurityScheme()
+{
+  Type = SecuritySchemeType.OAuth2,
+  Flows = new OpenApiOAuthFlows
+  {
+    AuthorizationCode = new OpenApiOAuthFlow
+    {
+      AuthorizationUrl = new Uri("/auth-server/connect/authorize", UriKind.Relative),
+      TokenUrl = new Uri("/auth-server/connect/token", UriKind.Relative),
+      Scopes = new Dictionary<string, string>
+      {
+        {"readAccess", "Access read operations"},
+        {"writeAccess", "Access write operations"}
+      }
+    }
+  }
+};
 
-<a href="https://gist.github.com/PradeepLoganathan/aeedbdfc22fcf936ea78c5fee2ba4203">View this gist on GitHub</a>
+options.AddSecurityDefinition("oauth2", securityScheme);
+```
 
 The above gists can be used to add different security specifications to the OAS document. This will result in the swagger UI using the defined security requirements as part of not only documenting the API but also in the Swagger UI.
