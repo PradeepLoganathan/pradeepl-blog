@@ -1,7 +1,7 @@
 ---
 title: "Introduction to Kubernetes Admission Controllers"
-lastmod: 2022-01-07T15:55:13+10:00
-date: 2022-01-07T15:55:13+10:00
+lastmod: 2022-01-06T15:55:13+10:00
+date: 2022-01-06T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
 tags: 
