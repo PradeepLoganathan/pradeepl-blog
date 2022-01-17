@@ -9,6 +9,7 @@ tags:
   - CAPZ
   - Cluster API
   - Kubernetes
+  - Azure
 categories:
   - Kubernetes
 #slug: kubernetes/using-cluster-api-to-create-kubernetes-clusters-on-azure/
