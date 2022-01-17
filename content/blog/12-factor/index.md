@@ -20,7 +20,7 @@ cover:
     image: "wim-van-t-einde-752333-unsplash.jpg"
     alt: "12 Factor Appications"
     caption: "12 Factor Applications"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text

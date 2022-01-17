@@ -16,13 +16,13 @@ TocOpen: false
 images:
   - datacenter-racks.jpg
 cover:
-    image: "datacenter-racks.jpg"
+    image: "cover.jpg"
     alt: "Kubernetes Cluster API - CAPI - An Introduction"
     caption: "Kubernetes Cluster API - CAPI - An Introduction"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
+  Text: "suggest changes to this post" # edit text
   appendFilePath: true # to append file path to Edit link
 ---
 ## Introduction

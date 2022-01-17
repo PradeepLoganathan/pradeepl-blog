@@ -1,13 +1,9 @@
 #ignore the public folder
 public
 
-#ignore resources folder
-resources
-
 #ignore firebase cache
 .firebase
 .firebase/**
-
 
 *.cache
 *.identifier
