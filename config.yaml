@@ -80,6 +80,8 @@ params:
   ShowCategories: true
   ShowDate: true
   ShowPostNavLinks: true
+  ShowCodeCopyButtons: true
+  hideFooter: true
 
 
   homeInfoParams:
