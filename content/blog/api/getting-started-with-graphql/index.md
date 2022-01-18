@@ -27,13 +27,13 @@ editPost:
   appendFilePath: true # to append file path to Edit link
 ---
 
-GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification. It is also a runtime designed for fulfilling these queries. [REST APIs](https://pradeeploganathan.com/rest/identifying-resources-and-designing-representations/), adhere to the requirements dictated by the server in the form of an API contract, GraphQL APIs respond to client queries with a response that adheres to the shape of the query specified by the client. GraphQL service is transport agnostic but is typically served over HTTP.
+GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification. It is also a runtime designed for fulfilling these queries. [REST APIs](https://pradeepl.com/blog/rest/identifying-resources-and-designing-representations/), adhere to the requirements dictated by the server in the form of an API contract, GraphQL APIs respond to client queries with a response that adheres to the shape of the query specified by the client. GraphQL service is transport agnostic but is typically served over HTTP.
 
 GraphQL was developed by Lee Byron, Nick Schrock, and Dan Schafer at Facebook in 2012. It was shared with the broader community in 2015 and is now governed through the GraphQL foundation. You can read more about it here… [Introducing the GraphQL Foundation (leebyron.com)](https://leebyron.com/introducing-the-graphql-foundation/)
 
 ### Shortcomings of REST
 
-GraphQL is not a replacement for REST API’s, it complements a REST API by compensating for some of the drawbacks of using the [REST specification](https://pradeeploganathan.com/rest/what-is-rest/). (I have also seen some teams replace the REST design completely with a GraphQL approach.) Some of the drawbacks of REST API’s are
+GraphQL is not a replacement for REST API’s, it complements a REST API by compensating for some of the drawbacks of using the [REST specification](https://pradeepl.com/rest/what-is-rest/). (I have also seen some teams replace the REST design completely with a GraphQL approach.) Some of the drawbacks of REST API’s are
 
 #### Overfetching
 

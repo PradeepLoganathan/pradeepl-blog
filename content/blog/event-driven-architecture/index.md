@@ -24,8 +24,8 @@ Events can be grouped into logical collections of events called topics. Topics a
 
 Events can be
 
-- Discrete -
-- Series -
+- Discrete
+- Series
 
 ### Characteristics of EDA
 
@@ -52,7 +52,7 @@ The main considerations for choosing Event-Driven architecture are:
 
 The key challenges in an EDA are Guaranteed delivery, Processing events in order or exactly once and managing consistency across service boundaries.
 
-![](images/Exactly-Once.png)
+!["Exactly Once"](images/Exactly-Once.png)
 
 Exactly Once
 
@@ -68,7 +68,7 @@ In Event-Driven architecture managing consistency across service boundaries can 
 
 An event-driven architecture in general comprises of three essential pieces: an event emitter, an event channel, and an event consumer. The event emitters are responsible for gathering state changes or events that occur within the event-driven system. They simply get the event and send it to the next step of the process which is the event channel. The event channel serve two purposes. one is to simply channel or funnel the event to a particular waiting consumer where the event will be processed and acted upon. Alternatively, the channel itself can react to the event, and perform some level of pre-processing on the event and then send it down to the consumers for the final processing. In some instances Pipelining is also possible where a consumer enriches an event and re-publishes it to the channel. Event processors/consumers are components that perform a specific task based on the event being processed.
 
-![](images/Event-Driven-Architecture-1024x378.png)
+!["Event Driven Architecture"](images/Event-Driven-Architecture-1024x378.png)
 
 Event Driven Architecture
 
@@ -82,13 +82,13 @@ The two main Event channel topologies for EDAs are the mediator and broker topol
 
 **Mediator topology** - The mediator topology pattern is used to design systems/processes that will need some level of coordination/orchestration in order to process the event. This topology uses a single event queue and an event mediator to route events to the relevant event processors. This topology is commonly used when multiple steps are required to process an event. In mediator topology, event producers send events into an event queue. There can be many event queues in an EDA. Event queues are responsible for sending the event messages on to the event mediator. All of these events, referred to as initial events, go through an event mediator. In order to perform each step in the initial event, the event mediator sends a specific processing event to the event channel. This processing event is received and processed by the event processor. Event channels are used to pass processing events associated with each step to the event processors. Event channels can either be in the form of message queues or in the form of message topics. The application logic that is required for processing the events is present in the event processor. Event processors are typically highly decoupled architectural components that are associated with a specific task in the system.
 
-![](images/Mediator-Topology.png)
+!["Mediator Topology"](images/Mediator-Topology.png)
 
 Mediator Topology
 
 **Broker topology** - The event broker topology pattern is used in scenarios where the event flow is relatively simple in nature and does not require any central event orchestration. In a broker topology, the event messages created by event producers enter an event broker, sometimes referred to as an event bus. The event broker can be centralized or federated and contains all of the event channels used for the event flow. The event channels may be message queues, message topics, or some combination of the two. Unlike the mediator topology, there is no event queue with the broker topology. The event processors are responsible for picking up events from an event broker.
 
-![](images/Broker-Topology.png)
+!["Broker Topology"](images/Broker-Topology.png)
 
 Broker Topology
 
@@ -125,10 +125,10 @@ Callbacks to the system that produced an event notification for more data in ord
 Although more data is being passed around, we gain a greater level of availability and resilience. The shipping system can function, at least with orders it has already received, even if the order system is temporarily unavailable. The shipping system does not need to call back to the order system after the initial event notification is received, which can be particularly beneficial if contacting and receiving data from the order system is slow.  
 However, with greater availability comes lower consistency. The replication of some data between the order and shipping systems lowers the consistency of the data.
 
-**Event Sourcing**\- Event sourcing captures all changes to application state as a sequence of events. These events are persisted in an event log and can be replayed to recover application state. Events are immutable facts that are only ever appended to an event log which allows for very high transaction rates and efficient replication. To optimize the time required to calculate the current state, an application can periodically build and save snapshots. To reduce the storage size, events before the selected snapshot may be deleted. 
+**Event Sourcing**\- Event sourcing captures all changes to application state as a sequence of events. These events are persisted in an event log and can be replayed to recover application state. Events are immutable facts that are only ever appended to an event log which allows for very high transaction rates and efficient replication. To optimize the time required to calculate the current state, an application can periodically build and save snapshots. To reduce the storage size, events before the selected snapshot may be deleted.
 
 ## Cloud based EDA support
 
 Cloud providers have built a lot of the support infrastructure necessary to implement event driven architectures. Large cloud platforms such as Azure, AWS and GCP support EDA implmentation using various technolgies. [This post refers](https://pradeeploganathan.com/azure/azureeventgrid-introduction/) to implementing an Event driven architecture pattern using Azure event grid.
 
-Photo by [Rubén Bagüés](https://unsplash.com/@rubavi78?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/oraganized-wires?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+Photo by [Rubén Bagüés](https://unsplash.com/@rubavi78?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/oraganized-wires?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)

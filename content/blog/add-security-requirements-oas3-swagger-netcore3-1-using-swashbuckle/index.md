@@ -35,7 +35,7 @@ editPost:
 
 ## OpenAPI Security Schemes
 
-As part of documenting API's, OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements. Defining the security requirements for an API is key to enable developers to use the API. The OAS 3 definitions for security is described in a [previous blog post here](https://pradeeploganathan.com/api/openapi-specification-swagger/#Security). It can be used to specify the below security schemes for an API
+As part of documenting API's, OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements. Defining the security requirements for an API is key to enable developers to use the API. The OAS 3 definitions for security is described in a [previous blog post here](https://pradeepl.com/blog/openapi-specification-swagger/#Security). It can be used to specify the below security schemes for an API
 
 1. HTTP authentication schemes that use the Authorization header
     1. Basic
@@ -102,7 +102,7 @@ services.AddSwaggerGen(options =>
 });
 ```
 
-The above code results in the swagger UI requiring a [JWT bearer token](https://pradeeploganathan.com/security/jwt/) to authorize requests to the API as below
+The above code results in the swagger UI requiring a [JWT bearer token](https://pradeepl.com/blog/jwt/) to authorize requests to the API as below
 
 ![](images/JWT-token-Swagger-1024x471.png)
 

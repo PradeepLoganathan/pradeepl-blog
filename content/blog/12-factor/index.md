@@ -29,7 +29,7 @@ editPost:
 
 ## Overview
 
-A group of people within Heroku developed the 12 Factors in 2012. This is essentially a manifesto describing the rules and guidelines that needed to be followed to build a microservices based cloud-native application. The manifesto is currently hosted [here](https://12factor.net/). This methodology presents a thought process on how to develop applications and is complimentary to other methodologies and thought processes such as the [reactive manifesto](https://pradeeploganathan.com/patterns/reactive-manifesto/).
+A group of people within Heroku developed the 12 Factors in 2012. This is essentially a manifesto describing the rules and guidelines that needed to be followed to build a microservices based cloud-native application. The manifesto is currently hosted [here](https://12factor.net/). This methodology presents a thought process on how to develop applications and is complimentary to other methodologies and thought processes such as the [reactive manifesto](https://pradeepl.com/blog/reactive-manifesto/).
 
 The 12 factors are
 

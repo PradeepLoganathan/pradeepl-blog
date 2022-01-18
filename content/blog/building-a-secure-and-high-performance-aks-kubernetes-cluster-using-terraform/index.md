@@ -30,7 +30,7 @@ editPost:
 
 ---
 
-I have been part of a couple of build outs where we built [Kubernetes](https://pradeeploganathan.com/kubernetes/kubernetes-concepts-pods/) clusters to run our cloud workloads. These builds involved deploying AKS clusters using terraform and AzDO. Designing the AKS infrastructure is key to ensure that the cloud workloads running on them can be deployed, secured, and hosted effectively. In this post I am documenting the general steps involved in building out a Kubernetes infrastructure on Azure Kubernetes Service (AKS) using terraform and deploy workloads using Azure devops (AzDO) and Helm charts.
+I have been part of a couple of build outs where we built [Kubernetes](https://pradeepl.com/kubernetes/kubernetes-concepts-pods/) clusters to run our cloud workloads. These builds involved deploying AKS clusters using terraform and AzDO. Designing the AKS infrastructure is key to ensure that the cloud workloads running on them can be deployed, secured, and hosted effectively. In this post I am documenting the general steps involved in building out a Kubernetes infrastructure on Azure Kubernetes Service (AKS) using terraform and deploy workloads using Azure devops (AzDO) and Helm charts.
 
 You can follow along as we build the AKS Kubernetes cluster using the code at [this github repository](https://github.com/PradeepLoganathan/azure_aks_terraform).
 
@@ -273,7 +273,7 @@ Addons to be installed
 
 We would need to create a log analytics workspace and retrieve the resource ID of the log analytics workspace. Now that we have all the pieces of the infrastructure ready, we can go ahead and initialize terraform to ensure that the necessary modules are downloaded. once terraform is initialized we can validate that our code is good to go. If I run terraform apply as below, terraform will indicate the infrastructure changes that it will perform to standup the Kubernetes cluster on AKS.
 
-![](images/terraform-plan.png)
+!["Terraform plan"](images/terraform-plan.png)
 
 Terraform Plan
 
@@ -563,6 +563,8 @@ Plan: 11 to add, 0 to change, 3 to destroy.
 ------------------------------------------------------------------------
 ```
 
-![](images/terraform-apply-1024x488.png)
+!["Terraform Plan"](images/terraform-apply-1024x488.png)
 
+```shell
 Terraform Apply -auto-approve
+```

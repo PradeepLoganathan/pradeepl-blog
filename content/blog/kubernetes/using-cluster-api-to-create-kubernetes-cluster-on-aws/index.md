@@ -2,7 +2,7 @@
 title: "Using Cluster Api to Create Kubernetes Clusters on AWS"
 lastmod: 2021-12-15T15:55:13+10:00
 date: 2021-12-15T15:55:13+10:00
-draft: false
+draft: true
 Author: Pradeep Loganathan
 tags: 
   - CAPI
