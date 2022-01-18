@@ -42,7 +42,7 @@ This design allows for a flexible approach separating policy definition and poli
 
 ### Constraint Template
 
-A constraint template models the policy definition as a template. The constraint template uses rego to define the policy. The rego code is stored in the template. Creating the policy definition as a template allows for parameterization as the rego defined in the template can also be parameterized. This allows the constraint template to be portable and reusable across multiple clusters. Constraint templates are testable and can be internally developed or community-sourced. [This](https://github.com/open-policy-agent/gatekeeper-library) [repo](https://github.com/open-policy-agent/gatekeeper-library/tree/master/src/general) contains several community defined constraint templates covering different policies. Constraint templates are created as custom resource definitions that are persisted in the cluster. They are applied using constraint objects.
+A constraint template models the policy definition as a template. The constraint template uses rego to define the policy. The rego code is stored in the template. Creating the policy definition as a template allows for parameterization as the rego defined in the template can also be parameterized. This allows the constraint template to be portable and reusable across multiple clusters. Constraint templates are testable and can be internally developed or community-sourced. [This repo](https://github.com/open-policy-agent/gatekeeper-library) contains several community defined constraint templates covering different policies. Constraint templates are created as custom resource definitions that are persisted in the cluster. They are applied using constraint objects.
 
 ### Defining Constraint Templates
 
@@ -117,7 +117,7 @@ spec:
 The constraint CRD is composed of two main parts
 
 * Kubernetes metadata – The constraint template and the constraint are linked by specifying the constraint template name in the constraint `kind`. In this case the constraint kind specifies ClusterRequiredLabels which links it to the above constraint template.
-* The Spec – In the spec the `` `match` `` field defines the scope of the constraint. In this case we are limiting this constraint to namespaces. We are passing in the required labels as a string array into the constraint template. In this case we are passing in a single string “costcenter” which is the required label. We can similarly define another constraint CRD to specify other labels as the required.
+* The Spec – In the spec the `` match `` field defines the scope of the constraint. In this case we are limiting this constraint to namespaces. We are passing in the required labels as a string array into the constraint template. In this case we are passing in a single string “costcenter” which is the required label. We can similarly define another constraint CRD to specify other labels as the required.
 
 We can use the same constraint template to define another constraint specifying environment as a required label. The constraint definition is below
 
@@ -143,4 +143,4 @@ The above constraints can be used to ensure that namespaces created in a cluster
 
 Open Policy Agent/Gatekeeper is extensively used by many platforms to implement policy implementation, policy governance and best practices. [VMWare’s Tanzu Mission Control](https://tanzu.vmware.com/content/blog/vmware-tanzu-mission-control-expands-its-policy-management-capabilities) (TMC) uses OPA/Gatekeeper as the underlying mechanism to define, deploy, and ensure security and compliance across cluster fleets. This enables centralized management and supporting best practices across hundreds of clusters. TMC provides a bunch of predefined constraint templates for a wide variety of policy types, including access, image, network, and quota policies. [Azure policy](https://docs.microsoft.com/en-us/azure/governance/policy/concepts/policy-for-kubernetes) extends gatekeeper to offer centralized, consistent policy management across AKS clusters.
 
-In the [next blog post](https://pradeepl.com/blog/kubernetes/deploying-gatekeeper-and-defining-constraints/) we will look at deploying gatekeeper to a kubernetens cluster, defining constraints and applying constraints to a cluster.
+In the [next blog post](https://pradeepl.com/blog/kubernetes/deploying-gatekeeper-and-defining-constraints/) we will look at deploying gatekeeper to a kubernetes cluster, defining constraints and applying constraints to a cluster.

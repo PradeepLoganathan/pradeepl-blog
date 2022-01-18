@@ -37,17 +37,17 @@ Create a Kubernetes cluster locally using kind. I am creating a cluster named ga
 kind create cluster --name gatekeepercluster
 ```
 
-After the cluster has been created, we can now deploy gatekeeper.
+We can now deploy gatekeeper into this cluster now that it has been created.
 
 ## Deploy Gatekeeper
 
-Gatekeeper can be installed into your cluster by directly applying the manifest or by using a helm package. The installation details are listed [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/)). While I do not advocate using manifest files directly from online sources, we can safely do so for this blog post. I am installing version 3.7 of gatekeeper into the cluster using the manifest.
+Gatekeeper can be installed into your cluster by directly applying a manifest or by using a helm package. The installation details are listed [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/)). While I do not advocate using manifest files directly from online sources, we can safely do so for this blog post. I am installing version 3.7 of gatekeeper into the cluster using the manifest.
 
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/release-3.7/deploy/gatekeeper.yaml
 ```
 
-This command produces the output below.
+This command produces the output below.It confirms that the necessary CRD's, mutating/validating webhooks, and admission controllers have been created.
 
 ```shell
 namespace/gatekeeper-system created
@@ -154,11 +154,11 @@ pod/gatekeeper-controller-manager-66f474f785-kkqdc condition met
 pod/gatekeeper-controller-manager-66f474f785-klsz2 condition met
 ```
 
-Now that we have confirmed that all the gatekeeper components are up and running, let us create a constraint template and implement a constraint.
+Now that we have confirmed that all the gatekeeper components are up and running, let us create a [constraint template](https://pradeepl.com/blog/kubernetes/kubernetes-gatekeeper-an-introduction/#constraint-template) and implement a [constraint](https://pradeepl.com/blog/kubernetes/kubernetes-gatekeeper-an-introduction/#constraint).
 
 ## ConstraintTemplate
 
-One of the policies that I have seen being applied in many clusters is the ability to pull images only from specific registries. This template is from the demo repository of Open Policy agent. This policy enables the creation of an allowlist for repositories ensuring that workloads do not pull images from unsafe repositories. Let’s get started on creating a constraint template to enable this.
+One of the policies that I have seen being applied in many clusters is the ability to pull images only from specific registries. This is a compliance policy which ensures that only vetted images are deployed into the cluster. It ensures that workloads do not use insecure images. Insecure images can result in a lot of issues including exfiltration of confidential data from workloads. This constraint template below is from the demo repository of Open Policy agent. This constraint template creates an allowlist of repositories ensuring that workloads do not pull images from unsafe repositories. Let’s get started on creating a constraint template to enable this.
 
 ```yaml
 apiVersion: templates.gatekeeper.sh/v1beta1
@@ -184,11 +184,11 @@ spec:
         package allowedrepos
   
         violation[{"msg": msg}] {
-          container := input.review.object.spec.containers[_]
-          satisfied := [good | repo = input.parameters.repos[_] ; good = contains(container.image, repo)]
-          not any(satisfied)
-          msg := sprintf("container <%v> has an invalid image repo <%v>, allowed repos are %v", [container.name, container.image, input.parameters.repos])
-        }
+            container := input.review.object.spec.containers[_]
+            satisfied := [good | repo = input.parameters.repos[_] ; good = startswith(container.image, repo)]
+            not any(satisfied)
+            msg := sprintf("container <%v> has an invalid image repo <%v>, allowed repos are %v", [container.name, container.image, input.parameters.repos])
+          }
   
         violation[{"msg": msg}] {
           container := input.review.object.spec.initContainers[_]
@@ -198,7 +198,7 @@ spec:
         } 
 ```
 
-This container template checks containers being created and indicates a violation, if the containers have an image repository which is not part of the allow list. I have authored a [blog post](https://pradeepl.com/kubernetes/introduction-to-open-policy-agent-opa/#REGO) to help understand rego. In this template the rego code at line 24 extracts the container spec. It then checks if `` `container.image` `` contains any of the repos specified by the `` `input.parameters.repo` `` array in line 25 and assigns the value to satisfied. If satisfied is not set, we know that the image was not pulled from the list of allowed repositories. The allowed list of repositories is passed in as a parameter as specified in line 14. The list of repositories is passed in as an array of strings. This is indicated by the data type of the parameter in line 15. Now that we have created the constraint template let us deploy it to the cluster.
+This container template checks containers being created and indicates a violation, if the containers have an image repository which is not part of the allow list. I have authored a [blog post](https://pradeepl.com/kubernetes/introduction-to-open-policy-agent-opa/#REGO) to help understand rego. In this template the rego code extracts the container spec. It then checks if `` container.image `` contains any of the repos specified by the `` input.parameters.repo `` array and assigns the value to satisfied. If `` satisfied `` is not set, we know that the image was not pulled from the list of allowed repositories. The allowed list of repositories is passed in as a parameter as specified in line 14. The list of repositories is passed in as an array of strings. This is indicated by the data type of the parameter in line 15. Now that we have created the constraint template let us deploy it to the cluster.
 
 ## Apply Constraint Template
 
