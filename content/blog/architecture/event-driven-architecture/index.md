@@ -129,6 +129,6 @@ However, with greater availability comes lower consistency. The replication of s
 
 ## Cloud based EDA support
 
-Cloud providers have built a lot of the support infrastructure necessary to implement event driven architectures. Large cloud platforms such as Azure, AWS and GCP support EDA implmentation using various technolgies. [This post refers](https://pradeeploganathan.com/azure/azureeventgrid-introduction/) to implementing an Event driven architecture pattern using Azure event grid.
+Cloud providers have built a lot of the support infrastructure necessary to implement event driven architectures. Large cloud platforms such as Azure, AWS and GCP support EDA implmentation using various technolgies. [This post refers](https://pradeepl.com/azure/azureeventgrid-introduction/) to implementing an Event driven architecture pattern using Azure event grid.
 
 Photo by [Rubén Bagüés](https://unsplash.com/@rubavi78?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/oraganized-wires?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)

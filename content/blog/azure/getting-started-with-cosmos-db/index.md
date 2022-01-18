@@ -24,7 +24,7 @@ A JSON document can be visualized as a nested dictionary of properties. We can t
 
 Sample JSON Document
 
-One of the key design decisions when using Cosmos DB as a document store is the structure of the JSON document. How simple or how complex should the JSON documents be? Should they be normalized or denormalized? This decision is remarkably similar to the normalization design in RDBMS databases. Normalization results in faster write performance and denormalization results in faster read performance. The decision to normalize or denormalize is dependent on data access patterns, rates of change and a host of other factors. Normalization is achieved by embedding documents and denormalization by splitting documents and referencing them. We embed documents if there is a one-to-one relationship between the child and the parent documents, or if the child document is dependent on the parent document and is queried together. Documents are referenced if there is a one-to-many relationship between the parent and the child documents. I have authored a detailed post on [modelling data for Cosmos Db here](https://pradeeploganathan.com/azure/high-performance-data-modelling-with-cosmos-db/).
+One of the key design decisions when using Cosmos DB as a document store is the structure of the JSON document. How simple or how complex should the JSON documents be? Should they be normalized or denormalized? This decision is remarkably similar to the normalization design in RDBMS databases. Normalization results in faster write performance and denormalization results in faster read performance. The decision to normalize or denormalize is dependent on data access patterns, rates of change and a host of other factors. Normalization is achieved by embedding documents and denormalization by splitting documents and referencing them. We embed documents if there is a one-to-one relationship between the child and the parent documents, or if the child document is dependent on the parent document and is queried together. Documents are referenced if there is a one-to-many relationship between the parent and the child documents. I have authored a detailed post on [modelling data for Cosmos Db here](https://pradeepl.com/azure/high-performance-data-modelling-with-cosmos-db/).
 
 ### Cosmos DB - System defined properties
 
@@ -37,7 +37,7 @@ There are some properties that are added to our document after we save it to Cos
 
 ### Cosmos DB - Resource Model
 
-![](images/Cosmos_resource_structure-1024x244.png)
+!["Cosmos Resource Structure"](images/Cosmos_resource_structure-1024x244.png)
 
 Cosmos Db Resource Model
 

@@ -42,7 +42,7 @@ Azure CosmosDB implements transaction log tailing using 'Change feeds' mechanism
 
 AWS DynamoDB implements transaction log tailing using DynamoDB Streams, which captures the full event activity within a table. DynamoDB streams are an event-based notification system that can resemble traditional database triggers.  Once activated for a table, it provides a service endpoint where all the ordered table changes are recorded and persisted up to 24 hours. The streams can output information about each item that is being changed and we can configure the delivery of just the partition key, the old data in the table, the newly written data in the table, or both the new and the old data simultaneously.
 
-In [Event driven architecture](https://pradeeploganathan.com/architecture/event-driven-architecture/) this pattern is used in conjunction with the [idempotent consumer pattern](https://pradeeploganathan.com/patterns/idempotent-consumer-pattern/) to provide eventual consistency.
+In [Event driven architecture](https://pradeepl.com/architecture/event-driven-architecture/) this pattern is used in conjunction with the [idempotent consumer pattern](https://pradeepl.com/patterns/idempotent-consumer-pattern/) to provide eventual consistency.
 
 ### References
 

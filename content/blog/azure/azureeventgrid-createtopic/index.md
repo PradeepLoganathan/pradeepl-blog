@@ -7,11 +7,11 @@ categories:
 
 This post is part of a three post series on Azure Event Grid
 
-[Azure Event Grid - Introduction](https://pradeeploganathan.com/azure/azureeventgrid-introduction)
+[Azure Event Grid - Introduction](https://pradeepl.com/azure/azureeventgrid-introduction)
 
-[Azure Event Grid - Create Topics](https://pradeeploganathan.com/azure/azureeventgrid-createtopic)
+[Azure Event Grid - Create Topics](https://pradeepl.com/azure/azureeventgrid-createtopic)
 
-[Azure Event Grid - Creating Custom events](https://pradeeploganathan.com/azure/azureeventgrid-createcustomevents)
+[Azure Event Grid - Creating Custom events](https://pradeepl.com/azure/azureeventgrid-createcustomevents)
 
 To get started with Azure Event grid we need to create three primary elements as described previously. We need to create a Topic, a subscription and an Event handler .
 

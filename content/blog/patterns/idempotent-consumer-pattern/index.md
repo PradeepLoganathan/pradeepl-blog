@@ -6,7 +6,7 @@ categories:
   - "patterns"
 ---
 
-[Event-Driven architecture](https://pradeeploganathan.com/architecture/event-driven-architecture/) is itself a distributed system, a field renowned for being difficult, particularly when things go wrong. The fallacies of distributed computing always lurk around the corner. One of the fallacies is that the network is unreliable. This necessitates planning for retries in case of failures.
+[Event-Driven architecture](https://pradeepl.com/architecture/event-driven-architecture/) is itself a distributed system, a field renowned for being difficult, particularly when things go wrong. The fallacies of distributed computing always lurk around the corner. One of the fallacies is that the network is unreliable. This necessitates planning for retries in case of failures.
 
 One issue with this is that retries can result in duplicate processing, and this can cause very real problems. Taking a payment twice from someone’s account will lead to an incorrect balance and an irate user.
 
@@ -27,7 +27,7 @@ The Idempotent Consumer pattern provides the necessary safeguards to allows log
 
 When an event arrives, the consumer needs to uniquely identify it using an event key assigned to the event. The idempotent repository is checked to see whether it contains the key, and if it does not, the logic wrapped by it is executed, otherwise it is skipped.
 
-![](images/Idempotnet-Consumer-Steps.png)
+!["idempotent consumer steps"](images/Idempotnet-Consumer-Steps.png)
 
 Idempotent Consumer Pattern - Steps
 
@@ -38,4 +38,4 @@ The incoming message identifier needs to be updated in the idempotent repository
 
 Many messaging systems, such as Apache ActiveMQ, Apache Kafka, Apache Camel have capabilities to eliminate duplicate messages. The Idempotent consumer pattern is used to provide this functionality in these systems.
 
-> Photo by [DDP](https://unsplash.com/@moino007?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/buttons?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+> Photo by [DDP](https://unsplash.com/@moino007?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/buttons?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)

@@ -323,7 +323,7 @@ The infrastructure providers provision infrastructure in the target operating en
 
 The Cluster API thus allows us to standup clusters across multiple infrastructure providers both in the cloud and on-premises. The below blog posts go into detail on using CAPI to standup clusters
 
-* [Using CAPI to create Kubernetes clusters on Azure.](https://pradeeploganathan.com/kubernetes/using-cluster-api-to-create-kubernetes-clusters-on-azure/)
+* [Using CAPI to create Kubernetes clusters on Azure.](https://pradeepl.com/kubernetes/using-cluster-api-to-create-kubernetes-clusters-on-azure/)
 * Using CAPI to create Kubernetes clusters on AWS.
 
 ## Conclusion

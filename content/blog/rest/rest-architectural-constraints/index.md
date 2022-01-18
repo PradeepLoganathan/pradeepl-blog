@@ -27,13 +27,13 @@ Implementing the above constraints has several advantages. It allows the servic
 
 **Uniform Interface** - The uniform interface defines a contract for communication between the client and the server. This is achieved through four sub constraints namely
 
-_Identification of resources_ - As discussed in [What is REST?](http://pradeeploganathan.com/2016/09/13/what-is-rest/) resources are uniquely identified by URI's. These identifiers are stable and do not change across interactions even when the resource state changes.
+_Identification of resources_ - As discussed in [What is REST?](http://pradeepl.com/rest/what-is-rest/) resources are uniquely identified by URI's. These identifiers are stable and do not change across interactions even when the resource state changes.
 
-_Manipulation of resources through representations_ - A client manipulates resources by sending new representations of the resource to the service. The server controls the resource representation and can accept or reject the  new resource representation sent by the client.
+_Manipulation of resources through representations_ - A client manipulates resources by sending new representations of the resource to the service. The server controls the resource representation and can accept or reject the  new resource representation sent by the client.
 
 _Self-descriptive messages_ - REST request and response messages contain all information needed for the service and the client to interpret the message and handle it appropriately. The messages are quite verbose and include the method, protocol used and the content type. This enables each message to be independent.
 
-_Hypermedia as the Engine of Application State (HATEOS)_\- Hypermedia connects resources to each other and describes their capabilities in machine-readable ways. Hypermedia is a strategy, implemented in different ways by dozens of technologies. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future.
+_Hypermedia as the Engine of Application State (HATEOS)_\- Hypermedia connects resources to each other and describes their capabilities in machine-readable ways. Hypermedia is a strategy, implemented in different ways by dozens of technologies. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future.
 
 **Layered System** -  A layered system further builds on the concept of client-server architecture. A layered system indicates that there can be more components than just the client and the server and each system can have additional layers in it. These layers should be easy to add, remove or change. Proxies, gateways, load balancer's are also additional layers.
 
