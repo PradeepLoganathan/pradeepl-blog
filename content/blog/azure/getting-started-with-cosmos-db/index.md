@@ -18,13 +18,49 @@ The SQL API provided by Cosmos DB can be used to store and retrieve JSON documen
 
 A JSON document can be visualized as a nested dictionary of properties. We can traverse through the JSON document to address specific properties by visualizing it as a tree structure. The JSON document used in this post is below. If we have a collection of JSON documents with the below structure, we can find customers who live in the state of Maryland with the filter /Address/State = "Maryland".
 
-<script src="https://gist.github.com/PradeepLoganathan/a683ecded264e1c58da752c421a52643.js"></script>
-
-<a href="https://gist.github.com/PradeepLoganathan/a683ecded264e1c58da752c421a52643">View this gist on GitHub</a>
+```json
+{
+        "id": "CU7-36-8183",
+        "CustomerId": "CU7-36-8183",
+        "ModifiedDate": "2020-08-10T16:31:18.6928886+10:00",
+        "Title": "Mr.",
+        "FirstName": "Delfina",
+        "LastName": "Rutherford",
+        "MiddleName": "Skylar",
+        "Suffix": "II",
+        "CompanyName": "Cormier, Oberbrunner and Kunde",
+        "SalesPerson": "Barney Hudson",
+        "CreditLimit": 871.63,
+        "Contact": {
+            "EmailAddress": "Felton28@hotmail.com",
+            "Phone": "1-234-718-9784"
+        },
+        "Address": {
+            "StreetAddress": "780 McCullough Heights",
+            "City": "Jacobiburgh",
+            "ZipCode": "77368-8091",
+            "State": "Maryland",
+            "County": "Cambridgeshire",
+            "Country": "USA"
+        },
+        "OrderIDs": [
+            "OD6-131-616",
+            "OD2-181-690",
+            "OD7-447-287",
+            "OD7-863-579",
+            "OD2-938-699",
+            "OD0-736-015",
+            "OD9-864-925",
+            "OD9-615-087",
+            "OD4-281-814",
+            "OD0-792-743"
+        ]
+}
+```
 
 Sample JSON Document
 
-One of the key design decisions when using Cosmos DB as a document store is the structure of the JSON document. How simple or how complex should the JSON documents be? Should they be normalized or denormalized? This decision is remarkably similar to the normalization design in RDBMS databases. Normalization results in faster write performance and denormalization results in faster read performance. The decision to normalize or denormalize is dependent on data access patterns, rates of change and a host of other factors. Normalization is achieved by embedding documents and denormalization by splitting documents and referencing them. We embed documents if there is a one-to-one relationship between the child and the parent documents, or if the child document is dependent on the parent document and is queried together. Documents are referenced if there is a one-to-many relationship between the parent and the child documents. I have authored a detailed post on [modelling data for Cosmos Db here](https://pradeepl.com/azure/high-performance-data-modelling-with-cosmos-db/).
+One of the key design decisions when using Cosmos DB as a document store is the structure of the JSON document. How simple or how complex should the JSON documents be? Should they be normalized or denormalized? This decision is remarkably similar to the normalization design in RDBMS databases. Normalization results in faster write performance and denormalization results in faster read performance. The decision to normalize or denormalize is dependent on data access patterns, rates of change and a host of other factors. Normalization is achieved by embedding documents and denormalization by splitting documents and referencing them. We embed documents if there is a one-to-one relationship between the child and the parent documents, or if the child document is dependent on the parent document and is queried together. Documents are referenced if there is a one-to-many relationship between the parent and the child documents. I have authored a detailed post on [modelling data for Cosmos Db here](https://pradeepl.com/blog/azure/high-performance-data-modelling-in-azure-cosmos-db/).
 
 ### Cosmos DB - System defined properties
 
