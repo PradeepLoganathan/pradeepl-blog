@@ -35,12 +35,12 @@ GraphQL was developed by Lee Byron, Nick Schrock, and Dan Schafer at Facebook in
 
 GraphQL is not a replacement for REST API’s, it complements a REST API by compensating for some of the drawbacks of using the [REST specification](https://pradeeploganathan.com/rest/what-is-rest/). (I have also seen some teams replace the REST design completely with a GraphQL approach.) Some of the drawbacks of REST API’s are
 
-### Overfetching
+#### Overfetching
 
 Overfetching happens when an API sends data that is not required by a client. This happens since the API spec is defined in advance and sometimes to cater to a broad range of data needed by the client. This results in wasted bandwidth and processing power. For e.g., a /movies/movie\_id endpoint may provide over fifty attributes of a movie. If a mobile application which only needs the movie name and genre of this movie calls this end point, it will still get all the attributes that it does not need.
 
 ```shell
-    GET https://api.themoviedb.org/3/movie/550/
+GET https://api.themoviedb.org/3/movie/550/
 ```
 
 ```json
@@ -136,13 +136,15 @@ Overfetching happens when an API sends data that is not required by a client. Th
 }
 ```
 
-Overfetching can be solved either by specifying the fields required in the HTTP request using query parameters. However, this does not scale well in complex scenarios. Another option is to create a BFF (Backend for Frontend). BFF’s are API’s which provide a facade around a backend API and are customized for a specific front end. In the above example we can use a BFF to provide a facade around the /products endpoint called maybe /mobile-products and allow mobile clients to call a /mobile-products endpoint which only provides the two fields that the mobile clients are interested in. This causes proliferation of BFF’s based on client applications.
+Overfetching can be solved either by specifying the fields required in the HTTP request using query parameters. However, this does not scale well in complex scenarios. Another option is to create a [BFF (Backend for Frontend)](https://pradeepl.com/blog/api-gateway/#backend-for-frontend-bff). BFF’s are API’s which provide a facade around a backend API and are customized for a specific front end. In the above example we can use a BFF to provide a facade around the /products endpoint called maybe /mobile-products and allow mobile clients to call a /mobile-products endpoint which only provides the two fields that the mobile clients are interested in. This causes proliferation of BFF’s based on client applications.
 
-### Underfetching
+#### Underfetching
 
-![](graphql-underfetching.png)
+Underfetching is when an API response does not have the necessary data. The client may have to call multiple endpoints and correlate them to get the necessary data. This also results in wasted bandwidth and performance issues due to multiple requests to the server. 
 
-Underfetching is when an API response does not have the necessary data. The client may have to call multiple endpoints and correlate them to get the necessary data. This also results in wasted bandwidth and performance issues due to multiple requests to the server. If I want to fetch a movie name and biographies of its cast members, then I will need to issue two calls. The first one to get the movie name and it cast identifiers from the movie end point as below.
+!["GraphQL - Underfetching"](images/graphql-underfetching.png)
+
+If I want to fetch a movie name and biographies of its cast members, then I will need to issue two calls. The first one to get the movie name and it cast identifiers from the movie end point as below.
 
 ```shell
 GET https://api.themoviedb.org/3/movie/550/credits
@@ -226,7 +228,7 @@ The above call results in the movie details and identifiers which can be used to
 
 This is inefficient as I need to make two network round trips for associated data. The client now needs to correlate data across multiple network calls and handle for errors. This makes the client more complex.
 
-### N + 1 problem
+#### N + 1 problem
 
 Underfetching also results in the N +1 problem. The N + 1 problem occurs when we need to fetch the children in a parent child relationship. Let us look at a scenario which requires us to display the last three books published by a list of authors in our system. Let us assume that we have /authors end point which lists all authors and a /authors/author\_id/books endpoint which list all books written by an author. To list the latest three books published by all the authors the client code will need to initially call the author endpoint to get a list of all author\_id’s. It will then have to loop through the author\_id’s and call the books endpoint multiple times for each author\_id. It may then have to additionally maybe sort & filter to get the last three books published. Thus, if we have N authors in our system, we need to do N + 1 calls to get the last 3 books published by them all. This results in the backend being flooded by a lot of calls to fetch the many (children) parts of the parent child relationship. This can be detrimental in large systems and can result in massive performance issues. On the client side it results in slower user experience. This can be resolved by fetching all the data as a single query.
 
@@ -240,7 +242,7 @@ REST is an architectural style. It specifies an architectural pattern. In contra
 
 The GraphQL server loads the GraphQL Schema on instantiation and builds the type schema as defined, allowing clients to execute operations against the schema. The GraphQL Server is also responsible for parsing, validating, and executing queries.
 
-### Types
+#### Types
 
 A type is an Object for e.g., a Customer, a Product etc. A simple example of a Customer type is below
 
@@ -285,15 +287,15 @@ type Cart {
 
 Fields represent attributes of a type. Each field has a datatype. The datatype can be scalar types such as String, Integer, Float etc., or a complex type such as Order, list of Orders, Customer, Cart etc. A field can also be a custom scalar type or an enumeration.
 
-### Arguments
+#### Arguments
 
 Arguments can be passed into a GraphQL Operation. One or many arguments can be passed into an operation. The datatypes of the arguments can be simple scalars or complex types.
 
-### Operations
+#### Operations
 
 GraphQL Supports four types of operations Query, Mutation, Subscription, and Introspection. Let us look at each of them.
 
-#### Query
+##### Query
 
 A query is an operation that is used to retrieve data. A query can be defined as follows
 
@@ -322,7 +324,7 @@ The query specifies the keys whose values are to be retrieved. A query can be bu
 }
 ```
 
-#### Mutation
+##### Mutation
 
 Mutations are used to perform changes to data that affect state. This includes creation, updates, and deletion of data. This is similar to the Post, Put, and Delete REST verbs. A mutation that creates orders can be defined as below. It takes a bunch of arguments necessary to create the order starting with customerid.
 
@@ -337,7 +339,7 @@ mutation createOrderMutation {
 
 If this mutation is successful, it will return an Order type containing details of the order that was created and we select the orderid and the customerid. In case of a failure the mutation would return an error in the json response.
 
-#### Subscription
+##### Subscription
 
 Subscriptions provide for real time update pushed out from the server. A subscription allows a client to listen to a GraphQL API for real time updates. Subscriptions allow for bi-directional communication. For example, if a client wants to be notified of changes to an order, then we can define a subscription as below
 
@@ -354,6 +356,10 @@ subscription {
 
 When the above subscription is initiated by the client it opens a channel where the server will send real time updates whenever the order status is updated. To stop listening to order updates the client can unsubscribe which closes the channel, and no further updates will be sent.
 
-#### Introspection
+##### Introspection
 
 Introspection provides the ability to query the API’s schema. This operation allows the client to understand the types exposed by the API, the fields available and the corresponding metadata. This allows GraphQL to validate queries before executing them. Introspection allows for a rich tooling to be built to dynamically introspect and execute queries.
+
+### Conclusion
+
+GraphQL provides an alternative to REST allowing for fine grained control over interactions with an API. It allows for a natural transition flow between the client and the server.
