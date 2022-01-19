@@ -1,9 +1,30 @@
 ---
 title: "Getting started with Cosmos DB"
-date: "2020-10-21"
+lastmod: 2020-10-21T15:55:13+10:00
+date: 2020-10-21T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
 categories: 
   - "azure"
   - "cloud"
+  - "cosmosdb"
+tags: 
+  - "comosdb"
+#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+summary: Cosmos DB is a cloud native database engine on Azure. It is a born-in the-cloud database with no legacy compatibility requirements. It can expose data using a variety of models and API's.
+ShowToc: true
+TocOpen: false
+images:
+  - cover.jpg
+cover:
+    image: "cover.jpg"
+    alt: "Getting started with Cosmos DB"
+    caption: "Getting started with Cosmos DB"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 ### Introduction
@@ -20,41 +41,41 @@ A JSON document can be visualized as a nested dictionary of properties. We can t
 
 ```json
 {
-        "id": "CU7-36-8183",
-        "CustomerId": "CU7-36-8183",
-        "ModifiedDate": "2020-08-10T16:31:18.6928886+10:00",
-        "Title": "Mr.",
-        "FirstName": "Delfina",
-        "LastName": "Rutherford",
-        "MiddleName": "Skylar",
-        "Suffix": "II",
-        "CompanyName": "Cormier, Oberbrunner and Kunde",
-        "SalesPerson": "Barney Hudson",
-        "CreditLimit": 871.63,
-        "Contact": {
-            "EmailAddress": "Felton28@hotmail.com",
-            "Phone": "1-234-718-9784"
-        },
-        "Address": {
-            "StreetAddress": "780 McCullough Heights",
-            "City": "Jacobiburgh",
-            "ZipCode": "77368-8091",
-            "State": "Maryland",
-            "County": "Cambridgeshire",
-            "Country": "USA"
-        },
-        "OrderIDs": [
-            "OD6-131-616",
-            "OD2-181-690",
-            "OD7-447-287",
-            "OD7-863-579",
-            "OD2-938-699",
-            "OD0-736-015",
-            "OD9-864-925",
-            "OD9-615-087",
-            "OD4-281-814",
-            "OD0-792-743"
-        ]
+  "id": "CU7-36-8183",
+  "CustomerId": "CU7-36-8183",
+  "ModifiedDate": "2020-08-10T16:31:18.6928886+10:00",
+  "Title": "Mr.",
+  "FirstName": "Delfina",
+  "LastName": "Rutherford",
+  "MiddleName": "Skylar",
+  "Suffix": "II",
+  "CompanyName": "Cormier, Oberbrunner and Kunde",
+  "SalesPerson": "Barney Hudson",
+  "CreditLimit": 871.63,
+  "Contact": {
+      "EmailAddress": "Felton28@hotmail.com",
+      "Phone": "1-234-718-9784"
+  },
+  "Address": {
+      "StreetAddress": "780 McCullough Heights",
+      "City": "Jacobiburgh",
+      "ZipCode": "77368-8091",
+      "State": "Maryland",
+      "County": "Cambridgeshire",
+      "Country": "USA"
+  },
+  "OrderIDs": [
+      "OD6-131-616",
+      "OD2-181-690",
+      "OD7-447-287",
+      "OD7-863-579",
+      "OD2-938-699",
+      "OD0-736-015",
+      "OD9-864-925",
+      "OD9-615-087",
+      "OD4-281-814",
+      "OD0-792-743"
+  ]
 }
 ```
 

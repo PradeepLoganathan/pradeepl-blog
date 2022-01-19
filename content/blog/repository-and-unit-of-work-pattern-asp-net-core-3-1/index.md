@@ -1,6 +1,9 @@
 ---
-title: "Repository and Unit of work pattern in ASP.net core 3.1"
-date: "2020-07-30"
+title: "Repository and Unit of work pattern in ASP.net core"
+lastmod: 2020-07-30T15:55:13+10:00
+date: 2020-07-30T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
 categories: 
   - "architecture"
   - "patterns"
@@ -9,6 +12,21 @@ tags:
   - "transactions"
   - "unitofwork"
   - "uow"
+#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+summary: A Repository is used to manage aggregate persistence and retrieval. The repository mediates between the data-access layer and the domain.The unit of work pattern keeps track of all changes to aggregates. Once all updates of the aggregates in a scope are completed, the tracked changes are played onto the database in a transaction
+ShowToc: true
+TocOpen: false
+images:
+  - cover.jpg
+cover:
+    image: "cover.jpg"
+    alt: "Repository and Unit of work pattern in ASP.net core"
+    caption: "Repository and Unit of work pattern in ASP.net core"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 ### Source Code
@@ -19,7 +37,7 @@ If you wish to follow along with the code used in this post, you can find it [on
 
 A Repository is used to manage aggregate persistence and retrieval. The repository mediates between the data-access layer and the domain. It decouples the domain layer from the data layer effectively. It does so by providing collection-like access to the underlying data. The repository offers a collection interface by providing methods to add, modify, remove, and fetch domain objects. This enables the domain to remain agnostic of the underlying persistence mechanism. This allows both these layers to evolve independently maintaining high cohesion with low coupling.
 
-![](images/Repository-Pattern-Pradeep-Loganathan-1024x556.png)
+!["Repository Pattern"](images/Repository-Pattern-Pradeep-Loganathan-1024x556.png)
 
 Applying Repository Pattern to Domain design
 
