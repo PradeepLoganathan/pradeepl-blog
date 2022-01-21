@@ -1,7 +1,7 @@
 baseURL: https://pradeepl.com
 title: Pradeep Loganathan's Blog
 paginate: 5
-copyright: "Copyright 2022 Pradeep Loganathan. All rights reserved."
+copyright: "&copy; 2022 Pradeep Loganathan. All rights reserved."
 
 enableInlineShortcodes: true
 enableRobotsTXT: true
