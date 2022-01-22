@@ -19,13 +19,25 @@ cover:
   caption: "Deploying a serverless knative application on kind"
 
 images:
-
-
+  - cover.jpg
+categories:
+  - Kubernetes
 tags:
   - "knative"
   - "kind"
   - "serverless"
+
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
+
 ---
+> The code for this blog post is on github [here.](https://github.com/PradeepLoganathan/install-knative-on-kind-with-kourier)
+
+Knative adds the necessary compoennts for deploying , running and managing serverless applications on Kubernetes. As a developer, I generally prefer to have knative running locally to develop and test my applications. In this blog post we will work through steps to  install knative on a kind cluster locally. We will then install kourier as the networking component. We will then deploy a sample application to test that everything ties up and we can deploy knative applications onto the local cluster. So lets get started.
+
+{{< hugo-giphy-shortcode K5c3azAxtnKlAsO3Jv >}}
 
 ## Create the cluster using Kind
 

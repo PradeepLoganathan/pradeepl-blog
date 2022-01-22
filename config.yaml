@@ -1,5 +1,6 @@
 baseURL: https://pradeepl.com
-title: Pradeep Loganathan's Blog
+languageCode: en-us
+title: "Pradeep Loganathan"
 paginate: 5
 copyright: "&copy; 2022 Pradeep Loganathan. All rights reserved."
 
@@ -47,16 +48,19 @@ menu:
 
 params:
   env: production
-  title: Pradeep Loganathan's Blog
+  title: "Pradeep Loganathan"
   description: 'My technical notes and thoughts on software engineering, programming, and life.'
-  author: Pradeep Loganathan
+  keywords: [Pradeep, Loganathan, Blog, Portfolio, Resume]
+  author: "Pradeep Loganathan"
   comments: true
   images:
     - Pradeep-Loganathan.jpeg
   DateFormat: 'January 2, 2006'
   timeFormat: 'h:mm a'
   dateTimeFormat: 'MMMM Do, YYYY h:mm a'
-  language: en
+  language: en-us
+
+  mainSections: ['posts']
 
   editPost:
     URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
@@ -98,7 +102,9 @@ params:
   homeInfoParams:
       Title: "Hi there \U0001F44B"
       Content: Welcome to my blog.
-     
+
+      subscribeInfo:
+        Text: If you liked this post, check out my other [Featured Posts](/categories/featured) or learn more [About Me](/about).  
 
   socialIcons: # optional
     - name: "twitter"
@@ -111,7 +117,9 @@ params:
       url: "https://github.com/pradeeploganathan"
     - name: stackoverflow
       url: "https://stackoverflow.com"
-  
+    - name: rss
+      url: /index.xml
+
   # analytics:
   #   google:
   #     SiteVerificationTag: "XYZabc"
