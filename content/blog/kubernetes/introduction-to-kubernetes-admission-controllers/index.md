@@ -209,7 +209,7 @@ The above pod definition tries to create a pod with a memory request size of 2 G
 
 ```shell
 > kubectl apply -f memory-default-2gi.yaml --namespace=default-mem-example
-Error from server (Forbidden): error when creating "memory-default-2gi.yaml": pods"default-mem-demo-2" is forbidden: maximum memory usage per Container is 512Mi, but limitis 2Gi
+Error from server (Forbidden): error when creating "memory-default-2gi.yaml": pods"default-mem-demo-2" is forbidden: maximum memory usage per Container is 512Mi, but limit is 2Gi
 ```
 
 As expected, the LimitRanges admission controller prevented the creation of this pod as its memory requirements violated the memory limits set for the namespace.
