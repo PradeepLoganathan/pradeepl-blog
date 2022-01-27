@@ -18,21 +18,16 @@ images:
 
 
 tags:
-  - "post"
+  - "post"dsfsdf
 ---
 
-Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It is an [open-source project](https://github.com/tektoncd) and is part of the [Continuous Delivery Foundation](https://cd.foundation/projects/) set of projects. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines. Tekton aims to make it easier and faster to build, test, and package up your source code. It allows developers to build, test, and deploy cloud-native, containerized applications across multiple Kubernetes providers, build and deploy immutable images, version control IaC etc. Tekton can be used to perform advanced Kubernetes deployment/rollback strategies like blue-green, canary deployment, rolling updates etc.
+Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It is an [open-source project](https://github.com/tektoncd) and is part of the [Continuous Delivery Foundation](https://cd.foundation/projects/) set of projects. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines. Tekton aims to make it easier and faster to build, test, and package up your source code. It allows developers to build, test, and deploy cloud-native, containerized applications across multiple Kubernetes providers, build and deploy immutable images, version control IaC etc. Tekton can be used to perform advanced Kubernetes deployment/rollback strategies such as blue-green deployment, canary deployment, rolling updates etc.
 
-Tekton was originally the build system for the Knative serverless workload platform. It was converted to a standalone project implementing general-purpose CI/CD platform. It was donated to the Continuous Delivery Foundation in March 2019.
+Tekton was originally the build system for the Knative serverless workload platform. It was converted to a standalone project implementing a general-purpose CI/CD platform. It was donated to the Continuous Delivery Foundation in March 2019.
 
 ## Tekton Components
 
-Tekton is composed of the following core components
-
-1. Tekton Pipelines
-2. Tekton Triggers
-3. Tekton CLI
-4. Tekton Dashboard
+Tekton uses  a pipeline architecture composed of pipelines, tasks , steps and workspaces to provide a highly configurable continuous delivery mechanism. The github repo for Tekton pipelines is [here](https://github.com/tektoncd/pipeline). It uses Tekton triggers to enable continuous integration to trigger pipelines based on triggers defined. The github repo for Tekton triggers is [here](https://github.com/tektoncd/triggers). It also provides a CLI to interact with these components. The project is hosted on github [here](https://github.com/tektoncd/cli). Let us take a look at these components in detail.
 
 ## Tekton Pipelines
 
@@ -108,7 +103,6 @@ spec:
   name: hello-world-task
 ```
 
-
 ### PipelineRun
 
 A pipelinerun is used to execute a pipeline.A pipelinerun creates a Taskrun for each task in the pipeline. The tasks are executed in the order defined in the pipeline. The pipelinerun monitors the execution of the pipeline and reports on the progress and completion of the pipeline.
@@ -125,5 +119,15 @@ spec:
 
 ## Tekton Triggers
 
-## Tekton CLI
-## Tekton Dashboard
+Tekton triggers provides continuous integration functionality. The custom resource definitions detailed above need to be manually triggered to perform a build and deploy. We would need to use kubectl or Tekton CLI to start a Tekton pipeline. Tekton triggers introduces new custom resources to automate your CI/CD pipelines further. The CRD's are Trigger templates, Trigger bindings and Event listeners. It uses webhooks as a mechanism to trigger pipelines automatically.  Let us get to know these CRD's in a bit more detail.
+
+### TriggerTemplates
+
+A Trigger template defines a template for the resources that the trigger will create. The template defines the pipeline that should be triggered and the parameters the need to be passed to the pipelines.  
+### TriggerBindings
+
+
+### EventListeners
+
+An event listener listens to incoming HTTP requests
+

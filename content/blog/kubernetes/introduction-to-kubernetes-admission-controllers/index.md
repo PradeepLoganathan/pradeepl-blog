@@ -11,10 +11,12 @@ categories:
   - Kubernetes
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: Admission controllers provide extension points that augment Kubernetes functionality. Admission controllers determine if the request is well-formed and approve or reject the API request.
+description: Admission controllers provide extension points that augment Kubernetes functionality. Admission controllers determine if the request is well-formed and approve or reject the API request.
 ShowToc: true
 TocOpen: false
 images:
   - austin-neill-4pHcmcPsP8A-unsplash.jpg
+  - Admission-controller-webhook-Architecture.png
 cover:
     image: "austin-neill-4pHcmcPsP8A-unsplash.jpg"
     alt: "Introduction to Kubernetes Admission Controllers"
