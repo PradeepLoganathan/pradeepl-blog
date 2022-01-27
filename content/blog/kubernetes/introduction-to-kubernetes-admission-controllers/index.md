@@ -11,10 +11,12 @@ categories:
   - Kubernetes
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: Admission controllers provide extension points that augment Kubernetes functionality. Admission controllers determine if the request is well-formed and approve or reject the API request.
+description: Admission controllers provide extension points that augment Kubernetes functionality. Admission controllers determine if the request is well-formed and approve or reject the API request.
 ShowToc: true
 TocOpen: false
 images:
   - austin-neill-4pHcmcPsP8A-unsplash.jpg
+  - Admission-controller-webhook-Architecture.png
 cover:
     image: "austin-neill-4pHcmcPsP8A-unsplash.jpg"
     alt: "Introduction to Kubernetes Admission Controllers"
@@ -209,7 +211,7 @@ The above pod definition tries to create a pod with a memory request size of 2 G
 
 ```shell
 > kubectl apply -f memory-default-2gi.yaml --namespace=default-mem-example
-Error from server (Forbidden): error when creating "memory-default-2gi.yaml": pods"default-mem-demo-2" is forbidden: maximum memory usage per Container is 512Mi, but limitis 2Gi
+Error from server (Forbidden): error when creating "memory-default-2gi.yaml": pods"default-mem-demo-2" is forbidden: maximum memory usage per Container is 512Mi, but limit is 2Gi
 ```
 
 As expected, the LimitRanges admission controller prevented the creation of this pod as its memory requirements violated the memory limits set for the namespace.
