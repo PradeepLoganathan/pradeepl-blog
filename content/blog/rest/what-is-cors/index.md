@@ -41,26 +41,30 @@ An HTTP request is classified as a "non- Simple" request if
 
 A general preflight request header is as shown below.
 
+```shell
 OPTIONS /resource/foo  
 Origin: http://myorigindomain.com  
 Access-Control-Request-Method: POST  
 Access-Control-Request-Headers: X-Custom-Header  
 content-length: 7995
+```
 
 A valid CORS request always contains an Origin header. This Origin header is added by the browser, and cannot be controlled by the user. The value of this header is the scheme (e.g. HTTP), domain (e.g. mydomain.com) and port (included only if it is not a default port, e.g. 8080) from which the request originates. In response, the server sends back an Access-Control-Allow-Origin header as shown below
 
+```shell
 HTTP/1.1 200  
- status: 200  
- transfer-encoding:"chunked"  
- content-type:"application/json; charset=utf-8"  
- content-encoding:"gzip"  
- vary:"Accept-Encoding"  
- server:"Kestrel"  
- Access-Control-Allow-Origin:http://myorigindomaincom  
- Access-Control-Allow-Methods:GET, POST  
- Access-Control-Allow-Headers:X-Custom-Header  
- x-powered-by:"ASP.NET"  
- date:"Sat, 17 Feb 2018 14:07:48 GMT"
+status: 200  
+transfer-encoding:"chunked"  
+content-type:"application/json; charset=utf-8"  
+content-encoding:"gzip"  
+vary:"Accept-Encoding"  
+server:"Kestrel"  
+Access-Control-Allow-Origin:http://myorigindomaincom  
+Access-Control-Allow-Methods:GET, POST  
+Access-Control-Allow-Headers:X-Custom-Header  
+x-powered-by:"ASP.NET"  
+date:"Sat, 17 Feb 2018 14:07:48 GMT"
+```
 
 In this case, the server responds with a Access-Control-Allow-Origin: \* which means that the resource can be accessed by any domain in a cross-site manner. If the resource owners at /api/testapi wished to restrict access to the resource to requests only from http://alloweddomain.org, they would send back:  
 Access-Control-Allow-Origin: http://alloweddomain.org  
@@ -70,26 +74,96 @@ Note that now, no domain other than http://alloweddomain.org (identified by the 
 
 In ASP.Net Core 3.1 CORS functionality for the pipeline is defined in the package Microsoft.AspNetCore.MVC.Cors. It can be included in the pipeline by adding cors to the middleware in the startup class as below.
 
-<script src="https://gist.github.com/PradeepLoganathan/12d24937adff27e2f02532cbb7bf948f.js?file=#file-startup.cs"></script>
+```csharp
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-<a href="https://gist.github.com/PradeepLoganathan/12d24937adff27e2f02532cbb7bf948f#file-#file-startup-cs">View this gist on GitHub</a>
+        public IConfiguration Configuration { get; }
 
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                builder => builder.AllowAnyOrigin()
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod());
+            });
+            services.AddMvc();            
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseCors("AllowAll");
+            app.UseMvc();
+        }
+    }
+```
 In the above startup class, I am adding CORS into the pipeline by calling Service.AddCors and defining a policy. The policy specified is a very liberal policy allowing all headers, origins, and methods. I am then configuring the service by calling app.UseCors() and specifying the policy defined above.
 
 We can define custom CORS policies in ASP.Net core and apply them into the pipeline as needed. In the below example, I am defining two different CORS policies. The CORSPolicies.PublicAPI policy is used for production scenarios and the CORSPolicies.DevAPI policy is used for development purposes. The PublicAPI policy restricts the domains and the methods whereas the DevAPI policy used in the development environment places no such restrictions.
 
-<script src="https://gist.github.com/PradeepLoganathan/2c6d08441d91d392e446ddaf762eea3b.js"></script>
+```csharp
 
-<a href="https://gist.github.com/PradeepLoganathan/2c6d08441d91d392e446ddaf762eea3b">View this gist on GitHub</a>
+readonly string CORSPolicies.PublicAPI = "corspolicy.public";
+readonly string CORSPolicies.DevAPI = "corspolicy.dev";
+    
+services.AddCors(options =>
+{
+    options.AddPolicy(CORSPolicies.PublicAPI,
+        builder => builder
+            .AllowAnyHeader()
+            .WithMethods("POST", "GET")
+            .WithOrigins("https://domain1.com", "https://domain2.com"));
+
+    options.AddPolicy(CORSPolicies.DevAPI,
+        builder => builder
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin());
+});
+```
 
 We can specify the policy to be used based on the environment as below
 
-<script src="https://gist.github.com/PradeepLoganathan/3da2b70e7486cd92af297bff92aef240.js"></script>
-
-<a href="https://gist.github.com/PradeepLoganathan/3da2b70e7486cd92af297bff92aef240">View this gist on GitHub</a>
+```csharp
+if (env.IsDevelopment())
+{
+    app.UseCors(CORSPolicies.DevAPI);
+}
+else
+{
+    app.UseCors(CORSPolicies.PublicAPI);
+}
+```
 
 We can also use specific policies for specific endpoints by specifying the EnableCORS attribute at the controller level as below. This provides a fine-grained level of control over which CORS policy is applied at the controller and at the method level. We can also disable CORS policy for a specific method using the DisableCors attribute.
 
-<script src="https://gist.github.com/PradeepLoganathan/67ec9c468a0b61efec75728ebbe53911.js"></script>
+```csharp
 
-<a href="https://gist.github.com/PradeepLoganathan/67ec9c468a0b61efec75728ebbe53911">View this gist on GitHub</a>
+[ApiController]
+[Route("api/[controller]")]
+[Produces("application/json")]
+[AllowAnonymous]
+[EnableCors(CORSPolicies.PublicApi)]
+public class PublicApiControllerBase : ControllerBase
+{
+  [DisableCors]
+  [HttpGet]
+  public ActionResult<IEnumerable<string>> Get()
+  {
+    return new string[] { "hello", ".net Core 3.1" };
+  }
+}
+```
