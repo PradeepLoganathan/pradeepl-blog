@@ -32,7 +32,7 @@ editPost:
 ---
 
 
-In the previous [post](https://pradeepl.com/dotnet/configuration-in-a-net-core-console-application/) we implemented configuration in a .net core console application. In this post let us look at implementing dependency injection in a .net core console application.
+In the previous [post](https://pradeepl.com/blog/dotnet/configuration-in-a-net-core-console-application/) we implemented configuration in a .net core console application. In this post let us look at implementing dependency injection in a .net core console application.
 
 An ELI5 explanation of dependency injection is provided in [this historically significant stackoverflow post](https://stackoverflow.com/questions/1638919/how-to-explain-dependency-injection-to-a-5-year-old). DI helps implement a key design pattern called loose coupling. DI enables loose coupling by allowing us to program against an interface(contract), rather than a concrete implementation. This makes code more maintainable and testable.
 
