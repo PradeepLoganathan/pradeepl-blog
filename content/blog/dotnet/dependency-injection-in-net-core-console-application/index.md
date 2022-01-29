@@ -12,9 +12,12 @@ categories:
   - "dotnet"
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: Dependency injection enables an application to use a key design principle called Loose coupling. Loose coupling enables us to write highly maintainable
-description: Dependency injection enables an application to use a key design principle called Loose coupling. Loose coupling enables us to write highly maintainable
+# description: Dependency injection enables an application to use a key design principle called Loose coupling. Loose coupling enables us to write highly maintainable
+ShowSummary: true
+ShowDescription: true
 ShowToc: true
 TocOpen: false
+ShowPostNavLinks: true
 images:
   - scott-trento-xrBxbPiK2w8-unsplash.jpg
 cover:
