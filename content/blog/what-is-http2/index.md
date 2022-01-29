@@ -15,7 +15,7 @@ tags:
 
 HTTP & HTTP/2 are both application level protocols that utilize a lower level protocol like TCP to talk on the Internet. The protocol of the Internet is TCP over IP over Ethernet. HTTP can use other transports too such as UDP. An example of this is [node-httpp](https://github.com/InstantWebP2P/node-httpp). HTTP/2 is a new protocol, intended as a higher performance alternative to HTTP/1.1. HTTP/2's overriding objective is to improve the experience of web application users. This is a significant release to HTTP 1.0. HTTP 1.0 introduced as an IEFT standard in 1996 ( [RFC 1945](https://tools.ietf.org/html/rfc1945) ) and HTTP 1.1 was published in 1999 ( [RFC 2616](https://www.ietf.org/rfc/rfc2616.txt) ). HTTP/2 was formalized by the [httpbis](https://tools.ietf.org/wg/httpbis/) working group. The HTTP2 protocol recommendations included solutions for header compression, server push and the 'Head of line blocking' problem. HTTP2 is comprised of two specifications Hypertext Transfer Protocol version 2 – [RFC7540](https://tools.ietf.org/html/rfc7540) and HPACK – Header Compression for HTTP2 – [RFC7541](https://tools.ietf.org/html/rfc7541)
 
-HTTP2 is currently supported by all the major browsers and Web servers. [caniuse](https://caniuse.com/#feat=http2)  indicates that 84% of all users are currently on HTTP2.
+HTTP2 is currently supported by all the major browsers and Web servers. [caniuse](https://caniuse.com/#feat=http2) indicates that 84% of all users are currently on HTTP2.
 
 ![http2](images/http2.png)
 
@@ -27,9 +27,9 @@ HTTP2 provides the following features
 
 ### Binary Protocol
 
-HTTP2 is binary, instead of textual. Known as the binary framing layer, this protocol is compatible with the HTTP/1.1 version. Status codes, methods, and headers have not undergone any changes.
+HTTP2 is binary, instead of textual. Known as the binary framing layer, this protocol is compatible with the HTTP/1.1 version. Status codes, methods, and headers have not undergone any changes.
 
-Binary protocols are more simple, efficient to parse and less error-prone compared to textual protocols. This also means that it is much more efficient on the wire. Textual protocols have a lot of implementation complexity. They must cover issues like string delimiters, whitespace handling, extra characters etc. These have also been the source of a few security issues. A binary protocol avoids all these issues. Another advantage of the binary protocol is that it breaks communication down into frames. This helps carry all communication over a single TCP connection, which remains open throughout a conversation. This opens opportunities to optimize the communication channel further. However, with this change, it is no longer human readable without using tools like Wireshark to decode the protocol. You cannot simply telnet to port 80 and fire out manually formed requests anymore.  If you are an Ops person this will not make you happy. However, the other features allow you to detect TCP congestion control and other issues quickly.
+Binary protocols are more simple, efficient to parse and less error-prone compared to textual protocols. This also means that it is much more efficient on the wire. Textual protocols have a lot of implementation complexity. They must cover issues like string delimiters, whitespace handling, extra characters etc. These have also been the source of a few security issues. A binary protocol avoids all these issues. Another advantage of the binary protocol is that it breaks communication down into frames. This helps carry all communication over a single TCP connection, which remains open throughout a conversation. This opens opportunities to optimize the communication channel further. However, with this change, it is no longer human readable without using tools like Wireshark to decode the protocol. You cannot simply telnet to port 80 and fire out manually formed requests anymore. If you are an Ops person this will not make you happy. However, the other features allow you to detect TCP congestion control and other issues quickly.
 
 ### Multiplexing
 
@@ -80,26 +80,69 @@ At the time of writing this post, [Kestrel](https://pradeeploganathan.com/asp-ne
 
 * * *
 
-<script src="https://gist.github.com/PradeepLoganathan/2007150e71706640b5091c432f5674d4.js"></script>
-
-<a href="https://gist.github.com/PradeepLoganathan/2007150e71706640b5091c432f5674d4">View this gist on GitHub</a>
+```csharp
+public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+{
+  return  WebHost.CreateDefaultBuilder(args)
+    .ConfigureKestrel(options =>
+    {
+      options.Listen(IPAddress.Any, 8080, listenOptions =>
+      {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+        listenOptions.UseHttps("testcertificate.pfx", "donotusepassword");
+       });
+     })
+     .UseStartup<Startup>();
+ }
+ ```
 
 We can also configure support for HTTP/2 using configuration by specifying the same in appsettings.json as below
 
-<script src="https://gist.github.com/PradeepLoganathan/8cf017504b346a82f26afd704088c7d8.js"></script>
-
-<a href="https://gist.github.com/PradeepLoganathan/8cf017504b346a82f26afd704088c7d8">View this gist on GitHub</a>
+```json
+"Kestrel": {
+       "EndPoints": {
+           "Http": {
+               "Url": "http://localhost:5000"
+           },
+           "HttpsInlineCertFile": {
+               "Url": "https://localhost:5001",
+               "Protocols": "Http1AndHttp2",  
+               "Certificate": {
+                   "Path": "./certificate.pfx",
+                   "Password": "DoNotUsePassword",
+                   "AllowInvalid": "true"
+               }
+           }
+       }
+   }
+```
 
 The above configuration can be used to setup a web application to use HTTP2. Similarly, we can also specify a client to use HTTP2 to connect to a Web application supporting HTTP2 as below. We use an instance of HTTPClient to connect as below
 
-<script src="https://gist.github.com/PradeepLoganathan/1919c89d641a459e52f4124f8798d7b2.js"></script>
-
-<a href="https://gist.github.com/PradeepLoganathan/1919c89d641a459e52f4124f8798d7b2">View this gist on GitHub</a>
+```csharp
+public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+{
+  return  WebHost.CreateDefaultBuilder(args)
+    .ConfigureKestrel(options =>
+    {
+      options.Listen(IPAddress.Any, 8080, listenOptions =>
+      {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+        listenOptions.UseHttps("testcertificate.pfx", "donotusepassword");
+       });
+     })
+     .UseStartup<Startup>();
+ }
+ ```
 
 Better still we can use HttpClientFactory and configure the HTTPClient as below
 
-<script src="https://gist.github.com/PradeepLoganathan/07edc3edff39c2cfc3a5c1afbaa3751c.js"></script>
-
-<a href="https://gist.github.com/PradeepLoganathan/07edc3edff39c2cfc3a5c1afbaa3751c">View this gist on GitHub</a>
+```csharp
+services.AddHttpClient<ICandidateService, CandidateService>(client => 
+{ 
+  client.BaseAddress = new Uri("https://localhost:5001"),
+  client.DefaultRequestVersion = new Version(2, 0) 
+});
+```
 
 If both the client and the server support HTTP2, then the connection will be established over HTTP2. If not, then the connection will switch over to HTTP 1.1

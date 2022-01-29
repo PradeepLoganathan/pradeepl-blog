@@ -67,7 +67,9 @@ params:
     Text: "Edit this post on github" # edit text
     appendFilePath: true # to append file path to Edit link
 
-  
+  social:
+    twitter: pradeepl    
+
   header:
     title: 'Pradeep Loganathan'
     imageUrl: 'Pradeep-Loganathan.jpeg'
@@ -116,7 +118,7 @@ params:
     - name: "github"
       url: "https://github.com/pradeeploganathan"
     - name: stackoverflow
-      url: "https://stackoverflow.com"
+      url: "https://stackoverflow.com/users/4613054/pradeepl"
     - name: rss
       url: /index.xml
 
