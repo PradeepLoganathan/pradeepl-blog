@@ -1,37 +1,53 @@
 ---
 title: "Tekton Getting Started"
-author: "Pradeep Loganathan"
+lastmod: 2022-01-06T15:55:13+10:00
 date: 2022-01-25T11:01:47+10:00
+Author: "Pradeep Loganathan"
 
 draft: true
 comments: true
 toc: true
 showToc: true
+TocOpen: false
 
-description: ""
+summary: Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines.
+description: Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines.
 
 cover:
-    image: "cover.png"
-    relative: true
+  image: "Tekton-Cover.png"
+  alt: "Getting started with Tekton"
+  caption: "Getting started with Tekton"
+  relative: true
 
 images:
-
-
+  - 
+categories:
+  - Kubernetes
 tags:
-  - "post"dsfsdf
+  - "tekton"
+  - "CICD"
+
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
-Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It is an [open-source project](https://github.com/tektoncd) and is part of the [Continuous Delivery Foundation](https://cd.foundation/projects/) set of projects. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines. Tekton aims to make it easier and faster to build, test, and package up your source code. It allows developers to build, test, and deploy cloud-native, containerized applications across multiple Kubernetes providers, build and deploy immutable images, version control IaC etc. Tekton can be used to perform advanced Kubernetes deployment/rollback strategies such as blue-green deployment, canary deployment, rolling updates etc.
+Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It is an [open-source project](https://github.com/tektoncd) and is part of the [Continuous Delivery Foundation](https://cd.foundation/projects/) set of projects. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines. Since it uses Kubernetes native CRD's , we can use familiar tools to create ,manage and monitor tekton pipelines. Tekton aims to make it easier and faster to build, test, and package up your source code. It allows developers to build, test, and deploy cloud-native, containerized applications across multiple Kubernetes providers, build and deploy immutable images, version control IaC etc. Tekton can be used to perform advanced Kubernetes deployment/rollback strategies such as blue-green deployment, canary deployment, rolling updates etc.
 
 Tekton was originally the build system for the Knative serverless workload platform. It was converted to a standalone project implementing a general-purpose CI/CD platform. It was donated to the Continuous Delivery Foundation in March 2019.
 
+This diagram depicts the various components of tekton and their interactions. 
+
+![Tekton components](Tekton-architecture.png)
+
 ## Tekton Components
 
-Tekton uses  a pipeline architecture composed of pipelines, tasks , steps and workspaces to provide a highly configurable continuous delivery mechanism. The github repo for Tekton pipelines is [here](https://github.com/tektoncd/pipeline). It uses Tekton triggers to enable continuous integration to trigger pipelines based on triggers defined. The github repo for Tekton triggers is [here](https://github.com/tektoncd/triggers). It also provides a CLI to interact with these components. The project is hosted on github [here](https://github.com/tektoncd/cli). Let us take a look at these components in detail.
+Tekton uses  a pipeline architecture composed of pipelines, tasks , steps and workspaces to provide a highly configurable continuous delivery mechanism. The github repo for Tekton pipelines is [here](https://github.com/tektoncd/pipeline). Tekton uses Tekton triggers to enable continuous integration to automatically invoke pipelines based on events. These events could be code being checked into specific branches, PR's being merged etc. The github repo for Tekton triggers is [here](https://github.com/tektoncd/triggers). Tekton also provides a CLI to interact with these components. The project is hosted on github [here](https://github.com/tektoncd/cli). Let us take a look at these components in detail.
 
 ## Tekton Pipelines
 
-Tekton uses Kubernetes Custom Resource Definitions (CRD) to define the building blocks used to assemble CI/CD pipelines.The CRD's defined by Tekton are below.
+Tekton uses Kubernetes Custom Resource Definitions (CRD) to define the building blocks used to assemble CI/CD pipelines.The CRD's defined by Tekton for continuous delivery are below.
 
 ### Step
 
@@ -39,7 +55,7 @@ Steps are the most basic units used to create a pipeline. A step represents a si
 
 ### Task
 
-A Task is a collection of steps that should be executed in a specific order. It is composed of several reusable, loosely coupled steps that perform a specific function. Steps in a task are generally related to each other. A task contains a minimum of one step while complex tasks can have many steps. A task is the basic unit of execution in Tekton. Tasks get executed as Kubernetes pods while steps in a Task map to containers. A Task is run in a single pod, enabling steps to share a common volume and resources. Tasks are usually designed to be independent of the data they operate on. Parameters can be used to customize the resources and behavior associated with a Task.
+A Task is a collection of steps that should be executed in a specific order. It is composed of several reusable, loosely coupled steps that perform a specific function. Steps in a task are generally related to each other. A task contains a minimum of one step while complex tasks can have many steps. A task is the basic unit of execution in Tekton. Tasks get executed as Kubernetes pods while steps in a Task map to containers. A Task is run in a single pod, enabling steps to share a common volume and resources. Tekton steps execute in a pod specifically created for the task. Tekton tasks are therefore isolated from one another and from the rest of the cluster. Tasks are usually designed to be independent of the data they operate on. Parameters can be used to customize the resources and behavior associated with a Task.
 
 The [Tekton catalog](https://github.com/tektoncd/catalog) contains a catalog of reusable task resources for everyday operations such as [Kubernetes actions](https://github.com/tektoncd/catalog/tree/main/task/kubernetes-actions), [GIT operations](https://github.com/tektoncd/catalog/tree/main/task/git-cli/0.3) etc. Tasks are generally stitched together to create a pipeline.
 
@@ -74,7 +90,7 @@ A sample pipeline is defined below. This pipeline has two tasks which are refere
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
- name: hello-pipeline
+ name: hello-world-pipeline
 spec:
  tasks:
  - name: hello-world
@@ -91,7 +107,7 @@ A Workspace is a shared volume used by tasks and pipelines. This allows artifact
 
 ### TaskRun
 
-A TaskRun is used to execute a task. A TaskRun will execute all the steps defined in the task. It will also contain the status of the task's execution and the status of the execution of each step. The TaskRun will execute until all the steps have been marked as successful.
+A TaskRun is used to execute a task. A TaskRun will execute all the steps defined in the task. It will also contain the status of the task's execution and the status of the execution of each step. The TaskRun will execute until all the steps have been marked as successful. This taskrun definition can be used to execute the hello-world-task defined above.
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -105,13 +121,13 @@ spec:
 
 ### PipelineRun
 
-A pipelinerun is used to execute a pipeline.A pipelinerun creates a Taskrun for each task in the pipeline. The tasks are executed in the order defined in the pipeline. The pipelinerun monitors the execution of the pipeline and reports on the progress and completion of the pipeline.
+A pipelinerun is used to execute a pipeline.A pipelinerun creates a Taskrun for each task in the pipeline. The tasks are executed in the order defined in the pipeline. The pipelinerun monitors the execution of the pipeline and reports on the progress and completion of the pipeline. This pipelinerun definition can be used to execute the hello-world-pipeline defined above.
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
- generateName: run-simple-pipeline
+ generateName: run-hello-pipeline
 spec:
  pipelineRef:
   name: hello-pipeline
@@ -119,15 +135,65 @@ spec:
 
 ## Tekton Triggers
 
-Tekton triggers provides continuous integration functionality. The custom resource definitions detailed above need to be manually triggered to perform a build and deploy. We would need to use kubectl or Tekton CLI to start a Tekton pipeline. Tekton triggers introduces new custom resources to automate your CI/CD pipelines further. The CRD's are Trigger templates, Trigger bindings and Event listeners. It uses webhooks as a mechanism to trigger pipelines automatically.  Let us get to know these CRD's in a bit more detail.
+Tekton triggers provides continuous integration functionality. The custom resource definitions detailed above provide functionality necessary for continuos delivery. Tekton Pipelines and Tasks are declarative. They need to be manually triggered to perform a build and deploy. We would need to use kubectl or Tekton CLI to execute a Tekton pipeline. Triggers provides the necessary functionality to declaratively create PipelineRun objects in response to external events. Triggers have no knowledge of what is in the pipeline declaration itself. This design allows for separation of concerns between the two areas. Tekton triggers introduces new custom resources to automate your CI/CD pipelines further. The CRD's are Trigger templates, Trigger bindings and Event listeners. Let us understand these CRD's in a bit more detail.
 
 ### TriggerTemplates
 
-A Trigger template defines a template for the resources that the trigger will create. The template defines the pipeline that should be triggered and the parameters the need to be passed to the pipelines.  
+A Trigger template defines a template for the resources that the trigger will create. A trigger template generally instantiates a pipelinerun and passes it the necessary parameters. The trigger template defines the pipeline that should be triggered and the parameters the need to be passed to the pipelines. A sample trigger template which triggers the hello-world-pipeline and passes it the gitrevision as a parameter is below.
+
+```yaml
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: template-name
+spec:
+  params:
+   - name: gitrevision
+     description: The git revision
+    default: master
+   - name: gitrepositoryurl
+     description: The git repository url
+  resourceTemplates:
+   - apiVersion: tekton.dev/v1beta1
+     kind: PipelineRun
+     metadata:
+      generateName: simple-pipeline-run-
+     spec:
+      pipelineRef:
+       name: hello-world-pipeline
+```
+
 ### TriggerBindings
 
+```yaml
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: binding-name
+spec:
+  params:  
+    - name: param-name
+      value: $(path.to.value)
+```
 
 ### EventListeners
 
-An event listener listens to incoming HTTP requests
+An event listener listens for incoming HTTP requests at a specific port and invokes a trigger template. The event listener links the trigger template and the trigger binding by extracting information defined in the trigger binding from incoming event data. It then invokes the trigger templates passing in the extracted data as parameters. This allows the trigger template to instantiate and pass parameters to the pipelinerun and taskrun objects.
+This is an extract of an yaml definition of an event listener
+
+```yaml
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: hello-listener
+spec:
+  serviceAccountName: tekton-triggers-sa
+  triggers:
+    - name: trigger-name
+      bindings:
+        - ref: binding-name
+      template:
+        ref: template-name
+      interceptors:
+```
 
