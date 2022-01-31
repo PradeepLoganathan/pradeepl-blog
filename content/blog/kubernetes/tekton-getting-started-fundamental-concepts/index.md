@@ -1,8 +1,10 @@
 ---
-title: "Tekton Getting Started"
+title: "Getting Started with Tekton - Fundamental Concepts"
 lastmod: 2022-01-06T15:55:13+10:00
 date: 2022-01-25T11:01:47+10:00
 Author: "Pradeep Loganathan"
+
+series: ["Tekton-Getting Started"]
 
 draft: false
 comments: true
@@ -11,7 +13,7 @@ showToc: true
 TocOpen: false
 
 summary: Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines.
-description: Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines.
+# description: Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines.
 
 cover:
   image: "Tekton-Cover.png"
@@ -24,8 +26,10 @@ images:
 categories:
   - Kubernetes
 tags:
-  - "tekton"
   - "CICD"
+  - "tekton-pipelines"
+  - "Tekton"
+  - "Pipelines"
 
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
@@ -145,7 +149,7 @@ A Trigger template defines a blueprint for the resources that the trigger will c
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: template-name
+  name: staging-trigger-template
 spec:
   params:
    - name: gitrevision
@@ -170,19 +174,19 @@ spec:
 
 ### TriggerBindings
 
+Trigger binding transforms the incoming event data for consumption by the trigger template. It transforms fields from the incoming event data into parameters. It then passes the parameters to the trigger template. A sample trigger binding is below. It uses Jsonpath expressions to extract the gitrevision and giturl from the incoming event data. The trigger binding passes the gitrevision and giturl parameters to the trigger template.
+
 ```yaml
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: deploy-pipeline-binding-git-repo
+  name: deploy-pipeline-binding
 spec:
   params:  
     - name: giturl
-      value: $(event.repository.url)
+      value: $(body.repository.url)
     - name: gitrevision
-      value: $(event.head_commit.id)
-  template: # The trigger template that this binding will use
-    name: template-name
+      value: $(body.head_commit.id)
 ```
 
 ### EventListeners
@@ -196,13 +200,20 @@ kind: EventListener
 metadata:
   name: hello-listener
 spec:
-  serviceAccountName: tekton-triggers-sa
   triggers:
-    - name: trigger-name
+    - name: staging-trigger
       bindings:
-        - ref: binding-name
+        - ref: deploy-pipeline-binding # The trigger binding to use
       template:
-        ref: template-name
-      interceptors:
+        ref: staging-trigger-template # The trigger template to use
 ```
 
+## Tekton CLI
+
+Tekton CLI provides a command line interface to interact with Tekton. It provides a set of commands to interact with Tekton resources. It can be used to create, delete, list, describe, and update all Tekton resources such as pipelines, eventlisteners, template bindings, trigger templates etc. It is available for all platforms and can be installed from [here.](https://github.com/tektoncd/cli/releases)
+
+## Tekton Dashboard
+
+Tekton dashboard provides a web based UI to view and manage Tekton resources. It can be installed directly into the kubernetes cluster. The github repo for tekton dashboard is [here.] (https://github.com/tektoncd/dashboard)
+
+All of the above are the major components of Tekton and cover all aspects of continous integration and deployment. In the next blog post we will look at deploying tekton to a kubernetes cluster and creating a CI/CD pipeline.
