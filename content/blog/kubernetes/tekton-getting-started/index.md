@@ -139,7 +139,7 @@ Tekton triggers provides continuous integration functionality. The custom resour
 
 ### TriggerTemplates
 
-A Trigger template defines a template for the resources that the trigger will create. A trigger template generally instantiates a pipelinerun and passes it the necessary parameters. The trigger template defines the pipeline that should be triggered and the parameters the need to be passed to the pipelines. A sample trigger template which triggers the hello-world-pipeline and passes it the gitrevision as a parameter is below.
+A Trigger template defines a blueprint for the resources that the trigger will create. The trigger template defines the pipelinerun or taskrun that should be triggered and the parameters the need to be passed. It attaches an event listener to the pipelinerun defined in the template and passes the corresponding parameters to it. A sample trigger template which triggers a pipelinerun is below. The  template passes the url of the git repo and the gitrevision as parameters to the pipelinerun.
 
 ```yaml
 apiVersion: triggers.tekton.dev/v1alpha1
@@ -150,8 +150,8 @@ spec:
   params:
    - name: gitrevision
      description: The git revision
-    default: master
-   - name: gitrepositoryurl
+     default: master
+   - name: giturl
      description: The git repository url
   resourceTemplates:
    - apiVersion: tekton.dev/v1beta1
@@ -161,6 +161,11 @@ spec:
      spec:
       pipelineRef:
        name: hello-world-pipeline
+      params: # The params are passed to the pipeline
+       - name: gitrevision
+         value: $gitrevision
+       - name: giturl
+         value: $giturl
 ```
 
 ### TriggerBindings
@@ -169,11 +174,15 @@ spec:
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: binding-name
+  name: deploy-pipeline-binding-git-repo
 spec:
   params:  
-    - name: param-name
-      value: $(path.to.value)
+    - name: giturl
+      value: $(event.repository.url)
+    - name: gitrevision
+      value: $(event.head_commit.id)
+  template: # The trigger template that this binding will use
+    name: template-name
 ```
 
 ### EventListeners
