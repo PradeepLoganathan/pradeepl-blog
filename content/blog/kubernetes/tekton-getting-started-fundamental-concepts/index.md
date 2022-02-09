@@ -214,6 +214,8 @@ Tekton CLI provides a command line interface to interact with Tekton. It provide
 
 ## Tekton Dashboard
 
-Tekton dashboard provides a web based UI to view and manage Tekton resources. It can be installed directly into the kubernetes cluster. The github repo for tekton dashboard is [here.] (https://github.com/tektoncd/dashboard)
+Tekton dashboard provides a web based UI to manage and view Tekton resources. It can be installed directly into the kubernetes cluster. The github repo for tekton dashboard is [here.](https://github.com/tektoncd/dashboard)
 
-All of the above are the major components of Tekton and cover all aspects of continous integration and deployment. In the next blog post we will look at deploying tekton to a kubernetes cluster and creating a CI/CD pipeline.
+!["Tekton Dashboard"](Tekton-Dashboard.png)
+
+All of the above are the major components of Tekton and cover all aspects of continuos integration and deployment. In the next blog post we will look at deploying tekton to a kubernetes cluster and creating a CI/CD pipeline.

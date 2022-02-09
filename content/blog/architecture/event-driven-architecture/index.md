@@ -1,9 +1,31 @@
 ---
 title: "Event Driven Architecture"
-date: "2019-07-01"
-categories: 
-  - "architecture"
-  - "patterns"
+lastmod: 2019-07-01T11:00:08+10:00
+date: 2019-07-01T11:00:08+10:00
+draft: false
+Author: Pradeep Loganathan
+tags: 
+  - "Event Driven Architecture"
+  - "EDA"
+  - "Event driven microservices"
+  - "Eventsourcing"
+categories:
+  - Architecture
+#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+summary: Event driven architecture (EDA) is an architectural paradigm where behavior is composed by reacting to events. In this paradigm events imply a significant change in state.
+ShowToc: true
+TocOpen: false
+images:
+  - "cover.png"
+cover:
+    image: "images/cover.png"
+    alt: "Event Driven Architecture"
+    caption: "Event Driven Architecture"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 ## Introduction
@@ -24,8 +46,8 @@ Events can be grouped into logical collections of events called topics. Topics a
 
 Events can be
 
-- Discrete
-- Series
+- Discrete : Discrete events are individually actionable. It does not rely on previous events to describe current state. The event encapsulates data about what happened but doesn’t have the data that initiated the event. For example, an event notifies consumers that a social media post was created.
+- Series : Events that are part of a stream are time-ordered and interrelated. The consumer needs the sequenced series of events to analyze what happened. Typical use cases are telemetry data or events from IoT devices.For e.g an IoT device may send a stream of temperature readings to a consumer. The consumer needs to correlate it to previous readings to figure out if the temperature has changed and the direction of change.
 
 ### Characteristics of EDA
 
@@ -43,7 +65,7 @@ The main considerations for choosing Event-Driven architecture are:
 
 - Agility: Agility refers to the ability to cope with the rapid changes that happen in the environment. In an EDA pattern, functional domains are loosely coupled. This ensures that changes that happen to one component do not affect the other components in the system. Hence, the degree of agility offered by the EDA pattern is high. This makes it it an ideal choice for the design of systems that require continuous changes without any downtime.
 - Ease of deployment : In an EDA pattern components are loosely coupled. This results in relatively simple deployments.
-- Testability: Unit testing of in an EDA pattern is moderately difficult because of the fact that it requires special test clients and test tools to generate events that are required for testing purposes. Additionaly factors such as order of delivery across functional domains needs to be considered. The combination of events and the sequence of delivery play a key role in system behaviour and needs to be a key consideration for testing.
+- Testability: Unit testing of in an EDA pattern is moderately difficult because of the fact that it requires special test clients and test tools to generate events that are required for testing purposes. Additionally factors such as order of delivery across functional domains needs to be considered. The combination of events and the sequence of delivery play a key role in system behaviour and needs to be a key consideration for testing.
 - Performance: EDA has the capability to perform asynchronous operations in parallel. This results in better performance of the architecture, irrespective of the time lag involved in queuing and dequeuing messages.
 - Scalability: EDA offers a high level of scalability because of the highly decoupled nature of the components. EDA scales extremely well to large number of producers, consumers and messages.
 - Ease of development: Ease of development using this pattern is low because of the asynchronous nature of the pattern.
@@ -60,7 +82,7 @@ Atmost once: The producer sends a message, and the consumer application may / ma
 Atleast once: The producer sends a message, and the consumer may process duplicate instances of the message.  
 Exactly once: The producer sends a message exactly once, and the consumer processes it exactly once.
 
-Different messaging platforms solve these problems differently. RabbitMQ and ActiveMQ provide atleast once and atmost once guarantees (https://www.rabbitmq.com/reliability.html), but not exactly-once. The solution that these frameworks suggest is to make our consumer idempotent.
+Different messaging platforms solve these problems differently. RabbitMQ and ActiveMQ provide atleast once and [atmost once guarantees](https://www.rabbitmq.com/reliability.html), but not exactly-once. The solution that these frameworks suggest is to make our consumer idempotent.
 
 In Event-Driven architecture managing consistency across service boundaries can be challenging. One option to managing consistency across service boundaries is to use event sourcing. In event sourcing we model data operations as a sequence of events in an append-only log, rather than the absolute values. The current state is composed only when needed and is easy to do—just take the latest update.
 
@@ -129,6 +151,4 @@ However, with greater availability comes lower consistency. The replication of s
 
 ## Cloud based EDA support
 
-Cloud providers have built a lot of the support infrastructure necessary to implement event driven architectures. Large cloud platforms such as Azure, AWS and GCP support EDA implmentation using various technolgies. [This post refers](https://pradeepl.com/azure/azureeventgrid-introduction/) to implementing an Event driven architecture pattern using Azure event grid.
-
-Photo by [Rubén Bagüés](https://unsplash.com/@rubavi78?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/oraganized-wires?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+Cloud providers have built a lot of the support infrastructure necessary to implement event driven architectures. Large cloud platforms such as Azure, AWS and GCP support EDA implementation using various technologies. [This post refers](https://pradeepl.com/blog/azure/azureeventgrid-introduction/) to implementing an Event driven architecture pattern using Azure event grid.

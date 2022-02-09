@@ -2,7 +2,7 @@
 title: "Deploying Sql Server Always On Availability Group on Kubernetes"
 lastmod: 2022-01-31T11:00:08+10:00
 date: 2022-01-31T11:00:08+10:00
-draft: true
+draft: false
 Author: Pradeep Loganathan
 tags: 
   - sqlserver
@@ -14,7 +14,7 @@ tags:
 categories:
   - Kubernetes
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
-summary: In this post we will deploy MS Sql Server in a kubernetes cluster. We will then configure it as an always on availability group.
+summary: In this post we will deploy MS Sql Server in a kubernetes cluster. We will then configure it as an always on availability group.We will also look at synchronization and failover.
 ShowToc: true
 TocOpen: false
 images:
