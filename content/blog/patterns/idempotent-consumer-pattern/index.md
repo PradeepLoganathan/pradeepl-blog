@@ -1,12 +1,41 @@
 ---
 title: "Idempotent Consumer Pattern"
-date: "2019-07-06"
-categories: 
-  - "architecture"
-  - "patterns"
+lastmod: 2019-07-06T15:55:13+10:00
+date: 2019-07-06T11:01:47+10:00
+Author: "Pradeep Loganathan"
+
+series: ["Tekton-Getting Started"]
+
+draft: false
+comments: true
+toc: true
+showToc: true
+TocOpen: false
+
+summary: The Idempotent Consumer pattern provides the necessary safeguards to allows logic wrapped by it to be executed only once. It implements an unique identifier for each message and an idempotent repository.
+
+cover:
+  image: "idempotent-consumer-pattern.jpg"
+  alt: "Idempotent Consumer Pattern"
+  caption: "Idempotent Consumer Pattern"
+  relative: true
+
+images:
+  - 
+categories:
+  - patterns
+tags:
+  - "idempotent consumer pattern"
+  - "idempotent consumer"
+  - "idempotent"
+
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
-[Event-Driven architecture](https://pradeepl.com/architecture/event-driven-architecture/) is itself a distributed system, a field renowned for being difficult, particularly when things go wrong. The fallacies of distributed computing always lurk around the corner. One of the fallacies is that the network is unreliable. This necessitates planning for retries in case of failures.
+[Event-Driven architecture](https://pradeepl.com/blog/architecture/event-driven-architecture/) is itself a distributed system, a field renowned for being difficult, particularly when things go wrong. The fallacies of distributed computing always lurk around the corner. One of the fallacies is that the network is unreliable. This necessitates planning for retries in case of failures.
 
 One issue with this is that retries can result in duplicate processing, and this can cause very real problems. Taking a payment twice from someone’s account will lead to an incorrect balance and an irate user.
 
