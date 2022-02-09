@@ -1,16 +1,41 @@
 ---
 title: "Git Branching strategies"
-date: "2020-01-28"
-categories: 
+lastmod: 2020-01-28T15:55:13+10:00
+date: 2020-01-28T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
+
+tags:
   - "git"
-tags: 
-  - "ci-cd"
+  - "branching strategies"
+  - "source repository"
+
+categories:
   - "git"
+#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+summary:  branching strategies allow a code base to evolve organically in a coherent way. A branching strategy is a convention, or a set of rules, that describes when branches are created.
+# description: Adding configuration to a .Net core Console application to read configuration from a json file, or environmental variables or command line arguments.
+ShowSummary: true
+ShowDescription: true
+ShowToc: true
+TocOpen: false
+ShowPostNavLinks: true
+images:
+  - fabrice-villard-Du41jIaI5Ww-unsplash
+cover:
+  image: "fabrice-villard-Du41jIaI5Ww-unsplash"
+  alt: "Git Branching strategies"
+  caption: "Git Branching strategies"
+  relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 ## Git Workflows
 
-[Git](https://pradeeploganathan.com/git/git-basics/) branching strategies allow a code base to evolve organically in a coherent way. A branching strategy is a convention, or a set of rules, that describes when branches are created, naming guidelines for branches, what use branches should have, and so on. Branching strategies allow for separation of work grouped by concept ideas. These concept ideas can be developed in parallel and may also involve bug fixes and patches. There are various Git branching strategies such as
+[Git](https://pradeepl.com/blog/git-basics/) branching strategies allow a code base to evolve organically in a coherent way. A branching strategy is a convention, or a set of rules, that describes when branches are created, naming guidelines for branches, what use branches should have, and so on. Branching strategies allow for separation of work grouped by concept ideas. These concept ideas can be developed in parallel and may also involve bug fixes and patches. There are various Git branching strategies such as
 
 - Scheduled deployment strategy - Gitflow
 - Branch per feature deployment strategy - Github flow
@@ -31,7 +56,7 @@ The other non-permanent branches are
 
 ![](images/gitflow-1024x843.png)
 
-Gitflow Workflow
+## Gitflow Workflow
 
 This workflow initially starts with a single develop branch. Developers create feature branches for each feature or a group of features that they work on. A feature can also be a bug fix or a refactor. The name of the feature branch indicates the feature being worked on. The feature branches are merged with the develop branch. Once a critical mass or a set of related features are built and merged, a new release branch is created. The team can then continue to work on further features while the release is tested and defects logged. The defects are fixed on the release branch and merged back into the develop branch. The new features created post the release branch creation are also committed to the develop branch.
 
@@ -54,7 +79,7 @@ Github flow was first described by Scott Chacon on his blog [here](http://scottc
 
 ![](images/github-flow-1024x743.png)
 
-Github flow
+## Github flow
 
 ### Pros
 
@@ -74,6 +99,5 @@ Gitlab flow uses branch naming conventions to specify which branch is deployed t
 
 ![](images/gitlab-flow-1-1024x454.png)
 
-Gitlab flow
 
 > Photo by [Fabrice Villard](https://unsplash.com/@fabulu75?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/tree?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
