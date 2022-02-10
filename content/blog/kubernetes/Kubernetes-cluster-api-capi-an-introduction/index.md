@@ -10,7 +10,7 @@ tags:
 categories:
   - Kubernetes
 #slug: kubernetes/kubernetes-cluster-api-capi-an-introduction/
-summary: Cluster API aims to simplify the creation, configuration, upgrade, downgrade, and teardown of Kubernetes clusters and their components. It aims to do so across multiple providers, infrastructure types and enable uniformity, interoperability, extensibility, and simplicity..
+summary: The Kubernetes Cluster API aims to simplify the creation, configuration, upgrade, downgrade, and teardown of Kubernetes clusters and their components. It aims to do so across multiple providers, infrastructure types and enable uniformity, interoperability, extensibility, and simplicity..
 ShowToc: true
 TocOpen: false
 images:

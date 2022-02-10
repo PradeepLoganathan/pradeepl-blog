@@ -1,16 +1,38 @@
 ---
 title: "Dates in API's"
-date: "2018-06-07"
-categories: 
+lastmod: 2018-06-07T15:55:13+10:00
+date: 2018-06-07T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
+tags: 
+  - "API design"
+  - "datetime"
+categories:
   - "api"
-  - "architecture"
+  - "design"
+#slug: kubernetes/introduction-to-open-policy-agent-opa/
+summary: Representing dates in an API is a common but often not well thought out functionality.We need to be very cognizant of representing dates, intervals, and periods in the API Payload. There are two generally accepted date formats for API's.
+ShowToc: true
+TocOpen: false
+images:
+  - paul-buffington-M07hwL1O8ZI-unsplash.jpg
+cover:
+    image: "paul-buffington-M07hwL1O8ZI-unsplash.jpg"
+    alt: "Dates in API's"
+    caption: "Dates in API's"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
-Representing dates in an API is a common but often not well thought out functionality. There are two generally accepted date formats for API's. Microsoft's guidelines for representing dates in API's is [here](https://github.com/Microsoft/api-guidelines/blob/master/Guidelines.md#113-json-serialization-of-dates-and-times) . We need to be very cognizant of representing dates, intervals, and periods in the API Payload. The two date formats are
 
-### ISO 8601 format
+Representing dates in an API is a common but often not well thought out functionality. Microsoft's guidelines for representing dates in API's is [here](https://github.com/Microsoft/api-guidelines/blob/master/Guidelines.md#113-json-serialization-of-dates-and-times) . We need to be very cognizant of representing dates, intervals, and periods in the API Payload. There are two generally accepted date formats for API's.The two date formats are
 
-The [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) standard is an International Standard for the representation of dates and times. This format contains date, time, and the offset from UTC, as well as the T character that designates the start of the time, for example, 2007-04-05T12:30:22-02:00. The pattern for this date and time format is YYYY-MM-DDThh:mm:ss.sTZD. It is recommended to use the ISO-8601 format for representing the date and time in your RESTful web APIs.
+## ISO 8601 format
+
+The [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) standard is an International Standard for the representation of dates and times. This format contains date, time, and the offset from UTC, as well as the T character that designates the start of the time, for example, 2007-04-05T12:30:22-02:00. The pattern for this date and time format is ```YYYY-MM-DDThh:mm:ss.sTZD```. It is recommended to use the ISO-8601 format for representing the date and time in your RESTful web APIs.
 
 The formats for an ISO8601 date are as follows:
 
@@ -32,18 +54,18 @@ The letters used in the above format are:
 - s: One or more digits representing a decimal fraction of a second
 - TZD: Time zone designator (Z or +hh:mm or -hh:mm)
 
-It offers an unambiguous way of making comparisons between two dates simpler. The date and time values are organized from the most to the least significant components: year, month (or week), day, hour, minute, second, and fraction of second.
+It offers an unambiguous way of making comparisons between two dates simpler. The date and time values are organized from the most to the least significant components: year, month (or week), day, hour, minute, second, and fraction of second. All values are numbers with leading zeros to ensure that the correct number of digits are used. Hours are given in 24-hour time. In strict ISO 8601 format, a T is required between the date and the time. The time zone designator is required for all dates that are not UTC.  
 
-The time zone designator can be either expressed using the ±hh:mm format or using the "Z" format (UTC - Coordinated Universal Time). Z stands for Zulu time. Zulu Time Zone is 0 hours ahead of Greenwich Mean Time So 12:00 PM in Z is 12:00 PM in GMT and 5:30 PM in India.
+The time zone designator is required for all dates that are not UTC. The time zone designator is optional for dates that are UTC. The time zone designator can be either expressed using the ±hh:mm format or using the "Z" format (UTC - Coordinated Universal Time). Z stands for Zulu time. Zulu Time Zone is 0 hours ahead of Greenwich Mean Time So 12:00 PM in Z is 12:00 PM in GMT and 5:30 PM in India.
 
-### UTC Epoch format
+## UTC Epoch format
 
-Epoch or Unix time is defined as the number of seconds since midnight (UTC) on 1st January 1970. An example of an epoch time format is 1524715312 which converts to the ISO 8601 format of 2018-04-26T04:01:52Z
+Epoch or Unix time is defined as the number of seconds since midnight (UTC) on 1st January 1970. The value of epoch is the amount of seconds since the timestamp, minus the amount of leap seconds since then. A 10-digit value indicates it is in seconds, while a 13-digit value is indicative of a millisecond value. An example of an epoch time format is 1524715312 which converts to the ISO 8601 format of 2018-04-26T04:01:52Z
 
 This [Wikipedia entry](http://en.wikipedia.org/wiki/Unix_time#History) explains a little about the origins of Unix time and the chosen epoch. The definition of Unix time and the epoch date went through a couple of changes before stabilizing on what it is now. Early versions of Unix measured system time in 1/60 s intervals. This meant that a 32-bit unsigned integer could only represent a span of time less than 829 days. For this reason, the time represented by the number 0 (called the epoch) had to be set in the very recent past. As this was in the early 1970s, the epoch was set to 1971-1-1. Later, the system time was changed to increment every second, which increased the span of time that could be represented by a 32-bit unsigned integer to around 136 years. As it was no longer so important to squeeze every second out of the counter, the epoch was rounded down to the nearest decade, thus becoming 1970-1-1. One must assume that this was considered a bit neater than 1971-1-1.
 
-Note that a 32-bit signed integer using 1970-1-1 as its epoch can represent dates up to 2038-1-19, on which date it will wrap around to 1901-12-13. Take a look [here](https://en.wikipedia.org/wiki/Year_2038_problem) to understand the Year 2038 problem.
+Note that a 32-bit signed integer using 1970-1-1 as its epoch can represent dates up to 2038-1-19, on which date it will wrap around to 1901-12-13. Take a look [here](https://en.wikipedia.org/wiki/Year_2038_problem) to understand the Year 2038 problem. Unix time is not particularly readable and certainly does not make it easy for people to interact with the service - either for exploratory or debug purposes. There are a number of online converters to convert epoch time into human readable formats. The most popular is [this one](https://www.epochconverter.com/).
 
-ISO-8601 is a portable, readable timestamp format designed with data interchange in mind. It's supported by most languages either natively or through a third-party library. Unix are not particularly readable and certainly don't make it easy for people to interact with the service - either for exploratory or debug purposes.
+## Conclusion
 
-[Photo by](https://unsplash.com/search/photos/time?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) [Paul Buffington](https://unsplash.com/photos/M07hwL1O8ZI?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) [on](https://unsplash.com/search/photos/time?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) [Unsplash](https://unsplash.com/search/photos/time?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+ISO-8601 is a portable, readable datetime format designed with data interchange in mind. It's supported by most languages either natively or through a third-party library. The ISO 8601 standard has been developed for clear communication of date and time information across countries, applications, and platforms. It is a standard that is used by the World Wide Web Consortium (W3C) and is supported by the ISO and other organizations. It fits in well with designing API's that can be used globally across different time zones, consumed by different languages, and used by different platforms.

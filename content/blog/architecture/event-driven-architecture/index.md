@@ -16,7 +16,7 @@ summary: Event driven architecture (EDA) is an architectural paradigm where beha
 ShowToc: true
 TocOpen: false
 images:
-  - "cover.png"
+  - "images/cover.png"
 cover:
     image: "images/cover.png"
     alt: "Event Driven Architecture"
