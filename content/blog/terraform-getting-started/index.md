@@ -9,8 +9,10 @@ categories:
   - "cloud"
 tags: 
   - "cloud"
-  - "infrastructure"
+  - "infrastructure as code"
   - "terraform"
+  - "IaC"
+
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: Sunshine coast .Net user group meeting. Topic - Getting started with terraform on Azure. 
 ShowToc: true
@@ -18,7 +20,7 @@ TocOpen: false
 images:
   - cover.jpg
 cover:
-  image: "cover.jpg"
+  image: "images/hohyeong-lee-e0uCDHd19U4-unsplash.jpg"
   alt: "Terraform - getting started"
   caption: "Terraform - getting started"
   relative: false # To use relative path for cover image, used in hugo Page-bundles
