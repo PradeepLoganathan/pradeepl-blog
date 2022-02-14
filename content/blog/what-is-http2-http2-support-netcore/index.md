@@ -1,15 +1,37 @@
 ---
-title: "What is HTTP2? HTTP2 in .NET core"
-date: "2018-03-11"
-categories: 
-  - "api"
-  - "http"
+title: "What is HTTP2? HTTP2 support in .NET core"
+lastmod: 2018-03-11T11:00:08+10:00
+date: 2018-03-11T11:00:08+10:00
+draft: false
+Author: Pradeep Loganathan
 tags: 
   - "api"
   - "http2"
   - "https"
   - "protocol"
+categories: 
+  - "api"
+  - "http"
+#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+summary: HTTP & HTTP/2 are both application level protocols that utilize a lower level protocol like TCP to talk on the Internet. The protocol of the Internet is TCP over IP over Ethernet.
+ShowToc: true
+TocOpen: false
+images:
+  - images/HPACK-compression.png
+  - images/http2.png
+  - images/Windows-HTTP2-support.png
+  - images/tony-webster-97532-unsplash.jpg
+cover:
+    image: "images/tony-webster-97532-unsplash.jpg"
+    alt: "What is HTTP2? HTTP2 support in .NET core"
+    caption: "What is HTTP2? HTTP2 support in .NET core"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
+
 
 ## HTTP2
 
@@ -33,8 +55,8 @@ Binary protocols are more simple, efficient to parse and less error-prone compar
 
 ### Multiplexing
 
-HTTP 1.1 is simply a request-response protocol which is not multiplexed. It allows only one outstanding request at a time and has to send the whole response to each request at a time. It is basically synchronous - once you send a request you are blocked waiting for a response. To load a simple web page, a browser generally sends multiple requests. One request to get the initial HTML, then the CSS, then the JavaScript, maybe the fonts and then a request to load each image or any other resource on the page. All these add up to a lot of latency in fulfilling the request to display a single web page. The browser needs to wait for a response to each request before firing off the next request. The latency of the request is the sum of the time taken to fetch and load each resource. To get around this browsers generally open multiple connections(tunnels) to the web server. Generally 6 -8 connections are used to fire off multiple requests across these connections parallelly. Thus one connection may be used to fetch images, another connection to fetch JavaScript and so on. In this case, the latency of the request is the latency of the longest request plus time taken to set up and tear down multiple connections.  
-HTTP 1.1 introduced the concept of pipelining. HTTP pipelining allows the browser to make multiple requests immediately without waiting for the previous request's response to return. However the responses will will need to be ordered in the same sequnce as the requests and have to be returned in full. HTTP/1.1 pipelining never really took off and browser and server support is limited. None of the major browers support pipelining due to 'Head of line queueing' issues,  buggy proxies, incorrect server support and performance issues. Sample these issues from [chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=364557)  and [Safari.](http://bytes.schibsted.com/safari-on-ios-5-randomly-switches-images/)  
+HTTP 1.1 is simply a request-response protocol which is not multiplexed. It allows only one outstanding request at a time and has to send the whole response to each request at a time. It is basically synchronous - once you send a request you are blocked waiting for a response. To load a simple web page, a browser generally sends multiple requests. One request to get the initial HTML, then the CSS, then the JavaScript, maybe the fonts and then a request to load each image or any other resource on the page. All these add up to a lot of latency in fulfilling the request to display a single web page. The browser needs to wait for a response to each request before firing off the next request. The latency of the request is the sum of the time taken to fetch and load each resource. To get around this browsers generally open multiple connections(tunnels) to the web server. Generally 6 -8 connections are used to fire off multiple requests across these connections in parallel. Thus one connection may be used to fetch images, another connection to fetch JavaScript and so on. In this case, the latency of the request is the latency of the longest request plus time taken to set up and tear down multiple connections.  
+HTTP 1.1 introduced the concept of pipelining. HTTP pipelining allows the browser to make multiple requests immediately without waiting for the previous request's response to return. However the responses will will need to be ordered in the same sequence as the requests and have to be returned in full. HTTP/1.1 pipelining never really took off and browser and server support is limited. None of the major browsers support pipelining due to 'Head of line queueing' issues,  buggy proxies, incorrect server support and performance issues. Sample these issues from [chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=364557)  and [Safari.](http://bytes.schibsted.com/safari-on-ios-5-randomly-switches-images/)  
 HTTP2 supports multiplexing several streams over a single connection. Multiplexing allows your browser to fire off multiple requests at once on the same connection and receive the requests back in any order. HTTP/2 allows you to use a single connection to send multiple requests parallelly on this single connection. So, now you can open a single connection and fire off requests to get the HTML, CSS, fonts, images etc. on this single connection without waiting for a response before firing the next request. While this in itself is a major optimization what makes it even better is that the server can respond to these requests in any order, send back files in different order, or even break each file requested into chunks and intermingle the chunks together. This prevents the 'Head of line blocking' problem, where a single resource heavy request hogs the pipeline and blocks all subsequent requests until it is complete.
 
 ### One Connection per Origin
@@ -77,8 +99,6 @@ Windows 10, Windows 10 Server, Windows Server 2016 and IIS support HTTP/2 out of
 ## .NET Core Support for HTTP2
 
 At the time of writing this post, [Kestrel](https://pradeeploganathan.com/asp-net/owin-katana-kestrel/) doesn't support some features of HTTP2, such as server push and stream prioritization. So, while the client can send a prioritization tag with its requests, Kestrel simply won't act on that request. Another caveat to HTTP/2 support is that your hosting environment's native cryptography library must support Application Layer Protocol Negotiation (ALPN) to establish the secure connection necessary for HTTP/2. That means HTTP2 is supported only for .NET Core apps deployed to either Windows environments or Linux hosts with OpenSSL 1.0.2 or higher. Thankfully, though, if your environment doesn't support HTTP/2, Kestrel will silently fall back to using standard HTTP 1.1 request processing. If you want to support HTTP/2 using .NET core you can simply leverage the ConfigureKestrel() method on your WebHostBuilder, like so
-
-* * *
 
 ```csharp
 public static IWebHostBuilder CreateWebHostBuilder(string[] args)
@@ -146,3 +166,7 @@ services.AddHttpClient<ICandidateService, CandidateService>(client =>
 ```
 
 If both the client and the server support HTTP2, then the connection will be established over HTTP2. If not, then the connection will switch over to HTTP 1.1
+
+## Conclusion
+
+While adding HTTP2 features to your application is not a requirement, it is recommended to add HTTP2 support to your application. It enables you to take advantage of HTTP2 features such as server push, prioritization and more. 

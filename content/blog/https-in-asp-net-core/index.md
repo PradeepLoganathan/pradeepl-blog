@@ -1,5 +1,5 @@
 ---
-title: "Https in ASP.Net Core 3.1"
+title: "Https in ASP.Net Core"
 lastmod: 2020-02-02T11:00:08+10:00
 date: 2020-02-02T11:00:08+10:00
 draft: false
@@ -17,11 +17,11 @@ summary: In asp.net core https is enabled by default. The HttpsRedirection middl
 ShowToc: true
 TocOpen: false
 images:
-  - Deploying_sql_server_on_kubernetes.png
+  - images/Kestrel.png
 cover:
     image: "images/alexander-ehrenhofer-yI4pFmN9ges-unsplash.jpg"
-    alt: "Https in ASP.Net Core 3.1"
-    caption: "Https in ASP.Net Core 3.1"
+    alt: "Https in ASP.Net Core"
+    caption: "Https in ASP.Net Core"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
@@ -31,7 +31,7 @@ editPost:
 
 ### Https Redirection middleware
 
-In asp.net core [https](https://pradeepl.com/http/https/) is enabled by default. The [HttpsRedirection middleware class](https://github.com/aspnet/BasicMiddleware/blob/354cb18d6304b24063d460e0a41c6c1d51ea4000/src/Microsoft.AspNetCore.HttpsPolicy/HttpsRedirectionMiddleware.cs#L139) provides the necessary functionality to enforce redirection from http to https. The UseHttpsRedirection extension method in startup is used to enforce this. This extension method issues a 307 temporary redirect response by default. It then uses the configured https port to specify the redirection endpoint. If the https port is not specified in code, this class will get the https port from HTTPS\_PORT environment variable or the IServerAddress feature. If either of them is not specified, then the middleware will log a warning and will not redirect. The code below shows an example of adding the https redirection middleware to the services collection and using it. The code below checks the environment and sets a permanent redirect to the HTTPS endpoint in production and a temporary redirect in development environment.
+In asp.net core [https](https://pradeepl.com/blog/https/) is enabled by default. The [HttpsRedirection middleware class](https://github.com/aspnet/BasicMiddleware/blob/354cb18d6304b24063d460e0a41c6c1d51ea4000/src/Microsoft.AspNetCore.HttpsPolicy/HttpsRedirectionMiddleware.cs#L139) provides the necessary functionality to enforce redirection from http to https. The UseHttpsRedirection extension method in startup is used to enforce this. This extension method issues a 307 temporary redirect response by default. It then uses the configured https port to specify the redirection endpoint. If the https port is not specified in code, this class will get the https port from HTTPS\_PORT environment variable or the IServerAddress feature. If either of them is not specified, then the middleware will log a warning and will not redirect. The code below shows an example of adding the https redirection middleware to the services collection and using it. The code below checks the environment and sets a permanent redirect to the HTTPS endpoint in production and a temporary redirect in development environment.
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -216,6 +216,8 @@ public void ConfigureServices(IServiceCollection services)
 Adding HSTS
 
 In the above code we are specifying HSTS preload to be set to true. [HSTS preloading](https://www.chromium.org/hsts) is a function built into the browser whereby a global list of hosts enforces the use of HTTPS ONLY on their site. The domains are hard coded into the browser, which avoids the initial insecure request and ensures that only HTTPS is used. Another crucial point that trips up a lot of folks is that the HSTS header is not set even if you specify the use of HSTS middleware for localhost and the loopback address for IPV6 and IPV4. This is because the ExcludeHosts parameter by default excludes these addresses.
+
+> Note: HSTS is a browser only feature. This is not supported by API's. API clients such as HttpClient and HttpClientHandler do not support HSTS. I have seen API setup code using HSTS and it really does not work.
 
 In summary .NET core provides a lot of ways to configure https for web applications with Kestrel as an edge server or through SSL offloading/TLS termination. It also provides for options to configure the same through code or through configuration or using a docker compose file.
 
