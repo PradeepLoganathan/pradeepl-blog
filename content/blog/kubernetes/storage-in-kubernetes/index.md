@@ -16,6 +16,8 @@ cover:
 
 images:
 
+mermaid: true
+
 
 tags:
   - "post"
@@ -34,6 +36,13 @@ Kubernetes provides a structured way to manage persistent storage. It provides A
 4. Storage Class: A storage class is a specification for a persistent volume.
 
 Let us look at each of the above storage types in further detail.
+
+{{< mermaid >}}
+  graph LR
+      A --- B
+      B-->C[fa:fa-ban forbidden]
+      B-->D(fa:fa-spinner);
+{{< /mermaid >}}
 
 ### Volumes
 

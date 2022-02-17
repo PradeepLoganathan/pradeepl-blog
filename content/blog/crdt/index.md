@@ -4,17 +4,33 @@ date: "2019-09-02"
 categories: 
   - "architecture"
   - "patterns"
+
+mermaid: true
 ---
 
-CRDT stands for conflict-free replicated datatype. CRDT describes data types that can be replicated across multiple computation units, updated concurrently without any coordination, and then merged to get a consistent state. It doesn’t matter in which order you execute operations on the data type or if you repeat operations: the result is eventually correct. CRDTs always have a merge function that can take many data entries living on different nodes and merge these automatically into one consistent view of the data, without any coordination between the nodes. The most important properties of the merge function are that it is symmetric and monotonic.
+CRDT stands for conflict-free replicated datatype. CRDT describes data types that can be replicated across multiple computation units, updated concurrently without any coordination, and then merged to get a consistent state. It doesn’t matter in which order you execute operations on the data type or if you repeat operations: the result is eventually correct.  CRDTs have semantics such that they can be concurrently updated and any conflicts can be resolved sensibly. CRDTs always have a merge function that can take many data entries living on different nodes and merge these automatically into one consistent view of the data, without any coordination between the nodes. The most important properties of the merge function are that it is symmetric and monotonic.
+The issue that CRDTs address is conflict resolution when different versions of the structure appear due to network partitions and their eventual repair. For a general data structure, if there are two conflicting versions, the solution is either to choose one (according to some general rules, like take the random one or the latest one, or application-specific logic) or to keep both versions and defer conflict resolution to the client code. CRDTs are conflict-free, that is, the structures are devised so that any conflict is resolved automatically in a way that doesn’t bring any data loss or corruption.
 
-![](images/CRDT-walk-path.png)
+<!-- ![](images/CRDT-walk-path.png) -->
 
+{{< mermaid >}}
+
+flowchart  LR
+A(New):::class1 ----> B(Scheduled)
+classDef class1 fill:#007ba7,stroke:#333,stroke-width:4px;
+B:::class1 ----> C(Packing):::class2
+C:::class1 ----> D(Shipped)
+A --> E(Cancelled)
+B --> E:::class1
+E --> F(Aborted)
+C --> F:::class1
+F --> D:::class1
+{{< /mermaid >}}
 CRDT Walk path
 
 Lets go through a simple example of how CRDT's work by walking through all possibilities of a simple Order processing workflow. Initially, define all possible status values and their merge order, as shown in figure. A graphical representation is the easiest way to get started when designing a CRDT with a small number of values. The states are represented by the rounded rectangles and their merge order indicated by the state progression arrows. So an order can progress from New to cancelled, or from scheduled to cancelled or from Packing to Aborted.
 
-Lets assume two nodes report differnt status. Now we need to merge the two status . When merging two statuses, there are three cases.
+Lets assume two nodes report different status. Now we need to merge the two status . When merging two statuses, there are three cases.
 
 - If both statuses are the same, then obviously you just pick that status.
 - If one of them is reachable from the other by walking in the direction of the arrows, then you pick the one toward which the arrows are pointing; as an example, merging “New” and “Packing” will result in “Packing.”

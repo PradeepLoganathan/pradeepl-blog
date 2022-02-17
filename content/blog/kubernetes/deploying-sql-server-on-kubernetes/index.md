@@ -49,7 +49,11 @@ Availability Groups offer two synchronization options to synchronize the seconda
 
 2. Asynchronous Commit mode : In Asynchronous commit mode, a transaction on the primary replica will only wait for the transaction to be committed on the primary. It does not wait for transactions to be hardened on the secondary replica.
 
+## SQL Server Availability Group buildout
+ 
+We can build a SQL Server Availability Group on a Kubernetes cluster. The overall design of the build out is below. We are deploying 3 instances of sql server with one instance as primary with read/write and two secondaries as read replicas for read scale out. One of the replicas is synchronized concurrently with the primary replica. The other replica is asynchronously synchronized with the primary replica.
 
+!["Single Cluster Availability Group"](Single-Availability-Group.png)
 ## Persistent Storage
 
 Since we are deploying a stateful workload on kubernetes we need to define the necessary storage structures. The cluster needs to provision storage, the pods need to mount the storage provisioned as volumes and a request for the storage should be defined in the manifest as a persistent volume claim. We would need to create these before we can deploy SQL Server on kubernetes.
