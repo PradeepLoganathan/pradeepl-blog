@@ -134,11 +134,11 @@ ESP deals with the task of processing streams of event data with the goal of ide
 
 In CEP, analysis is performed to find patterns in events to determine whether a more complex event has occurred. A complex event is an event that summarizes or represents a set of other events. The various events that are taken into consideration may be evaluated over a long period of time. The event correlation between the various events may occur in various dimensions, such as temporal, causal, and spatial. It combines data from multiple sources to infer events or patterns that suggest more complicated circumstances. An example of functionality that uses CEP is a credit card fraud engine. Each transaction on a credit card is an event and the system analyse clusters of events for a particular credit card to try to find a pattern that might indicate fraud. If fraud is detected, a downstream action is initiated.
 
-### Patterns of Event Driven Architectures
+## Patterns of Event Driven Architectures
 
 An EDA can provide variations in how it is implemented. These variations are primarily based on how events are generated and processed. They can be categorized as event notification, event-carried state transfer, and event sourcing. Event-driven software systems can also provide a combination of these variations.
 
-#### Event Notification
+### Event Notification
 
 The event notification pattern works by emitting events to subscribers once a command is executed. There is no expectation that the recipient of the message produce a reply. The source system doesn’t expect it, and doesn’t use it. This is a fire-and-forget one way mechanism. The event notification is immutable.
 
@@ -151,7 +151,7 @@ There is a decoupling between the event producer and any event consumers as well
 
 The drawback to the loose coupling between event producers and event consumers is that it can be difficult to see the logical flow of event notifications. This added complexity also makes it more difficult to debug and maintain. A variety of event consumers, including ones in software systems other than the one that produced the event notification, may react to an event. Sometimes the only way to understand the logical flow is to monitor your systems to see the flow of event messages. The mediator and broker topologies allow us to implement event notifications.
 
-#### Event Carried State Transfer
+### Event Carried State Transfer
 
 Event-carried state transfer is a variation on event notification. These are events where a message does not contain any data that requires the receiver to call back to the source system. These forms of event messages will include everything the recipient will need to process an event.
 
@@ -161,7 +161,7 @@ Callbacks to the system that produced an event notification for more data in ord
 Although more data is being passed around, we gain a greater level of availability and resilience. The shipping system can function, at least with orders it has already received, even if the order system is temporarily unavailable. The shipping system does not need to call back to the order system after the initial event notification is received, which can be particularly beneficial if contacting and receiving data from the order system is slow.  
 However, with greater availability comes lower consistency. The replication of some data between the order and shipping systems lowers the consistency of the data.
 
-#### Event Sourcing
+### Event Sourcing
 
 Event sourcing captures all changes to application state as a sequence of events. These events are persisted in an event log and can be replayed to recover application state. Events are immutable facts that are only ever appended to an event log which allows for very high transaction rates and efficient replication. To optimize the time required to calculate the current state, an application can periodically build and save snapshots. To reduce the storage size, events before the selected snapshot may be deleted.
 
