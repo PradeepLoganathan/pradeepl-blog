@@ -23,7 +23,7 @@ TocOpen: false
 images:
   - JWT-token-Swagger.jpg
 cover:
-    image: "JWT-token-Swagger.jpg"
+    image: "neonbrand-3BfDXcn9sqM-unsplash.jpg"
     alt: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
     caption: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
