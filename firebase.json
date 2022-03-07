@@ -8,8 +8,8 @@
     ],
     "redirects": [
       {
-        "source": "/12-factor",
-        "destination": "https://pradeepl.com/blog/12-factor-cloud-native-apps",
+        "source": "/blog/12-factor",
+        "destination": "/blog/12-factor-cloud-native-apps",
         "type": 301
       }
     ]

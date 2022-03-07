@@ -1,18 +1,39 @@
 ---
-title: "JWT"
-date: "2018-04-21"
+title: "What is a JSON Web Token (JWT)?"
+lastmod: 2018-04-21T15:55:13+10:00
+date: 2018-04-21T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
+tags: 
+  - "api"   
+  - "security"
 categories: 
   - "api"
   - "security"
+summary: JSON Web Token(JWT) is an industry standard for security tokens used to securely transmit information between client and server as JSON objects.It provides a solution to the problem of passing claims between parties. 
+ShowToc: true
+TocOpen: false
+images:
+  - Jwt-tokens-pradeeploganathan.jpg
+  - images/Token-Based-Authentication-2.jpg
+  - images/JWT-token-structure_thumb.png
+cover:
+    image: "Jwt-tokens-pradeeploganathan.jpg"
+    alt: "What is a JSON Web Token (JWT)?"
+    caption: "What is a JSON Web Token (JWT)?"
+    relative: true
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
-
-### Three part series on JWT tokens
+> Three part series on JWT tokens
 
 Part 1: What is a JWT Token (This post)  
 [Part 2: Creating a JWT token server in ASP.net core 2.0](http://pradeeploganathan.com/security/jwt-tokenserver/)  
 [Part 3: Accessing and Consuming a JWT token protected service in Angular 5+.](http://pradeeploganathan.com/security/jwt-angular-interceptor/)
 
- **JWT ( JSON Web Token** **)** is a security token format, defined by an open standard ([RFC 7519](https://tools.ietf.org/html/rfc7519)). It provides a solution to the problem of passing claims between parties. It is an industry standard for security tokens used to securely transmit information between client and server as JSON objects. As a token format., It defines a compact and self-contained mechanism for transmitting data between parties in a way that can be verified and trusted because it is digitally signed. Additionally, the encoding rules of a JWT also make these tokens quite easy to use within the context of HTTP. As it is digitally signed this information can be verified and trusted. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA.
+ **JWT ( JSON Web Token** **)** is a security token format, defined by an open standard ([RFC 7519](https://tools.ietf.org/html/rfc7519)). It provides a solution to the problem of passing claims between parties. It is an industry standard for security tokens used to securely transmit information between client and server as JSON objects. As a token format., It defines a compact and self-contained mechanism for transmitting data between parties in a way that can be verified and trusted because it is digitally signed. JWT does not use cookies and can be used across multiple domains. Additionally, the encoding rules of a JWT also make these tokens quite easy to use within the context of HTTP. As it is digitally signed this information can be verified and trusted. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA.
 
 The two main properties of this standard are:
 
@@ -30,26 +51,26 @@ A JWT token has three parts: Header, Payload, and Signature as shown below. The 
 
 The header part decides which algorithm should be used to generate the token. The header has information that is required on the backend for recognizing what cryptographic operation to do based on that information (metadata, the algorithms, and keys being used):
 
+```json
+{
+  "alg":"HS256",
+  "typ":"JWT"
+}
 ```
-{ 
-```
 
-'alg': 'HS256' , `'typ': 'JWT'
-}`
+### Payload
 
-### Claims
-
-The second part consists of claims provided in the JSON format. A claim is a piece of information that the client sends to the server and which must be authenticated. Most commonly, this would be the username but it can include any set of data. Claims can be either Registered claims or Public claims. Registered claims are defined by the JWT Specification. These claims have a key and a purpose defined already. These claims are listed on the specification [here](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1).
+The second part consists of a payload provided in the JSON format. The payload contains claims.  A claim is a piece of information that the client sends to the server and which must be authenticated. Most commonly, this would be the username but it can include any set of data. Claims can be either Registered claims or Public claims. Registered claims are defined by the JWT Specification. These claims have a key and a purpose defined already. These claims are listed on the specification [here](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1).
 
 Public claims are keys defined by you and should be collision resistant. Some examples of registered claims are
 
-- _Issuer (_iss_)_: This lets us know who has issued the token.
-- _Audience (_aud_)_: This lets us know that this token must be consumed by our application.
-- _Subject (sub)_: This lets us know which part of the app can use the token (useful in bigger applications).
-- _Issued at (_iat_)_: This lets us know when the token has been created.
-- _Expiration date (exp)_: This lets us know when the token is expiring so we have to generate a new one.
-- _Not before (_nbf_)_: Defines the time before which the JWT must not be accepted for processing.
-- _JWT ID (_jti_)_: Provides a unique identifier for the JWT.
+- Issuer (_iss_): This lets us know who has issued the token.
+- Audience (_aud_): This lets us know that this token must be consumed by our application.
+- Subject (sub): This lets us know which part of the app can use the token (useful in bigger applications).
+- Issued at (_iat_): This lets us know when the token has been created.
+- Expiration date (exp): This lets us know when the token is expiring so we have to generate a new one.
+- Not before (_nbf_): Defines the time before which the JWT must not be accepted for processing.
+- JWT ID (_jti_): Provides a unique identifier for the JWT.
 
 ### Signature
 
