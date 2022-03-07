@@ -1,5 +1,5 @@
 ---
-title: "Configuration in a .Net core Console application"
+title: "Configuration in a .Net Core Console application"
 lastmod: 2019-12-20T15:55:13+10:00
 date: 2019-12-20T15:55:13+10:00
 draft: false
@@ -24,8 +24,8 @@ images:
   - rima-kruciene-gpKe3hmIawg-unsplash.jpg
 cover:
   image: "rima-kruciene-gpKe3hmIawg-unsplash.jpg"
-  alt: "Configuration in a .Net core Console application"
-  caption: "Configuration in a .Net core Console application"
+  alt: "Configuration in a .Net Core Console application"
+  caption: "Configuration in a .Net Core Console application"
   relative: false # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"

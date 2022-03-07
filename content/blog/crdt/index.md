@@ -1,5 +1,5 @@
 ---
-title: "CRDT"
+title: "How do you increment a counter? -"
 date: "2019-09-02"
 categories: 
   - "architecture"
@@ -8,7 +8,16 @@ categories:
 mermaid: true
 ---
 
-CRDT stands for conflict-free replicated datatype. CRDT describes data types that can be replicated across multiple computation units, updated concurrently without any coordination, and then merged to get a consistent state. It doesn’t matter in which order you execute operations on the data type or if you repeat operations: the result is eventually correct.  CRDTs have semantics such that they can be concurrently updated and any conflicts can be resolved sensibly. CRDTs always have a merge function that can take many data entries living on different nodes and merge these automatically into one consistent view of the data, without any coordination between the nodes. The most important properties of the merge function are that it is symmetric and monotonic.
+Many moons ago I was working on an online eCommerce platform. The platform used to undergo massive traffic spikes periodically. 
+
+I was trying to implement a distributed counter. I was using a distributed counter because I wanted to be able to increment the counter on multiple servers.
+## CAP Theorem
+
+The CAP theorem was proposed by Eric Brewer. 
+
+## CRDT
+
+CRDT stands for conflict-free replicated datatype. Conflict-free replicated datatype describe data-types that can be replicated across multiple computation units or nodes, they can be updated concurrently without any coordination, and then merged to get a consistent state. It doesn’t matter in which order you execute operations on the data type or if you repeat operations the result is eventually correct. Each node in a distributed system has its own replica of the CRDT. Each replica can resolve queries in isolation and can also process commands that immediately alter its state. CRDTs  they can be concurrently updated across nodes and any conflicts can be resolved sensibly. CRDTs always have a merge function that can take many data entries living on different nodes and merge these automatically into one consistent view of the data, without any coordination between the nodes. CRDTs allow two conflicting updates to be merged. All replicas will converge to the same state when all updates have been delivered. The most important properties of the merge function are that it is symmetric and monotonic.
 The issue that CRDTs address is conflict resolution when different versions of the structure appear due to network partitions and their eventual repair. For a general data structure, if there are two conflicting versions, the solution is either to choose one (according to some general rules, like take the random one or the latest one, or application-specific logic) or to keep both versions and defer conflict resolution to the client code. CRDTs are conflict-free, that is, the structures are devised so that any conflict is resolved automatically in a way that doesn’t bring any data loss or corruption.
 
 <!-- ![](images/CRDT-walk-path.png) -->

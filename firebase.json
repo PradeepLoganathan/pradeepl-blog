@@ -5,6 +5,13 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/12-factor",
+        "destination": "https://pradeepl.com/blog/12-factor-cloud-native-apps",
+        "type": 301
+      }
     ]
   }
 }
