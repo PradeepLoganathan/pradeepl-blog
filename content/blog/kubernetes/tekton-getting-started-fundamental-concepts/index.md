@@ -84,6 +84,20 @@ spec:
       args: ['-c', 'echo from step two']
 ```
 
+### TaskRun
+
+A TaskRun is used to execute a task. A TaskRun will execute all the steps defined in the task. It will also contain the status of the task's execution and the status of the execution of each step. The TaskRun will execute until all the steps have been marked as successful. This taskrun definition can be used to execute the hello-world-task defined above.
+
+```yaml
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+ name: hello-world-task-run
+spec:
+ taskRef:
+  name: hello-world-task
+```
+
 ### Pipeline
 
 A Pipeline defines a workflow composed of a set of tasks to be executed in a specific order. A pipeline consists of one or more tasks, each of which may include several steps. The pipeline is composed of tasks that define the various parts of the workflow ( e.g. build, test, manage artifact etc.) and these tasks are executed either sequentially, concurrently or as a directed acyclic graph. Some tasks may declare other tasks as dependencies and need to be run after the dependent task is complete. These tasks are run sequentially. Some tasks may not have any dependencies and are run concurrently. Pipelines are stateless, reusable, and parameterized. Tekton creates several pods based on the task and ensures all pods execute successfully. Pipelines can execute tasks on different Kubernetes nodes.
@@ -105,24 +119,6 @@ spec:
     name: hello-universe-task
 ```
 
-### Workspace
-
-A Workspace is a shared volume used by tasks and pipelines. It allows artifact data to be shared as input/output by tasks and pipelines. A workspace can be created as a ConfigMap, PersistenceVolumeChain, Secrets, etc. A workspace can be used as a build cache to speed up the CI/CD process. It can also be used to access application configuration, credentials, etc.
-
-### TaskRun
-
-A TaskRun is used to execute a task. A TaskRun will execute all the steps defined in the task. It will also contain the status of the task's execution and the status of the execution of each step. The TaskRun will execute until all the steps have been marked as successful. This taskrun definition can be used to execute the hello-world-task defined above.
-
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: TaskRun
-metadata:
- name: hello-world-task-run
-spec:
- taskRef:
-  name: hello-world-task
-```
-
 ### PipelineRun
 
 A pipelinerun is used to execute a pipeline.A pipelinerun creates a Taskrun for each task in the pipeline. The tasks are executed in the order defined in the pipeline. The pipelinerun monitors the execution of the pipeline and reports on the progress and completion of the pipeline. This pipelinerun definition can be used to execute the hello-world-pipeline defined above.
@@ -136,6 +132,10 @@ spec:
  pipelineRef:
   name: hello-pipeline
 ```
+
+### Workspace
+
+A Workspace is a shared volume used by tasks and pipelines. It allows artifact data to be shared as input/output by tasks and pipelines. A workspace can be created as a ConfigMap, PersistenceVolumeChain, Secrets, etc. A workspace can be used as a build cache to speed up the CI/CD process. It can also be used to access application configuration, credentials, etc.
 
 ## Tekton Triggers
 
