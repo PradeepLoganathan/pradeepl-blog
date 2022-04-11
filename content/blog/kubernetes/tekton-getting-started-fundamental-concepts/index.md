@@ -37,11 +37,11 @@ editPost:
   appendFilePath: true # to append file path to Edit link
 ---
 
-Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It is an [open-source project](https://github.com/tektoncd) and is part of the [Continuous Delivery Foundation](https://cd.foundation/projects/) set of projects. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines. Since it uses Kubernetes native CRD's , we can use familiar tools to create ,manage and monitor tekton pipelines. Tekton aims to make it easier and faster to build, test, and package up your source code. It allows developers to build, test, and deploy cloud-native, containerized applications across multiple Kubernetes providers, build and deploy immutable images, version control IaC etc. Tekton can be used to perform advanced Kubernetes deployment/rollback strategies such as blue-green deployment, canary deployment, rolling updates etc.
+Tekton provides a cloud-native, standardized set of building blocks for CI/CD systems. It is an [open-source project](https://github.com/tektoncd) and is part of the [Continuous Delivery Foundation](https://cd.foundation/projects/) set of projects. It runs natively on Kubernetes and can target any platform, language, or cloud. It extends the Kubernetes API and provides custom resources to create CI/CD pipelines. Since it uses Kubernetes native CRD's , we can use familiar tools to create, manage and monitor tekton pipelines. Tekton aims to make it easier and faster to build, test, and package up your source code. It allows developers to build, test, and deploy cloud-native, containerized applications across multiple Kubernetes providers, build and deploy immutable images, version control IaC etc. Tekton can be used to perform advanced Kubernetes deployment/rollback strategies such as blue-green deployment, canary deployment, rolling updates etc.
 
 Tekton was originally the build system for the Knative serverless workload platform. It was converted to a standalone project implementing a general-purpose CI/CD platform. It was donated to the Continuous Delivery Foundation in March 2019.
 
-This diagram depicts the various components of tekton and their interactions. 
+This diagram depicts the various components of tekton and their interactions.
 
 ![Tekton components](Tekton-architecture.png)
 
@@ -63,7 +63,7 @@ A Task is a collection of steps that should be executed in a specific order. It 
 
 The [Tekton catalog](https://github.com/tektoncd/catalog) contains a catalog of reusable task resources for everyday operations such as [Kubernetes actions](https://github.com/tektoncd/catalog/tree/main/task/kubernetes-actions), [GIT operations](https://github.com/tektoncd/catalog/tree/main/task/git-cli/0.3) etc. Tasks are generally stitched together to create a pipeline.
 
-A simple hello world task is defined below. This task has two steps named hello-one and hello-two referenced by ``spec.steps.name``. The step use the ubuntu image to create a container and print a text message.
+A simple hello world task is defined below. This task has two steps named hello-one and hello-two referenced by ``spec.steps.name``. The steps use the ubuntu image to create a container and print a text message.
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -74,19 +74,19 @@ spec:
   steps:
     - name: hello-one
       image: ubuntu
-      script: |
-        set -e
-        echo "Hello World from step one!"
+      command:
+        - /bin/bash
+      args: ['-c', 'echo from step one']
     - name: hello-two
       image: ubuntu
-      script: |
-        set -e
-        echo "Hello World from step two!"
+      command:
+        - /bin/bash
+      args: ['-c', 'echo from step two']
 ```
 
 ### Pipeline
 
-A Pipeline defines a workflow composed of a set of tasks to be executed in a specific order. A pipeline consists of one or more tasks, each of which may include several steps. The pipeline is composed of tasks that define the various parts of the workflow ( e.g build, test, manage artifact etc.) and these tasks are executed either sequentially, concurrently or as a directed acyclic graph. Some tasks may declare other tasks as dependencies and need to be run after the dependent task is complete. These tasks are run sequentially. Some tasks may not have any dependencies and are run concurrently. Pipelines are stateless, reusable, and parameterized. Tekton creates several pods based on the task and ensures all pods execute successfully. Pipelines can execute tasks on different Kubernetes nodes.
+A Pipeline defines a workflow composed of a set of tasks to be executed in a specific order. A pipeline consists of one or more tasks, each of which may include several steps. The pipeline is composed of tasks that define the various parts of the workflow ( e.g. build, test, manage artifact etc.) and these tasks are executed either sequentially, concurrently or as a directed acyclic graph. Some tasks may declare other tasks as dependencies and need to be run after the dependent task is complete. These tasks are run sequentially. Some tasks may not have any dependencies and are run concurrently. Pipelines are stateless, reusable, and parameterized. Tekton creates several pods based on the task and ensures all pods execute successfully. Pipelines can execute tasks on different Kubernetes nodes.
 
 A sample pipeline is defined below. This pipeline has two tasks which are referenced by ``tasks.taskref.name``. This pipeline executes the tasks.
 
@@ -107,7 +107,7 @@ spec:
 
 ### Workspace
 
-A Workspace is a shared volume used by tasks and pipelines. This allows artifact data to be shared as input/output by tasks and pipelines.A workspace can be created as a ConfigMap, PersistenceVolumeChain, Secrets etc. A workspace can be used as a build cache to speed up the CI/CD process. It can also be used to access application configuration, credentials etc.
+A Workspace is a shared volume used by tasks and pipelines. It allows artifact data to be shared as input/output by tasks and pipelines. A workspace can be created as a ConfigMap, PersistenceVolumeChain, Secrets, etc. A workspace can be used as a build cache to speed up the CI/CD process. It can also be used to access application configuration, credentials, etc.
 
 ### TaskRun
 
@@ -139,7 +139,7 @@ spec:
 
 ## Tekton Triggers
 
-Tekton triggers provides continuous integration functionality. The custom resource definitions detailed above provide functionality necessary for continuos delivery. Tekton Pipelines and Tasks are declarative. They need to be manually triggered to perform a build and deploy. We would need to use kubectl or Tekton CLI to execute a Tekton pipeline. Triggers provides the necessary functionality to declaratively create PipelineRun objects in response to external events. Triggers have no knowledge of what is in the pipeline declaration itself. This design allows for separation of concerns between the two areas. Tekton triggers introduces new custom resources to automate your CI/CD pipelines further. The CRD's are Trigger templates, Trigger bindings and Event listeners. Let us understand these CRD's in a bit more detail.
+Tekton triggers provide continuous integration functionality. The custom resource definitions detailed above provide the functionality necessary for continuous delivery. Tekton Pipelines and Tasks are declarative. They need to be manually triggered to perform a build and deploy. We would need to use kubectl or Tekton CLI to execute a Tekton pipeline. Triggers provide the necessary functionality to declaratively create PipelineRun objects in response to external events. Triggers have no knowledge of what is in the pipeline declaration itself. This design allows for separation of concerns between the two areas. Tekton triggers introduces new custom resources to automate your CI/CD pipelines further. The CRD's are Trigger templates, Trigger bindings and Event listeners. Let us understand these CRD's in a bit more detail.
 
 ### TriggerTemplates
 
@@ -210,7 +210,7 @@ spec:
 
 ## Tekton CLI
 
-Tekton CLI provides a command line interface to interact with Tekton. It provides a set of commands to interact with Tekton resources. It can be used to create, delete, list, describe, and update all Tekton resources such as pipelines, eventlisteners, template bindings, trigger templates etc. It is available for all platforms and can be installed from [here.](https://github.com/tektoncd/cli/releases)
+Tekton CLI provides a command line interface to interact with Tekton. It provides a set of commands to interact with Tekton resources. It can be used to create, delete, list, describe, and update all Tekton resources such as pipelines, eventlisteners, template bindings, trigger templates, etc. It is available for all platforms and can be installed from [here.](https://github.com/tektoncd/cli/releases)
 
 ## Tekton Dashboard
 
@@ -218,4 +218,4 @@ Tekton dashboard provides a web based UI to manage and view Tekton resources. It
 
 !["Tekton Dashboard"](Tekton-Dashboard.png)
 
-All of the above are the major components of Tekton and cover all aspects of continuos integration and deployment. In the next blog post we will look at deploying tekton to a kubernetes cluster and creating a CI/CD pipeline.
+All of the above are the major components of Tekton and cover all aspects of continuous integration and deployment. In the next blog post, we will look at deploying tekton to a kubernetes cluster and creating a CI/CD pipeline.

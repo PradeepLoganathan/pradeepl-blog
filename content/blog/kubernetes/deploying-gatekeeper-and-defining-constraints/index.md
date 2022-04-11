@@ -17,7 +17,7 @@ TocOpen: false
 images:
   - Shaniwar-wada.png
 cover:
-    image: "Shaniwar-wada.png"
+    image: "gatekeeper-opa.png"
     alt: "Deploying gatekeeper to a kubernetes cluster and defining constraints"
     caption: "Deploying gatekeeper to a kubernetes cluster and defining constraints"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
