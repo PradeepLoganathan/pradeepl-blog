@@ -30,7 +30,7 @@ editPost:
 
 ## Overview
 
-A group of people within Heroku developed the 12 Factors in 2012. This is essentially a manifesto describing a set of design principles to build a microservices-based cloud-native application. The manifesto is currently hosted [here](https://12factor.net/). This methodology presents a thought process on how to develop applications and is complementary to other methodologies and thought processes such as the [reactive manifesto](https://pradeepl.com/blog/reactive-manifesto/).
+The twelve-factor app principles are a collection of best practices for building microservices-based cloud-native applications. These applications are modular, scalable, and agile. They are designed to perform at web scale and provide high resiliency. These principles are applied to cloud-native applications and are programming language and platform agnostic. The 12 Factors were published in 2012 by Adam Wiggins, founder of Heroku. It is hosted [here](https://12factor.net/). This methodology presents a thought process on how to develop applications and is complementary to other methodologies and thought processes such as the [reactive manifesto](https://pradeepl.com/blog/reactive-manifesto/).
 
 The 12 factors are
 
