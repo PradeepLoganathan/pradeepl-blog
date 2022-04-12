@@ -62,18 +62,20 @@ Dashboard version: v0.25.0
 
 ## Pipeline
 
-dfgdfgfdgdfg
+To demonstrate the concepts, let us build a simple build and deploy pipeline using Tekton. The pipeline does a git clone of the source code, builds the code, creates a container and deploys the container to the Kubernetes cluster.
 
 {{< mermaid >}}
 
 flowchart  LR
-A(Checkout) ---> B(Build)
-B ---> C{Test}
+A(Checkout Source) --> B(Build)
+B --> C{Test}
 C --Tests pass--> D(Containerize)
 C --Tests Fail--> E(Report Failure)
-D ---> F(Deploy)
+D ---> F(Deploy Container)
 {{< /mermaid >}}
 
-dfgdfgdfgfd
+Each of the steps in the pipeline is a Tekton task. The tasks are defined in the Tekton pipeline resource file. The pipeline resource file is defined below.
+
+{{< mermaid >}}
 
 ## Checkout Task
