@@ -49,8 +49,6 @@ This diagram depicts the various components of tekton and their interactions.
 
 Tekton uses  a pipeline architecture composed of pipelines, tasks , steps and workspaces to provide a highly configurable continuous delivery mechanism. The github repo for Tekton pipelines is [here](https://github.com/tektoncd/pipeline). Tekton uses Tekton triggers to enable continuous integration to automatically invoke pipelines based on events. These events could be code being checked into specific branches, PR's being merged etc. The github repo for Tekton triggers is [here](https://github.com/tektoncd/triggers). Tekton also provides a CLI to interact with these components. The project is hosted on github [here](https://github.com/tektoncd/cli). Let us take a look at these components in detail.
 
-## Tekton Pipelines
-
 Tekton uses Kubernetes Custom Resource Definitions (CRD) to define the building blocks used to assemble CI/CD pipelines.The CRD's defined by Tekton for continuous delivery are below.
 
 ### Step
@@ -115,6 +113,8 @@ spec:
    taskRef:
     name: hello-world-task
  - name: hello-universe
+   runAfter:
+    - hello-world
    taskRef:
     name: hello-universe-task
 ```
