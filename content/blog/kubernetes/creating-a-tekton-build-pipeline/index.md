@@ -39,6 +39,10 @@ D ---> F(Deploy Container)
 
 Each of the steps in the pipeline is a Tekton task. Let us start by installing Tekton, building the tasks and then adding them to the pipeline. Let us start by installing the core components first.
 
+[![Spotify](https://spotify-github-readme.vercel.app/api/spotify)](https://open.spotify.com/embed/episode/6v8ugYvufK1WU6VHrHoonK)
+<!-- 
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/episode/6v8ugYvufK1WU6VHrHoonK?utm_source=generator" width="100%" height="232" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe> -->
+
 ## Install Tekton Components
 
 ### Install Core components
