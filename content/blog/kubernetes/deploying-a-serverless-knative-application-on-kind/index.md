@@ -181,10 +181,10 @@ validatingwebhookconfiguration.admissionregistration.k8s.io/validation.webhook.s
 secret/webhook-certs created
 ```
 
-## Setup Knative networking using Kourier
+## Setup Knative serving using Kourier
 
 ### Install Kourier
-We need to now setup a networking layer for KNative. I am using Kourier as it has the lowest resource requirements and connects to the Knative ingress CRD's directly.
+We need to now setup the serving layer for Knative. I am using Kourier as it has the lowest resource requirements and connects to the Knative ingress CRD's directly.
 
 I am installing kourier from the knative repository on github. It also makes sense to wait for the necessary components to be up and running.
 

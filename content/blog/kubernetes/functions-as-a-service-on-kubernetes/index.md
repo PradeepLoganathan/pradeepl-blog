@@ -1,7 +1,7 @@
 ---
-title: "Knative Serverless on Kubernetes"
+title: "Functions as a Service on Kubernetes"
 author: "Pradeep Loganathan"
-date: 2022-01-24T10:48:22+10:00
+date: 2022-05-18T13:40:06+10:00
 
 draft: true
 comments: true
@@ -21,7 +21,7 @@ tags:
   - "post"
 ---
 
-> "Serverless on kubernetes .. Say what !!! ??"
+ "Serverless on kubernetes .. Say what !!! ??"
 
 That must be your first reaction when we talk about serverless on Kubernetes. Kubernetes is a platform to run containers and manage containerized applications. Serverless is an execution model which allows developers to focus on their application logic rather than the underlying infrastructure. Developers can deploy their code into an execution environment without having to think about the underlying infrastructure on which the application is deployed. In this model, the serverless platform automatically scales up or down based on demand. Serverless platforms on kubernetes similarly focus on allowing developers to focus on application logic rather than think about the complexities of container management and managing the underlying infrastructure.
 A few platforms have emerged recently that bring serverless features to containers by abstracting away the complexities of managing containers and any underlying infrastructure.
