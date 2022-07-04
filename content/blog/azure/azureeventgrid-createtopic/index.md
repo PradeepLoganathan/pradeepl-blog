@@ -1,17 +1,38 @@
 ---
 title: "Azure Event Grid - Creating a Topic"
-date: "2018-12-27"
+author: "Pradeep Loganathan"
+date: 2022-06-23T12:25:09+10:00
+draft: false
+comments: true
+toc: true
+showToc: true
+TocOpen: false
 categories: 
   - "azure"
+tags: 
+  - Azure
+  - Eventdriven
+categories: 
+  - "azure"
+summary: "Azure Event Grid is an eventing back plane that enables event-driven and reactive programming. In this blog post series we will understand Azure Event Grid and look at developing an event driven application using Azure Event Grid as the backplane"
+cover:
+    image: "images/azure-event-grid-createtopic.png"
+    alt: "Azure Event Grid - Introduction"
+    caption: "Azure Event Grid - Introduction"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 This post is part of a three post series on Azure Event Grid
 
-[Azure Event Grid - Introduction](https://pradeepl.com/azure/azureeventgrid-introduction)
+[Part 1 - Azure Event Grid - Introduction](https://pradeepl.com/blog/azure/azureeventgrid-introduction)
 
-[Azure Event Grid - Create Topics](https://pradeepl.com/azure/azureeventgrid-createtopic)
+[Part 2 - Azure Event Grid - Create Topics](https://pradeepl.com/blog/azure/azureeventgrid-createtopic)
 
-[Azure Event Grid - Creating Custom events](https://pradeepl.com/azure/azureeventgrid-createcustomevents)
+[Part 3 - Azure Event Grid - Creating Custom events](https://pradeepl.com/blog/azure/azureeventgrid-createcustomevents)
 
 To get started with Azure Event grid we need to create three primary elements as described previously. We need to create a Topic, a subscription and an Event handler .
 
@@ -30,5 +51,3 @@ To get started with Azure Event grid we need to create three primary elements as
 ![Azure Event Grid - Topic Created](images/TopicCreated.png)
 
 Azure Event Grid - Topic Created
-
-Photo by [Steve Long](https://unsplash.com/photos/xRSSxi2OK5I?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/road-sign?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)

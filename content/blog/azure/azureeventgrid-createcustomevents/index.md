@@ -1,19 +1,39 @@
 ---
 title: "Azure Event Grid - Create Custom Events"
-date: "2018-12-30"
+date: 2022-06-24T12:25:09+10:00
+draft: false
+comments: true
+toc: true
+showToc: true
+TocOpen: false
+
+tags: 
+  - Azure
+  - Eventdriven
 categories: 
   - "azure"
+summary: "Azure Event Grid is an eventing back plane that enables event-driven and reactive programming. In this blog post series we will understand Azure Event Grid and look at developing an event driven application using Azure Event Grid as the backplane"
+cover:
+    image: "images/azure-event-grid-create-custom-topics.png"
+    alt: "Azure Event Grid - Introduction"
+    caption: "Azure Event Grid - Introduction"
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 This post is part of a three post series on Azure Event Grid
 
-[Azure Event Grid - Introduction](https://pradeepl.com/azure/azureeventgrid-introduction)
+[Part 1 - Azure Event Grid - Introduction](https://pradeepl.com/blog/azure/azureeventgrid-introduction)
 
-[Azure Event Grid - Create Topics](https://pradeepl.com/azure/azureeventgrid-createtopic)
+[Part 2 - Azure Event Grid - Create Topics](https://pradeepl.com/blog/azure/azureeventgrid-createtopic)
 
-[Azure Event Grid - Creating Custom events](https://pradeepl.com/azure/azureeventgrid-createcustomevents)
+[Part 3 - Azure Event Grid - Creating Custom events](https://pradeepl.com/blog/azure/azureeventgrid-createcustomevents)
 
-An azure eventgrid event has the below schema. Azure also gives you an option to select an alternate schema called Cloud Schema. For now let's look at the event grid schema.
+
+An azure eventgrid event object has the below schema. Azure also gives you an option to select an alternate schema called Cloud Schema. For now let's look at the event grid schema.
 
 ## Event Schema
 
@@ -25,17 +45,21 @@ An azure eventgrid event has the below schema. Azure also gives you an option to
     "id": "string",
     "eventType": "string",
     "eventTime": "string",
-    "data": { "object-unique-to-each-publisher" },
+    "data": { 
+        "object-unique-to-each-publisher"
+    },
     "dataVersion": "string",
     "metadataVersion": "string"
   }
 ]
 ```
 
-- Topic - This field defines the topic or in case of an
+A brief description of the fields in this schema is below
+
+- topic - This field defines the topic. This is the full resource path to the event source.
 - subject - This field can be used as a tag or a label by the application.
 - id - An unique identifier for the event.
-- eventType - The type of the published event. In the sample below I am using Candidatecreated and candidatedupdated as the event types.
+- eventType - The type of the registered event. In the sample below I am using Candidatecreated and candidatedupdated as the event types.
 - eventTime - The time when an event was published. This is in the publishers UTC time.
 - data - This field is the custom data published by the event source.
 - dataVersion - This field can be used by the publisher to version the data schema .
@@ -44,11 +68,13 @@ An azure eventgrid event has the below schema. Azure also gives you an option to
 
 To create and publish custom events to Event grid we need to use the Eventgrid SDK. Install the SDK from using the package manager console as below
 
-Install-Package Microsoft.Azure.EventGrid -Version 3.0.0
+```shell
+Install-Package Azure.Messaging.EventGrid
+```
 
 ## Creating Custom Events
 
-One of the areas where I am using azure event grid is to implement Domain events. Domain event is a well established paradigm in Domain Driven Design (DDD). [You can read more about it in this article from Martin Fowler](https://martinfowler.com/eaaDev/DomainEvent.html). In this example I am model the event signature using an interface. This interface provides two domain events which are raised when ever a candidate is created and a candidate is updated. The event signature is below.
+One of the areas where I am using azure event grid is to implement Domain events. Domain event is a well established paradigm in Domain Driven Design (DDD). You can read more about it in [this article from Martin Fowler](https://martinfowler.com/eaaDev/DomainEvent.html). In this example I am modelling the event signature using an interface. This interface provides two domain events. The CandidateCreatedEvent is raised when ever a candidate object is created. The CandidateUpdatedEvent is raised whenever a candidate object is updated. The event signatures are below.
 
 ```csharp
 public interface ICandidateEvents
@@ -68,63 +94,56 @@ To publish an event we need to create an array of events. Yes, even if you need 
 
 ```csharp
 public class CandidateEvents : ICandidateEvents
+{
+    string topicEndpointURL;
+    string topicKey ;
+    string topicHostname ;
+    AzureKeyCredential topicCredentials ;
+    EventGridPublisherClient client;
+
+    public CandidateEvents()
     {
-        string topicEndpoint;
-        string topicKey ;
-        string topicHostname ;
-        TopicCredentials topicCredentials ;
-        EventGridClient client;
-
-        public CandidateEvents()
-        {
-            topicEndpoint = "https://yourtopicendpoint/api/events";
-            topicKey = "yourtopickey";
-            topicHostname = new Uri(topicEndpoint).Host;
-            topicCredentials = new TopicCredentials(topicKey);
-            client = new EventGridClient(topicCredentials);
-        }
-
-        public async Task CandidateCreatedEvent(Candidate candidate)
-        {
-            List<EventGridEvent> eventsList = new List<EventGridEvent>();
-
-            EventGridEvent ev = new EventGridEvent()
-            {
-                Id = new Guid().ToString(),
-                Data = candidate,
-                EventTime = DateTime.Now,
-                EventType = "Somevent.CandidateCreated",
-                DataVersion = "1.0",
-                Subject = candidate.CandidateName.Identifier
-
-            };
-
-            eventsList.Add(ev);
-
-            await client.PublishEventsAsync(topicHostname, eventsList );
-        }
-
-        public Task CandidateUpdatedEvent(Candidate candidate)
-        {
-            List<EventGridEvent> eventsList = new List<EventGridEvent>();
-
-            EventGridEvent ev = new EventGridEvent()
-            {
-                Id = new Guid().ToString(),
-                Data = candidate,
-                EventTime = DateTime.Now,
-                EventType = "Somevent.CandidateUpdated",
-                DataVersion = "1.0",
-                Subject = candidate.CandidateName.Identifier
-
-            };
-
-            eventsList.Add(ev);
-
-            await client.PublishEventsAsync(topicHostname, eventsList );
-        }
+        topicEndpointURL = "https://yourtopicendpoint/api/events";
+        topicKey = "yourtopickey";
+        topicEndpoint = new Uri(topicEndpointURL);
+        topicCredentials = new AzureKeyCredential(topicKey);
+        client = new EventGridPublisherClient(topicCredentials);
     }
-    ```
+
+    public async Task CandidateCreatedEvent(Candidate candidate)
+    {
+        List<EventGridEvent> eventsList = new List<EventGridEvent>();
+        EventGridEvent ev = new EventGridEvent()
+        {
+            Id = new Guid().ToString(),
+            Data = candidate,
+            EventTime = DateTime.Now,
+            EventType = "Somevent.CandidateCreated",
+            DataVersion = "1.0",
+            Subject = candidate.CandidateName.Identifier
+        };
+        eventsList.Add(ev);
+        await client.PublishEventsAsync(topicHostname, eventsList );
+    }
+
+    public Task CandidateUpdatedEvent(Candidate candidate)
+    {
+        List<EventGridEvent> eventsList = new List<EventGridEvent>();
+        EventGridEvent ev = new EventGridEvent()
+        {
+            Id = new Guid().ToString(),
+            Data = candidate,
+            EventTime = DateTime.Now,
+            EventType = "Somevent.CandidateUpdated",
+            DataVersion = "1.0",
+            Subject = candidate.CandidateName.Identifier
+        };
+        eventsList.Add(ev);
+        await client.PublishEventsAsync(topicHostname, eventsList );
+    }
+}
+```
+
 
 As shown in the previous post , I have created a subscription for this topic and have used a web hook as the handler for the subscription. The web hook points to an API. Azure Event grid now will post the event to the handler. It will retry the post until it receives a 200 or a 202 response. Event Grid uses a exponential backoff retry policy i.e. it will increase the time between retries for every failed retry. We can also specify a retry policy if necessary.
 
@@ -137,37 +156,38 @@ public async Task<IActionResult> Post([FromBody]object request)
 {
     try
     {
-        var eventGridEvent = JsonConvert.DeserializeObject<EventGridEvent[]>(request.ToString());
+        var eventGridEvent = JsonConvert.
+                DeserializeObject<EventGridEvent[]>(request.ToString());
         
         foreach (var item in eventGridEvent)
         {
             
-        if (string.Equals(item.EventType, "Microsoft.EventGrid.SubscriptionValidationEvent", StringComparison.OrdinalIgnoreCase))
-                {   
-                    var data = item.Data as JObject;
-                    var eventData = data.ToObject<SubscriptionValidationEventData>();
-                    var responseData = new SubscriptionValidationResponse
-                    {
-                        ValidationResponse = eventData.ValidationCode
-             };
-                                                
-                    return Ok(responseData);
-         }
+            if (string.Equals(item.EventType, 
+                            "Microsoft.EventGrid.SubscriptionValidationEvent",
+                            StringComparison.OrdinalIgnoreCase))
+            {   
+                var data = item.Data as JObject;
+                var eventData = data.ToObject<SubscriptionValidationEventData>();
+                var responseData = new SubscriptionValidationResponse
+                {
+                    ValidationResponse = eventData.ValidationCode
+                };
+                                                    
+                return Ok(responseData);
+            }
             else
             {            
                 await DoSomethingWithEvent(item.Data.ToString());
+            }
         }
-
-        }
-      }
-      catch (Exception ex)
-      {
-          telemetry.TrackException(ex);
+    }
+    catch (Exception ex)
+    {
+        telemetry.TrackException(ex);
         throw;
-       }
+    }
 
-       return Ok();
-
+    return Ok();
 } 
 ```
 
