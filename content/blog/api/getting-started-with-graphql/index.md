@@ -18,8 +18,8 @@ images:
   - giorgio-grani-cDsakT8anSw-unsplash.jpg
 cover:
     image: "giorgio-grani-cDsakT8anSw-unsplash.jpg"
-    alt: "Introduction to Open Policy Agent (OPA)"
-    caption: "Introduction to Open Policy Agent (OPA)"
+    alt: "Getting started with GraphQL"
+    caption: "Getting started with GraphQL"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
