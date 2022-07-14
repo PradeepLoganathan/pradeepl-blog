@@ -1,5 +1,5 @@
 ---
-title: "Terraform - Getting started"
+title: "Terraform - Getting Started"
 lastmod: 2020-10-11T15:55:13+10:00
 date: 2020-10-11T15:55:13+10:00
 draft: false

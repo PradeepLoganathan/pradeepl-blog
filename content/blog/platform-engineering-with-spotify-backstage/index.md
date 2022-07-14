@@ -18,7 +18,7 @@ images:
 cover:
     image: "backstage-cover.png"
     alt: "Platform engineering with Backstage"
-    caption: "Platform engineering with BackstageL"
+    caption: "Platform engineering with Backstage"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
