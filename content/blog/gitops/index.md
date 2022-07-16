@@ -25,12 +25,17 @@ tags:
 
 GitOps is a methodology for continuous deployment using a Git repository as the single source of truth. The Git repository is the source of truth for both declarative infrastructure as well as application workloads. The repository contains the YAML manifests or Helm charts for the Kubernetes resources to be created. The Git repo is used to store, track and version control changes to these YAML files containing the Kubernetes configuration such as Namespaces, Deployments, Pods, Services, Ingress, DaemonSets, ConfigMaps, Secrets etc. Changes to the live state versus the desired state is managed by examining Git diffs and using Git primitives to roll back and reconcile the live state.
 
-GitOps makes Git the source of truth where you specify the desired state of your entire system. Developers introduce changes to the cluster state or application configuration, through a CI pipeline. These updates/changes are stored in a Git repository. Changes between versions can be compared and rolled back if necessary. Changes are explicit and are approved through pull requests. A dedicated GitOps component reads approved changes from the Git repository and applies the changes to the Kubernetes cluster through a CD pipeline. This provides for separation of concerns and also ensures that the Git repository reflects the current state of the cluster irrespective of who made the change and when. Any change to a defined branch will trigger the relevant updates to the cluster. The Git repo acts as a backup in case of catastrophic failures and allows for recovery from scratch.
+GitOps makes Git the source of truth where you specify the desired state of your entire system. Developers introduce changes to the cluster state or application configuration, through a CI pipeline. These updates/changes are stored in a Git repository. Changes between versions can be compared and rolled back if necessary. Changes are explicit and approved through pull requests. A dedicated GitOps component reads approved changes from the Git repository and applies the changes to the Kubernetes cluster through a CD pipeline. This provides for separation of concerns and also ensures that the Git repository reflects the current state of the cluster irrespective of who made the change and when. Any change to a defined branch will trigger the relevant updates to the cluster. The Git repo acts as a backup in case of catastrophic failures and allows for recovery from scratch.
 
-GitOps as a methodology for managing Kubernetes clusters and applications was initially proposed by Alexis Richardson, co-founder and CEO of Weaveworks. ina series of [blog posts](https://www.weave.works/blog/gitops-operations-by-pull-request). Weaveworks used the GitOps methodology with their Kubernetes environments.
+GitOps as a methodology for managing Kubernetes clusters and applications was initially proposed by Alexis Richardson, co-founder and CEO of Weaveworks in a series of [blog posts](https://www.weave.works/blog/gitops-operations-by-pull-request). Weaveworks used the GitOps methodology with their Kubernetes environments.
 
 ![GitOps Process](images/gitops-process.svg "Simplified GitOps workflow")
 
+## DevOps vs GitOps
+
+DevOps is a well established patterns for delivering cloud native applications. DevOps generally takes a push approach where infrastructure updates are pushed into the environment. This requires a good knowledge and understanding of the various environments and the current state of these environments. In a GitOps model we use the pull approach where the GitOps operator pulls changes based on any changes to the desired state. The GitOps operator is responsible for resolving the state changes.
+
+In a DevOps model the application pipelines and the deployment pipelines are seperated.
 ## Principles of GitOps
 
 The principles of GitOps are:
