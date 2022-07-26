@@ -17,10 +17,10 @@ summary: The Open API Specification is used to define the contract between the A
 ShowToc: true
 TocOpen: false
 images:
-  - "clay-banks-iGG39Ggagjk-unsplash.jpg"
+  - "openapi-specification-swagger.png"
   - "images/OAS3.png"
 cover:
-    image: "clay-banks-iGG39Ggagjk-unsplash.jpg"
+    image: "openapi-specification-swagger.png"
     alt: "Building a successful API - Understanding Open api specification (OAS) 3.0"
     caption: "Building a successful API - Understanding Open api specification (OAS) 3.0"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
@@ -38,9 +38,9 @@ The OpenAPI specification, generally known by its former name Swagger, is a sche
 
 ## Swagger vs Open API Specification
 
-The terms Swagger and OpenAPI are used interchangeably. Swagger began in 2011 as a set of tools that allowed developers to represent API as code, to automatically generate documentation and client SDKs. The rights to Swagger were bought by SmartBear Software, who donated the rights of the specification format to the Linux Foundation, under the OpenAPI Initiative. The need for standardization when expressing API functionality in a platform, transport, and programming language agnostic way emerged as the OpenAPI Specification. On 1 January 2016, the Swagger specification was renamed to the OpenAPI Specification (OAS). Since then, a newer version, 3.0.0 of OAS, has been released. The [Swagger website](https://swagger.io/) now focuses on tooling around the OpenAPI Specification, including ways to author an API specification and generate client- and server-side stubs (Swagger Editor, Codegen, and UI) to help developers consume the resulting API more easily. Thus, OpenAPI is the specification language itself, while Swagger is a set of tools that work with and around an OpenAPI specification.
+The terms Swagger and OpenAPI are used interchangeably. Swagger began in 2011 as a set of tools that allowed developers to represent API as code, to automatically generate documentation and client SDKs. The rights to Swagger were bought by SmartBear Software, who donated the rights of the specification format to the [Linux Foundation](https://www.linuxfoundation.org/), under the OpenAPI Initiative. The need for standardization when expressing API functionality in a platform, transport, and programming language agnostic way emerged as the OpenAPI Specification. On 1 January 2016, the Swagger specification was renamed to the OpenAPI Specification (OAS). Since then, a newer version, 3.0.0 of OAS, has been released. The [Swagger website](https://swagger.io/) now focuses on tooling around the OpenAPI Specification, including ways to author an API specification and generate client- and server-side stubs. Tools such as Swagger Editor, Codegen, and others built by Swagger help developers create API specifications and consume the resulting API more easily. Thus, OpenAPI is the specification language itself, while Swagger is a set of tools that work with and around an OpenAPI specification.
 
-The Open-API specification is defined [here](http://spec.openapis.org/oas/v3.0.3). Some of the tooling supporting version 3 of OAS is listed [here](https://github.com/OAI/OpenAPI-Specification/blob/master/IMPLEMENTATIONS.md)
+The Open-API specification is defined [here](http://spec.openapis.org/oas/v3.0.3). Some of the tooling supporting version 3.0 of OAS is listed [here](https://github.com/OAI/OpenAPI-Specification/blob/master/IMPLEMENTATIONS.md). A complete overview of the OAS 3.0.3 specification is provided [here](https://swagger.io/specification/). OAS 3.0 aims to simplify the structure and also increase reusability of components, such as parameters, headers, examples, and security schemes. An understanding of this spec is key to helping developers use an API effectively.
 
 ## Open API Specification file structure
 
@@ -54,7 +54,7 @@ An Open API file allows you to describe your entire API, including the following
 
 The structure of an Open API file version 3.0 is below
 
-!["OAS File structure"](images/OAS3.png)
+!["OAS File structure"](images/OAS3-File-structure.png)
 
 OAS 3.0 File structure
 
@@ -238,6 +238,6 @@ A list of Security Requirement Objects used by the API. The Security Requirement
 ]
 ```
 
-A complete overview of the OAS 3.0.3 specification is provided [here](https://swagger.io/specification/). An understanding of this spec is key to helping developers use an API effectively.
+### Conclusion
 
-> Photo by <a href="https://unsplash.com/@claybanks?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Clay Banks</a> on <a href="https://unsplash.com/s/photos/connect?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+Creating an Open API specification that captures all the necessary details and descriptions of an API is key to successful API management. The specification can then be used in Swagger UI to create interactive documentation. It can also be used by API gateways and other tools which optimize the API development and management lifecycle. OAS 3.0 makes it easier to define API specs and to consume API's using standardized tooling and frameworks. The [next blog post](https://pradeepl.com/blog/add-security-requirements-oas3-swagger-netcore3-1-using-swashbuckle/) provides details on securing the swagger endpoint so that it can be consumed in a safe and secure manner.

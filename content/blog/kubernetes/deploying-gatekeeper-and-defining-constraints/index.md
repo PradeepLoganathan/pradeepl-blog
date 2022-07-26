@@ -27,7 +27,7 @@ editPost:
   appendFilePath: true # to append file path to Edit link
 ---
 
-This blog post is a follow up to my [previous post](https://pradeepl.com/blog/kubernetes/kubernetes-gatekeeper-an-introduction/) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster locally.
+This blog post is a follow up to my [previous post](https://pradeepl.com/blog/kubernetes/kubernetes-gatekeeper-an-introduction/) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster. We can deploy Gatekeeper to any kubernetes cluster on cloud providers or on premises. For this blog post , I am using Kind to create a cluster locally.
 
 ## Create Cluster
 
@@ -39,7 +39,7 @@ kind create cluster --name gatekeepercluster
 
 We can now deploy gatekeeper into this cluster now that it has been created.
 
-## Deploy Gatekeeper
+## Install Gatekeeper
 
 Gatekeeper can be installed into your cluster by directly applying a manifest or by using a helm package. The installation details are listed [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/)). While I do not advocate using manifest files directly from online sources, we can safely do so for this blog post. I am installing version 3.7 of gatekeeper into the cluster using the manifest.
 
@@ -47,7 +47,7 @@ Gatekeeper can be installed into your cluster by directly applying a manifest or
 kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/release-3.7/deploy/gatekeeper.yaml
 ```
 
-This command produces the output below.It confirms that the necessary CRD's, mutating/validating webhooks, and admission controllers have been created.
+This command produces the output below. It confirms that the necessary CRD's, mutating/validating webhooks, and admission controllers have been created.
 
 ```shell
 namespace/gatekeeper-system created
@@ -77,6 +77,8 @@ poddisruptionbudget.policy/gatekeeper-controller-manager created
 mutatingwebhookconfiguration.admissionregistration.k8s.iogatekeeper-mutating-webhook-configuration created
 validatingwebhookconfiguration.admissionregistration.k8s.iogatekeeper-validating-webhook-configuration created
 ```
+
+## Verify Gatekeeper Installation
 
 Now that the installation is complete, we can verify the deployment by checking if the necessary namespaces and pods are created and running.
 
@@ -198,7 +200,7 @@ spec:
         } 
 ```
 
-This container template checks containers being created and indicates a violation, if the containers have an image repository which is not part of the allow list. I have authored a [blog post](https://pradeepl.com/blog/kubernetes/introduction-to-open-policy-agent-opa/#REGO) providing an introduction to rego. In this template the rego code extracts the container spec. It then checks if `` container.image `` contains any of the repos specified by the `` input.parameters.repo `` array and assigns the value to satisfied. If `` satisfied `` is not set, we know that the image was not pulled from the list of allowed repositories. The allowed list of repositories is passed in as a parameter as specified in line 14. The list of repositories is passed in as an array of strings. This is indicated by the data type of the parameter in line 15. Now that we have created the constraint template let us deploy it to the cluster.
+This container template validates all containers being created. If the containers have an image repository which is not part of the allow list of repositories it flags a violation. The allowed list of container repositories is passed in as a template parameter. It uses Rego policy language to specify the validation policy . I have authored a [blog post](https://pradeepl.com/blog/kubernetes/introduction-to-open-policy-agent-opa/#REGO) providing an introduction to rego. In this template the rego code extracts the container spec. It then checks if `` container.image `` contains any of the repos specified by the `` input.parameters.repo `` array and assigns the value to satisfied. If `` satisfied `` is not set, we know that the image was not pulled from the list of allowed repositories. The allowed list of repositories is passed in as a parameter as specified in line 14. The list of repositories is passed in as an array of strings. This is indicated by the data type of the parameter in line 15. Now that we have created the constraint template let us deploy it to the cluster.
 
 ## Apply Constraint Template
 
@@ -213,31 +215,33 @@ This deploys the constraint template as a custom resource into the cluster. We n
 We can now create a constraint which implements the constraint template defined above.
 
 ```yaml
-    apiVersion: constraints.gatekeeper.sh/v1beta1
-    kind: AllowedRepos
-    metadata:
-      name: repo-is-openpolicyagent
-    spec:
-      match:
-        kinds:
-          - apiGroups: [""]
-            kinds: ["Pod"]
-        namespaces:
-          - "myapp"
-      parameters:
-        repos:
-          - "mysecurerepo/"
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: AllowedRepos
+metadata:
+  name: repo-is-openpolicyagent
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - "myapp"
+  parameters:
+    repos:
+      - "mysecurerepo/"
 ```
 
-We can use spec.match to specify the kubernetes resources to which the constraint applies. In the constraint above at line we specify that the constraint applies to pods created in the myapp namespace.
+We can use spec.match to specify the kubernetes resources to which the constraint applies. In the constraint above, we specify that the constraint applies to pods created in the myapp namespace. We use the ```spec.match.kinds``` to indicate that the constraint applies to all pods. We also pass the repo parameter to be matched against using  ```spec.parameters.repos``.
 
 ## Apply Constraint
+
+We can now apply this constraint to the cluster using kubectl.
 
 ```shell
 kubectl apply --filename ClusterAllowedRepos-Constraint.yaml
 ```
 
-## Check for Violations
+So far we have created a ConstraintTemplate which implements the logic for Constraint validation using rego. We then created an instance of this ConstraintTemplate by creating a Constraint object and passing in the necessary parameters. We now have all the building blocks to ensure that we can validate constraints on the kubernetes cluster. We can verify that the Constraint exists on the cluster by describing it as below.
 
 ```yaml
 > kubectl describe latestimage not-allowed
@@ -318,9 +322,43 @@ Status:
   Total Violations:  0
 ```
 
-## Test the policy enforcement
+We are now ready to ensure that we can use the Constraint to validate container creation requests and ensure that they use container images from whitelisted repositories.
+
+## Test  policy enforcement
+
+To test the constraint created above, we can try and create a pod in the myapp namespace. We need to create the namespace initially as below.
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myapp
+  labels:
+   name: myapp
+```
+
+We can now create a pod definition that will be used to create a container.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  namespace: myapp
+spec:
+  containers:
+  - image: busybox:1.28.4
+    name: mybusy
+    command: ["/bin/sh","-c","sleep 100000"]
+```
+
+If we now try to create the pod above it will fail the constraint and will not be allowed to be created.
 
 ```shell
-> kubectl run nginx --image nginx:latest
-Error from server ([not-allowed] container <nginx> uses an image tagged with latest<nginx:latest>. Do not use latest. Use a specific version number.): admission webhook"validation.gatekeeper.sh" denied the request: [not-allowed] container <nginx> usesan image tagged with latest <nginx:latest>. Do not use latest. Use a specific versionnumber.
+> kubectl apply -f test-pod.yaml
+Error from server :  admission webhook "validation.gatekeeper.sh" denied the request: pod "test-pod" has an invalid image repo, allowed repos are ["mysecurerepo"]
 ```
+
+## Conclusion
+
+OPA and Gatekeeper are a great toolset to define and enforce policies. OPA provides an open source engine to author declarative policies as code using rego and Gatekeeper uses these policies to enable resource validation and audit functionality in kubernetes clusters. The ability to create Clustertemplates enables policy reuse and parameterization. This allows operators to create policies to enforce regulatory and compliance requirements and validate them continuously.

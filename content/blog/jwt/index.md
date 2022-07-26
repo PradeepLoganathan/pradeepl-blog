@@ -60,9 +60,9 @@ The header part decides which algorithm should be used to generate the token. Th
 
 ### Payload
 
-The second part consists of a payload provided in the JSON format. The payload contains claims.  A claim is a piece of information that the client sends to the server and which must be authenticated. Most commonly, this would be the username but it can include any set of data. Claims can be either Registered claims or Public claims. Registered claims are defined by the JWT Specification. These claims have a key and a purpose defined already. These claims are listed on the specification [here](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1).
+The second part consists of a payload provided in the JSON format. The payload contains claims.  A claim is a piece of information that the client sends to the server and which must be authenticated. Most commonly, this would be the username but it can include any set of data. Claims can be either Registered claims, Public claims or Private claims. Registered claims are defined by the JWT Specification. These claims have a key and a purpose defined already. These claims are listed on the specification [here](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1).
 
-Public claims are keys defined by you and should be collision resistant. Some examples of registered claims are
+Some examples of registered claims are
 
 - Issuer (_iss_): This lets us know who has issued the token.
 - Audience (_aud_): This lets us know that this token must be consumed by our application.
@@ -71,6 +71,20 @@ Public claims are keys defined by you and should be collision resistant. Some ex
 - Expiration date (exp): This lets us know when the token is expiring so we have to generate a new one.
 - Not before (_nbf_): Defines the time before which the JWT must not be accepted for processing.
 - JWT ID (_jti_): Provides a unique identifier for the JWT.
+
+Public claims are keys defined by you and should be collision resistant. They are generally defined as an URI with a namespace to avoid collisions. Private claims are custom claims that two parties agree to use to share information. Private claims are neither registered nor public.
+
+This is a sample payload
+
+```json
+{
+    "iss": "thetalentbot.com",
+    "jti": "00586f3a-3aa5-46f3-add0-ae62c11919fe",
+    "name": "Pradeep Loganathan",
+    "iat": 1545698610,
+    "exp": 1558893661
+}
+```
 
 ### Signature
 
