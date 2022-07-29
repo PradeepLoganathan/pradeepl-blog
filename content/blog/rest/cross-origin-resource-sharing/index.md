@@ -1,9 +1,24 @@
 ---
-title: "What is CORS ?"
-date: "2018-02-17"
-categories: 
-  - "api"
-  - "rest"
+title: "Cross origin resource sharing CORS"
+author: "Pradeep Loganathan"
+date: 2017-07-10T12:25:09+10:00
+draft: false
+comments: true
+toc: true
+showToc: true
+TocOpen: false
+
+summary: "Cross-Origin Resource Sharing or CORS is a mechanism that enables a web browser to perform cross-domain requests. Cross-domain requests are HTTP requests for resources hosted on a different domain than the domain of the resource making the request."
+
+cover:
+  image: CORS-cover.png"
+  alt: "CORS"
+  caption: "CORS"
+  relative: false # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 ### Introduction
@@ -18,12 +33,16 @@ However, with the prevalence and rapid rise of JavaScript frameworks such as Ang
 
 ### CORS HTTP headers
 
-If a server wants its resources to be available securely to other domains, it should use the below headers to control access to it resources
+If a server wants its resources to be available securely to other domains, it should use the below headers to control access to it resources. The headers are
 
-- Access-Control-Allow-Origin: This header is used to control access to the resource and make it available for specific domains If you want to restrict it to specific domains( e.g. siteb.com ), the response header can be modified to allow the same by marking the header as Access-Control-Allow-Origin: http://siteb.com. If another site such as sitec.com tries to get access to this resource now, it will trigger an XMLHttpRequest error and deny access to the requesting JavaScript code. Access-Control-Allow-Origin: \* indicates that this resource is available for access across all domains.
+- Access-Control-Allow-Origin: This header is used to control access to the resource and make it available for specific domains If you want to restrict it to specific domains( e.g. siteb.com ), the response header can be modified to allow the same by marking the header as Access-Control-Allow-Origin: https://siteb.com. If another site such as sitec.com tries to get access to this resource now, it will trigger an XMLHttpRequest error and deny access to the requesting JavaScript code. To allow access to the resource acros all domains thie header should be marked as Access-Control-Allow-Origin: \*.
+
 - Access-Control-Allow-Methods: This header indicates the methods that can be used on the resource from other domains. The acceptable values are the HTTP verbs POST, PUT, GET, etc.
+
 - Access-Control-Allow-Headers: This indicates a comma-separated list of headers accepted by the server providing the resource.
+
 - Access-Control-Allow-Credentials: This is an optional header and if set to true indicates that the server allows cookies (or other user credentials) to be included on cross-origin requests. By default, CORS does not include cookies on cross-origin requests. To reduce the chance of Cross site request forgery (CSRF) vulnerabilities in CORS, CORS requires both the server and the client to acknowledge that it is ok to include cookies on requests. Doing this makes cookies an active decision, rather than something that happens passively without any control. The client code must set the withCredentials property on the XMLHttpRequest to true to give permission. The server must respond also with the Access-Control-Allow-Credentials header. Responding with this header to true means that the server allows cookies (or other user credentials) to be included on cross-origin requests.
+
 - Access-Control-Expose-Headers: This is an optional header and provides explicit permission to the client to read response headers. This is primarily for compatibility with pre-CORS clients. This header is used in CORS preflight requests. It indicates how long the results of a preflight request can be cached. The results of this preflight request are the headers defined above primarily the Access-Control-Allow-Methods and Access-Control-Allow-Headers.
 
 A client uses the below request headers to initiate a CORS request
