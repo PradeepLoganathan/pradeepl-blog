@@ -56,14 +56,15 @@ The other non-permanent branches are
 2. Release branches - Once a set of features & their associated bug fixes have been implemented and merged into the develop branch a release branch is created. The branch is assigned a name composed of the release prefix, followed by the numeric form of choice for your release. One of the standards for the numeric form is semver. The release branch is then subjected to integration and regression testing. Any bugs identified during this phase is fixed and committed directly to the release branch. Once the release branch has been confirmed to be free of bugs, it is merged into the master branch and released into production. These fixes are also merged back into dev and other release branches if any.
 3. Hotfix/Patch branches - Hotfixes are production issues that need an immediate fix before a planned release. The development team creates a hotfix branch from master and applies the appropriate fixes. Once the fixes are tested, the hotfix branch is merged onto the master, to ship a new release.
 
-![](images/gitflow-1024x843.png)
-
-## Gitflow Workflow
+### Gitflow Workflow
 
 This workflow initially starts with a single develop branch. Developers create feature branches for each feature or a group of features that they work on. A feature can also be a bug fix or a refactor. The name of the feature branch indicates the feature being worked on. The feature branches are merged with the develop branch. Once a critical mass or a set of related features are built and merged, a new release branch is created. The team can then continue to work on further features while the release is tested and defects logged. The defects are fixed on the release branch and merged back into the develop branch. The new features created post the release branch creation are also committed to the develop branch.
 
 Once the team has confirmed that the quality of the release is good, a new master branch is created from the release branch. The master branch is tagged with the version and deployed to production. If a production defect is identified post release, a hotfix branch is created from the production branch and the defect is fixed and merged back into master to be tagged and released to production. The hotfix is also merged back into the develop branch. This workflow is a variation of the scheduled deployment strategy.
 
+In the figure below the solid lines represent the long lived branches (master & develop ) vand the dashed lines represent short lived branches ( feature branches, hotfix, release etc)
+
+![Gitflow](images/Gitflow.png "Gitflow")
 ### Pros
 
 - This is an appropriate workflow for versioned software such as desktop applications, mobile applications etc.
@@ -77,12 +78,13 @@ Once the team has confirmed that the quality of the release is good, a new maste
 
 ## Github flow
 
-Github flow was first described by Scott Chacon on his blog [here](http://scottchacon.com/2011/08/31/github-flow.html). This workflow is optimized for frequent releases in a continuous delivery model. In Github flow there is only one permanent branch called master. To work on a new feature a developer creates a feature branch from master and commits their work to this feature branch. The feature branch is pushed to the remote and is kept upto date regularly. When the feature development is complete the developer issues a pull request to the master branch. If the pull request is accepted then the feature is ready to be deployed from the feature branch. If the feature branch is deployed and there are no issues then the changes are merged to master. However if there are issues then master is immediately redeployed since it is is always in a proven working state. This workflow is a variation of the Branch-Per-Feature deployment strategy.
+Github flow was first described by Scott Chacon on his blog [here](http://scottchacon.com/2011/08/31/github-flow.html). This workflow is optimized for frequent releases in a continuous delivery model. In Github flow there is only one permanent branch called master.The master branch should always be in a deployable state. When any change is merged into the master branch it is usually deployed to production immediately.
 
-![](images/github-flow-1024x743.png)
+To work on a new feature a developer creates a feature branch from master and commits their work to this feature branch. The feature branch is pushed to the remote and is kept upto date regularly. When the feature development is complete the developer issues a pull request to the master branch. If the pull request is accepted then the feature is ready to be deployed from the feature branch. If the feature branch is deployed and there are no issues then the changes are merged to master. However if there are issues then master is immediately redeployed since it is is always in a proven working state. This workflow is a variation of the Branch-Per-Feature deployment strategy.
 
-## Github flow
+### Github flow workflow
 
+![Github Flow](images/Github-Flow.png "Github Flow")
 ### Pros
 
 - Simplicity - Only one main development branch - master.
@@ -110,3 +112,7 @@ Gitlab flow uses branch naming conventions to specify which branch is deployed t
 
 - Gitlab branching is more complex than Github branching.
 - Git history is harder to reason with due to merges across multiple environments.
+
+## Conclusion
+
+Branching allows teams of developers to easily collaborate inside of one central code base.Choosing the right branching strategy is key to ensure a good cadence of releasing code to production safely. Knowing and understanding the various branching strategies is key to making this decision.
