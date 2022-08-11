@@ -1,20 +1,40 @@
 ---
 title: "Reactive Manifesto"
-date: "2019-01-12"
+lastmod: 2018-09-09T15:55:13+10:00
+date: 2018-09-09T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
+tags: 
+  - "architecture"
+  - "reactive"
+  - "cloud native"
+  - "12 factor app"
+  - "design"
+  - "pattern"
 categories: 
   - "architecture"
   - "patterns"
-tags: 
-  - "architeture"
-  - "design"
-  - "pattern"
+summary: "The Reactive Manifesto describes how to design and architect Reactive systems according to your needs.Systems built as Reactive Systems are more Reliable, flexible, loosely coupled, scalable and resilient. This makes them easier to develop and amenable to change. They are significantly more tolerant of failure and when failure does occur, they meet it with elegance rather than disaster."
+ShowToc: true
+TocOpen: false
+images:
+  - 12-factor-apps.png
+cover:
+    image: "12-factor-apps.png"
+    alt: "Reactive Manifesto"
+    caption: "Reactive Manifesto"
+    relative: true
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 The Reactive Manifesto describes how to design and architect Reactive systems according to your needs. It describes the four traits of Reactive systems. Reactive Manifest is currently at v.2.0, which was initially published on September 16, 2014. The manifesto is published at GitHub [here](https://github.com/reactivemanifesto/reactivemanifesto).  
 
 According to the [Reactive Manifesto](https://www.reactivemanifesto.org/) , a reactive system should be responsive, resilient, elastic, and message driven. Systems built as Reactive Systems are more Reliable, flexible, loosely coupled, scalable and resilient. This makes them easier to develop and amenable to change. They are significantly more tolerant of failure and when failure does occur, they meet it with elegance rather than disaster. Reactive Systems are highly responsive, giving users effective interactive feedback.
 
-![](images/Reactive-manifesto.png)
+![Reactive Manifesto](images/Reactive-manifesto.png)
 
 Reactive Stream
 

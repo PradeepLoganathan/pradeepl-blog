@@ -2,7 +2,7 @@
 title: "Gitops With Argocd"
 author: "Pradeep Loganathan"
 date: 2022-08-11T03:37:18+10:00
-draft: false
+draft: true
 Author: Pradeep Loganathan
 tags: 
   - devops

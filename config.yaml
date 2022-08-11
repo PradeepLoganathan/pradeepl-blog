@@ -3,6 +3,8 @@ languageCode: en-us
 title: "Pradeep Loganathan"
 paginate: 5
 copyright: "&copy; 2022 Pradeep Loganathan. All rights reserved."
+enableEmoji : true
+
 
 enableInlineShortcodes: true
 enableRobotsTXT: true
