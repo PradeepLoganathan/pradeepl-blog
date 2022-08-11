@@ -2,23 +2,34 @@
 title: "Gitops With Argocd"
 author: "Pradeep Loganathan"
 date: 2022-08-11T03:37:18+10:00
+draft: false
+Author: Pradeep Loganathan
+tags: 
+  - devops
+  - gitops
+  - cicd
+  - argocd
+categories:
+  - platformengineering
 
-draft: true
-comments: true
-toc: true
-showToc: true
-
-description: ""
-
-cover:
-    image: "cover.png"
-    relative: true
-
+summary: Argo CD is a declarative, continuous delivery GitOps operator for kubernetes. 
+ShowToc: true
+TocOpen: false
 images:
+  - images/gitops-with-argocd-cover.png
+  - images/argocd-guestbook.png
+  - images/argocd-login.png
+  - images/argocd-webui.png
+cover:
+    image: "images/gitops-with-argocd-cover.png"
+    alt: "GitOps with ArgoCD"
+    caption: "GitOps with ArgoCD"
+    relative: true
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 
-
-tags:
-  - "post"
 ---
 
 > **_NOTE:_**  The code for this blog post is in github [here](https://github.com/PradeepLoganathan/argocd-getting-started).  
@@ -195,7 +206,7 @@ Now we can update the ingress to use this URL by creating the ingress yaml as be
 
 ```yaml
 #ingress.yaml
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-server-ingress
@@ -328,8 +339,8 @@ We can also head over to the Web UI to check the deployment status. We are prese
 
 ![Guestbook application](images/argocd-guestbook.png "Guestbook application")
 
-Yay, we have our first application deployed using GitOps principles by ArgoCD.
+Yay, we have our first application deployed using GitOps principles by ArgoCD. :fireworks::fireworks::heart:
 
 ## Conclusion
 
-GitOps provides an amazing path to production. It allows for streamlined processes and better deployment experience. However, installing, securing and configuring ArgoCD can be complex and daunting. In this blog post we deployed and configured ArgoCD for a single local development cluster. A production deployment of ArgoCD will be more rigorous as it will have to manage multiple clusters, provide better security including RBAC etc. However , there are products which come preinstalled with Gitops operators and enable better integration. [Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.2/tap/GUID-overview.html) is an example of a powerful applications platform providing GitOps functionality out of the box. GitOps has had strong adoption and the larger open source community is pushing the boundaries to enable simpler and powerful feature sets.
+GitOps provides an amazing path to production. It allows for streamlined processes and better deployment experience. However, installing, securing and configuring ArgoCD can be complex and daunting. In this blog post we deployed and configured ArgoCD for a single local development cluster. A production deployment of ArgoCD will be more rigorous as it will have to manage multiple clusters, provide better security including RBAC etc. However , there are products which come preinstalled with Gitops operators and enable better integration. [Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.2/tap/GUID-overview.html) is an example of a powerful applications platform providing GitOps functionality out of the box. ArgoCD can also be used to deploy not just containerized applications but Kubernetes clusters too using GitOps principles. This [blog post](https://core.vmware.com/blog/deploying-kubernetes-clusters-gitops-and-argocd) provides details on using ArgoCD to standup Kubernetes clusters on Tanzu Kubernetes Grid. GitOps has had strong adoption and the larger open source community is pushing the boundaries to enable simpler and powerful feature sets.
