@@ -12,7 +12,7 @@ tags:
 categories: 
   - "architecture"
   - "cloud"
-summary: A group of people within Heroku developed the 12 Factors in 2012. This is essentially a manifesto describing the rules and guidelines that needed to be followed to build a microservices based cloud-native application.
+summary: The twelve-factor app principles are a collection of best practices for building microservices-based cloud-native applications. These applications are modular, scalable, and agile. They are designed to perform at web scale and provide high resiliency.
 ShowToc: true
 TocOpen: false
 images:
