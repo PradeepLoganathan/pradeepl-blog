@@ -41,7 +41,7 @@ While having multiple options to create a Kubernetes cluster is great, it result
 
 To address the above challenges the [Cluster Lifecycle Special Interest Group](https://github.com/kubernetes/community/tree/master/sig-cluster-lifecycle) came together to identify a better way of creating a cluster, configuring it, and managing its lifecycle. The primary objective of this SIG is to simplify the creation, configuration, upgrade, downgrade, and teardown of Kubernetes clusters and their components. This should work across multiple providers, infrastructure types and enable uniformity, interoperability, extensibility, and simplicity. This would ideally use the same Kubernetes primitives and declarative model that have proven to be successful and is well known. The underlying cluster infrastructure, like virtual machines, networks, load balancers etc., would be managed the same way that developers manage application workloads. This should enable consistent and repeatable cluster deployments across a wide variety of infrastructure environments. Thus, the Cluster API was born primarily focusing on providing declarative API’s and tooling to simplify provisioning, managing, and operating multiple Kubernetes clusters.
 
-Thus, the Cluster API enables us to
+Cluster API enables us to
 
 * Provision multi-master Kubernetes clusters.
 * Provisioning and maintenance of all the required cluster primitives (compute, networking, storage, security etc.)

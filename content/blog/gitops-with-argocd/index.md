@@ -34,7 +34,7 @@ editPost:
 
 > **_NOTE:_**  The code for this blog post is in github [here](https://github.com/PradeepLoganathan/argocd-getting-started).  
 
-## What is Argo CD?
+## What is ArgoCD?
 
 Argo CD is a declarative, continuous delivery [GitOps](https://pradeepl.com/blog/gitops) operator for kubernetes. Argo CD was originally built by Applatix which was acquired by Intuit and open sourced in August 2018. It was accepted as a CNCF incubation-level project in April 2020. It is part of the [argo project](https://github.com/argoproj) which provides solutions for orchestrating container workflows. The other tools in this project are Argo Workflows, Argo Rollouts and Argo Events. [Argo Workflow]((https://github.com/argoproj/argo-workflows)) is a workflow engine for orchestrating directed acyclic graph(DAG) and step based workflows on kubernetes. [Argo Rollouts](https://github.com/argoproj/argo-rollouts) provides advanced deployment strategies such as blue-green, canary, experimentation and progressive delivery features to kubernetes. [Argo Events](https://github.com/argoproj/argo-events) is an event -driven workflow automation framework for kubernetes.
 

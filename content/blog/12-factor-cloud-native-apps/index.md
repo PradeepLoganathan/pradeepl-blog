@@ -1,7 +1,7 @@
 ---
 title: "Principles of Cloud Native design - 12 Factor apps"
-lastmod: 2018-09-09T15:55:13+10:00
-date: 2018-09-09T15:55:13+10:00
+lastmod: 2022-08-12T15:55:13+10:00
+date: 2022-08-12T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
 tags: 
