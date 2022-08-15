@@ -5,13 +5,6 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "redirects": [
-      {
-        "source": "/blog/12-factor",
-        "destination": "/blog/12-factor-cloud-native-apps",
-        "type": 301
-      }
     ]
   }
 }

@@ -173,3 +173,8 @@ taxonomies:
   tag: "tags"
   category: "categories"
   series: "series"
+
+sitemap:
+  changefreq: weekly
+  filename: sitemap.xml
+  priority: 0.5
