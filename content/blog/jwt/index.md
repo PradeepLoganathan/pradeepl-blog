@@ -7,9 +7,12 @@ Author: Pradeep Loganathan
 tags: 
   - "api"   
   - "security"
+  - "JWT"
+  - "jwt"
 categories: 
   - "api"
   - "security"
+  - "jwt"
 summary: JSON Web Token(JWT) is an industry standard for security tokens used to securely transmit information between client and server as JSON objects.It provides a solution to the problem of passing claims between parties. 
 ShowToc: true
 TocOpen: false
@@ -29,9 +32,11 @@ editPost:
 ---
 > Three part series on JWT tokens
 
-Part 1: What is a JWT Token (This post)  
-[Part 2: Creating a JWT token server in ASP.net core 2.0](http://pradeeploganathan.com/security/jwt-tokenserver/)  
-[Part 3: Accessing and Consuming a JWT token protected service in Angular 5+.](http://pradeeploganathan.com/security/jwt-angular-interceptor/)
+Part 1: What is a JWT Token (This post) 
+
+[Part 2: Creating a JWT token server in ASP.net core 2.0]({{< ref "/blog/jwt-tokenserver/index.md" >}} "JSON Web Token")  
+
+[Part 3: Accessing and Consuming a JWT token protected service in Angular 5+.]({{< ref "/blog/jwt-angular-interceptor/index.md" >}} "JWT Angular interceptor")
 
  **JWT ( JSON Web Token** **)** is a security token format, defined by an open standard ([RFC 7519](https://tools.ietf.org/html/rfc7519)). It provides a solution to the problem of passing claims between parties. It is an industry standard for security tokens used to securely transmit information between client and server as JSON objects. As a token format., It defines a compact and self-contained mechanism for transmitting data between parties in a way that can be verified and trusted because it is digitally signed. JWT does not use cookies and can be used across multiple domains. Additionally, the encoding rules of a JWT also make these tokens quite easy to use within the context of HTTP. As it is digitally signed this information can be verified and trusted. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA.
 
@@ -45,7 +50,7 @@ Self-contained: A JWT token is self-contained and contains all the required iden
 
 A JWT token has three parts: Header, Payload, and Signature as shown below. The encoded token is on the left and the decoded information is on the right.
 
-### [![JWT token structure](images/JWT-token-structure_thumb.png "JWT token structure")](http://pradeeploganathan.com/wp-content/uploads/2018/04/JWT-token-structure.png)
+![JWT token structure](images/JWT-token-structure_thumb.png "JWT token structure")]
 
 ### Header
 
@@ -109,6 +114,6 @@ The Token-based authentication scheme can be split it into two distinct parts. T
 
 As the JWT is self-contained, the Resource Server can extract information and even data about the subject and validate the access token locally. It does not need to use a shared database or validate remotely with the token server. The claims on the JWT represented as JSON payload can be HMAC signed or encrypted guaranteeing security.
 
-In the next [post](http://pradeeploganathan.com/security/jwt-tokenserver/), we will look at generating a JWT token using .Net Core.
+In the next [post]({{< ref "/blog/jwt-tokenserver/index.md" >}} "JSON Web Token"), we will look at generating a JWT token using .Net Core.
 
 Photo by [Igor Ovsyannykov](https://unsplash.com/photos/yB5cYEq7y2U?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/ticket?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)

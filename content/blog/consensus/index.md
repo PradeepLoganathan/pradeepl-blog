@@ -1,12 +1,35 @@
 ---
 title: "Consensus algorithms"
-date: "2017-07-12"
+author: "Pradeep Loganathan"
+date: "2017-07-12T14:06:19+10:00"
+draft: false
+Author: Pradeep Loganathan
 categories: 
   - "architecture"
   - "blockchain"
+  - "algorithms"
+  - "consensus"
 tags: 
   - "architecture"
+  - "consensus algorithms"
+  - "Raft"
+  - "Paxos"
+summary: Consensus is one of the most important and fundamental problems in distributed computing. Simply put, the goal of consensus is to get several nodes to agree on something. It is a distributed computing concept that is used to provide a means of agreeing to a single version of truth by all peers on the distributed network.
+ShowToc: true
+TocOpen: false
+
+cover:
+    image: "Consensus Algorithms - Cover.png"
+    alt: "Consensus Algorithms"
+    caption: "Consensus Algorithms"
+    relative: true  # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
+
+## Consensus algorithm
 
 Consensus is one of the most important and fundamental problems in distributed computing. Simply put, the goal of consensus is to get several nodes to agree on something. In distributed systems, consensus forces participants in the system to agree on consistent values across and elect a leader. It is a distributed computing concept that is used to provide a means of agreeing to a single version of truth by all peers on the distributed network. Consensus protocols also implement measures to prevent issues with split brain and stale replicas. Reliably reaching consensus despite network faults and process failures is a surprisingly hard problem to solve.
 
@@ -43,19 +66,19 @@ This algorithm works on the idea that a node or user has enough stake in the sys
 **DELEGATED PROOF OF STAKE**  
 Delegated Proof of Stake (DPOS) is an innovation over standard PoS whereby each node that has stake in the system can delegate the validation of a transaction to other nodes by voting. This is used in the bitshares blockchain.
 
-PROOF OF ELAPSED TIME  
+**PROOF OF ELAPSED TIME**  
 Introduced by Intel, it uses Trusted Execution Environment (TEE) to provide randomness and safety in the leader election process via a guaranteed wait time. It requires the Intel SGX (Software Guard Extensions) processor to provide the security guarantee and for it to be secure.
 
-DEPOSIT-BASED CONSENSUS  
+**DEPOSIT-BASED CONSENSUS**  
 Nodes that wish to participate on the network must put in a security deposit before they can propose a block.
 
-PROOF OF IMPORTANCE  
+**PROOF OF IMPORTANCE**
 This idea is important and different from Proof of Stake. Proof of importance not only relies on how much stake a user has in the system, but it also monitors the usage and movement of tokens by the user to establish a level of trust and importance. This is used in Nemcoin.
 
-FEDERATED CONSENSUS OR FEDERATED BYZANTINE CONSENSUS  
+**FEDERATED CONSENSUS OR FEDERATED BYZANTINE CONSENSUS** 
 Used in the stellar consensus protocol, nodes in this protocol keep a group of publicly trusted peers and propagates only those transactions that have been validated by the majority of trusted nodes.
 
-REPUTATION-BASED MECHANISMS  
+**REPUTATION-BASED MECHANISMS**  
 As the name suggests, a leader is elected on the basis of the reputation it has built over time on the network. This can be based on the voting from other members.
 
 ### Paxos
@@ -100,5 +123,3 @@ Semi-private (e.g., consortium-based, uses traditional Byzantine Fault Tolerance
 PoA is a consensus mechanism for blockchain in which consensus is achieved by referring to a list of validators (referred to as authorities when they are linked to physical entities). Validators are a group of accounts/nodes that are allowed to participate in the consensus; they validate the transactions and blocks.
 
 Unlike PoW or PoS, there is no mining mechanism involved. There are several types of PoA protocols, and they vary depending on how they work. Hyperledger and Ripple are based on PoA. Hyperledger is based on PBFT, whereas ripple uses an iterative process.
-
-Picture Courtesy - [Rawpixel](https://unsplash.com/@rawpixel)

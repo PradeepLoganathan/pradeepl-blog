@@ -33,6 +33,7 @@ editPost:
 ---
 
 > **_NOTE:_**  The code for this blog post is in github [here](https://github.com/PradeepLoganathan/argocd-getting-started).  
+> **_NOTE:_**  For an overview of Gitops read this blog post [here](https://pradeepl.com/blog/gitops) 
 
 ## What is ArgoCD?
 
@@ -42,7 +43,14 @@ Argo CD is a declarative, continuous delivery [GitOps](https://pradeepl.com/blog
 
 The main components of Argo CD are
 
+
+## How does ArgoCD work?
+
+
+
 ## Getting started with Argo CD on Kind
+
+To get started with Argo CD let's install it on a Kubernetes cluster. We would then need to configure it and deploy a sample workload to ensure that it is working as expected.
 
 Argo CD can be installed on any kubernetes cluster. The process of installing Argo CD involves the below steps
 
