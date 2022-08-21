@@ -142,10 +142,10 @@ params:
 
   profileMode:
     enabled: true
-    title: "Notes from my journey designing and building amazing systems with amazing teams" # optional default will be site title
+    title: "Notes from my journey designing and building software systems" # optional default will be site title
     subtitle: "Software engineering notes"
     imageUrl: "Pradeep-Loganathan.jpeg" # optional
-    imageTitle: "<title of image as alt>" # optional
+    imageTitle: "Pradeep Loganathan" # optional
     imageWidth: 120 # custom size
     imageHeight: 120 # custom size
     buttons:

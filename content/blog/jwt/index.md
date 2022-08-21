@@ -17,11 +17,11 @@ summary: JSON Web Token(JWT) is an industry standard for security tokens used to
 ShowToc: true
 TocOpen: false
 images:
-  - Jwt-tokens-pradeeploganathan.jpg
+  - JWT-Cover.png
   - images/Token-Based-Authentication-2.jpg
   - images/JWT-token-structure_thumb.png
 cover:
-    image: "Jwt-tokens-pradeeploganathan.jpg"
+    image: "JWT-Cover.png"
     alt: "What is a JSON Web Token (JWT)?"
     caption: "What is a JSON Web Token (JWT)?"
     relative: true
@@ -50,7 +50,7 @@ Self-contained: A JWT token is self-contained and contains all the required iden
 
 A JWT token has three parts: Header, Payload, and Signature as shown below. The encoded token is on the left and the decoded information is on the right.
 
-![JWT token structure](images/JWT-token-structure_thumb.png "JWT token structure")]
+![JWT token structure](images/JWT-token-structure_thumb.png "JWT token structure")
 
 ### Header
 
@@ -71,9 +71,9 @@ Some examples of registered claims are
 
 - Issuer (_iss_): This lets us know who has issued the token.
 - Audience (_aud_): This lets us know that this token must be consumed by our application.
-- Subject (sub): This lets us know which part of the app can use the token (useful in bigger applications).
+- Subject (_sub_): This lets us know which part of the app can use the token (useful in bigger applications).
 - Issued at (_iat_): This lets us know when the token has been created.
-- Expiration date (exp): This lets us know when the token is expiring so we have to generate a new one.
+- Expiration date (_exp_): This lets us know when the token is expiring so we have to generate a new one.
 - Not before (_nbf_): Defines the time before which the JWT must not be accepted for processing.
 - JWT ID (_jti_): Provides a unique identifier for the JWT.
 
@@ -106,14 +106,16 @@ Now that we have all the pieces of the JWT, we can compose the JWT as below.
 
 Now that we know the structure of a JWT, we need to understand the process of generating a JWT, presenting it to a resource server and having it authenticated.
 
-![Token based authentication](images/Token-Based-Authentication-2.png)
+The Token-based authentication scheme can be split it into two distinct parts.
 
-Token-based Authentication
+- _Authentication Request_ - The first part is the authentication request. The client provides credentials to identify himself to the token server. The token server validates the credentials and generates a token with the necessary claims and sends it to the client.
 
-The Token-based authentication scheme can be split it into two distinct parts. The first part is the authentication request. The client provides credentials to identify himself to the token server. The token server validates the credentials and generates a token with the necessary claims and sends it to the client. The second part is the request to a protected endpoint on the resource server. The client provides the token acquired earlier to the resource server along with the post request. This is provided in the authorization header as a bearer token. The resource server validates the token and if the validation is successful, responds back with the requested resource.
+![Token based authentication](images/JWT%20Authentication%20Request.png)
+
+- _Resource Request_ - The second part is the request to a protected endpoint on the resource server. The client provides the token acquired earlier to the resource server along with the post request. This is provided in the authorization header as a bearer token. The resource server validates the token and if the validation is successful, responds back with the requested resource.
+
+![Token based authentication](images/JWT%20Resource%20Request.png)
 
 As the JWT is self-contained, the Resource Server can extract information and even data about the subject and validate the access token locally. It does not need to use a shared database or validate remotely with the token server. The claims on the JWT represented as JSON payload can be HMAC signed or encrypted guaranteeing security.
 
 In the next [post]({{< ref "/blog/jwt-tokenserver/index.md" >}} "JSON Web Token"), we will look at generating a JWT token using .Net Core.
-
-Photo by [Igor Ovsyannykov](https://unsplash.com/photos/yB5cYEq7y2U?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/ticket?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)

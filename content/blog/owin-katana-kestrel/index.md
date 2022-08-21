@@ -7,7 +7,7 @@ categories:
 
 ## OWIN
 
-The Open Web Interface for .NET (OWIN) is a standard that defines an interface between .NET servers and web applications. It is a community-driven specification published under the Creative Commons license (http://owin.org/) that aims to decouple the host, the server and the application framework from each other, effectively eliminating environmental dependencies from the application. Ruby on Rails(RoR) has a similar specification called RACK which was a minimal contract between the server and the RoR application.
+The Open Web Interface for .NET (OWIN) is a standard that defines an interface between .NET servers and web applications. It is a [community-driven specification](http://owin.org/) published under the Creative Commons license  that aims to decouple the host, the server and the application framework from each other, effectively eliminating environmental dependencies from the application. Ruby on Rails(RoR) has a similar specification called RACK which was a minimal contract between the server and the RoR application.
 
 OWIN provides three main benefits
 
@@ -37,11 +37,11 @@ At any instant, the state of an HTTP transaction and the server-side processing 
 
 The AppFunc delegate Func<IDictionary<string, object>, Task> takes the environment dictionary and returns a task object. This allows us the chain actions on the dictionary. All applications should implement this delegate to be OWIN compliant.
 
-A detailed post on the architecture and design of the ASP.Net core middleware is [available here.](http://pradeeploganathan.com/asp-net/asp-net-core-framework-lifecycle/)
+A detailed post on the architecture and design of the ASP.Net core middleware is [available here.]({{< relref "/blog/asp-net-core-framework-lifecycle" >}})
 
 ## Katana
 
-Project Katana (https://github.com/aspnet/AspNetKatana) is an implementation of OWIN by the .Net foundation. It is the code name for a set of Microsoft’s .NET 4.5–based components that utilize the OWIN specification to implement various functionalities in ASP.NET 4.6. Katana uses a layered architecture that consists of four layers: Host, Server, Middleware, and Application similar to the layers in the OWIN specification.
+[Project Katana](https://github.com/aspnet/AspNetKatana) is an implementation of OWIN by the .Net foundation. It is the code name for a set of Microsoft’s .NET 4.5–based components that utilize the OWIN specification to implement various functionalities in ASP.NET 4.6. Katana uses a layered architecture that consists of four layers: Host, Server, Middleware, and Application similar to the layers in the OWIN specification.
 
 1. **Host Layer -** The host layer is the layer that hosts the application in a process on the operating system. The host is also responsible for setting up a server layer and  
     constructing the OWIN pipeline. Katana support three different hosting scenarios namely IIS/ASP.NET, OwinHost.exe, and custom host.
@@ -51,22 +51,64 @@ Project Katana (https://github.com/aspnet/AspNetKatana) is an implementation of 
 
 ## Kestrel
 
-Kestrel (https://github.com/aspnet/KestrelHttpServer) is a lightweight cross-platform web server that supports .NET Core and runs on multiple platforms such as Linux, macOS, and Windows. Kestrel is fully written in .Net core. It is based on libuv which is a multi-platform asynchronous eventing library. Libuv is also at the heart of Node.js. Another hosting option is WebListener or HTTP.sys which is windows only. HTTPSys offers better performance than Kestrel as it is fully optimized and targetted for Windows OS.
+[Kestrel](https://github.com/aspnet/KestrelHttpServer) is a lightweight cross-platform web server that supports .NET Core and runs on multiple platforms such as Linux, macOS, and Windows. Kestrel is fully written in .Net core. It is based on libuv which is a multi-platform asynchronous eventing library. Libuv is also at the heart of Node.js. Another hosting option is WebListener or HTTP.sys which is windows only. HTTPSys offers better performance than Kestrel as it is fully optimized and targetted for Windows OS.
 
 Technically speaking Kestrel provides an implementation of IServer defined in Microsoft.Aspnetcore.Hosting. The IServer interface is defined by a Start method and a Features property. The implementation of the Start method is responsible for configuring and starting the server. It creates the HTTPContext , sets up the Request and Response properties and calls the configure method. The Features property indicates the features supported by the server. The behavior exposed by the HTTPContext class is internally implemented by the supported features. For e.g the Request, Response and Session objects exposed by HTTPConext are obtained by implementing IHttpRequestFeature, IHttpResponseFeature, and ISessionFeature respectively. A server needs to minimally support the IHttpRequestFeature and the IHTTPResponseFeature. The definition of these features can be seen at Github [here.](https://github.com/aspnet/HttpAbstractions/tree/87cd79d6fc54bb4abf07c1e380cd7a9498a78612/src/Microsoft.AspNetCore.Http.Features)
 
-Kestrel isn’t a full-featured web server, it’s a small, fast web server geared toward serving dynamic content from ASP.NET Core. It is designed to run behind a proxy like IIS on windows or NGINX on Linux/MacOS , and should not be used to directly host ASP.NET Core or any other application in production environments. Kestrel is packaged as a NuGet library (https://www.nuget.org/packages/Microsoft.AspNetCore.Server.Kestrel/) and can easily be run on the command line to listen and respond to web requests from a specified port (default 5004). Kestrel does not support buffering, Web-sockets, HTTP2 or direct file transmission.
+Kestrel isn’t a full-featured web server, it’s a small, fast web server geared toward serving dynamic content from ASP.NET Core. It is designed to run behind a proxy like IIS on windows or NGINX on Linux/MacOS , and should not be used to directly host ASP.NET Core or any other application in production environments. Kestrel is packaged as a [NuGet library](https://www.nuget.org/packages/Microsoft.AspNetCore.Server.Kestrel/) and can easily be run on the command line to listen and respond to web requests from a specified port (default 5004). Kestrel does not support buffering, Web-sockets, HTTP2 or direct file transmission.
 
 In code, we can start Kestrel as shown below. The main method in program.cs sets up webhostbulder to use kestrel. It also specifies the startup class to be used. The startup class uses the convention based configure method to return a string in the response body.
 
-<script src="https://gist.github.com/PradeepLoganathan/a15a037f29ed2de35adc3044ce475334.js"></script>
+```csharp
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
-When the application is executed, kestrel prints the port it is listening on and we can point a browser at this URL to get the output as shown below.
+
+namespace OWINHost
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var host = new WebHostBuilder()
+                 .UseKestrel()
+                 .UseContentRoot(Directory.GetCurrentDirectory())
+                 .UseStartup<Startup>()
+                 .Build();
+
+            host.Run();
+                
+        }
+    }
+}
+```
+
+```csharp
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Builder;
+
+
+namespace OWINHost
+{
+    public class Startup
+    {
+        public void Configure(IApplicationBuilder app)
+        {
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("<h1>Hello from the owin host</h1>");
+            });
+        }
+    }
+}
+```
+
+When the application is executed, kestrel prints the port it is listening on.
 
 ![](images/kestrel.png)
+
+ We can now point a browser at this URL to get the output as shown below.
 
 ![](images/kestrelpage.png)
 
 Now we have a console based web host which can serve web apps.
-
-Photo by [Alex Blăjan](https://unsplash.com/photos/oMasI3a66no?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
