@@ -8,6 +8,7 @@ categories:
   - "cloud"
   - "iac"
   - "video"
+  - "meetup"
 tags: 
   - "terraform"
   - "azure"

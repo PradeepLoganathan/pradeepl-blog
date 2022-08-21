@@ -5,6 +5,7 @@ date: 2020-10-11T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
 categories: 
+  - "meetup"
   - "cloud"
   - "iac"
   - "video"

@@ -64,6 +64,7 @@ A simple WAT file containing webassembly instructions to add two numbers and ret
 The above code defines a module. The function _start is exported and made available to the host. It can be invoked by using the wasmer runtime as follows ```wasmer run one.wasm --invoke _start 2 2```
 
 ![Wasmer run webassembly](images/Wasmer-run.png)
+
 ## WebAssembly in the browser
 
 WebAssembly was originally designed as a technology solution to speed up code execution inside web browsers. It was not intended to replace JavaScript, but work side-by-side with JavaScript. Wasm overcomes some of the performance limitations of javascript in the browser. WebAssembly’s universal acceptance on all major browsers meant non-JavaScript code can be compiled to run anywhere. This meant that applications written in C++ and other languages could be compiled to wasm making their transition from the desktop to the browser much smoother and perform better.
