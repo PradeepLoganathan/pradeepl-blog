@@ -3,8 +3,6 @@ languageCode: en-us
 title: "Pradeep Loganathan"
 paginate: 5
 copyright: "&copy; 2022 Pradeep Loganathan. All rights reserved."
-enableEmoji : true
-
 
 enableInlineShortcodes: true
 enableRobotsTXT: true
@@ -16,12 +14,22 @@ enableGitInfo: true
 
 googleAnalytics: G-LB9Q9F622G
 
+markup:
+  highlight:
+    # anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNos: false
+    # noClasses: false
+    style: monokai
+
 minify:
   minifyOutput: true
   minifyCSS: true
   minifyJS: true
   minifyHTML: true
   minifyURLs: true
+  disableXML: true
 
 outputs:
     home:
@@ -52,7 +60,7 @@ params:
   env: production
   title: "Pradeep Loganathan"
   description: 'My technical notes and thoughts on software engineering, programming, and life.'
-  keywords: [Pradeep, Loganathan, Blog, Portfolio, Resume]
+  keywords: [Pradeep Loganathan, kubernetes, Devops, GitOps, ArgoCD, FluxCD]
   author: "Pradeep Loganathan"
   comments: true
   images:
@@ -87,6 +95,7 @@ params:
     smallIconWidth: 65
 
   ShowShareButtons: true
+  ShowWordCount: true
   ShowReadingTime: true
   ShowAuthor: true
   ShowBreadCrumbs: true
@@ -96,6 +105,7 @@ params:
   ShowPostNavLinks: true
   ShowCodeCopyButtons: true
   hideFooter: true
+  ShowRssButtonInSectionTermList: true
 
   taxonomies:
     category: categories

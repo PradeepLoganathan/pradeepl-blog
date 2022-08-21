@@ -4,6 +4,8 @@ lastmod: 2022-08-12T15:55:13+10:00
 date: 2022-08-12T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
+ShowPostNavLinks: true
+ShowRssButtonInSectionTermList: true
 tags: 
   - "architecture"
   - "cloud"
