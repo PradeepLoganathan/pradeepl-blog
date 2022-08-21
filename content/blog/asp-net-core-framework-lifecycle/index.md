@@ -20,7 +20,7 @@ images:
   - images/multiple-middleware-with-MapWhen.png
   - images/multiple-middleware.png
 cover:
-    image: "aspnetcore-framework-lifecycle.png"
+    image: "aspnetcore-framework-lifecycle-cover.png"
     alt: "asp.net core framework lifecycle"
     caption: "asp.net core framework lifecycle"
     relative: true
@@ -37,9 +37,9 @@ A lifecycle is a series of components, events, and stages that process a request
 Middleware components form the basic building blocks of an ASP.NET core pipeline providing capabilities such as the ability to serve files and route requests. Middleware is a series of components that form the applications request pipeline. Middleware components provide many of the underlying application level infrastructures. Routing, CORS, authentication and caching are implemented using middleware. App-specific middleware can also be written. Each middleware component acts on the request as they come in and on the response as it is sent back. It can choose to act on a request, ignore it or pass it to a specific component. These components are called in the order they are added to the pipeline. ASP.Net Core does not have HTTP Modules and handlers. Previously HTTP modules and handlers provided common services such as caching, authorization, and request handling. Modules provided application level services, they provided a hook into application lifecycle events to author reusable services. Handlers were responsible for generating the response. Module and handler execution were driven by application events whereas middleware exaction is dependent on the order in which they are added to the pipeline. Middleware provides the same results as handlers and modules.  The middleware can also integrate with a larger framework like MVC. While middleware executes in the order in which they are added, httphandlers execute every time the associated application event is fired and httpmodule is executed exactly once to generate a response. The ASP.Net core middleware pipeline can be configured using the following methods
 
 1. _**Use**_- Use adds a middleware component to the pipeline. The component’s code must decide whether to terminate or continue the pipeline. We can add as many app.Use methods as we want. They will be executed in the order in which they were added to the pipeline. When middleware is written an app.Use(...), a middleware delegate is added to the application's request pipeline. It can be written as an inline delegate or in a class.
-2.  _**Map**_ - Branches to different middleware components based on the incoming request URL path.
-3.  _**MapWhen**_ - Adds additional functionality to the Map method by using predicate-based branching. A request pipeline can be branched off based on the conditions specified in the predicate.
-4.  _**Run**_ - short circuits the request and directly generates a response. It terminates the middleware. Any middleware components added after Run will not be processed.
+2. _**Map**_ - Branches to different middleware components based on the incoming request URL path.
+3. _**MapWhen**_ - Adds additional functionality to the Map method by using predicate-based branching. A request pipeline can be branched off based on the conditions specified in the predicate.
+4. _**Run**_ - short circuits the request and directly generates a response. It terminates the middleware. Any middleware components added after Run will not be processed.
 
 Let's see these in further detail
 
@@ -122,7 +122,6 @@ app.Map("/branch1", (appBuilder) =>
 
 This prints the below output when we navigate to the branch1 path. If we do not navigate to the branch1 path, the previous output is produced since the map condition matching to "branch1" fails and the branch1 middleware is not added to the processing pipeline. 
 
-
 !["Using Map to add multiple middleware branches"](images/multiple-middleware-with-Map.png "Using Map to add multiple middlewares")
 
 ### MapWhen
@@ -143,11 +142,11 @@ app.MapWhen( context => context.Request.Query.ContainsKey("querypath1"), (appbui
 
 ### Run()
  
- Run short circuits the pipeline. The Run method is used to add middleware and immediately return a response. It should be added at the end of the middleware since Run() ends the pipeline and won't call anything after itself.
+Run short circuits the pipeline. The Run method is used to add middleware and immediately return a response. It should be added at the end of the middleware since Run() ends the pipeline and won't call anything after itself.
  
 ## Built-In Middleware
  
- Asp.net core has a lot of cross-cutting functionality built in as middleware. These are pre-built and available out of the box with Asp.net Core. Examples of pre-built middleware are Authentication, Routing, Session, Static files etc.
+Asp.net core has a lot of cross-cutting functionality built in as middleware. These are pre-built and available out of the box with Asp.net Core. Examples of pre-built middleware are Authentication, Routing, Session, Static files etc.
  
 ## Program and Startup
  

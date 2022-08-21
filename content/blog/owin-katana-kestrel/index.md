@@ -1,9 +1,38 @@
 ---
-title: "What is OWIN?"
-date: "2017-08-02"
+title: "What is OWIN? How does it relate to Katana and Kestrel"
+lastmod: 2017-08-02T15:55:13+10:00
+date: 2017-08-02T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
+tags:
+  - "asp.net"
+  - ".net"
+  - "dotnet"
+  - "framework"
+  - "OWIN"
+  - "Katana"
+  - "Kestrel"
 categories: 
-  - "asp-net"
+  - "OWIN"
+  - "asp.net"
+summary:  The Open Web Interface for .NET (OWIN) is a standard that defines an interface between .NET servers and web applications. Katana is an implementation of OWIN by the .Net foundation. Kestrel is a lightweight cross-platform web server that supports .NET Core and runs on multiple platforms such as Linux, macOS, and Windows. 
+ShowToc: true
+TocOpen: false
+images:
+  - images/owin-katana-kestrel.png
+  - images/kestrel.png
+  - images/kestrelpage.png
+cover:
+    image: "owin-katana-kestrel.png"
+    alt: "OWIN, Katana and Kestrel"
+    caption: "OWIN, Katana and Kestrel"
+    relative: true
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
+
 
 ## OWIN
 

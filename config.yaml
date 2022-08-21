@@ -37,7 +37,7 @@ menu:
       weight: 50
     - identifier: about
       name: About
-      url: /about/
+      url: https://www.linkedin.com/in/pradeeploganathan/
       weight: 30
     - identifier: blog
       name: Blog
