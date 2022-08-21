@@ -7,5 +7,6 @@ categories:
   - "meetup"
 ---
 
-[![IMAGE ALT TEXT HERE](https://www.youtube.com/watch?v=d2c-mfyN2Oc/0.jpg)](https://www.youtube.com/watch?v=d2c-mfyN2Oc)
+
+{{< youtube id="d2c-mfyN2Oc" autoplay="true" color="white" modestbranding="true">}}
 

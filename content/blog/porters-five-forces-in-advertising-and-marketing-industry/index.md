@@ -7,6 +7,6 @@ categories:
   - "meetup"
 ---
 
-[![Youtube Video](https://www.youtube.com/watch?v=wuBArX8FuCw/0.jpg)](https://www.youtube.com/watch?v=wuBArX8FuCw)
 
-https://www.youtube.com/watch?v=wuBArX8FuCw
+{{< youtube id="wuBArX8FuCw" autoplay="true" color="white" modestbranding="true">}}
+
