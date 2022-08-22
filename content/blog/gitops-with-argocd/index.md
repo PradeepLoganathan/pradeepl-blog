@@ -1,7 +1,8 @@
 ---
-title: "Gitops With Argocd"
+title: "Gitops with ArgoCD"
 author: "Pradeep Loganathan"
-date: 2022-08-11T03:37:18+10:00
+date: 2022-08-22T03:37:18+10:00
+lastmod: 2022-08-22T03:37:18+10:00
 draft: true
 Author: Pradeep Loganathan
 tags: 
@@ -11,10 +12,9 @@ tags:
   - argocd
 categories:
   - platformengineering
-
-summary: Argo CD is a declarative, continuous delivery GitOps operator for kubernetes. 
+summary: GitOps is a methodology for continuous deployment using a Git repository as the single source of truth. Argo CD is a declarative, continuous delivery GitOps operator for kubernetes. In this post we will deploy ArgoCD to a kind cluster and deploy an application, the GitOps way.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - images/gitops-with-argocd-cover.png
   - images/argocd-guestbook.png
@@ -37,16 +37,14 @@ editPost:
 
 ## What is ArgoCD?
 
-Argo CD is a declarative, continuous delivery [GitOps](https://pradeepl.com/blog/gitops) operator for kubernetes. Argo CD was originally built by Applatix which was acquired by Intuit and open sourced in August 2018. It was accepted as a CNCF incubation-level project in April 2020. It is part of the [argo project](https://github.com/argoproj) which provides solutions for orchestrating container workflows. The other tools in this project are Argo Workflows, Argo Rollouts and Argo Events. [Argo Workflow]((https://github.com/argoproj/argo-workflows)) is a workflow engine for orchestrating directed acyclic graph(DAG) and step based workflows on kubernetes. [Argo Rollouts](https://github.com/argoproj/argo-rollouts) provides advanced deployment strategies such as blue-green, canary, experimentation and progressive delivery features to kubernetes. [Argo Events](https://github.com/argoproj/argo-events) is an event -driven workflow automation framework for kubernetes.
-
+Argo CD is a declarative, continuous delivery [GitOps]({{< ref "/blog/gitops" >}}) operator for kubernetes. Argo CD was originally built by Applatix which was acquired by Intuit and open sourced in August 2018. It was accepted as a CNCF incubation-level project in April 2020. It is part of the [argo project](https://github.com/argoproj) which provides solutions for orchestrating container workflows. The other tools in this project are Argo Workflows, Argo Rollouts and Argo Events. [Argo Workflow]((https://github.com/argoproj/argo-workflows)) is a workflow engine for orchestrating directed acyclic graph(DAG) and step based workflows on kubernetes. [Argo Rollouts](https://github.com/argoproj/argo-rollouts) provides advanced deployment strategies such as blue-green, canary, experimentation and progressive delivery features to kubernetes. [Argo Events](https://github.com/argoproj/argo-events) is an event -driven workflow automation framework for kubernetes.
+<!-- 
 ## Argo CD architecture
 
 The main components of Argo CD are
 
 
-## How does ArgoCD work?
-
-
+## How does ArgoCD work? -->
 
 ## Getting started with Argo CD on Kind
 
@@ -303,9 +301,9 @@ We will deploy a sample application from ArgoCD called ```guestbook``` to this c
 kubectl create namespace guestbook
 ````
 
-We now need to create a yaml to define the application. In the below application definition we are providing the source and the destination details for the application. The destination includes the namespace and the cluster where the application will be deployed. The source includes the repository URL and the path of the application to be deployed.
+We now need to create a yaml to define the application. In the below application definition we are providing the source and the destination details for the application. The destination ( lines 8 - 10) includes the namespace and the cluster where the application will be deployed. The source (lines 11 - 14) includes the repository URL and the path of the application to be deployed.
 
-```yaml
+```yaml {linenos=true}
 #guestbook.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application

@@ -2,6 +2,7 @@
 title: "WebAssembly - From Browser to Cloud "
 author: "Pradeep Loganathan"
 date: 2022-07-04T10:26:07+10:00
+lastmod: 2022-07-04T10:26:07+10:00
 draft: false
 comments: true
 toc: true
