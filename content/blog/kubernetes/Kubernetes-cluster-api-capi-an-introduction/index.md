@@ -16,7 +16,7 @@ TocOpen: false
 images:
   - datacenter-racks.jpg
 cover:
-    image: "cover.jpg"
+    image: "ClusterAPI-Cover.png"
     alt: "Kubernetes Cluster API - CAPI - An Introduction"
     caption: "Kubernetes Cluster API - CAPI - An Introduction"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
@@ -53,6 +53,14 @@ Cluster API enables us to
 
 A consistent, declarative API was chosen as it enables broader use cases such as hybrid-cloud and multi-cloud allowing providers to implement platform specific Intrinsics in a standardized manner. It allows for the development of standardized tooling talking to a standardized interface eliminating provider and tooling lock-in. This declarative API allows for immutable infrastructure (once created they are never updated, only deleted). Teams can use familiar processes such as GITOPS to manage clusters similar to managing their code daily. This community-driven “Kubernetes style” API provides familiarity and integrates well with existing tooling for cluster lifecycle management.
 
+## Cluster API architecture
+
+The cluster api architecture consists of the Core API and the providers.
+
+* Core API - The core API consists of CRD's that model the infrastructure and configuration needed to create Kubernetes clusters. These CRD's model the physical servers, virtual machines and other infrastructure components.
+* Providers - The providers implement the necessary functionality and services for each infrastructure environment. 
+
+!["Cluster API - Design"](ClusterAPI%20-%20Design.png#center)
 ### Cluster Types
 
 Cluster API distinguishes between two distinct types of clusters, the management cluster, and the Workload clusters. It also uses a bootstrap cluster to enable bootstrapping the other clusters.
@@ -80,9 +88,9 @@ The Cluster API is implemented as several custom resource definitions (CRD) and 
 
 ### Custom Resource Definitions (CRD’s)
 
-The Cluster API provides four new CRD’s which map closely to familiar resources such as Pods, Replicasets and Deployments. It uses a Cluster resource at the highest level, and then MachineDeployments and MachineSets, and lastly Machines at the lowest level.
+The Cluster API uses a bunch of custom resource definitions which represent the infrastructure and the configuration needed to create and manage a kubernetes cluster. Each CRD is managed by its corresponding controller. The controller is responsible to ensure that the desired state and the real state are reconciled. The Cluster API Core manager uses these controllers to manage the lifecycle of each cluster 
 
-![](CAPI-CRD-types.png)
+!["Cluster API - Architecture"](CAPI-architecture.png#center)
 
 Let us now understand each of these CRD’s better.
 
@@ -226,7 +234,7 @@ spec:
 
 #### MachineDeployment
 
-A _MachineDeployment_ is a definition for a well-managed set of machines. It is similar to a deployment. It manages the MachineSet and allows for rollout/rollback. Each change to a MachineDeployment creates and scales up a new MachineSet to replace the old one. It reconciles changes to the Machine resources, by having a solid rolling-out strategy between MachineSets configurations similar to Deployments.
+A _MachineDeployment_ is a definition for a well-managed set of machines. It manages changes to machines by destroying and recreating them. It is similar to a deployment. It manages the MachineSet and allows for rollout/rollback. Each change to a MachineDeployment creates and scales up a new MachineSet to replace the old one. It reconciles changes to the Machine resources, by having a solid rolling-out strategy between MachineSets configurations similar to Deployments.
 
 ```yaml
 apiVersion: cluster.x-k8s.io/v1beta1
@@ -302,6 +310,10 @@ A _MachineSet_ represents a group of machines. It is similar to a replicaset. Th
 #### Machine
 
 A _Machine_ represents a K8s node. It represents an instance at a provider, which can be any kind of server, like an Azure VM, an AWS EC2 instance, a PXE booted bare-metal server or a Raspberry Pi. It is a declarative spec for a platform or infrastructure component that hosts a Kubernetes node such as a bare metal server or a VM. A machine resource is immutable. When a machine spec is updated, the controller deletes the machine and creates a new one that conforms to the new spec.
+
+#### MachineHealthCheck
+
+A _MachineHealthCheck_ crd identifies when a node is unhealthy and needs to be replaced.
 
 ### Management Cluster Components
 
