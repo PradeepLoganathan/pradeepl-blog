@@ -15,11 +15,12 @@ tags:
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: A Repository is used to manage aggregate persistence and retrieval. The repository mediates between the data-access layer and the domain.The unit of work pattern keeps track of all changes to aggregates. Once all updates of the aggregates in a scope are completed, the tracked changes are played onto the database in a transaction
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
-  - cover.jpg
+  - repository-and-unit-of-work-pattern-asp-net-core-cover.png
+  - images/Repository-and-unit-of-work-pattern.png
 cover:
-    image: "cover.jpg"
+    image: "repository-and-unit-of-work-pattern-asp-net-core-cover.png"
     alt: "Repository and Unit of work pattern in ASP.net core"
     caption: "Repository and Unit of work pattern in ASP.net core"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
@@ -37,7 +38,7 @@ If you wish to follow along with the code used in this post, you can find it [on
 
 A Repository is used to manage aggregate persistence and retrieval. The repository mediates between the data-access layer and the domain. It decouples the domain layer from the data layer effectively. It does so by providing collection-like access to the underlying data. The repository offers a collection interface by providing methods to add, modify, remove, and fetch domain objects. This enables the domain to remain agnostic of the underlying persistence mechanism. This allows both these layers to evolve independently maintaining high cohesion with low coupling.
 
-!["Repository Pattern"](images/Repository-Pattern-Pradeep-Loganathan-1024x556.png)
+!["Repository Pattern"](images/Repository-and-unit-of-work-pattern.png)
 
 Applying Repository Pattern to Domain design
 

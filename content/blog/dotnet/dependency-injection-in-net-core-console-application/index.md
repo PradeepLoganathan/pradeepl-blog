@@ -16,23 +16,23 @@ summary: Dependency injection enables an application to use a key design princip
 ShowSummary: true
 ShowDescription: true
 ShowToc: true
-TocOpen: false
+TocOpen: true
 ShowPostNavLinks: true
 images:
-  - scott-trento-xrBxbPiK2w8-unsplash.jpg
+  - dependency-injection-in-net-core-console-application-cover.png
 cover:
-  image: "scott-trento-xrBxbPiK2w8-unsplash.jpg"
+  image: "dependency-injection-in-net-core-console-application-cover.png"
   alt: "Dependency injection in .Net Core Console application"
   caption: "Dependency injection in .Net Core Console application"
-  relative: false # To use relative path for cover image, used in hugo Page-bundles
+  relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text
   appendFilePath: true # to append file path to Edit link
 ---
+> The code sample for this blog post is [here on Github](https://github.com/PradeepLoganathan/Injector)
 
-
-In the previous [post](https://pradeepl.com/blog/dotnet/configuration-in-a-net-core-console-application/) we implemented configuration in a .net core console application. In this post let us look at implementing dependency injection in a .net core console application.
+In the previous [post]({{< ref "/blog/dotnet/configuration-in-a-net-core-console-application" >}}) we implemented configuration in a .net core console application. In this post let us look at implementing dependency injection in a .net core console application.
 
 An ELI5 explanation of dependency injection is provided in [this historically significant stackoverflow post](https://stackoverflow.com/questions/1638919/how-to-explain-dependency-injection-to-a-5-year-old). DI helps implement a key design pattern called loose coupling. DI enables loose coupling by allowing us to program against an interface(contract), rather than a concrete implementation. This makes code more maintainable and testable.
 
@@ -156,3 +156,5 @@ foreach (var type in ConsoleAppTypes)
 Using Assembly scanning to auto register type assignable from ICustomer
 
 We now have a fully functioning DI system in a .net core console application. we can now design our interfaces and classes and make sure that they are designed to be maintainable and independently testable. We can create mocks and use them in place of the actual implementation etc.
+
+To understand a more practical example of dependency injection , we can look at using DI to inject concrete repositories and DBContext. This [blog post]({{< ref "/blog/repository-and-unit-of-work-pattern-asp-net-core-3-1">}}) runs through steps to implement dependency injection and use the Unit of Work pattern in asp.net core. It makes extensive use of dependency injection to inject repositories and configuration to configure the database context.

@@ -18,7 +18,7 @@ summary: Adding configuration to a .Net core Console application to read configu
 ShowSummary: true
 ShowDescription: true
 ShowToc: true
-TocOpen: false
+TocOpen: true
 ShowPostNavLinks: true
 images:
   - configuration-in-a-net-core-console-application-cover.png

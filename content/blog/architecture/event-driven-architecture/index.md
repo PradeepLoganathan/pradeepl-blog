@@ -14,7 +14,7 @@ categories:
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: Event driven architecture (EDA) is an architectural paradigm where behavior is composed by reacting to events. In this paradigm events imply a significant change in state.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - "images/cover.png"
 cover:
@@ -167,4 +167,4 @@ Event sourcing captures all changes to application state as a sequence of events
 
 ## Cloud based EDA support
 
-Cloud providers have built a lot of the support infrastructure necessary to implement event driven architectures. Large cloud platforms such as Azure, AWS and GCP support EDA implementation using various technologies. [This post refers](https://pradeepl.com/blog/azure/azureeventgrid-introduction/) to implementing an Event driven architecture pattern using Azure event grid.
+Cloud providers have built a lot of the support infrastructure necessary to implement event driven architectures. Large cloud platforms such as Azure, AWS and GCP support EDA implementation using various technologies. [This post refers]({{< ref "blog/azure/azureeventgrid-introduction">}}) to implementing an Event driven architecture pattern using Azure event grid.
