@@ -6,6 +6,9 @@ categories:
   - "resilience"
 tags: 
   - "pattern"
+
+series: ["Design Patterns"]
+
 ---
 
 The retry pattern is an extremely important pattern to make applications and services more resilient to transient failures. A transient failure is a common type of failure in a cloud-based distributed architecture. This is often due to the nature of the network itself (loss of connectivity, timeout on requests, and so on). Transient faults occur when services are hosted separately and communicate over the wire, most likely over a HTTP protocol. These faults are expected to be short-lived. Repeating such a request that has previously failed could succeed on a subsequent attempt.  

@@ -5,6 +5,8 @@ categories:
   - "architecture"
   - "containers"
   - "patterns"
+
+series: ["Design Patterns"]
 ---
 
 Sidecar pattern is a single-node pattern made up of two containers. It involves co-locating another container in a node/pod along with the main application container. The application container contains the core logic for the application. The role of the sidecar is to augment and improve the application container, often without the application container’s knowledge.

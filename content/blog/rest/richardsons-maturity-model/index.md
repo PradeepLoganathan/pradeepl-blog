@@ -3,6 +3,8 @@ title: "Richardson's Maturity Model"
 date: "2016-10-21"
 categories: 
   - "rest"
+
+series: ["REST"]
 ---
 
 The Richardson Maturity Model was developed by [Leonard Richardson](https://web.archive.org/web/20180822201706/http://www.crummy.com/). It specifies a model to grade REST services according to their adherence to the REST constraints. This model identifies three levels of service maturity based on the service’s support for URI’s, HTTP and Hypermedia.

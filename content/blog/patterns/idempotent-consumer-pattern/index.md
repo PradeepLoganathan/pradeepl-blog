@@ -4,7 +4,7 @@ lastmod: 2019-07-06T15:55:13+10:00
 date: 2019-07-06T11:01:47+10:00
 Author: "Pradeep Loganathan"
 
-series: ["Tekton-Getting Started"]
+series: ["Design Patterns"]
 
 draft: false
 comments: true

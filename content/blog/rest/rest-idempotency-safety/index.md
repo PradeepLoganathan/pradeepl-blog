@@ -6,6 +6,8 @@ categories:
 tags: 
   - "microservice"
   - "rest"
+
+series: ["REST"]
 ---
 
 Implementing HTTP’s uniform interface as discussed in the previous [posts](http://pradeepl.com/rest-communicating-with-verbs-and-status-codes/) has a surprisingly good architectural side effect. If it is Implemented as specified in the REST specifications (HTTP specification - RFC 2616), you get two useful properties namely Idempotency and Safety.

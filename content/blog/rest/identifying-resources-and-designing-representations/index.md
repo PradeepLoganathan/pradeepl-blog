@@ -3,6 +3,8 @@ title: "REST - Identifying Resources and URI design."
 date: "2016-12-14"
 categories: 
   - "rest"
+
+series: ["REST"]
 ---
 
 [CodeProject](http://pradeeploganathan.com)

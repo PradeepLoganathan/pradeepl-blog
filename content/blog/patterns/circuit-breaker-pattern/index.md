@@ -4,6 +4,8 @@ date: "2018-09-21"
 categories: 
   - "architecture"
   - "patterns"
+
+series: ["Design Patterns"]
 ---
 
 The failure of one service can lead to other services failing throughout the application. To manage this problem and prevent a cascading service failure, we can use a resilience pattern called circuit breaker. This mechanism is used to avoid a distributed application going down due to a cascading failure of many essential components. Circuit breakers help to avoid one failing component tearing down other dependent services in a domino effect. The key idea is for a service to fail fast if a dependent resource is not available, as opposed to waiting for a timeout/error for each service invocation during the period in which the dependent resource is down.

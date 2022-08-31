@@ -15,7 +15,8 @@ categories:
   - "jwt"
 summary: JSON Web Token(JWT) is an industry standard for security tokens used to securely transmit information between client and server as JSON objects.It provides a solution to the problem of passing claims between parties. 
 ShowToc: true
-TocOpen: false
+TocOpen: true
+series: ["JWT Tokens"]
 images:
   - JWT-Cover.png
   - images/Token-Based-Authentication-2.jpg

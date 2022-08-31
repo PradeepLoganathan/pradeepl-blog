@@ -2,7 +2,8 @@ baseURL: https://pradeepl.com
 languageCode: en-us
 title: "Pradeep Loganathan"
 paginate: 5
-copyright: "&copy; 2022 Pradeep Loganathan. All rights reserved."
+copyright: "&copy; 2022 Pradeep Loganathan. This work is licensed under a Creative Commons Attribution-ShareAlike 4.0
+  International License.."
 
 enableInlineShortcodes: true
 enableRobotsTXT: true
@@ -69,6 +70,7 @@ params:
   timeFormat: 'h:mm a'
   dateTimeFormat: 'MMMM Do, YYYY h:mm a'
   language: en-us
+  languageCode: en-us
 
   mainSections: ['posts']
 

@@ -6,6 +6,8 @@ categories:
 tags: 
   - "constraints"
   - "rest"
+
+series: ["REST"]
 ---
 
 REST as defined in [Roy T Fielding's thesis](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm) defines **six architectural constraints w**hich make any web service – a truly RESTful API. These are also called as Fielding's constraints. They generalize the Web’s architectural principles and represent them as a framework of constraints or an architectural style. The REST constraints are

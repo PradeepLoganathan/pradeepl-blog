@@ -9,7 +9,7 @@ showToc: true
 TocOpen: false
 
 summary: "Cross-Origin Resource Sharing or CORS is a mechanism that enables a web browser to perform cross-domain requests. Cross-domain requests are HTTP requests for resources hosted on a different domain than the domain of the resource making the request."
-
+series: ["REST"]
 cover:
   image: CORS-cover.png"
   alt: "CORS"

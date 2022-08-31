@@ -5,6 +5,8 @@ categories:
   - "rest"
 tags: 
   - "rest"
+
+series: ["REST"]
 ---
 
 The Web has radically transformed the way we produce and share information. It has democratized information sharing and has revolutionized how information is created and shared. It has also been through major inflection points named only as software engineers would.
