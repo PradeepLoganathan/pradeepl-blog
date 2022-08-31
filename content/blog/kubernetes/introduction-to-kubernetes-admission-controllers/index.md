@@ -21,7 +21,7 @@ cover:
   image: "austin-neill-4pHcmcPsP8A-featured.jpg"
   alt: "Introduction to Kubernetes Admission Controllers"
   caption: "Introduction to Kubernetes Admission Controllers"
-  relative: false # To use relative path for cover image, used in hugo Page-bundles
+  relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text

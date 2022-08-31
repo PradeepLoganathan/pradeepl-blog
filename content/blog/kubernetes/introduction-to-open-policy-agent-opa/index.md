@@ -20,7 +20,7 @@ cover:
     image: "introduction-to-open-policy-agent-opa-cover.jpg"
     alt: "Introduction to Open Policy Agent (OPA)"
     caption: "Introduction to Open Policy Agent (OPA)"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text

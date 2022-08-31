@@ -19,7 +19,7 @@ cover:
     image: "ClusterAPI-Cover.png"
     alt: "Kubernetes Cluster API - CAPI - An Introduction"
     caption: "Kubernetes Cluster API - CAPI - An Introduction"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "suggest changes to this post" # edit text

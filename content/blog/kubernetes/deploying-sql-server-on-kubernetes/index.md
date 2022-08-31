@@ -23,7 +23,7 @@ cover:
     image: "Deploying_sql_server_on_kubernetes.png"
     alt: "Deploying Sql Server on Kubernetes for High Availability and Disaster Recovery"
     caption: "Deploying Sql Server on Kubernetes for High Availability and Disaster Recovery"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text

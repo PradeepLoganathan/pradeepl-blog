@@ -18,7 +18,7 @@ cover:
     image: "cloudnativebuildpacks.png"
     alt: "Cloud native buildpacks"
     caption: "Cloud native buildpacks"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text

@@ -22,7 +22,7 @@ cover:
     image: "Knative-fundamentals.png"
     alt: "Knative Fundamentals"
     caption: "Knative Fundamentals"
-    relative: false
+    relative: true
 comments: true
 images:
 editPost:

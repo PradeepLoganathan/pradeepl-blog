@@ -21,12 +21,12 @@ ShowToc: true
 TocOpen: false
 ShowPostNavLinks: true
 images:
-  - rima-kruciene-gpKe3hmIawg-unsplash.jpg
+  - configuration-in-a-net-core-console-application-cover.png
 cover:
-  image: "rima-kruciene-gpKe3hmIawg-unsplash.jpg"
+  image: "configuration-in-a-net-core-console-application-cover.png"
   alt: "Configuration in a .Net Core Console application"
   caption: "Configuration in a .Net Core Console application"
-  relative: false # To use relative path for cover image, used in hugo Page-bundles
+  relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text
@@ -37,7 +37,7 @@ A .NET core console application is an amazing bare bones application template wh
 
 As a .NET core console application does not have dependency injection built in, features that an application depends on such as configuration is not readily available. In a full-fledged ASP.net core application, configuration is available using the injected IConfiguration interface by default. In a .NET core console application Configuration can be added using the ConfigurationBuilder class. Additionally, support for configuring the application using a Json file, environmental variables, command line or using a custom configuration provider can also be added.
 
-The IConfiguration and the Configuration builder types are available in the Microsoft.Extensions.Configuration package. The extensions to add a json file such as appsettings.json as a configuration source is available in the Microsoft.Extensions.Configuration.Json nuget package. The extensions to add Environmental variables as a configuration source is available in the nuget package Microsoft.Extensions.Configuration.EnvironmentVariables. the extensions to add the command line as a configuration source is available in the Microsoft.Extensions.Configuration.CommandLine nuget package.
+The ```IConfiguration``` and the ```ConfigurationBuilder``` types are available in the ```Microsoft.Extensions.Configuration``` package. The extensions to add a json file such as appsettings.json as a configuration source is available in the ```Microsoft.Extensions.Configuration.Json``` nuget package. The extensions to add Environmental variables as a configuration source is available in the nuget package ```Microsoft.Extensions.Configuration.EnvironmentVariables```. The extensions to add the command line as a configuration source is available in the ```Microsoft.Extensions.Configuration.CommandLine``` nuget package.
 
 The above NuGet packages can be installed using the install-package command as below.
 
@@ -51,7 +51,7 @@ Install-Package Microsoft.Extensions.Configuration.EnvironmentVariables
 
 Installing packages for Configuration
 
-Once these packages are installed it provides the necessary functionality to use the ConfigurationBuilder class. In the below gist I am adding a json configuration file called appsettings.json. I am also adding environmental variables and command line as a configuration source.
+Once these packages are installed it provides the necessary functionality to use the ```ConfigurationBuilder``` class. In the below gist I am adding a json configuration file called appsettings.json. I am also adding environmental variables and command line as a configuration source.
 
 ```csharp
 static async Task Main(string[] args)
@@ -103,4 +103,4 @@ We can then strongly bind it using Configuration.Bind("LogSettings", LoggingConf
 
 Binding configuration strongly typed to use DI
 
-[In the next post](https://pradeepl.com/blog/dotnet/dependency-injection-in-net-core-console-application/) let us look at implementing Dependency injection in a console application which can also be used to inject configuration.
+In the [next post]({{< ref "/blog/dotnet/dependency-injection-in-net-core-console-application" >}}) let us look at implementing Dependency injection in a console application which can also be used to inject configuration.
