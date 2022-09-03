@@ -15,7 +15,6 @@ summary: REST defines six architectural constraints which make any web service â
 ShowToc: true
 TocOpen: true
 series: ["REST"]
-Weight: 2
 images:
   - "images/REST-architectural-constraints.png"
 cover:

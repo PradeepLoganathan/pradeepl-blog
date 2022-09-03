@@ -15,7 +15,6 @@ summary: The key parts of a Resource oriented architecture (REST architecture) a
 ShowToc: true
 TocOpen: true
 series: ["REST"]
-Weight: 3
 images:
   - "images/REST-architectural-constraints.png"
 cover:

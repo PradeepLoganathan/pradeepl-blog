@@ -19,7 +19,6 @@ summary: REST API's have a very rich vocabulary to communicate a variety of stat
 ShowToc: true
 TocOpen: true
 series: ["REST"]
-Weight: 4
 images:
   - images/rest-communicating-with-verbs-and-status-codes.png
 cover:

@@ -33,7 +33,7 @@ editPost:
 ---
 
 > **_NOTE:_**  The code for this blog post is in github [here](https://github.com/PradeepLoganathan/argocd-getting-started).  
-> **_NOTE:_**  For an overview of Gitops read this blog post [here](https://pradeepl.com/blog/gitops) 
+> **_NOTE:_**  For an overview of Gitops read this blog post [here]({{< ref "/blog/gitops" >}})
 
 ## What is ArgoCD?
 

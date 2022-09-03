@@ -15,7 +15,6 @@ summary: Implementing the REST architectural principles results in the both Idem
 ShowToc: true
 TocOpen: true
 series: ["REST"]
-Weight: 5
 images:
   - "images/rest-idempotency-safety.png"
 cover:
