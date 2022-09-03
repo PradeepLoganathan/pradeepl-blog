@@ -1,0 +1,7 @@
+.excalidraw.light {
+    filter: none;
+  }
+  
+.excalidraw.dark {
+    filter: invert(100%) hue-rotate(180deg);
+}

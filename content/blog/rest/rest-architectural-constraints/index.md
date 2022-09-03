@@ -1,16 +1,35 @@
 ---
 title: "REST architectural constraints"
-date: "2016-10-19"
-categories: 
-  - "rest"
+lastmod: 2016-10-19T11:00:08+10:00
+date: 2016-10-19T11:00:08+10:00
+draft: false
+Author: Pradeep Loganathan
 tags: 
-  - "constraints"
+  - "api"
   - "rest"
-
+  - "design"
+categories: 
+  - "api"
+  - "rest"
+summary: REST defines six architectural constraints which make any web service – a truly RESTful API. These are also called as Fielding's constraints. They generalize the Web’s architectural principles and represent them as a framework of constraints or an architectural style.
+ShowToc: true
+TocOpen: true
 series: ["REST"]
+Weight: 2
+images:
+  - "images/REST-architectural-constraints.png"
+cover:
+    image: "images/REST-architectural-constraints.png"
+    alt: "REST constraints"
+    caption: "REST constraints"
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
-REST as defined in [Roy T Fielding's thesis](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm) defines **six architectural constraints w**hich make any web service – a truly RESTful API. These are also called as Fielding's constraints. They generalize the Web’s architectural principles and represent them as a framework of constraints or an architectural style. The REST constraints are
+REST as defined in [Roy T Fielding's thesis](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm) defines **_six architectural constraints_** which make any web service – a truly RESTful API. These are also called as Fielding's constraints. They generalize the Web’s architectural principles and represent them as a framework of constraints or an architectural style. The REST constraints are
 
 1. Client–server architecture.
 2. Stateless.
@@ -27,7 +46,7 @@ This constraint species that the client and server must be able to evolve indepe
 
 ## Stateless
 
-A REST service must be stateless. Each request must have all the information needed for the server to process it and the server should not need any additional information from previous requests to fulfill the current request .This shifts the responsibility of maintaining state to the client freeing the server to focus on fulfilling as many requests as possible. The necessary state to operate the request is contained within it as a part of the URI, query-string parameters, body, or headers. The URI identifies the resource, and the body contains the state of it. A stateless service is easily scalable since additional servers can be added or removed as necessary without having to worry about routing subsequent requests to the same server. These can be further load balanced as necessary.
+A REST service must be stateless. Each request must have all the information needed for the server to process it and the server should not need any additional information from previous requests to fulfill the current request .This shifts the responsibility of maintaining state to the client freeing the server to focus on fulfilling as many requests as possible. The necessary state to operate the request is contained within the request as a part of the URI, query-string parameters, body, or headers. The URI identifies the resource, and the body contains the state of it. A stateless service is easily scalable since additional servers can be added or removed as necessary without having to worry about routing subsequent requests to the same server. These can be further load balanced as necessary.
 
 ## Cacheable
 

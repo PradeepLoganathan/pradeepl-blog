@@ -17,12 +17,13 @@ categories:
   - "cloud"
 summary: REST API's have a very rich vocabulary to communicate a variety of statuses and results. The verbs put, post, update, get and others are used to indicate the action that must be performed. The status indicate the result of the actions performed by the verbs.
 ShowToc: true
-TocOpen: open
+TocOpen: true
 series: ["REST"]
+Weight: 4
 images:
-  - rest-communicating-with-verbs-and-status-codes-cover.png
+  - images/rest-communicating-with-verbs-and-status-codes.png
 cover:
-    image: "rest-communicating-with-verbs-and-status-codes-cover.png"
+    image: "images/rest-communicating-with-verbs-and-status-codes.png"
     alt: "Rest API- Communicating with Verbs and status codes"
     caption: "Rest API- Communicating with Verbs and status codes"
     relative: true
