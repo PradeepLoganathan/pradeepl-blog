@@ -10,7 +10,7 @@ tags:
   - "terraform"
 ---
 
-This post is a follow up on the [Terraform 101](https://pradeeploganathan.com/cloud/terraform-getting-started) sessions for the Sunshine Coast dotnet user group. The slides and the code from the session are below.
+This post is a follow up on the [Terraform 101]({{< ref "/blog/terraform-getting-started">}}) sessions for the Sunshine Coast dotnet user group. The slides and the code from the session are below.
 
 ## Slides
 

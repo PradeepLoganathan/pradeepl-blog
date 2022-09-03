@@ -21,24 +21,44 @@ REST as defined in [Roy T Fielding's thesis](http://www.ics.uci.edu/~fielding/pu
 
 Implementing the above constraints has several advantages. It allows the service to use standard internet infrastructure elements such as caches, proxies and load balancers. This allows service developers to focus on core service logic rather than reinvent the wheel implementing custom caching services or security layers.
 
-**Client- Server Architecture** -  This constraint species that the client and server must be able to evolve independently. They must have no dependency of any sort on each other. The only information needed is for the client to know the resource URIs on the server. This encourages separation of concerns between the client and the server allowing them to evolve independently.
+## Client- Server Architecture
 
-**Stateless** -  A REST service must be stateless. Each request must have all the information needed for the server to process it and the server should not need any additional information from previous requests to fulfill the current request .This shifts the responsibility of maintaining state to the client freeing the server to focus on fulfilling as many requests as possible. The necessary state to operate the request is contained within it as a part of the URI, query-string parameters, body, or headers. The URI identifies the resource, and the body contains the state of it. A stateless service is easily scalable since additional servers can be added or removed as necessary without having to worry about routing subsequent requests to the same server. These can be further load balanced as necessary.
+This constraint species that the client and server must be able to evolve independently. They must have no dependency of any sort on each other. The only information needed is for the client to know the resource URIs on the server. This encourages separation of concerns between the client and the server allowing them to evolve independently.
 
-**Cacheable** -  A REST service must explicitly indicate cacheblilty of responses. The service should also indicate the duration for which the response is valid. Caching helps improve performance on the client side and scalability on the server side. If the client has access to a valid cached response for a given request, it avoids repeating the same request. Instead, it uses its cached copy. This helps alleviate some of the server’s work, and thus contributes to scalability and performance.
+## Stateless
 
-**Uniform Interface** - The uniform interface defines a contract for communication between the client and the server. This is achieved through four sub constraints namely
+A REST service must be stateless. Each request must have all the information needed for the server to process it and the server should not need any additional information from previous requests to fulfill the current request .This shifts the responsibility of maintaining state to the client freeing the server to focus on fulfilling as many requests as possible. The necessary state to operate the request is contained within it as a part of the URI, query-string parameters, body, or headers. The URI identifies the resource, and the body contains the state of it. A stateless service is easily scalable since additional servers can be added or removed as necessary without having to worry about routing subsequent requests to the same server. These can be further load balanced as necessary.
 
-_Identification of resources_ - As discussed in [What is REST?](http://pradeepl.com/rest/what-is-rest/) resources are uniquely identified by URI's. These identifiers are stable and do not change across interactions even when the resource state changes.
+## Cacheable
 
-_Manipulation of resources through representations_ - A client manipulates resources by sending new representations of the resource to the service. The server controls the resource representation and can accept or reject the  new resource representation sent by the client.
+A REST service must explicitly indicate cacheblilty of responses. The service should also indicate the duration for which the response is valid. Caching helps improve performance on the client side and scalability on the server side. If the client has access to a valid cached response for a given request, it avoids repeating the same request. Instead, it uses its cached copy. This helps alleviate some of the server’s work, and thus contributes to scalability and performance.
 
-_Self-descriptive messages_ - REST request and response messages contain all information needed for the service and the client to interpret the message and handle it appropriately. The messages are quite verbose and include the method, protocol used and the content type. This enables each message to be independent.
+## Uniform Interface
 
-_Hypermedia as the Engine of Application State (HATEOS)_\- Hypermedia connects resources to each other and describes their capabilities in machine-readable ways. Hypermedia is a strategy, implemented in different ways by dozens of technologies. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future.
+The uniform interface defines a contract for communication between the client and the server. This is achieved through four sub constraints namely
 
-**Layered System** -  A layered system further builds on the concept of client-server architecture. A layered system indicates that there can be more components than just the client and the server and each system can have additional layers in it. These layers should be easy to add, remove or change. Proxies, gateways, load balancer's are also additional layers.
+### Identification of resources
 
-**Code on Demand** - Code on Demand is an optional constraint. Code on Demand allows flexibility to the client by allowing it to download code. Servers are able to temporarily extend or customize the functionality of a client by transferring logic to it that it can execute. This enables transferring additional logic to the client to be executed. This is primarily accomplished using JavaScript and other web technologies.
+As discussed in [What is REST?](http://pradeepl.com/rest/what-is-rest/) resources are uniquely identified by URI's. These identifiers are stable and do not change across interactions even when the resource state changes.
+
+### Manipulation of resources through representations
+
+A client manipulates resources by sending new representations of the resource to the service. The server controls the resource representation and can accept or reject the  new resource representation sent by the client.
+
+### Self-descriptive messages
+
+REST request and response messages contain all information needed for the service and the client to interpret the message and handle it appropriately. The messages are quite verbose and include the method, protocol used and the content type. This enables each message to be independent.
+
+### Hypermedia as the Engine of Application State (HATEOS)
+
+Hypermedia connects resources to each other and describes their capabilities in machine-readable ways. Hypermedia is a strategy, implemented in different ways by dozens of technologies. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future.
+
+## Layered System
+
+A layered system further builds on the concept of client-server architecture. A layered system indicates that there can be more components than just the client and the server and each system can have additional layers in it. These layers should be easy to add, remove or change. Proxies, gateways, load balancer's are also additional layers.
+
+## Code on Demand
+
+Code on Demand is an optional constraint. Code on Demand allows flexibility to the client by allowing it to download code. Servers are able to temporarily extend or customize the functionality of a client by transferring logic to it that it can execute. This enables transferring additional logic to the client to be executed. This is primarily accomplished using JavaScript and other web technologies.
 
 The above constraints describe what a truly RESTful API should look like.
