@@ -13,14 +13,18 @@ categories:
 #slug: kubernetes/kubernetes-opa-gatekeeper-an-introduction/
 summary: Gatekeeper is a Kubernetes-native policy controller that enables resource validation and audit functionality for a Kubernetes cluster. It is an open-source customizable Kubernetes admission webhook used for cluster policy administration and governance.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
-  - rafael-hoyos-weht-FnabIfupjwo-unsplash.jpg
+  - images/Kubernetes-Gatekeeper-Cover.png
 cover:
-    image: "rafael-hoyos-weht-FnabIfupjwo-unsplash.jpg"
+    image: "images/Kubernetes-Gatekeeper-Cover.png"
     alt: "Kubernetes Gatekeeper – An introduction"
     caption: "Kubernetes Gatekeeper – An introduction"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 
@@ -143,4 +147,4 @@ The above constraints can be used to ensure that namespaces created in a cluster
 
 Open Policy Agent/Gatekeeper is extensively used by many platforms to implement policy implementation, policy governance and best practices. [VMWare’s Tanzu Mission Control](https://tanzu.vmware.com/content/blog/vmware-tanzu-mission-control-expands-its-policy-management-capabilities) (TMC) uses OPA/Gatekeeper as the underlying mechanism to define, deploy, and ensure security and compliance across cluster fleets. This enables centralized management and supporting best practices across hundreds of clusters. TMC provides a bunch of predefined constraint templates for a wide variety of policy types, including access, image, network, and quota policies. [Azure policy](https://docs.microsoft.com/en-us/azure/governance/policy/concepts/policy-for-kubernetes) extends gatekeeper to offer centralized, consistent policy management across AKS clusters.
 
-In the [next blog post](https://pradeepl.com/blog/kubernetes/deploying-gatekeeper-and-defining-constraints/) we will look at deploying gatekeeper to a kubernetes cluster, defining constraints and applying constraints to a cluster.
+In the [next blog post]({{< ref "/blog/kubernetes/deploying-gatekeeper-and-defining-constraints" >}}) we will look at deploying gatekeeper to a kubernetes cluster, defining constraints and applying constraints to a cluster.

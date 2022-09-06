@@ -8,14 +8,18 @@ tags:
   - gatekeeper
   - Kubernetes
   - "admission controllers"
+  - Policy
+  - hardening
 categories:
   - Kubernetes
+  - security
+  - policy
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: In this post we will deploy gatekeeper to a kubernetes cluster. We will then define constraints and ensure that gatekeeper enforces those constraints.
 ShowToc: true
-TocOpen: false
+TocOpen: open
 images:
-  - Shaniwar-wada.png
+  - gatekeeper-opa.png
 cover:
     image: "gatekeeper-opa.png"
     alt: "Deploying gatekeeper to a kubernetes cluster and defining constraints"
@@ -27,24 +31,27 @@ editPost:
   appendFilePath: true # to append file path to Edit link
 ---
 
-This blog post is a follow up to my [previous post](https://pradeepl.com/blog/kubernetes/kubernetes-gatekeeper-an-introduction/) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster. We can deploy Gatekeeper to any kubernetes cluster on cloud providers or on premises. For this blog post , I am using Kind to create a cluster locally.
+This blog post is a follow up to my [previous post]({{< ref "/blog/kubernetes/kubernetes-gatekeeper-an-introduction">}}) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster. We can deploy Gatekeeper to any kubernetes cluster on cloud providers or on premises. For this blog post , I am using Kind to create a cluster locally.
 
-## Create Cluster
+## The Basics
+
+We need to first create the cluster and install gatekeeper to get started.
+### Create Cluster
 
 Create a Kubernetes cluster locally using kind. I am creating a cluster named gatekeepercluster as below.
 
 ```shell
-kind create cluster --name gatekeepercluster
+$ kind create cluster --name gatekeepercluster
 ```
 
 We can now deploy gatekeeper into this cluster now that it has been created.
 
-## Install Gatekeeper
+### Install Gatekeeper
 
 Gatekeeper can be installed into your cluster by directly applying a manifest or by using a helm package. The installation details are listed [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/)). While I do not advocate using manifest files directly from online sources, we can safely do so for this blog post. I am installing version 3.7 of gatekeeper into the cluster using the manifest.
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/release-3.7/deploy/gatekeeper.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/release-3.7/deploy/gatekeeper.yaml
 ```
 
 This command produces the output below. It confirms that the necessary CRD's, mutating/validating webhooks, and admission controllers have been created.
@@ -78,12 +85,12 @@ mutatingwebhookconfiguration.admissionregistration.k8s.iogatekeeper-mutating-web
 validatingwebhookconfiguration.admissionregistration.k8s.iogatekeeper-validating-webhook-configuration created
 ```
 
-## Verify Gatekeeper Installation
+### Verify Gatekeeper Installation
 
 Now that the installation is complete, we can verify the deployment by checking if the necessary namespaces and pods are created and running.
 
 ```shell
-kubectl get namespaces
+$ kubectl get namespaces
 ```
 
 This command produces the output below.
@@ -101,7 +108,7 @@ local-path-storage   Active   27m
 Gatekeeper installs all required components into a namespace called gatekeeper-system. We can see that the gatekeeper namespace has been created. We can check for pods running in this namespace.
 
 ```shell
-kubectl get pods --namespace gatekeeper-system
+$ kubectl get pods --namespace gatekeeper-system
 ```
 
 This command produces the following output
@@ -119,7 +126,7 @@ We can see above that the gatekeeper-system namespace has been created and the n
 We can also check to see if the webhook that gatekeeper uses to listen to the API server events has been deployed
 
 ```shell
-kubectl get validatingwebhookconfigurations
+$ kubectl get validatingwebhookconfigurations
 ```
 
 This command produces the below output confirming the presence of the webhook in the cluster.
@@ -138,8 +145,8 @@ Error from server (InternalError): Internal error occurred: failed calling webho
 It is always better to wait for the components to be successfully created. We can do so using the Kubectl wait commands as below
 
 ```shell
-kubectl wait --for=condition=available --timeout=600s deployment -n gatekeeper-system--all
-kubectl -n gatekeeper-system wait --for=condition=Ready --timeout=600s pod -lgatekeeper.sh/operation=webhook
+$ kubectl wait --for=condition=available --timeout=600s deployment -n gatekeeper-system--all
+$ kubectl -n gatekeeper-system wait --for=condition=Ready --timeout=600s pod -l gatekeeper.sh/operation=webhook
 ```
 
 These commands confirm that all the necessary gatekeeper components have been created as seen in the below output
@@ -156,9 +163,12 @@ pod/gatekeeper-controller-manager-66f474f785-kkqdc condition met
 pod/gatekeeper-controller-manager-66f474f785-klsz2 condition met
 ```
 
-Now that we have confirmed that all the gatekeeper components are up and running, let us create a [constraint template](https://pradeepl.com/blog/kubernetes/kubernetes-gatekeeper-an-introduction/#constraint-template) and implement a [constraint](https://pradeepl.com/blog/kubernetes/kubernetes-gatekeeper-an-introduction/#constraint).
+Now that we have confirmed that all the gatekeeper components are up and running, let us create a [constraint template]({{< ref "/blog/kubernetes/kubernetes-gatekeeper-an-introduction#constraint-template" >}}) and implement a [constraint]({{< ref "/blog/kubernetes/kubernetes-gatekeeper-an-introduction#constraint" >}}).
 
-## ConstraintTemplate
+## Creating and Implementing Constraints
+
+We have successfully created a cluster, deployed gatekeeper and verified that all the components are working fine. We can now go onto defining a constraint template and implementing a constraint in our cluster.
+### ConstraintTemplate
 
 One of the policies that I have seen being applied in many clusters is the ability to pull images only from specific registries. This is a compliance policy which ensures that only vetted images are deployed into the cluster. It ensures that workloads do not use insecure images. Insecure images can result in a lot of issues including exfiltration of confidential data from workloads. This constraint template below is from the demo repository of Open Policy agent. This constraint template creates an allowlist of repositories ensuring that workloads do not pull images from unsafe repositories. Let’s get started on creating a constraint template to enable this.
 
@@ -200,9 +210,9 @@ spec:
         } 
 ```
 
-This container template validates all containers being created. If the containers have an image repository which is not part of the allow list of repositories it flags a violation. The allowed list of container repositories is passed in as a template parameter. It uses Rego policy language to specify the validation policy . I have authored a [blog post](https://pradeepl.com/blog/kubernetes/introduction-to-open-policy-agent-opa/#REGO) providing an introduction to rego. In this template the rego code extracts the container spec. It then checks if `` container.image `` contains any of the repos specified by the `` input.parameters.repo `` array and assigns the value to satisfied. If `` satisfied `` is not set, we know that the image was not pulled from the list of allowed repositories. The allowed list of repositories is passed in as a parameter as specified in line 14. The list of repositories is passed in as an array of strings. This is indicated by the data type of the parameter in line 15. Now that we have created the constraint template let us deploy it to the cluster.
+This container template validates all containers being created. If the containers have an image repository which is not part of the allow list of repositories it flags a violation. The allowed list of container repositories is passed in as a template parameter. It uses Rego policy language to specify the validation policy . I have authored a [blog post]({{< ref "/blog/kubernetes/introduction-to-open-policy-agent-opa#REGO" >}}) providing an introduction to rego. In this template the rego code extracts the container spec. It then checks if `` container.image `` contains any of the repos specified by the `` input.parameters.repo `` array and assigns the value to satisfied. If `` satisfied `` is not set, we know that the image was not pulled from the list of allowed repositories. The allowed list of repositories is passed in as a parameter as specified in line 14. The list of repositories is passed in as an array of strings. This is indicated by the data type of the parameter in line 15. Now that we have created the constraint template let us deploy it to the cluster.
 
-## Apply Constraint Template
+### Apply Constraint Template
 
 ```shell
 kubectl apply --f ClusterAllowedRepos.yaml
@@ -210,7 +220,7 @@ kubectl apply --f ClusterAllowedRepos.yaml
 
 This deploys the constraint template as a custom resource into the cluster. We now use this template to create one to many constraint resources.
 
-## Create Constraint
+### Create Constraint
 
 We can now create a constraint which implements the constraint template defined above.
 
@@ -233,7 +243,7 @@ spec:
 
 We can use spec.match to specify the kubernetes resources to which the constraint applies. In the constraint above, we specify that the constraint applies to pods created in the myapp namespace. We use the ```spec.match.kinds``` to indicate that the constraint applies to all pods. We also pass the repo parameter to be matched against using  ```spec.parameters.repos``.
 
-## Apply Constraint
+### Apply Constraint
 
 We can now apply this constraint to the cluster using kubectl.
 
@@ -244,7 +254,7 @@ kubectl apply --filename ClusterAllowedRepos-Constraint.yaml
 So far we have created a ConstraintTemplate which implements the logic for Constraint validation using rego. We then created an instance of this ConstraintTemplate by creating a Constraint object and passing in the necessary parameters. We now have all the building blocks to ensure that we can validate constraints on the kubernetes cluster. We can verify that the Constraint exists on the cluster by describing it as below.
 
 ```yaml
-> kubectl describe latestimage not-allowed
+$ kubectl describe latestimage not-allowed
 Name:         not-allowed
 Namespace:
 Labels:       <none>
@@ -355,7 +365,7 @@ spec:
 If we now try to create the pod above it will fail the constraint and will not be allowed to be created.
 
 ```shell
-> kubectl apply -f test-pod.yaml
+$ kubectl apply -f test-pod.yaml
 Error from server :  admission webhook "validation.gatekeeper.sh" denied the request: pod "test-pod" has an invalid image repo, allowed repos are ["mysecurerepo"]
 ```
 

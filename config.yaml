@@ -3,7 +3,7 @@ languageCode: en-us
 title: "Pradeep Loganathan"
 paginate: 5
 copyright: "&copy; 2022 Pradeep Loganathan. This work is licensed under a Creative Commons Attribution-ShareAlike 4.0
-  International License.."
+  International License."
 
 enableInlineShortcodes: true
 enableRobotsTXT: true
@@ -16,12 +16,15 @@ enableGitInfo: true
 googleAnalytics: G-LB9Q9F622G
 
 markup:
+  goldmark:
+    renderer:
+      unsafe: true
   highlight:
-    # anchorLineNos: true
+    anchorLineNos: true
     codeFences: true
     guessSyntax: true
     lineNos: false
-    # noClasses: false
+    noClasses: false
     style: monokai
 
 minify:
@@ -108,6 +111,7 @@ params:
   ShowCodeCopyButtons: true
   hideFooter: true
   ShowRssButtonInSectionTermList: true
+  Author: "Pradeep Loganathan"
 
   taxonomies:
     category: categories
@@ -188,7 +192,7 @@ assets:
 permalinks:
   categories: "/blog/categories/:slug/"
   tags: "/blog/tags/:slug/"
-  blog: "/blog/:filename"
+  #blog: "/blog/:filename" Think through this change
    
 module:
   imports:

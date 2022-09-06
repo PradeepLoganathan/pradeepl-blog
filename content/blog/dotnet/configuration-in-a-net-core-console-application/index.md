@@ -6,8 +6,8 @@ draft: false
 Author: Pradeep Loganathan
 
 tags:
-  - "net"
-  - "net-core"
+  - "dotnet"
+  - "dotnet core"
   - "configuration"
 
 categories:
