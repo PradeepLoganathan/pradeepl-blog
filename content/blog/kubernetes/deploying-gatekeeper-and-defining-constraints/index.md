@@ -41,7 +41,7 @@ We need to first create the cluster and install gatekeeper to get started.
 Create a Kubernetes cluster locally using kind. I am creating a cluster named gatekeepercluster as below.
 
 ```shell
-$ kind create cluster --name gatekeepercluster
+kind create cluster --name gatekeepercluster
 ```
 
 We can now deploy gatekeeper into this cluster now that it has been created.
@@ -51,7 +51,7 @@ We can now deploy gatekeeper into this cluster now that it has been created.
 Gatekeeper can be installed into your cluster by directly applying a manifest or by using a helm package. The installation details are listed [here](https://open-policy-agent.github.io/gatekeeper/website/docs/install/)). While I do not advocate using manifest files directly from online sources, we can safely do so for this blog post. I am installing version 3.7 of gatekeeper into the cluster using the manifest.
 
 ```shell
-$ kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/release-3.7/deploy/gatekeeper.yaml
+kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/release-3.7/deploy/gatekeeper.yaml
 ```
 
 This command produces the output below. It confirms that the necessary CRD's, mutating/validating webhooks, and admission controllers have been created.
@@ -90,7 +90,7 @@ validatingwebhookconfiguration.admissionregistration.k8s.iogatekeeper-validating
 Now that the installation is complete, we can verify the deployment by checking if the necessary namespaces and pods are created and running.
 
 ```shell
-$ kubectl get namespaces
+kubectl get namespaces
 ```
 
 This command produces the output below.
@@ -108,7 +108,7 @@ local-path-storage   Active   27m
 Gatekeeper installs all required components into a namespace called gatekeeper-system. We can see that the gatekeeper namespace has been created. We can check for pods running in this namespace.
 
 ```shell
-$ kubectl get pods --namespace gatekeeper-system
+kubectl get pods --namespace gatekeeper-system
 ```
 
 This command produces the following output
@@ -126,7 +126,7 @@ We can see above that the gatekeeper-system namespace has been created and the n
 We can also check to see if the webhook that gatekeeper uses to listen to the API server events has been deployed
 
 ```shell
-$ kubectl get validatingwebhookconfigurations
+kubectl get validatingwebhookconfigurations
 ```
 
 This command produces the below output confirming the presence of the webhook in the cluster.
@@ -145,8 +145,8 @@ Error from server (InternalError): Internal error occurred: failed calling webho
 It is always better to wait for the components to be successfully created. We can do so using the Kubectl wait commands as below
 
 ```shell
-$ kubectl wait --for=condition=available --timeout=600s deployment -n gatekeeper-system--all
-$ kubectl -n gatekeeper-system wait --for=condition=Ready --timeout=600s pod -l gatekeeper.sh/operation=webhook
+kubectl wait --for=condition=available --timeout=600s deployment -n gatekeeper-system--all
+kubectl -n gatekeeper-system wait --for=condition=Ready --timeout=600s pod -l gatekeeper.sh/operation=webhook
 ```
 
 These commands confirm that all the necessary gatekeeper components have been created as seen in the below output
@@ -241,7 +241,7 @@ spec:
       - "mysecurerepo/"
 ```
 
-We can use spec.match to specify the kubernetes resources to which the constraint applies. In the constraint above, we specify that the constraint applies to pods created in the myapp namespace. We use the ```spec.match.kinds``` to indicate that the constraint applies to all pods. We also pass the repo parameter to be matched against using  ```spec.parameters.repos``.
+We can use spec.match to specify the kubernetes resources to which the constraint applies. In the constraint above, we specify that the constraint applies to pods created in the myapp namespace. We use the ```spec.match.kinds``` to indicate that the constraint applies to all pods. We also pass the repo parameter to be matched against using  ```spec.parameters.repos```.
 
 ### Apply Constraint
 

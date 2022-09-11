@@ -15,14 +15,18 @@ categories:
 #slug: kubernetes/using-cluster-api-to-create-kubernetes-clusters-on-azure/
 summary: In this post let’s look at using CAPI to deploy a Kubernetes cluster in Azure. The end goal is to create a Kubernetes cluster in Azure with three control plane nodes and three worker nodes.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
-  - possessed-photography-jIBMSMs4_kA-unsplash.jpg
+  - images/cluster-api-azure.png
 cover:
-    image: "possessed-photography-jIBMSMs4_kA-unsplash.jpg"
+    image: "images/cluster-api-azure.png"
     alt: "Using Cluster Api to Create Kubernetes Clusters on Azure"
     caption: "Using Cluster Api to Create Kubernetes Clusters on Azure"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 ---
 
 Cluster API (CAPI) allows for the creation, configuration, upgrade, downgrade, and teardown of Kubernetes clusters and their components. If you would like to understand Cluster API and how it enables cluster creation across multiple infrastructure providers, please read my blog post [here](https://pradeepl.com/blog/kubernetes/kubernetes-cluster-api-capi-an-introduction/). In this post let’s look at using CAPI to deploy a Kubernetes cluster in Azure. The end goal is to create a Kubernetes cluster in Azure with three control plane nodes and three worker nodes.
@@ -344,7 +348,7 @@ Warning: policy/v1beta1 PodDisruptionBudget is deprecated in v1.21+, unavailable
 poddisruptionbudget.policy/calico-kube-controllers created
 ```
 
-If we describe the cluster now, we should be able to see all the control plane as well as the worker nodes up and running.
+If we describe the cluster now, we should be able to see the control plane as well as the worker nodes up and running.
 
 ```shell
 #use clusterctl to describe the cluster to check if everything is in ready state
