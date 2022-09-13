@@ -1,10 +1,29 @@
 ---
 title: "Circuit Breaker Pattern"
-date: "2018-09-21"
+lastmod: "2018-09-21T15:55:13+10:00"
+date: "2018-09-21T15:55:13+10:00"
+draft: false
+Author: Pradeep Loganathan
+tags: 
+  - "Design Patterns"
+  - "High availability"
 categories: 
   - "architecture"
   - "patterns"
-
+summary: Circuit breakers help to avoid one failing component tearing down other dependent services in a domino effect. The key idea is for a service to fail fast if a dependent resource is not available, as opposed to waiting for a timeout/error for each service invocation during the period in which the dependent resource is down.
+ShowToc: true
+TocOpen: true
+images:
+  - images/Pradeep-Loganathan-Circuit-Breaker.png
+cover:
+    image: "images/Pradeep-Loganathan-Circuit-Breaker.png"
+    alt: "Circuit Breaker pattern"
+    caption: "Circuit Breaker Design Pattern"
+    relative: true # To use relative path for cover image, used in hugo Page-bundle
+editPost:
+  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
+  Text: "Edit this post on github" # edit text
+  appendFilePath: true # to append file path to Edit link
 series: ["Design Patterns"]
 ---
 
@@ -20,22 +39,21 @@ Circuit Breaker
 
 ## Advantages
 
-**_Monitoring -_** The circuit breaker is valuable for monitoring. If a service goes down, it should be monitored, properly logged somewhere, and recovered from a failure state.
+* _Monitoring_ -  The circuit breaker is valuable for monitoring. If a service goes down, it should be monitored, properly logged somewhere, and recovered from a failure state.
 
-**_Fault-tolerance -_** When you test various states in your circuit breaker, this helps you add logic to create a fault-tolerant system. For example, if a service is unavailable, then we can add logic to fetch to retrieve information from a cache.
+* _Fault-tolerance_ -  When you test various states in your circuit breaker, this helps you add logic to create a fault-tolerant system. For example, if a service is unavailable, then we can add logic to fetch to retrieve information from a cache.
 
-**_Reduced load -_** If a service is slow or down, a circuit breaker can handle this situation by serving a cached page or a timeout page. This helps the impacted services to recover by reducing their load.
+* _Reduced load_ - If a service is slow or down, a circuit breaker can handle this situation by serving a cached page or a timeout page. This helps the impacted services to recover by reducing their load.
 
 ## Circuit Breaker - States
 
 ![](images/circuit-breaker-diagram.png)
 
-**_Circuit Breaker States_**
 
-**_Closed -_** In the closed state operations that involve the dependency can happen normally. At this time, all the calls are being made successfully to the service, and we are getting proper responses. We can add a threshold number for errors before the circuit breaker gets into the open state. When requests start to fail for a dependent service within a time window, the failure count is incremented to keep count of the number of failures. If the failures are greater than the threshold, the circuit for that dependency is moved to the Open state.  
-**_Open -_** As the name suggests, the circuit is open or we are in an error state, so none of the calls will be made to the service being called. Whenever a failure has been detected, the circuit opens, making sure that the service short-circuits requests involving the dependency and responds immediately. Periodically, after some configured amount of time, a single request is let through and the circuit moves to the Half-Open state.  
-**_Half-open_** \- Once our circuit goes into the open state, the circuit breaker will keep a check on the service being called to make sure things work normally once the service is healthy again. To do so, the circuit breaker gets into the half-open state after staying for a predefined period in the open state. In the half-open state, the circuit breaker will try calling the end service again; if the call succeeds, the circuit will go back to the closed state; otherwise, it will go into the open state again.
+* _Closed_ -  In the closed state operations that involve the dependency can happen normally. At this time, all the calls are being made successfully to the service, and we are getting proper responses. We can add a threshold number for errors before the circuit breaker gets into the open state. When requests start to fail for a dependent service within a time window, the failure count is incremented to keep count of the number of failures. If the failures are greater than the threshold, the circuit for that dependency is moved to the Open state.
+
+* _Open_ - As the name suggests, the circuit is open or we are in an error state, so none of the calls will be made to the service being called. Whenever a failure has been detected, the circuit opens, making sure that the service short-circuits requests involving the dependency and responds immediately. Periodically, after some configured amount of time, a single request is let through and the circuit moves to the Half-Open state.
+
+* _Half-Open_ - Once our circuit goes into the open state, the circuit breaker will keep a check on the service being called to make sure things work normally once the service is healthy again. To do so, the circuit breaker gets into the half-open state after staying for a predefined period in the open state. In the half-open state, the circuit breaker will try calling the end service again; if the call succeeds, the circuit will go back to the closed state; otherwise, it will go into the open state again.
 
 The Circuit Breaker is available as part of resiliency libraries such as pybreaker, Hystrix, Jrugged etc.
-
-Photo by [Linh Ha](https://unsplash.com/photos/ZYdKWY_sOJ8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/circuit?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
