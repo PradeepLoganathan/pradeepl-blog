@@ -16,7 +16,7 @@ TocOpen: true
 images:
   - images/Pradeep-Loganathan-Circuit-Breaker.png
 cover:
-    image: "images/Pradeep-Loganathan-Circuit-Breaker.png"
+    image: "images/Circuit-Breaker-pattern.png"
     alt: "Circuit Breaker pattern"
     caption: "Circuit Breaker Design Pattern"
     relative: true # To use relative path for cover image, used in hugo Page-bundle
@@ -26,8 +26,7 @@ editPost:
   appendFilePath: true # to append file path to Edit link
 series: ["Design Patterns"]
 ---
-
-The failure of one service can lead to other services failing throughout the application. To manage this problem and prevent a cascading service failure, we can use a resilience pattern called circuit breaker. This mechanism is used to avoid a distributed application going down due to a cascading failure of many essential components. Circuit breakers help to avoid one failing component tearing down other dependent services in a domino effect. The key idea is for a service to fail fast if a dependent resource is not available, as opposed to waiting for a timeout/error for each service invocation during the period in which the dependent resource is down.
+In a microservices based distributed system each service is interdependent on other services. Each service provides a specific piece of functionality and interacts with other services to complete a end user request or command. The failure of one service can lead to other services failing throughout the application. If these failures are not isolated it can lead to a single failure bringing the whole system down. To manage this problem and prevent a cascading service failure, we can use a resilience pattern called circuit breaker. This pattern is used to avoid a distributed application going down due to cascading failure of certain essential components. Circuit breakers help to avoid one failing component tearing down other dependent services in a domino effect. The key idea is for a service to fail fast if a dependent resource is not available, as opposed to waiting for a timeout/error for each service invocation during the period in which the dependent resource is down.
 
 This not only benefits the caller by insulating it from the faulty service but also has the effect of reducing the load on the struggling service, giving it some time to recover. It would also be possible to monitor such occurrences and reinforce the resources for the overwhelmed service in response to the increased load. When the service has had some time to recuperate, the circuit breaker should snap back into a half-closed state in which some requests are sent in order to test whether the service is back in shape. If not, then the circuit breaker can trip again immediately; otherwise, it closes automatically and resumes normal operations.
 
