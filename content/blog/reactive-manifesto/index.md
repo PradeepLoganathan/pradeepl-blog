@@ -62,7 +62,7 @@ Let us understand these tenets in further detail.
 
 ### Responsive
 
-The system responds in a timely manner if at all possible. Responsiveness is the cornerstone of usability and utility. In a reactive world, not providing a response to users when needed and not providing any response at all are one and the same. Responsiveness means that problems may be detected quickly and dealt with effectively. Responsive systems focus on providing rapid and consistent response times, establishing reliable upper bounds so they deliver a consistent quality of service. This consistency in system responsiveness builds end user confidence and better error handling. 
+The system responds in a timely manner if at all possible. Responsiveness is the cornerstone of usability and utility. In a reactive world, not providing a response to users when needed and not providing any response at all are one and the same. In a responsive system problems can be identified quickly and fixed effectively. Responsive systems focus on providing rapid and consistent response times, establishing reliable upper bounds so they deliver a consistent quality of service. This consistency in system responsiveness builds end user confidence and better error handling.
 
 ### Resilient
 

@@ -44,11 +44,13 @@ Backstage was originally developed at Spotify as an internal developer portal. I
 
 A Service Catalog enables enterprise teams to create an organized and curated collection of all software assets within an organization.The service catalog also stores a range of metadata, including documentation,  ownership, programming language, source code, current version, previous updates etc.
 
+![Backstage Service Catalog](images/Backstage-Service-Catalog.png#center)
+
 ### Software Templates
 
-![Backstage Templates](images/Backstage-Templates.png)
-
 [Backstage templates](https://backstage.io/docs/features/software-templates/software-templates-index) lets you define a code skeleton with organizational best practices built in. Templates ensure that software meets your requirements around security or compliance from the very beginning. Developers can use these skeletons to create new services or other workloads.
+
+![Backstage Templates](images/Backstage-Templates.png#centre)
 
 ### Tech Documentation
 
