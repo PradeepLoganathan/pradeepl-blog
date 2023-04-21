@@ -64,101 +64,11 @@ A data warehouse or data lake is a centralized data storage system that is desig
 
 10. Data Privacy and Compliance: Centralized data warehouses may face challenges in meeting data privacy and compliance requirements, such as GDPR, HIPAA, or industry-specific regulations. Ensuring compliance and data privacy in Centralized data warehouses may require additional efforts in terms of data masking, data encryption, and access controls.
 
-Most of these challenges vary depending on the specific architecture and implementation, as well as the organization's data requirements, size, and industry. However, these challenges are some of the common ones that organizations face when working with the centralized data warehouse/data lake architectures.
+In this architecture, data is ingested from various sources into a centralized data storage and processing layer. Data is then analyzed using data analytics tools , and data governance policies and practices are enforced. Data operations, such as data integration, transformation, and management, are also performed within this centralized data storage and processing layer.
 
-A generic high level centralized data warehouse/data lake architecture is below
+Monolithic Data Architecture also results in all data-related tasks and responsibilities are consolidated within a single team or department, covering data engineering, data science, data analytics, data governance, and data operations. In this architecture data governance policies, standards, and practices are enforced centrally by the data team, covering all data-related tasks. Monolithic Data Architecture provides a single point of control and coordination for data initiatives, which can be beneficial in organizations with centralized data management requirements, strict data governance policies, and standardized data processing. However, it may face challenges in agility, autonomy, and scalability, especially in organizations with diverse data needs across different domains or business units. Most of these challenges vary depending on the specific architecture and implementation, as well as the organization's data requirements, size, and industry. However, these challenges are some of the common ones that organizations face when working with a monolithic data architecture with a centralized data warehouse/data lake.
 
-{{< mermaid >}}
-graph TD
-  A[Data Source] --> B[Extract]
-  A1[Data Source] --> B
-  A2[Data Source] --> B
-  A3[Data Source] --> B
-  B --> C[Transform]
-  C --> D[Load]
-  D --> E[Data Warehouse]
-  E --> F[Data Marts]
-  E --> G[Reporting and Analytics]
-  E --> H[Data Governance]
-  F --> I[Data Mart 1]
-  F --> J[Data Mart 2]
-  F --> K[Data Mart 3]
-  G --> L[Reporting and Analytics Tools]
-  H --> M[Data Governance Tools]
-{{< /mermaid >}}
-
-### Monolithic Data Architecture
-
-Monolithic Data Architecture typically refers to a broader approach where all data-related tasks and responsibilities are consolidated within a single team or department, covering data engineering, data science, data analytics, data governance, and data operations. In this architecture data governance policies, standards, and practices are enforced centrally by the data team, covering all data-related tasks. In this architecture data is typically ingested from various sources into a centralized data repository, such as a data warehouse or a data lake. Data is processed, transformed, and stored in this centralized repository, and data consumers and applications access the data from this central repository for analysis and insights. Monolithic Data Architecture provides a single point of control and coordination for data initiatives, which can be beneficial in organizations with centralized data management requirements, strict data governance policies, and standardized data processing. However, it may face challenges in agility, autonomy, and scalability, especially in organizations with diverse data needs across different domains or business units.
-
-A generic Monolithic Data architecture is below
-
-{{< mermaid >}}
-graph LR
-
-
-subgraph "Monolithic Data Architecture"
-
-subgraph "Monolithic Data System"
-
-  subgraph "Data Ingestion"
-    DI1[Data Ingestion 1]
-    DI2[Data Ingestion 2]
-    DI3[Data Ingestion 3]
-  end
-
-  subgraph "Data Storage & Processing"
-    DSP1[Data Storage & Processing 1]
-    DSP2[Data Storage & Processing 2]
-    DSP3[Data Storage & Processing 3]
-  end
-
-  subgraph "Data Analytics"
-    DA1[Data Analytics 1]
-    DA2[Data Analytics 2]
-    DA3[Data Analytics 3]
-  end
-
-  subgraph "Data Governance"
-    DG1[Data Governance 1]
-    DG2[Data Governance 2]
-    DG3[Data Governance 3]
-  end
-
-  subgraph "Data Operations"
-    DO1[Data Operations 1]
-    DO2[Data Operations 2]
-    DO3[Data Operations 3]
-  end
-  
-end
-
-end
-
-classDef orange fill:#f96,stroke:#333,stroke-width:4px
-classDef blue fill:#2986cc,stroke:#333,stroke-width:4px
-classDef green fill:#38761d,stroke:#333,stroke-width:4px
-class DI1 orange
-class DI2 blue
-class DI3 green
-class DSP1 orange
-class DSP2 blue
-class DSP3 green
-class DA1 orange
-class DA2 blue
-class DA3 green
-class DG1 orange
-class DG2 blue
-class DG3 green
-class DO1 orange
-class DO2 blue
-class DO3 green
-
-{{< /mermaid >}}
-
-In this architecture, data is ingested from various sources (represented by "Data Ingestion" boxes) into a centralized data storage and processing layer (represented by "Data Storage & Processing" boxes). Data is then analyzed using data analytics tools (represented by "Data Analytics" boxes), and data governance policies and practices are enforced (represented by "Data Governance" boxes). Data operations, such as data integration, transformation, and management, are also performed within the monolithic data architecture (represented by "Data Operations" boxes).
-
-Now that we have seen a couple of examples of traditional data architectures let us understand the key concepts of Data mesh architecture.
+Data mesh architectures attempts to resolve these challenges by scaling out data lifecycle processes by enabling teams to manage data where it originates and ensures scalability and agility.
 
 ## Key concepts of Data Mesh Architecture
 
