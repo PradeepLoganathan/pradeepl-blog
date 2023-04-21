@@ -32,41 +32,37 @@ mermaid: true
 
 ## Introduction
 
-Data Mesh architecture is a modern approach to data engineering and data operations that aims to improve the scalability, agility, and innovation of data teams within organizations. It is based on the principles of domain-oriented ownership, product thinking, self-serve data infrastructure, platform thinking, data as a first-class citizen, democratized data access, and a culture of collaboration.
+Data Mesh architecture is a modern approach to data engineering and data operations that aims to improve the scalability, agility, and innovation of data teams within organizations. It promotes a  more decentralized, domain-oriented, and collaborative approach to data engineering, enabling organizations to scale, adapt, democratize, and govern their data effectively. It is based on the principles of domain-oriented ownership, product thinking, self-serve data infrastructure, platform thinking, data as a first-class citizen, democratized data access, and a culture of collaboration.
 
 In a Data Mesh architecture, data ownership is distributed among domain-oriented teams who are responsible for the data within their respective domains. These domain teams operate with a product mindset, treating data as a product and using product management practices to define data product roadmaps, iterate on data products, and align them with business needs. The concept of domain-oriented teams in data mesh architecture is based on the idea that data expertise should be distributed across the organization, rather than being concentrated in a central data team. By empowering domain-oriented teams with data ownership and autonomy, organizations can enable faster decision-making, agility, and innovation in their data operations. These teams have access to self-serve data infrastructure, which provides standardized data tools, services, and APIs allowing them to create, manage, and operate their data pipelines, data stores, and data products independently. This promotes agility and reduces dependence on centralized data engineering teams.
 
-By adopting a Data Mesh approach, organizations aim to overcome the limitations of traditional centralized data engineering practices, such as bottlenecks, lack of ownership, and scalability challenges. 
+By adopting a Data Mesh approach, organizations aim to overcome the limitations of traditional centralized data engineering practices, such as data silos, lack of ownership, scalability and agility challenges. 
 
-## Traditional Data Architectures
+## Monolithic Data Architectures
 
-The industry currently uses multiple data architectures each with their pros and cons.
+The most prevalent architecture currently is the Monolithic data architecture with a centralized data warehouse or data lake. In this design, data is ingested, stored, and processed in a central repository such as a data warehouse or data lake. Data is then made available to various data consumers and applications for analysis and insights. It serves the needs for several  business units using a single data model. This approach provides a unified data repository and central data governance but may face challenges in scalability, flexibility, and agility for domain-specific data operations.
 
-### Centralized Data Warehouse/Data Lake Architecture
+A data warehouse or data lake is a centralized data storage system that is designed for efficient querying and analysis of large volumes of data from various sources. Centralized Data warehouses are used by organizations to support decision-making processes, enable data-driven insights, and facilitate business intelligence (BI) and analytics. The design of a Centralized data warehouse creates several challenges, such as:
 
-In this design, data is ingested, stored, and processed in a central repository such as a data warehouse or data lake. Data is then made available to various data consumers and applications for analysis and insights. This approach provides a unified data repository and central data governance but may face challenges in scalability, flexibility, and agility for domain-specific data operations.
+1. Scalability: Centralized data warehouses may have limitations in terms of scalability, as they are often built on fixed hardware infrastructure that may not easily accommodate growing data volumes or changing data requirements. Scaling up or out may be time-consuming and expensive.
 
-A data warehouse or data lake is a centralized data storage system that is designed for efficient querying and analysis of large volumes of data from various sources. Data warehouses are used by organizations to support decision-making processes, enable data-driven insights, and facilitate business intelligence (BI) and analytics.Traditional data warehouse architectures face several challenges, such as:
+2. Cost: Centralized data warehouses typically require significant upfront investments in hardware, software, and skilled personnel for setup, maintenance, and ongoing operations. These costs can be prohibitive for smaller organizations or those with limited budgets.
 
-1. Scalability: Traditional data warehouses may have limitations in terms of scalability, as they are often built on fixed hardware infrastructure that may not easily accommodate growing data volumes or changing data requirements. Scaling up or out may be time-consuming and expensive.
+3. Complexity: Centralized data warehouses can be complex to set up, configure, and maintain, as they often involve multiple components such as database servers, ETL processes, data integration, and data modeling. Managing these components and ensuring their interoperability can be challenging.
 
-2. Cost: Traditional data warehouses typically require significant upfront investments in hardware, software, and skilled personnel for setup, maintenance, and ongoing operations. These costs can be prohibitive for smaller organizations or those with limited budgets.
+4. Data Integration: Centralized data warehouses may face challenges in integrating data from diverse sources, as they may require complex ETL processes, data mapping, and data consolidation. Data integration may require significant time and effort, and changes in data sources may require updates to the ETL processes and data models.
 
-3. Complexity: Traditional data warehouses can be complex to set up, configure, and maintain, as they often involve multiple components such as database servers, ETL processes, data integration, and data modeling. Managing these components and ensuring their interoperability can be challenging.
+5. Latency: Centralized data warehouses have limitations in handling real-time data or near-real-time data, as data may need to go through ETL processes before being loaded into the data warehouse. This can result in data latency, which may not be suitable for organizations that require up-to-date insights from their data. Most organizations generally have a latency of 16 - 24 hours before the data warehouse has the necessary data to be served up.
 
-4. Data Integration: Traditional data warehouses may face challenges in integrating data from diverse sources, as they may require complex ETL processes, data mapping, and data consolidation. Data integration may require significant time and effort, and changes in data sources may require updates to the ETL processes and data models.
+6. Agility: Centralized data warehouses may lack the agility required to quickly adapt to changing business requirements or data needs. Changes in data sources, data models, or data processing requirements may require significant effort and time to implement in traditional data warehouse architectures.
 
-5. Latency: Traditional data warehouses have limitations in handling real-time data or near-real-time data, as data may need to go through ETL processes before being loaded into the data warehouse. This can result in data latency, which may not be suitable for organizations that require up-to-date insights from their data. Most organizations generally have a latency of 16 - 24 hours before the data warehouse has the necessary data to be served up.
+7. Data Governance: Centralized data warehouses may face challenges in implementing robust data governance practices, such as data lineage, data quality, and data security. Ensuring consistent data governance across the data warehouse may require additional effort and resources.
 
-6. Agility: Traditional data warehouses may lack the agility required to quickly adapt to changing business requirements or data needs. Changes in data sources, data models, or data processing requirements may require significant effort and time to implement in traditional data warehouse architectures.
+8. Vendor Lock-In: Centralized data warehouses may be tied to specific vendors or technologies, which may result in vendor lock-in and limit the organization's ability to switch to different technologies or vendors in the future.
 
-7. Data Governance: Traditional data warehouses may face challenges in implementing robust data governance practices, such as data lineage, data quality, and data security. Ensuring consistent data governance across the data warehouse may require additional effort and resources.
+9. Performance: Centralized data warehouses may face performance challenges in handling large data volumes, complex queries, or high concurrency. Tuning and optimizing performance in traditional data warehouses requires specialized skills and expertise.
 
-8. Vendor Lock-In: Traditional data warehouses may be tied to specific vendors or technologies, which may result in vendor lock-in and limit the organization's ability to switch to different technologies or vendors in the future.
-
-9. Performance: Traditional data warehouses may face performance challenges in handling large data volumes, complex queries, or high concurrency. Tuning and optimizing performance in traditional data warehouses requires specialized skills and expertise.
-
-10. Data Privacy and Compliance: Traditional data warehouses may face challenges in meeting data privacy and compliance requirements, such as GDPR, HIPAA, or industry-specific regulations. Ensuring compliance and data privacy in traditional data warehouses may require additional efforts in terms of data masking, data encryption, and access controls.
+10. Data Privacy and Compliance: Centralized data warehouses may face challenges in meeting data privacy and compliance requirements, such as GDPR, HIPAA, or industry-specific regulations. Ensuring compliance and data privacy in Centralized data warehouses may require additional efforts in terms of data masking, data encryption, and access controls.
 
 Most of these challenges vary depending on the specific architecture and implementation, as well as the organization's data requirements, size, and industry. However, these challenges are some of the common ones that organizations face when working with the centralized data warehouse/data lake architectures.
 
