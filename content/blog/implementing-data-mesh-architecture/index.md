@@ -2,7 +2,7 @@
 title: "Implementing a Data Mesh Architecture"
 lastmod: 2023-04-20T16:54:36+05:30
 date: 2023-04-20T16:54:36+05:30
-draft: false
+draft: true
 Author: Pradeep Loganathan
 tags: 
   - "data mesh"
