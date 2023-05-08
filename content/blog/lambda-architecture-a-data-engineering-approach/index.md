@@ -1,7 +1,7 @@
 ---
-title: "Lambda Architecture: A Data Engineering Approach"
-lastmod: 2023-04-20T16:54:36+05:30
-date: 2023-04-20T16:54:36+05:30
+title: "Lambda Architecture - A Data Engineering Approach"
+lastmod: 2023-05-07T16:54:36+05:30
+date: 2023-05-07T16:54:36+05:30
 draft: false
 Author: Pradeep Loganathan
 tags: 
@@ -9,7 +9,7 @@ tags:
   - "data architecture"
   - "data"
   - "lambda architecture"
-categories: 
+categories:
   - "data engineering"
 summary: "Lambda architecture is a data processing architecture designed to handle large amounts of data by combining batch processing with real-time stream processing.Lambda architecture provides a way to handle both real-time and batch processing in a single architecture."
 ShowToc: true
@@ -26,9 +26,6 @@ editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text
   appendFilePath: true # to append file path to Edit link
-
-mermaid: true
-
 ---
 
 Data engineering is the process of designing, building, and maintaining data pipelines that can handle large volumes of data efficiently and effectively. Data engineers face many challenges in dealing with big data, such as scalability, fault tolerance, latency, and complexity. One of the solutions that has emerged in recent years to address these challenges is the Lambda Architecture, a data processing architecture that combines batch and stream processing methods to provide a comprehensive and robust data pipeline.
