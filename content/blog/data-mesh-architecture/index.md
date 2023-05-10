@@ -8,10 +8,10 @@ tags:
   - "data mesh"
   - "data engineering"
   - "data architecture"
-  - "data"
+  - "big data"
 categories: 
   - "datamesh"
-summary: "Data Mesh architecture is a modern approach to data engineering and data operations that aims to improve the scalability, agility, and innovation of data teams within organizations."
+summary: "Data Mesh architecture is a modern approach to data engineering and data operations that aims to improve the scalability, agility, and innovation of data teams within organizations. It is based on the principles of domain-oriented ownership, product thinking, self-serve data infrastructure, platform thinking, data as a first-class citizen, democratized data access, and a culture of collaboration."
 ShowToc: true
 TocOpen: false
 images:
@@ -96,7 +96,7 @@ Overall, Data Mesh architecture aims to decentralize data ownership, promote pro
 
 Data Mesh architecture is based on a set of key principles that provide a foundation for its design and implementation. These principles are:
 
-1. Domain-oriented ownership: Data is owned by domain-oriented teams who are responsible for the data within their respective domains. This promotes data autonomy and accountability, allowing domain teams to make decisions on data models, data pipelines, and data products that are aligned with their specific domain needs.
+1. Domain-oriented ownership: Data is owned by domain-oriented teams who are responsible for the data within their respective domains. This promotes data autonomy and accountability, allowing domain teams to make decisions on data models, data pipelines, and data products that are aligned with their specific domain needs. These teams are responsible for data architecture for the respective domains
 
 2. Data as a Product (DaaP): Data is treated as a product, and data teams operate with a product mindset. This includes applying product management practices such as understanding customer needs, defining data product roadmaps, and iterating on data products based on feedback and data-driven insights.
 
