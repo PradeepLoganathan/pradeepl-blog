@@ -1,5 +1,5 @@
 ---
-title: "Lambda Architecture - A Data Engineering Approach"
+title: "Lambda Architecture - A data engineering approach for big data"
 lastmod: 2023-05-07T16:54:36+05:30
 date: 2023-05-07T16:54:36+05:30
 draft: false
