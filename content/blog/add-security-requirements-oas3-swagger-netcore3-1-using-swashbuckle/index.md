@@ -35,7 +35,7 @@ editPost:
 
 ## OpenAPI Security Schemes
 
-As part of documenting API's, OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements. Defining the security requirements for an API is key to enable developers to use the API. The OAS 3 definitions for security is described in a [previous blog post here]({{< ref "/blog/openapi-specification-swagger/#Security">}}). It can be used to specify the below security schemes for an API
+As part of documenting API's, OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements. Defining the security requirements for an API is key to enable developers to use the API. The OAS 3 definitions for security is described in a [previous blog post here]({{< ref "/blog/openapi-specification-swagger">}}). It can be used to specify the below security schemes for an API
 
 1. HTTP authentication schemes that use the Authorization header
     1. Basic

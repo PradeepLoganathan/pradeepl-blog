@@ -339,4 +339,4 @@ spec:
 
 The code for this blog post is on GitHub [here](https://github.com/PradeepLoganathan/opa_hello_world)
 
-The above is part of the OPA Gatekeeper project which hosts a community-owned library of policies. In the [next post]({{< ref "blog/kubernetes/kubernetes-gatekeeper-an-introduction/">}}) let’s take a quick tour of gatekeeper and its integration with OPA.
+The above is part of the OPA Gatekeeper project which hosts a community-owned library of policies. In the [next post]({{< ref "blog/kubernetes/kubernetes-gatekeeper-an-introduction">}}) let’s take a quick tour of gatekeeper and its integration with OPA.

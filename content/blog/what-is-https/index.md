@@ -74,6 +74,6 @@ Secure TLS connections between the client and server have at least one of the fo
 - Public-key cryptography is used to authenticate the identity of the communicating parties. The authentication procedure could be made optional, but typically it is required for the server.
 - To prevent the undetected loss or alteration of the data during transmission, each transmitted message includes message integrity check using a message authentication code
 
-A detailed post on implementing https in an ASP.Net Core web application is [here]({{< ref "/blog/https-in-asp-net-core-31">}})
+A detailed post on implementing https in an ASP.Net Core web application is [here]({{< ref "/blog/https-in-asp-net-core">}})
 
 > Photo by [Micah Williams](https://unsplash.com/@mr_williams_photography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/safe?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
