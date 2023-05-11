@@ -112,4 +112,4 @@ The Lambda Architecture also has some challenges, such as:
 
 - Resource consumption: The Lambda Architecture can consume a lot of resources, such as storage space, network bandwidth, memory, CPU, etc., as it processes the same data twice through both layers. It may also incur higher costs for cloud-based solutions.
 
-In summary, lambda architecture is a powerful and popular way of designing a data pipeline that can handle both batch and stream processing. However, it also comes with trade-offs and challenges that need to be considered carefully. In my next post, I will show you how to implement a lambda architecture using some of the most popular tools and frameworks in the data engineering space. Stay tuned!
+In summary, lambda architecture is a powerful and popular way of designing a data pipeline that can handle both batch and stream processing. However, it also comes with trade-offs and challenges that need to be considered carefully. Other Data processing architectures such as [Kappa architecture]({{<ref "/blog/kappa-architecture">}}) address these concerns with innovative solutions. 
