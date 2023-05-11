@@ -2,7 +2,7 @@ baseURL: https://pradeepl.com
 languageCode: en-us
 title: "Pradeep Loganathan"
 paginate: 5
-copyright: "&copy; 2022 Pradeep Loganathan. This work is licensed under a Creative Commons Attribution-ShareAlike 4.0
+copyright: "&copy; 2023 Pradeep Loganathan.<br> This work is licensed under a Creative Commons Attribution-ShareAlike 4.0
   International License."
 
 enableInlineShortcodes: true
