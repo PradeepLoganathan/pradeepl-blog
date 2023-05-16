@@ -19,8 +19,8 @@ images:
   - images/Lambda-architecture.png
 cover:
     image: "images/Lambda-architecture-cover.png"
-    alt: "Data Mesh Architecture"
-    caption: "Data Mesh Architecture"
+    alt: "Lambda Architecture"
+    caption: "Lambda Architecture"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
