@@ -102,7 +102,7 @@ params:
     tagline:  Software engineering podcast - tagline
     download_url: https://cdn.pradeepl.com/episodes/
     cdn_url: https://cdn.pradeepl.com/
-    itunes_url: https://podcasts.apple.com/us/podcast/
+    itunes_url: https://podcasts.apple.com/us/podcast/cloud-native-engineering/id1620074933
     itunes_id:
     google_podcasts_url: 
 
@@ -147,7 +147,7 @@ params:
     tag: tags
     series: series
     course: course
-    podcasts: episodes
+    episode: episodes
 
   homeInfoParams:
       Title: "Hi there \U0001F44B"
