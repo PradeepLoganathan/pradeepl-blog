@@ -1,7 +1,9 @@
 ---
 title: "Devops-Sydney Securing Your Supply Chain "
 author: "Pradeep Loganathan"
+lastmod: 2022-08-18T13:12:36+10:00
 date: 2022-08-18T13:12:36+10:00
+Author: "Pradeep Loganathan"
 
 draft: false
 comments: true
@@ -19,9 +21,9 @@ editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text
   appendFilePath: true # to append file path to Edit link
----hugo
+---
 
-I had the pleasure of presenting a talk at the Devops Sydney meetup group. The session was recorded and is here {{< youtube id="PWF0oVKcByQ" autoplay="true" color="white" modestbranding="true">}}
+I had the pleasure of presenting a talk at the Devops Sydney meetup group. The session was recorded and is here {{< youtube id="PWF0oVKcByQ" autoplay="false" color="white" modestbranding="true">}}
 
 The slides used in the presentation are below
 {{<gslides src="https://docs.google.com/presentation/d/e/2PACX-1vTUrGkycq4bRXZA78VsaDsXrskkQJp-1ts8JLhaxzP0Y8MQvTovF8hzPE8CJ63As2TFMaAKoGCaLeLl/embed?start=false&loop=false&delayms=3000">}}
