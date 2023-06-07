@@ -82,13 +82,18 @@ outputs:
 
 menu:
   main:
-    - identifier: categories
-      name: Categories
-      url: /categories/
-      weight: 50
+    
     - identifier: about
       name: About
       url: https://www.linkedin.com/in/pradeeploganathan/
+      weight: 50
+    - identifier: videos
+      name: Videos
+      url: /videos/
+      weight: 40
+    - identifier: podcast
+      name: Podcast
+      url: /episodes/
       weight: 30
     - identifier: blog
       name: Blog
