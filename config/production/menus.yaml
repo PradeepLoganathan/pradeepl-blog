@@ -1,21 +1,19 @@
-main:
-  - identifier: categories
-    name: Categories
-    url: /categories/
+mmain:
+  - name: About
+    params:
+    rel: external
+    pre: <i class="fa fa-heart"></i>
+    url: https://www.linkedin.com/in/pradeeploganathan/
     weight: 50
-  - identifier: tags
-    name: Tags
-    url: /tags/
+  - name: Videos
+    pageref: /screencasts
     weight: 40
-  - identifier: about
-    name: About
-    url: /about/
+  - name: Podcast
+    pageref: /episodes
     weight: 30
-  - identifier: blog
-    name: Blog
-    url: /blog/
+  - name: Blog
+    pageref: /blog
     weight: 20
-  - identifier: Search
-    name: Search
-    url: /search/
+  - name: Search
+    pageref: /search
     weight: 10

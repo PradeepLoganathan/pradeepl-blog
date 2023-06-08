@@ -62,26 +62,24 @@ outputs:
      
 menu:
   main:
-    - identifier: about
-      name: About
-      url: https://www.linkedin.com/in/pradeeploganathan/
-      weight: 50
-    - identifier: videos
-      name: Videos
-      url: /videos/
-      weight: 40
-    - identifier: podcast
-      name: Podcast
-      url: /episodes/
-      weight: 30
-    - identifier: blog
-      name: Blog
-      url: /blog/
-      weight: 20
-    - identifier: Search
-      name: Search
-      url: /search/
-      weight: 10
+  - name: About
+    params:
+    rel: external
+    pre: <i class="fa fa-heart"></i>
+    url: https://www.linkedin.com/in/pradeeploganathan/
+    weight: 50
+  - name: Videos
+    pageref: /screencasts
+    weight: 40
+  - name: Podcast
+    pageref: /episodes
+    weight: 30
+  - name: Blog
+    pageref: /blog
+    weight: 20
+  - name: Search
+    pageref: /search
+    weight: 10
 
 params:
   env: production
