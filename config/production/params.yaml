@@ -1,6 +1,7 @@
 env: production
 title: Pradeep Loganathan's Blog
 description: 'My technical notes and thoughts on software engineering, programming, and life.'
+keywords: [Pradeep Loganathan, kubernetes, Devops, GitOps, ArgoCD, FluxCD]
 author: Pradeep Loganathan
 comments: true
 images:
@@ -8,7 +9,20 @@ images:
 DateFormat: 'January 2, 2006'
 timeFormat: 'h:mm a'
 dateTimeFormat: 'MMMM Do, YYYY h:mm a'
-language: en
+language: en-us
+languageCode: en-us
+
+mainSections: ['posts', "episodes"]
+
+podcast:
+  description: Software engineering podcast - description
+  tagline:  Software engineering podcast - tagline
+  download_url: https://cdn.pradeepl.com/episodes/
+  cdn_url: https://cdn.pradeepl.com/
+  itunes_url: https://podcasts.apple.com/us/podcast/cloud-native-engineering/id1620074933
+  itunes_id:
+  google_podcasts_url: 
+
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text
@@ -18,6 +32,16 @@ header:
   title: 'Pradeep Loganathan'
   imageUrl: 'Pradeep-Loganathan.jpeg'
   subtitle: 'cc'
+
+label:
+  text: "Pradeep Loganathan"
+  icon: AllSeeingEye.jpg
+  iconHeight: 34
+  iconWidth: 245
+  smallIcon: AllSeeingEye.jpg
+  smallIconHeight: 65
+  smallIconWidth: 65
+  
 ShowShareButtons: true
 ShowReadingTime: true
 ShowAuthor: true
@@ -26,9 +50,25 @@ ShowTags: true
 ShowCategories: true
 ShowDate: true
 ShowPostNavLinks: true
+ShowCodeCopyButtons: true
+hideFooter: true
+ShowRssButtonInSectionTermList: true
+
+taxonomies:
+  category: categories
+  tag: tags
+  series: series
+  course: course
+  episode: episodes
+
+
 homeInfoParams:
     Title: "Hi there \U0001F44B"
     Content: Welcome to my blog.
+
+    subscribeInfo:
+        Text: If you liked this post, check out my other [Featured Posts](/categories/featured) or learn more [About Me](/about).  
+
    
 socialIcons: # optional
   - name: "twitter"
@@ -40,7 +80,9 @@ socialIcons: # optional
   - name: "github"
     url: "https://github.com/pradeeploganathan"
   - name: stackoverflow
-    url: "https://stackoverflow.com"
+    url: "https://stackoverflow.com/users/4613054/pradeepl"
+  - name: rss
+    url: /index.xml
 
 # analytics:
 #   google:
@@ -62,7 +104,7 @@ profileMode:
   title: "Notes from my journey designing and building amazing systems with amazing teams" # optional default will be site title
   subtitle: "Software engineering notes"
   imageUrl: "Pradeep-Loganathan.jpeg" # optional
-  imageTitle: "<title of image as alt>" # optional
+  imageTitle: "Pradeep Loganathan" # optional
   imageWidth: 120 # custom size
   imageHeight: 120 # custom size
   buttons:
@@ -70,3 +112,16 @@ profileMode:
       url: "/index.xml"
     - name: "Podcast"
       url: "/episodes/index.xml"
+
+giscus:
+  repo : "PradeepLoganathan/pradeepl-blog"
+  repoID : "R_kgDOGrc4sA"
+  category : "BlogPosts"
+  categoryID : "DIC_kwDOGrc4sM4CRM5A"
+  mapping : "og:title"
+  reactionsEnabled : "1"
+  emitMetadata : "0"
+  inputPosition : "bottom"
+  theme : "preferred_color_scheme"
+  lang : "en"
+  loading : "lazy"

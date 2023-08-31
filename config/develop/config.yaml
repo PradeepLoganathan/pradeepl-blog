@@ -2,6 +2,7 @@ baseURL: https://pradeepl.com
 title: Pradeep Loganathan's Blog
 paginate: 5
 
+defaultContentLanguage: en
 enableInlineShortcodes: true
 enableRobotsTXT: true
 buildDrafts: false
