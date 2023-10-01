@@ -32,10 +32,15 @@
 .post-single .post-footer {
     grid-column: 1;
 }
+
+.post-single .giscus_comments {
+    grid-column: 1;
+}
 .post-single .toc {
     height: fit-content;
     grid-row: span 3;
 }
+
 /* Make the ToC scrollable */
 .post-single .toc #TableOfContents {
     overflow-y: auto;

@@ -1,7 +1,7 @@
 baseURL: https://pradeepl.com
 languageCode: en-us
 title: Pradeep Loganathan's Blog
-paginate: 5
+paginate: 10
 copyright: "&copy; 2023 Pradeep Loganathan.<br> This work is licensed under <br> a Creative Commons Attribution-ShareAlike 4.0 <br> International License."
 
 defaultContentLanguage: en
