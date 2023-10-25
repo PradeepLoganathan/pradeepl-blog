@@ -39,7 +39,9 @@ Part 1: What is a JWT Token (This post)
 
 [Part 3: Accessing and Consuming a JWT token protected service in Angular 5+.]({{< ref "/blog/jwt-angular-interceptor/index.md" >}} "JWT Angular interceptor")
 
- **JWT ( JSON Web Token** **)** is a security token format, defined by an open standard ([RFC 7519](https://tools.ietf.org/html/rfc7519)). It provides a solution to the problem of passing claims between parties. It is an industry standard for security tokens used to securely transmit information between client and server as JSON objects. As a token format., It defines a compact and self-contained mechanism for transmitting data between parties in a way that can be verified and trusted because it is digitally signed. JWT does not use cookies and can be used across multiple domains. Additionally, the encoding rules of a JWT also make these tokens quite easy to use within the context of HTTP. As it is digitally signed this information can be verified and trusted. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA.
+## JSON Web Token - JWT
+
+**JWT ( JSON Web Token** **)** is a security token format, defined by an open standard ([RFC 7519](https://tools.ietf.org/html/rfc7519)). It provides a solution to the problem of passing claims between parties. It is an industry standard for security tokens used to securely transmit information between client and server as JSON objects. As a token format., It defines a compact and self-contained mechanism for transmitting data between parties in a way that can be verified and trusted because it is digitally signed. JWT does not use cookies and can be used across multiple domains. Additionally, the encoding rules of a JWT also make these tokens quite easy to use within the context of HTTP. As it is digitally signed this information can be verified and trusted. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA.
 
 The two main properties of this standard are:
 
