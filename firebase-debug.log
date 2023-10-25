@@ -1,0 +1,24 @@
+[debug] [2023-09-16T04:59:35.630Z] ----------------------------------------------------------------------
+[debug] [2023-09-16T04:59:35.631Z] Command:       /home/pradeepl/.nvm/versions/node/v18.17.1/bin/node /home/pradeepl/.nvm/versions/node/v18.17.1/bin/firebase deploy
+[debug] [2023-09-16T04:59:35.632Z] CLI Version:   12.5.4
+[debug] [2023-09-16T04:59:35.632Z] Platform:      linux
+[debug] [2023-09-16T04:59:35.632Z] Node Version:  v18.17.1
+[debug] [2023-09-16T04:59:35.632Z] Time:          Sat Sep 16 2023 14:59:35 GMT+1000 (Australian Eastern Standard Time)
+[debug] [2023-09-16T04:59:35.632Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-09-16T04:59:35.677Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-09-16T04:59:35.677Z] > authorizing via signed-in user (loganathan.pradeep@gmail.com)
+[debug] [2023-09-16T04:59:35.677Z] [iam] checking project pradeep-blog for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-09-16T04:59:35.679Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/pradeep-blog:testIamPermissions [none]
+[debug] [2023-09-16T04:59:35.679Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/pradeep-blog:testIamPermissions x-goog-quota-user=projects/pradeep-blog
+[debug] [2023-09-16T04:59:35.679Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pradeep-blog:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-09-16T04:59:37.368Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/pradeep-blog:testIamPermissions 200
+[debug] [2023-09-16T04:59:37.368Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/pradeep-blog:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-09-16T04:59:37.369Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/pradeep-blog [none]
+[debug] [2023-09-16T04:59:37.377Z] *** [apiv2] error from fetch(https://firebase.googleapis.com/v1beta1/projects/pradeep-blog, {"headers":{},"method":"GET","signal":{}}): FetchError: request to https://firebase.googleapis.com/v1beta1/projects/pradeep-blog failed, reason: connect EHOSTUNREACH 193.0.14.129:443
+[debug] [2023-09-16T04:59:37.377Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects/pradeep-blog (original: request to https://firebase.googleapis.com/v1beta1/projects/pradeep-blog failed, reason: connect EHOSTUNREACH 193.0.14.129:443)
+[debug] [2023-09-16T04:59:37.877Z] FirebaseError: Failed to make request to https://firebase.googleapis.com/v1beta1/projects/pradeep-blog
+    at RetryOperation._fn (/home/pradeepl/.nvm/versions/node/v18.17.1/lib/node_modules/firebase-tools/lib/apiv2.js:239:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project pradeep-blog. Please make sure the project exists and your account has permission to access it.
