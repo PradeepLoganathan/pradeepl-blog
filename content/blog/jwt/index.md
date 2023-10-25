@@ -49,9 +49,9 @@ Self-contained: A JWT token is self-contained and contains all the required iden
 
 ## Structure of a JWT
 
-A JWT token has three parts: Header, Payload, and Signature as shown below. The encoded token is on the left and the decoded information is on the right.
+A JWT token has three parts: Header, Payload, and Signature as shown below. 
 
-![JWT token structure](images/JWT-token-structure_thumb.png "JWT token structure")
+![JWT token format](images/JWT-Token-Format.png "JWT token format")
 
 ### Header
 
@@ -102,6 +102,11 @@ Now that we have all the pieces of the JWT, we can compose the JWT as below.
 - Then the header, claims are appended together with a period character so that the payload = base64URLencode(headers) + “.” + base64URLencode(claims).
 - The signature is now generated using  the algorithm mentioned in the header, so that the signature = base64URLencode(HMACSHA256(payload, secret));
 - Finally the JWT is composed as encodedJWT = payload + "." + signature
+
+We can use a tool such as [jwt.io debugger](https://jwt.io/) to visualize a jwt token. The encoded token is on the left and the decoded information is on the right.
+
+![JWT token structure](images/JWT-token-structure_thumb.png "JWT token structure")
+
 
 ## Token-Based Authentication Flow
 
