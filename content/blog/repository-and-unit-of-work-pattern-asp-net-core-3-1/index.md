@@ -36,7 +36,7 @@ If you wish to follow along with the code used in this post, you can find it [on
 
 ### Repository Pattern
 
-A Repository is used to manage aggregate persistence and retrieval. The repository mediates between the data-access layer and the domain. It decouples the domain layer from the data layer effectively. It does so by providing collection-like access to the underlying data. The repository offers a collection interface by providing methods to add, modify, remove, and fetch domain objects. This enables the domain to remain agnostic of the underlying persistence mechanism. This allows both these layers to evolve independently maintaining high cohesion with low coupling.
+A Repository mediates between the data-access layer and the domain. It is used to manage aggregate persistence and retrieval. It decouples the domain layer from the data layer effectively. It does so by providing collection-like access to the underlying data. It provides a way to perform CRUD (Create, Read, Update, Delete) operations on a single type of entity (e.g., User, Product) while abstracting the underlying data source. It encapsulates all database operations on that entity. This enables the domain to remain agnostic of the underlying persistence mechanism. This allows both these layers to evolve independently maintaining high cohesion with low coupling.
 
 !["Repository Pattern"](images/Repository-and-unit-of-work-pattern.png)
 
@@ -44,15 +44,15 @@ Applying Repository Pattern to Domain design
 
 ### Pros
 
-The repository pattern abstracts the underlying technology and architecture of the persistence layer. Even though this abstraction is highly desirable, reality is that the choice of the persistence technology does influence the rest of the stack in some ways. Typically, each repository is responsible for persisting an aggregate root.
+The repository pattern abstracts the underlying technology and architecture of the persistence layer. Even though this abstraction is highly desirable, reality is that the choice of the persistence technology does influence the rest of the stack in some ways. Typically, each repository is responsible for persisting an aggregate root. It manages transactions and ensures data consistency.
 
-The repository pattern makes data retrieval explicit by using named query methods and limiting access to the aggregate level. It does not offer an open interface into the data model. This makes it easy to express the intent of the operation explicit in terms of the domain model. It also makes it easy to tune the queries as they are contained to the repository alone. Using the Specification pattern makes authoring named queries explicit and highly maintainable.
+The repository pattern makes data retrieval explicit by using named query methods and limiting access to the aggregate level. It does not offer an open interface into the data model. This makes it easy to express the intent of the operation explicit in terms of the domain model. It also makes it easy to tune the queries as they are contained to the repository alone. Using the Specification pattern makes authoring named queries explicit and highly maintainable. It promotes seperation of concerns and makes code maitainable and testable.
 
 Implementing the Repository pattern breaks the repository layer into smaller units of easily testable code. Since the domain layer depends on the repository interface rather than the concrete implementation, it makes unit testing easier by injecting mock repositories during testing.
 
 ### Is it an Antipattern?
 
-Some folks consider the repository pattern as an antipattern as it abstracts away the underlying persistence technology. The argument is that this abstraction does not enable the other layers to make use of the power of the persistence technology. This may be true in cases where the codebase is small. However, as the complexity of the code base increases the benefits of the repository kicks in to reduce coupling and increase cohesion. This makes the code more maintainable and testable. It also prevents the infrastructure concerns from leaking into the domain allowing it to be purely concerned with business rules.
+The repository pattern can add additional complexity to the code base. This may be true in cases where the codebase is small. If you are using an ORM like EFCore you are basically building another layer of abstraction over a powerful ORM which almost implements these patterns.  However, as the complexity of the code base increases the benefits of the repository kicks in to reduce coupling and increase cohesion. This makes the code more maintainable and testable. It also prevents the infrastructure concerns from leaking into the domain allowing it to be purely concerned with business rules.
 
 ### Implementing Repository pattern
 
@@ -132,6 +132,7 @@ As you can see both the repository interfaces are exactly similar except for the
 
 #### Generic Repository interface
 
+Generic repository interfaces/classes may have also contributed to global warming as they result in a lot of hot air debates on whether they are downright evil or an amazing abstraction. We need to understand that the generic 
 The refactored interface representing a generic repository is as below.
 
 ```csharp

@@ -12,7 +12,7 @@ categories:
   - platformengineering
 summary: Backstage is an open source platform for building Internal developer platforms. It improves the overall developer experience by delivering the core features of a developer portal, such as Software Catalogs, templates, and documentation. 
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - backstage-cover.png
 cover:

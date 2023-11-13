@@ -1,5 +1,5 @@
 ---
-title: "Building a successful API - Understanding Open API Specification (OAS) 3.1.0"
+title: "Building a successful API - Understanding the Open API Specification (OAS)"
 lastmod: 2023-08-20T11:00:08+10:00
 date: 2020-06-20T11:00:08+10:00
 draft: false
@@ -15,14 +15,14 @@ categories:
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: The Open API Specification is used to define the contract between the API consumers and the API providers. The specification is based on the JSON schema and is a standard format for describing the data exchanged between the API consumers and the API providers.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - "openapi-specification-swagger.png"
   - "images/OAS3.png"
 cover:
     image: "openapi-specification-swagger.png"
-    alt: "Building a successful API - Understanding Open api specification (OAS) 3.0"
-    caption: "Building a successful API - Understanding Open api specification (OAS) 3.0"
+    alt: "Building a successful API - Understanding the Open api specification (OAS)"
+    caption: "Building a successful API - Understanding the Open api specification (OAS)"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
@@ -35,7 +35,7 @@ The Open API specification defines a standard, language-agnostic interface for R
 
 ## OpenAPI Specification
 
-The OpenAPI specification, generally known by its former name Swagger, is a schema that is used to construct a JSON or YAML definition of a restful API. The OpenAPI specification acts as a documentation tool allowing developers to easily describe their public APIs in a format that is widely known, understood, and supported. The OpenAPI spec is language agnostic. The APIs defined by the spec can be constructed in any language with any tool or framework. This specification is detailed [here.](https://www.openapis.org/).
+The OpenAPI Specification (OAS) is an open-source framework that allows developers to define and document APIs in a format that is both human and machine readable. Originating from the Swagger framework, OAS has become the industry standard for API specification, offering a common language that ensures both clarity and functionality across different API services. It enables developers to describe the entire API, including available endpoints, operation parameters, authentication methods, and contact information, providing a blueprint for building consistent and secure APIs. The APIs defined by the spec can be constructed in any language with any tool or framework. This specification is detailed [here.](https://www.openapis.org/).
 
 The key features of the OpenAPI Specification include:
 
@@ -261,6 +261,16 @@ The security object is used to define the list of Security Requirement Objects u
   }
 ]
 ```
+
+### Common Challenges in Implementing OAS
+
+Implementing the OAS spec can be challenging. some of the common pain areas are
+
+- Complexity in Large APIs: As APIs grow, keeping the OAS document organized and maintainable can be challenging.
+- Versioning: Properly managing changes and versioning of the API can lead to inconsistencies if not handled carefully.
+- Tooling Compatibility: Ensuring that the OAS is compatible with all the necessary tools across the API lifecycle is crucial.
+- Security Specifications: Accurately defining security schemes in OAS can be complex, especially for APIs with multiple authentication methods.
+- Keeping Documentation Up-to-Date: As APIs evolve, it's essential to reflect those changes in the OAS document promptly to avoid miscommunication with API consumers."
 
 ### Conclusion
 
