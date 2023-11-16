@@ -4,9 +4,8 @@ author: "Pradeep Loganathan"
 date: 2022-02-10T12:25:09+10:00
 draft: false
 comments: true
-toc: true
 showToc: true
-TocOpen: false
+TocOpen: true
 tags: 
   - "Cloud native buildpacks"
   - CI/CD
@@ -15,13 +14,13 @@ categories:
   - Kubernetes
 summary: "Container images are a popular and standard format to package applications. Building secure, high performance container images can be challenging. Cloud native buildpacks provide solutions to create container images that are secure, high performance, and easy to deploy."
 cover:
-    image: "cloudnativebuildpacks.png"
+    image: "images/buildpacks-pradeepl.png"
     alt: "Cloud native buildpacks"
     caption: "Cloud native buildpacks"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
+  Text: "Suggest Changes" # edit text
   appendFilePath: true # to append file path to Edit link
 ---
 
@@ -31,17 +30,47 @@ A DockerFile is the most popular mechanism for building container images. It is 
 
 ## DockerFile Challenges
 
-However, there are issues with using a Dockerfile to generate container images such as the following:
+An example of a very simple docker file to build a dotnet application is below
 
-1. Each development team creates a Dockerfile for each deployable unit. The base images and included frameworks are different for each image. This makes it difficult to manage and maintain.
-2. Non-standard docker files can create non-reproducible builds. Examples are using the latest tag or using apt-get to install packages.
-3. The image may not be optimized.
-4. The image may not be secure. Security patches issued by vendors for CVE's are not automatically applied to the image.
-5. The docker engine used to generate the image is susceptible to vulnerabilities.
-6. Operational concerns bleed into the development loop which is not ideal for the development team.
-7. Human errors from manually creating Docker files.
+```
+# Base image with specific version
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 
-A simple example of the problem with development teams creating container images using docker files is below.
+WORKDIR /app
+
+# Copy csproj and restore dependencies
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
+
+# Runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /app
+COPY --from=build-env /app/out .
+
+ENTRYPOINT ["dotnet", "YourApp.dll"]
+
+```
+
+
+This is a very simple dockerfile. It works fine and looks innocuous but has issues that can turn into larger problems at a later point in time. Some of these issues are 
+
+- Manual Dependency Management: The Dockerfile explicitly defines base images and requires manual updates. Explicitly defined base images require you to constantly monitor and update them to patch any security issues, which might not be feasible in a fast-paced development environment. Human errors from manually creating Docker files can further make it hard.
+
+- Non-Reproducible Builds: Using tags like latest or even version-specific tags (like 3.1 in .NET Core) can lead to non-reproducible builds. These tags might get updated to point to different images over time, meaning a build today might not be the same as a build tomorrow, even with the same Dockerfile.  
+
+- Security Vulnerabilities: The Dockerfile does not handle security patches for base images or dependencies automatically. Security patches issued by vendors for CVE's are not automatically applied to the image. The docker engine used to generate the image is susceptible to vulnerabilities.
+
+- Complexity and Maintenance: The Dockerfile requires knowledge of the .NET Core build process and maintenance. The creation of the docker file requires an implicit understanding how .NET Core builds and publishes applications. Operational concerns bleed into the development loop which is not ideal for the development team.
+
+- Optimization: The Dockerfile does not inherently optimize for layer caching or image size. While the Dockerfile follows some best practices for layer caching and image size optimization, such as using multi-stage builds and separate COPY commands for dependencies, there are always opportunities for further optimization, especially in complex applications. An example of optimization might be to  choose a more minimal base image, if available and appropriate, to reduce the size further.
+
+- Standardization: Different teams may use different patterns for Dockerfiles, leading to a lack of standardization. Each development team creates a Dockerfile for each deployable unit. The base images and included frameworks are different for each image. This makes it difficult to manage and maintain.
+
+This problem get further excacerbated as teams across the organization create container images using docker files similar to above. 
 
 ![Individual Docker files](images/Independent-docker-files.png)
 
@@ -64,6 +93,8 @@ Buildpacks provide a higher level of abstraction compared to Dockerfiles. It rem
 7. Fast base image upgrades by rebasing. This enables container base image upgrades without the need to rebuild the application.
 8. Produces a Software Bill of Materials (SBOM) that can be used to track the software dependencies and versioning.
 
+
+
 ![Buildpack benefits](images/Buildpack-Benefits.png)
 
 ## What are Cloud Native Buildpacks?
@@ -72,7 +103,7 @@ Cloud Native Buildpacks was initiated by Pivotal and Heroku as a CNCF sandbox pr
 
 The Buildpack API defines the contract that should be implemented by any BuildPack. The Cloud Native Buildpack project itself does not provide any buildpacks. The buildpacks are developed and maintained by the community primarily led by [Paketo](https://paketo.io/), [Google Cloud Platform](https://github.com/GoogleCloudPlatform/buildpacks), Heroku and others.
 
-The platform makes Buildpack functionality available to end users and is generally used as a CLI tool, a cloud platform component or as part of a build pipeline. End users interact with the platform to use Buildpacks. The Pack CLI is a reference implementation of the platform API. It is used to create and manage buildpacks.  Pack, [Kpack](https://github.com/pivotal/kpack), [Tekton templates](https://pradeepl.com/blog/kubernetes/tekton-getting-started-fundamental-concepts/) etc implement the Platform API to coordinate the execution of buildpacks using the lifecycle.
+The platform makes Buildpack functionality available to end users and is generally used as a CLI tool, a cloud platform component or as part of a build pipeline. End users interact with the platform to use Buildpacks. The Pack CLI is a reference implementation of the platform API. It is used to create and manage buildpacks.  [Pack]({{< ref "/blog/kubernetes/cloudnativebuildpacks#pack" >}}), [Kpack]({{< ref "/blog/kpack" >}}), [Tekton]({{< ref "/blog/kubernetes/tekton-getting-started-fundamental-concepts" >}}) etc implement the Platform API to coordinate the execution of buildpacks using the lifecycle.
 
 The lifecycle orchestrates the buildpacks and produces the final image. It runs through a series of steps to produce the final OCI compliant image described below.
 
@@ -104,14 +135,16 @@ The lifecycle orchestrates buildpack execution. It then assembles the container 
 
 ### Platform
 
-The role of the platform is to execute each lifecycle phase in order. Examples of platforms are Pack, Kpack, Tekton templates etc.
+The role of the platform is to execute each lifecycle phase in order. It provides the environment where buildpacks execute, ensuring that they have the necessary resources and context to build the application. It orchestrates the lifecycle processes, providing the necessary context and resources. The platform invokes the lifecycle, passing in the source code and builder (which includes buildpacks and stack). It manages the outputs of the lifecycle, such as the container image, and may push it to a registry or deploy it. Platforms must comply with the CNB specifications to ensure they can correctly execute the lifecycle and utilize buildpacks. This compliance ensures that applications built using CNB are portable across different platforms that support CNB. Platforms generally provide feedback and logs from the lifecycle execution to the user, enabling monitoring and troubleshooting of the build process. Examples of platforms are Cloud Foundry, Heroku, Kubernetes with tools such as [Kpack]({{< ref "/blog/kpack" >}}) or Tekton etc.
 
 ### Stack
 
-The stack provides the build-time and the run-time environments in the form of images. A stack consists of the following components
+The stack provides the build-time and the run-time environments in the form of images. Stacks ensure that the application is built and runs in consistent environments. This is crucial for predictability and debugging. A stack consists of the following components
 
-1. Build image - The build image provides the base image from which the build environment is constructed.
-2. Run image - The run image provides the base image from which the application images are built.
+1. Build image - The build image provides the base image from which the build environment is constructed. It contains the necessary tools and environments (like compilers, runtimes, libraries, etc.) required to compile or prepare your application. The build image is typically larger as it includes everything needed to build the application.
+2. Run image - After the application is built, it needs an environment to run in. The run image provides this environment. It is usually a slimmed-down version of the build image, containing only the necessary components to run the application, which makes it more lightweight and secure.
+
+By defining a clear boundary between build and run environments, stacks help in maintaining security. Regular updates to stack images can address security vulnerabilities. Organizations can create custom stacks that include specific operating systems and configurations tailored to their needs. The stack can be optimized for various factors like performance, size, and compliance with organizational standards. Stacks provide portability. Applications built on a particular stack can be easily moved between different environments (like development, testing, and production) that support the same stack.
 
 ## Creating a container image
 
@@ -120,6 +153,8 @@ The stack provides the build-time and the run-time environments in the form of i
 The platform coordinates the creation of the container image. It executes the lifecycle phases in the order specified. The lifecycle runs its detect phase to identify the buildpack to be used. It then runs through the lifecycle steps to execute the build, cache the image layers and export the image. The lifecycle also uses the build and the run image stack as the base image for the application image.
 
 ## Building images with Pack
+
+Pack is a command-line tool provided by the Cloud Native Buildpacks (CNB) project. It is designed to simplify the process of using buildpacks for building container images from source code. Developers can use pack to build container images locally on their machine. Pack makes it easier for developers to use buildpacks without needing deep knowledge of the underlying processes. It also allows developers to create custom builders, add buildpacks, and configure the build process if necessary.
 
 Pack can be installed by following the instructions [here](https://buildpacks.io/docs/tools/pack/). Once pack has been installed we can use it to build and package applications into container images. Let us create a simple .Net core application and package it into a container image using pack. I will create a sample web api project as below. 
 
@@ -341,7 +376,7 @@ Rebased Image: 1f6d9f0c2b504243169e49f30ecfe357914a3cc054fc89ae27744dc35612b2d6
 Successfully rebased image weatherapi:0.1
 ```
 
-This is an extremely powerful feature of the platform. It allows us to change the base image of the container without having to rebuild the application. Platform tools such as KPack have taken this further and allow us perform a rebase of all affected images.
+This is an extremely powerful feature of the platform. It allows us to change the base image of the container without having to rebuild the application. Platform tools such as [Kpack]({{< ref "/blog/kpack" >}}) have taken this further and allow us perform a rebase of all affected images.
 
 ## Generating a Software Bill of Materials (SBOM)
 
@@ -393,4 +428,4 @@ The generated sbom is below
 }
 ```
 
-Cloud native buildpacks are a natural evolution to creating container images. It allows for developers to focus on the development aspects and not worry about operational concerns leaking into the inner development loop. It allows the operators to define the build process and the application lifecycle. In the next post we will look at creating container images in a kubernetes cluster using Kpack.
+Cloud native buildpacks are a natural evolution to creating container images. It allows for developers to focus on the development aspects and not worry about operational concerns leaking into the inner development loop. It allows the operators to define the build process and the application lifecycle. In the next post we will look at creating container images in a kubernetes cluster using [Kpack]({{< ref "/blog/kpack" >}}).

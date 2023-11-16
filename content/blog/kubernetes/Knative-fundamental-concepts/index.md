@@ -44,7 +44,7 @@ Knative focuses on the inner loop of the development process and allows develope
 
 Knative focuses on two key areas hosting/serving traffic to an application, and enabling applications to easily consume and produce events. It provides a complete application deployment platform, including setting up a build process, automated deployment etc. It abstracts away complexity around routing and eventing. It provides an eventing mechanism that standardizes the way applications use messaging and queueing systems such as RabbitMQ, Kafka or Pub/Sub.
 
-The Knative stack consists of the Serving and Eventing modules built on top of the Kubernetes platform. The serving module serves stateless applications using HTTP/S endpoints and the eventing module integrates with eventing engines such as Kafka, RabbitMQ, Azure Service Bus, AWS SQS, Google Pub/Sub and many others. The build module has been extracted into a stand-alone project called [Tekton](https://pradeepl.com/blog/kubernetes/tekton-getting-started-fundamental-concepts/).
+The Knative stack consists of the Serving and Eventing modules built on top of the Kubernetes platform. The serving module serves stateless applications using HTTP/S endpoints and the eventing module integrates with eventing engines such as Kafka, RabbitMQ, Azure Service Bus, AWS SQS, Google Pub/Sub and many others. The build module has been extracted into a stand-alone project called [Tekton]({{< ref "/blog/kubernetes/tekton-getting-started-fundamental-concepts" >}})
 
 The Serving module provides a virtual endpoint for your service and listens to it. When it discovers a hit on the endpoint, it creates the required Kubernetes components to serve that traffic. The serving component scales the number of containers needed to handle the load. It can scale up as more load is generated, or down, including all the way to zero. The eventing component produces and consumes cloud events in your serverless functions. It provides a simple mechanism for sending and receiving events. Let us look at these modules in more detail.
 
@@ -161,7 +161,7 @@ Events flow from Sources. An Event source generates or imports events. and relay
 
 ## Knative build
 
-Knative build was spun off into the Tekton pipeline project. [This blog post](https://pradeepl.com/blog/kubernetes/tekton-getting-started-fundamental-concepts/) talks about the fundamentals of Tekton.
+Knative build was spun off into the Tekton pipeline project. [This]({{< ref "/blog/kubernetes/tekton-getting-started-fundamental-concepts" >}}) blog post talks about the fundamentals of Tekton.
 
 ## Installation & First Run
 
