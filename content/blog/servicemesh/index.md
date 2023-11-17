@@ -8,31 +8,28 @@ categories:
   - "patterns"
 ---
 
-Service Mesh is a dedicated infrastructure layer for handling service-to-service communication in order to make it visible, manageable, and controlled. A Service Mesh adds capabilities like traffic control, service discovery, load balancing, resilience, observability, security in a transparent manner. A service mesh allows applications to offload these capabilities from application-level libraries and allow developers to focus on building business logic. A Service Mesh generally is implemented as a mesh of interconnected network proxies designed to better manage service traffic. The service mesh is used alongside most other service implementations as a sidecar. With a Service Mesh, microservices don't directly communicate with other microservices. Rather, all service-to-service communications take place on top of a software component called the Service Mesh proxy. This [sidecar](https://pradeeploganathan.com/patterns/sidecar) proxy layer is known as the Data Plane. All these [sidecar](https://pradeeploganathan.com/patterns/sidecar) proxies are controlled via a Control Plane. That is where all the configuration related to inter-service communications are applied.
+Imagine a green, sustainable city, meticulously designed for environmental harmony and efficiency. The city has many distinct localities such as neighborhoods, districts, and even villages with their own identity and cultures. This city boasts an intricate public transport system, with buses, trams, and subways efficiently transporting citizens to their destinations from its various localities. Multiple such cities are connected together in a thriving, fast-paced ecosystem. The cities are also similarly connected in an efficient and sustainable design. Each locality in a city represents a microservice, and each city in this system, a domain operating within the larger ecosystem - the application. In an ideal world, this system not only ensures smooth transit but also maintains each city's eco-friendly ethos; balancing efficiency with sustainability. But how does this ecosystem manage to keep its vast and varied transport network running so smoothly and eco-consciously, avoiding traffic jams, pollution, and inefficiencies?  
 
-Service mesh provides policy-based networking for microservices describing desired behavior of the network in the face of constantly changing conditions and network topology. At their core, service meshes provide a developer-driven, services-first network. This frees application developers from building network concerns into their application code. Service Mesh provides the built-in support for some network functions such as resiliency, service discovery, etc. For instance, developers need not worry about [circuit breaking](https://pradeeploganathan.com/patterns/circuit-breaker-pattern/) anymore when one microservice calls another service. That comes as part of the Service Mesh. Infact, Service mesh implementations have embedded resiliency-enablement patterns such as circuit breaker, retry, timeout, and throttling/rate limiting.
+![](images/servicemesh-city.png)
 
-Service Mesh is language-agnostic. The microservice to Service Mesh proxy communication always happens over standard protocols such as HTTP1.x/2.x, gRPC, etc. You can write your microservices from any technology and they will still work with the Service Mesh.
+This city's challenge mirrors what we face in the realm of software development when dealing with microservices. The transition from monolithic to microservices architectures has opened up avenues for more scalable, agile, and efficient software development practices. This has resulted in teams building multiple independent microservices which focus on a specific functionality. Highly efficient supply chains have enabled teams to deploy multiple instances of these microservices rapidly.  However, this shift also brings complexities, particularly in ensuring seamless, secure, reliable, and efficient communication among numerous independent services. In the absence of an effective system to connect these services, the potential for operational 'pollution' – in the form of bottlenecks, security vulnerabilities, and inefficient resource utilization – becomes a significant risk. Traditional methods often fall short and are hard to manage and monitor.
 
-A service mesh provides the following
+A Service Mesh is the equivalent of an advanced traffic control system in our city analogy. It doesn't drive the vehicles (microservices) but oversees and manages the entire traffic network. It ensures that every vehicle finds the most efficient route, avoids collisions, and adheres to traffic rules, all without direct intervention from the drivers. In this blog post, we’ll explore the essence of a service mesh. We’ll discover how it operates as the intelligent traffic system of microservices, guiding service communications seamlessly and securely. We’ll dive into its components, how it enhances communication, and why it's becoming an indispensable tool in managing the intricate flow of modern, cloud-native applications.
 
-- Traffic management (such as A/B testing and canary deployment)
-- Security (such as TLS and key management)
-- Observability (such as providing traffic visibility).
+# Why do you need a ServiceMesh?
 
-Service mesh platforms typically provide two separate components, the data plane and the control plane.
+ Microservices architecture decomposed applications into smaller, independently deployable services, each running in its own process and communicating via lightweight protocols, typically HTTP/REST/RPC or message queues. The distributed nature of microservices created complex network topologies. This fragmentation also led to an explosion in network traffic, with each microservice potentially communicating with numerous others. This architecture demands dynamic service discovery, load balancing, fault tolerance, and distributed tracing to manage the increased network traffic and inter-service dependencies. Challenges such as circuit breaking, service-to-service security, and real-time monitoring required new solutions. Traditional network management tools were inadequate for addressing the dynamic and ephemeral nature of microservice communication. To manage the intricate communication demands of microservices, the concept of a service mesh was introduced. It provided a dedicated layer for handling inter-service communication.
 
-![](images/Service-Mesh.png)
+# What is a ServiceMesh ?
 
-The data plane is a set of network proxies deployed as sidecars that are responsible for the runtime tasks, such as routing, load balancing, rate limiting, circuit breaking, authentication and security, and monitoring. In other words, the data plane's job is to translate, forward, and observe every network packet that goes in and out of the service instance.
+ At its core, a service mesh is a dedicated infrastructure layer designed to control and manage the communication between different services in a microservices architecture. It aims to streamline communication processes, ensuring that services can interact seamlessly and reliably. It provides built-in mechanisms to secure communications and enforce compliance policies. It is designed to offer deep insights into communication patterns, aiding in monitoring and troubleshooting.
 
-The control plane decides how the data plane should perform its tasks. It provides policy and configuration for all the network proxies (data plane) that run in a service mesh. The control plane does not touch any packets/requests in the system, as it is never on the critical path.
+# Components of a ServiceMesh
 
-There are four popular Service Mesh products, each with its own advantages:
+## Control Plane and Data Plane
 
-- Linkerd (https://linkerd.io/)
-- Envoy (https://www.envoyproxy.io/)
-- Istio (https://istio.io/)
-- Linkerd2, formerly Conduit (https://conduit.io/)
+- Control Plane: The control plane is the administrative layer, responsible for managing and configuring the policies that govern how services communicate. It's the 'brain' of the service mesh, orchestrating the overall behavior of the mesh.
 
-> Photo by [JJ Ying](https://unsplash.com/@jjying?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/mesh?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+- Data Plane: The data plane consists of a network of lightweight proxies, typically deployed alongside service instances. These proxies, known as sidecar proxies, handle the actual routing and forwarding of traffic between services.
+
+- Sidecar Proxies: Sidecar proxies intercept all network traffic to and from the service. This separation of concerns means that services can focus on business logic, while the proxies handle networking. They deal with various network functions, including load balancing, traffic routing, and security (like mutual TLS for encrypted communication).
