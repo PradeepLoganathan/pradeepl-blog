@@ -13,7 +13,7 @@ categories:
   - "data engineering"
 summary: "Lambda architecture is a data processing architecture designed to handle large amounts of data by combining batch processing with real-time stream processing.Lambda architecture provides a way to handle both real-time and batch processing in a single architecture."
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - images/Lambda-architecture-cover.png
   - images/Lambda-architecture.png
@@ -24,7 +24,7 @@ cover:
     relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
+  Text: "Suggest changes" # edit text
   appendFilePath: true # to append file path to Edit link
 ---
 

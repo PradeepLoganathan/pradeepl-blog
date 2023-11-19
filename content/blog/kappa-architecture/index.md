@@ -13,7 +13,7 @@ categories:
   - "data engineering"
 summary: "Kappa architecture is a data-processing architecture that is designed to process data in real time. It is a single-layer architecture that uses a streaming processing engine to process data as it is received. This architecture is simpler and more efficient than the Lambda architecture, and it can be implemented at a lower cost."
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - images/Kappa-arch-cover.png
   - 
@@ -24,7 +24,7 @@ cover:
     relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
+  Text: "Suggest changes" # edit text
   appendFilePath: true # to append file path to Edit link
 ---
 
