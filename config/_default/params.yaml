@@ -1,7 +1,7 @@
-env: production
 title: Pradeep Loganathan's Blog
 description: 'My technical notes and thoughts on software engineering, programming, and life.'
 author: Pradeep Loganathan
+Copyright: "my copyright"
 comments: true
 images:
   - Pradeep-Loganathan.jpeg
@@ -13,59 +13,3 @@ editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Edit this post on github" # edit text
   appendFilePath: true # to append file path to Edit link
-
-header:
-  title: 'Pradeep Loganathan'
-  imageUrl: 'Pradeep-Loganathan.jpeg'
-  subtitle: 'cc'
-ShowShareButtons: true
-ShowReadingTime: true
-ShowAuthor: true
-ShowBreadCrumbs: true
-ShowTags: true
-ShowCategories: true
-ShowDate: true
-ShowPostNavLinks: true
-homeInfoParams:
-    Title: "Hi there \U0001F44B"
-    Content: Welcome to my blog.
-   
-socialIcons: # optional
-  - name: "twitter"
-    url: "https://twitter.com/pradeepl"
-  - name: "facebook"
-    url: "https://facebook.com/pradeepl"
-  - name: "linkedin"
-    url: "https://www.linkedin.com/in/pradeeploganathan/"
-  - name: "github"
-    url: "https://github.com/pradeeploganathan"
-  - name: stackoverflow
-    url: "https://stackoverflow.com"
-
-# analytics:
-#   google:
-#     SiteVerificationTag: "XYZabc"
-#   bing:
-#     SiteVerificationTag: "XYZabc"
-  
-fuseOpts:
-  isCaseSensitive: false
-  shouldSort: true
-  location: 0
-  distance: 1000
-  threshold: 0.4
-  minMatchCharLength: 0
-  keys: ["title", "permalink", "summary", "content"]
-profileMode:
-  enabled: true
-  title: "Notes from my journey designing and building amazing systems with amazing teams" # optional default will be site title
-  subtitle: "Software engineering notes"
-  imageUrl: "Pradeep-Loganathan.jpeg" # optional
-  imageTitle: "<title of image as alt>" # optional
-  imageWidth: 120 # custom size
-  imageHeight: 120 # custom size
-  buttons:
-    - name: feed
-      url: "/index.xml"
-    - name: tags
-      url: "/tags/"

@@ -1,0 +1,16 @@
+main:
+  - name: About me
+    params:
+    rel: external
+    pre: <i class="fa fa-heart"></i>
+    url: https://www.linkedin.com/in/pradeeploganathan/
+    weight: 50 
+  - name: Podcasts
+    pageref: /episodes
+    weight: 30
+  - name: Blog
+    pageref: /blog
+    weight: 20
+  - name: Search
+    pageref: /search
+    weight: 10
