@@ -1,10 +1,10 @@
 baseURL: ""
-title: Pradeep Loganathan's Blog
+title: Pradeep Loganathan's Blog - Development
 paginate: 5
 
 defaultContentLanguage: en
 enableInlineShortcodes: true
-enableRobotsTXT: true
+enableRobotsTXT: false
 buildDrafts: true
 buildFuture: true
 buildExpired: true
