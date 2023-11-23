@@ -102,8 +102,7 @@ services.AddSwaggerGen(options =>
 });
 ```
 
-
-The above code results in the swagger UI requiring a [JWT bearer token]({{< ref /blog/jwt/ >}}) to authorize requests to the API as below
+The above code results in the swagger UI requiring a [JWT bearer token]({{< ref "/blog/jwt" >}}) to authorize requests to the API as below
 
 ![](images/JWT-token-Swagger-1024x471.png)
 

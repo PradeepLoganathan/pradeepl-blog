@@ -1,0 +1,79 @@
+baseURL: ""
+title: Pradeep Loganathan's Blog - Development
+paginate: 5
+
+defaultContentLanguage: en
+enableInlineShortcodes: true
+enableRobotsTXT: false
+buildDrafts: true
+buildFuture: true
+buildExpired: true
+enableEmoji: true
+enableGitInfo: true
+
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNos: false
+    noClasses: false
+    style: monokai
+
+
+minify:
+  minifyOutput: false
+  minifyCSS: false
+  minifyJS: false
+  minifyHTML: false
+  minifyURLs: false
+
+outputFormats:
+  aacfeed:
+    MediaType: "application/rss+xml"
+    BaseName: "index"
+    path: "/feed/aac"
+    IsHTML: false
+    IsPlainText: true
+    noUgly: true
+    Rel: "alternate"
+  mp3feed:
+    MediaType: "application/rss+xml"
+    BaseName: "index"
+    path: "/feed/mp3"
+    IsHTML: false
+    IsPlainText: true
+    noUgly: true
+    Rel: "alternate"
+
+outputs:
+    home:
+        - HTML
+        - RSS
+        - JSON # is necessary
+        - aacfeed
+        - mp3feed
+
+assets:
+    favicon: "/favicon.ico"
+    favicon16x16:  "/favicon-16x16.png"
+    favicon32x32:  "/favicon-32x32.png"
+    apple_touch_icon:  "/apple-touch-icon.png"
+
+permalinks:
+  categories: "/blog/categories/:slug/"
+  tags: "/blog/tags/:slug/"
+  #blog: "/blog/:filename" Think through this change
+ 
+module:
+  imports:
+    - path: github.com/adityatelange/hugo-PaperMod
+
+taxonomies:
+  tag: "tags"
+  category: "categories"
+  series: "series"

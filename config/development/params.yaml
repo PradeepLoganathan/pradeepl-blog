@@ -1,4 +1,4 @@
-env: production
+env: development
 title: Pradeep Loganathan's Blog
 description: 'My technical notes and thoughts on software engineering, programming, and life.'
 author: Pradeep Loganathan
@@ -42,11 +42,6 @@ socialIcons: # optional
   - name: stackoverflow
     url: "https://stackoverflow.com"
 
-# analytics:
-#   google:
-#     SiteVerificationTag: "XYZabc"
-#   bing:
-#     SiteVerificationTag: "XYZabc"
   
 fuseOpts:
   isCaseSensitive: false
@@ -56,14 +51,15 @@ fuseOpts:
   threshold: 0.4
   minMatchCharLength: 0
   keys: ["title", "permalink", "summary", "content"]
+
 profileMode:
   enabled: true
   title: "Notes from my journey designing and building amazing systems with amazing teams" # optional default will be site title
   subtitle: "Software engineering notes"
   imageUrl: "Pradeep-Loganathan.jpeg" # optional
-  imageTitle: "<title of image as alt>" # optional
-  imageWidth: 120 # custom size
-  imageHeight: 120 # custom size
+  imageTitle: "Pradeep Loganathan" # optional
+  imageWidth: 140 # custom size
+  imageHeight: 140 # custom size
   buttons:
     - name: feed
       url: "/index.xml"
