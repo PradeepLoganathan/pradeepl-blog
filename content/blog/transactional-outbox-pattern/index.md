@@ -40,10 +40,6 @@ editPost:
   appendFilePath: true # to append file path to Edit link
 ---
 
-
-
-
-
 Services/software components often needs to publish messages or events as part of a transaction that updates the database. For instance, Integration events such as Order created, Customer created etc need to be published to external domains which maybe interested in these events. Both the database update and the sending of the message must happen within a transaction. A service might update the database and then crash, for example, before sending the message. If the service doesn’t perform these two operations atomically, a failure could leave the system in an inconsistent state.
 
 The traditional solution is to use a [distributed transaction( 2PC)](http://geekswithblogs.net/Pradeepl/archive/2006/02/09/68808.aspx) that spans across the database and the message broker. However Distributed transactions create their own complexities and have performance issues. Additionally many modern messaging systems such as apache kafka do not support distributed transactions. As a result, an application must use a different mechanism to reliably publish messages.
@@ -119,11 +115,13 @@ These are other microservices or external systems that need to receive the messa
 
 Messages from the Outbox table are sent to a message queue or event bus, which then delivers them to the intended microservices. This adds another layer of reliability and decoupling, as the message queue/event bus can manage message delivery retries, ordering, and distribution.
 
-## Practical example of Outbox pattern
+# Practical example of Outbox pattern
 
 Now that we know the actors in the pattern, its sequence flow .. let us look at an example implementation of this pattern.
 
 Imagine an e-commerce system where an order service handles customer orders. When an order is placed, the system needs to update the order database and notify the inventory service to update the stock. This is a classic case where we can apply the Transactional Outbox pattern.
+
+![Transactional Outbox Pattern](images/Transactional-Outbox-Pattern.png)
 
 The process flow is as follows
 
@@ -163,7 +161,7 @@ sequenceDiagram
 
 # Conclusion
 
-The Transactional Outbox pattern is a key pattern in distrinuted systems. It is used to ensure reliable messaging in distributed systems in a simple and efficient manner.
+The Transactional Outbox pattern is a key pattern in distributed systems. It is used to ensure reliable messaging in distributed systems in a simple and efficient manner. It is a key strategy for managing data consistency, reliability, and communication in a microservices architecture. It addresses several distributed systems challenges and is a vital tool in the toolbox of developers and architects working with such systems.
 
 ## References
 

@@ -11,7 +11,7 @@ Creating API's has a certain rigor to it right from the design phase which is di
 
 In an API since there is no UI and the client and the API provider work on a contract, exceptions are communicated through the API response in the appropriate media format such as JSON or XML. There are multiple ways of returning exceptions back to the client. I generally prefer to implement a custom exception handling middleware. Implementing a middleware component is simpler and it can be added to the OWIN request/response processing pipeline. It makes the context of the middleware much more explicit by limiting it to handling and communicating exceptions to the client. It is in some ways a cross cutting concern which should be abstracted away from the domain code.
 
-If you are new to the pipeline architecture of .NET core, I would suggest you read [this post]{{ < ref "/blog/owin-katana-kestrel/" > }}) before moving ahead.
+If you are new to the pipeline architecture of .NET core, I would suggest you read [this post]({{ < ref "/blog/owin-katana-kestrel/" > }}) before moving ahead.
 
 A middleware component is a request delegate that processes the request/response and then invokes the next component in the pipeline. The next request delegate is resolved by dependency injection.
 

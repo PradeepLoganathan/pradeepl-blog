@@ -1,14 +1,11 @@
-mmain:
-  - name: About
+main:
+  - name: About me
     params:
     rel: external
     pre: <i class="fa fa-heart"></i>
     url: https://www.linkedin.com/in/pradeeploganathan/
-    weight: 50
-  - name: Videos
-    pageref: /screencasts
-    weight: 40
-  - name: Podcast
+    weight: 50 
+  - name: Podcasts
     pageref: /episodes
     weight: 30
   - name: Blog
