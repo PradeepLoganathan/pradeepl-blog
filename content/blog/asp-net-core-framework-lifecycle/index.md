@@ -13,6 +13,7 @@ categories:
   - ".net"
   - "asp.net"
 summary:  A lifecycle is a series of components, events, and stages that process a request or respond to user interaction. The framework lifecycle offers extension points and hooks into these components so that you can customize the final output. asp.net core provides a framework lifecycle to process requests.
+Description:  A lifecycle is a series of components, events, and stages that process a request or respond to user interaction. The framework lifecycle offers extension points and hooks into these components so that you can customize the final output. asp.net core provides a framework lifecycle to process requests.
 ShowToc: true
 TocOpen: false
 images:
