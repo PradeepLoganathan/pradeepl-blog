@@ -1,5 +1,5 @@
 ---
-title: "Sidecar pattern"
+title: "Sidecar container pattern"
 date: "2019-07-24"
 categories: 
   - "architecture"
@@ -35,3 +35,10 @@ The sidecar pattern can be further specialized into an Ambassador pattern, Adapt
 > Photo by [Joël in 't Veld](https://unsplash.com/@photographer_in_wheelchair?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/sidecar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
 
 > Sidecar pattern image from O'Reilly website
+
+## References and Further reading
+
+I found some of these resources to be insightful and they provide further advanced information on side car container patterns.
+
+- [Azure Architecture Center - Sidecar Pattern] (https://learn.microsoft.com/en-us/azure/architecture/patterns/sidecar)
+- [Kubernetes v1.28: Introducing Native Sidecar Containers] - (https://spacelift.io/blog/kubernetes-sidecar-container)

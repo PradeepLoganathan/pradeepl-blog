@@ -21,7 +21,6 @@ cover:
     image: "images/rest-idempotency-safety.png"
     alt: "Rest - Idempotency and Safety"
     caption: "Rest - Idempotency and Safety"
-    relative: true # To use relative path for cover image, used in hugo Page-bundles
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Suggest changes" # edit text
