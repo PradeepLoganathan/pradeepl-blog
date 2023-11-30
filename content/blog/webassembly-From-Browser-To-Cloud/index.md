@@ -2,7 +2,7 @@
 title: "WebAssembly - From Browser to Cloud "
 author: "Pradeep Loganathan"
 date: 2022-07-04T10:26:07+10:00
-lastmod: 2022-07-04T10:26:07+10:00
+lastmod: 2022-08-09T10:26:07+10:00
 draft: false
 comments: true
 toc: true
@@ -15,7 +15,7 @@ tags:
   - CloudNative
 categories: 
   - "CloudNative"
-summary: "WebAssembly(WASM) is a low-level assembly-like language that is designed for efficient execution and compact representation. WebAssembly is a binary-encoded instruction format or bytecode that runs on a stack-based virtual machine. WebAssembly systems interface(WASI) is a runtime specification and a standard for WebAssembly interaction with the operating system."
+summary: "WebAssembly(WASM) is a low-level assembly-like language that is designed for efficient execution and compact representation. WebAssembly systems interface(WASI) is a runtime specification and a standard for WebAssembly interaction with the operating system."
 cover:
     image: "images/WebAssembly-WASM-WASI.png"
     alt: "WebAssembly, WASM and WASI"
@@ -105,7 +105,7 @@ Some of the well-known wasm runtimes are [Wasmer](https://wasmer.io/), [Wasmtime
 
 ## WebAssembly on Kubernetes
 
-Containers are an ideal tool to host workloads in a safe and secure environment. Container runtimes restrict workloads from abusing sensitive kernel calls. However, a lot of effort is needed to lockdown a container environment and it also needs to be constantly patched as new CVE's are reported. Containers are also not small enough to run in environments with constrained resources ( CPU, memory etc) such as edge environments. Edge environments also operate in low network bandwidth environments where patching containers is not effective.  WASM provides an ideal alternative runtime environment for such workloads. WASM has low resource overheads and fast startup times. WASM's sandboxed environment and secure by default runtime model is ideal for such environments. WASI unlocks the ability to use WASM in these environments. Solomon Hykes , the founder of docker also tweeted about this potential some time back.
+Containers are an ideal tool to host workloads in a safe and secure environment. Container runtimes restrict workloads from abusing sensitive kernel calls. However, a lot of effort is needed to lockdown a container environment and it also needs to be constantly patched as new CVE's are reported. Containers are also not small enough to run in environments with constrained resources ( CPU, memory etc) such as edge environments. Edge environments also operate in low network bandwidth environments where patching containers is not effective.  WASM provides an ideal alternative runtime environment for such workloads. WASM has low resource overheads and fast startup times. WASM's sandboxed environment and secure by default runtime model is ideal for such environments. WASI unlocks the ability to use WASM in these environments. Solomon Hykes, the founder of docker also tweeted about this potential some time back.
 
 {{< tweet user="solomonstre" id="1111004913222324225" >}}
 
@@ -113,7 +113,7 @@ Containers are an ideal tool to host workloads in a safe and secure environment.
 
 ## Serverless using WebAssembly
 
-In the serverless world , cloud providers manage infrastructure and allow for on-demand provisioning with greater agility. In this model, you provide the code and the cloud provider provisions and manages all resources ( containers, network, OS, app server etc) required to run it. The code runs on a server shared by many others and needs to be isolated to provide security and protect it from vulnerabilities that can be caused by other workloads. Since resources are provisioned dynamically on demand, workloads can suffer from coldstart issues while resources are being provisioned due to startup from zero. WebAssembly is ideal under these circumstances due to their fast startup and isolated runtime model. Cloudflare's computing platform called [Workers](https://workers.cloudflare.com/) is a serverless runtime based on the Chrome V8 Javascript engine. It does not use containers or Virtual Machines. Workers hosts the WebAssembly runtime and can be used to deploy WASM modules as serverless functions. This model has significantly fast startup times and requires fewer resources. See this post [here](https://blog.cloudflare.com/cloud-computing-without-containers/) for more details.
+In the serverless world , cloud providers manage infrastructure and allow for on-demand provisioning with greater agility. In this model, you provide the code and the cloud provider provisions and manages all resources ( containers, network, OS, app server etc) required to run it. The code runs on a server shared by many others and needs to be isolated to provide security and protect it from vulnerabilities that can be caused by other workloads. Since resources are provisioned dynamically on demand, workloads can suffer from cold start issues while resources are being provisioned due to startup from zero. WebAssembly is ideal under these circumstances due to their fast startup and isolated runtime model. Cloudflare's computing platform called [Workers](https://workers.cloudflare.com/) is a serverless runtime based on the Chrome V8 Javascript engine. It does not use containers or Virtual Machines. Workers hosts the WebAssembly runtime and can be used to deploy WASM modules as serverless functions. This model has significantly fast startup times and requires fewer resources. See this post [here](https://blog.cloudflare.com/cloud-computing-without-containers/) for more details.
 
 
 ## Conclusion

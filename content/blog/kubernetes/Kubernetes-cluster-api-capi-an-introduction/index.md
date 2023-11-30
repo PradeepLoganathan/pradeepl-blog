@@ -1,6 +1,6 @@
 ---
 title: "Kubernetes Cluster API (CAPI) – An introduction"
-lastmod: 2021-12-08T15:55:13+10:00
+lastmod: 2021-12-12T15:55:13+10:00
 date: 2021-12-08T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
@@ -37,6 +37,9 @@ A survey by [Anchore](https://anchore.com/software-supply-chain-security-report/
 
 While having multiple options to create a Kubernetes cluster is great, it results in massive operational and governance challenges. If you want to migrate your K8s cluster to a different cloud provider, you will need to rewrite your IaC code completely. If you need to change your bootstrap tool you would need to rewrite your IaC code again. Cluster creation is just one part of the problem, we need to perform cluster upgrades, deletion, scaling operations, etc. Cluster lifecycle management is challenging, especially if you are managing a fleet of clusters. Each of the above cluster creation options has strong opinions on the lifecycle management process of the cluster. All these problems become exacerbated as we create multiple clusters sometimes across cloud providers and on-premises systems. Additionally, a cluster requires other components such as load balancers, VPC/VNET and many others to provide the necessary functionality. Each of the above providers has highly opinionated and proprietary mechanisms to provision these into the cluster.
 
+As organizations scale , they often find themselves overseeing multiple Kubernetes clusters spread across multiple environments, including on-premises data centers and public clouds. This expansion brings its own set of challenges. Clusters might end up being configured differently, posing a hurdle in maintaining uniformity across the board. Regular updates and maintenance tasks for these clusters can be time-consuming. Ensuring that every cluster complies with security policies and regulatory requirements adds another layer of complexity. Additionally, optimally managing resources across these diverse clusters demands advanced and strategic planning. 
+
+
 ## Cluster SIG
 
 To address the above challenges the [Cluster Lifecycle Special Interest Group](https://github.com/kubernetes/community/tree/master/sig-cluster-lifecycle) came together to identify a better way of creating a cluster, configuring it, and managing its lifecycle. The primary objective of this SIG is to simplify the creation, configuration, upgrade, downgrade, and teardown of Kubernetes clusters and their components. This should work across multiple providers, infrastructure types and enable uniformity, interoperability, extensibility, and simplicity. This would ideally use the same Kubernetes primitives and declarative model that have proven to be successful and is well known. The underlying cluster infrastructure, like virtual machines, networks, load balancers etc., would be managed the same way that developers manage application workloads. This should enable consistent and repeatable cluster deployments across a wide variety of infrastructure environments. Thus, the Cluster API was born primarily focusing on providing declarative API’s and tooling to simplify provisioning, managing, and operating multiple Kubernetes clusters.
@@ -51,7 +54,7 @@ The Cluster API enables us to
 * Upgrades of Control Plane and Workers on a rolling basis
 * Support for multiple bare metal & public and private cloud providers.
 
-The Cluster API is designed to be a consistent, declarative API. It enables broader use cases such as hybrid-cloud and multi-cloud, allowing providers to implement platform specific intrinsics in a standardized manner. It is designed for the development of standardized tooling talking to a standardized interface eliminating provider and tooling lock-in. This declarative API allows for immutable infrastructure (once created they are never updated, only deleted). Teams can use advanced processes such as [GitOps]({{< ref "/blog/gitops" >}}) to manage clusters similar to managing their code daily. This community-driven “Kubernetes style” API provides familiarity and integrates well with existing tooling for cluster lifecycle management.
+The Cluster API is designed to be a consistent, declarative API. It enables broader use cases such as hybrid-cloud and multi-cloud, allowing providers to implement platform specific intrinsics in a standardized manner. Specifically designed for managing the entire lifecycle of Kubernetes clusters, including upgrades, scaling, and configuration changes, in a Kubernetes-centric way. Cluster API is designed to be Kubernetes-native, meaning it uses the Kubernetes API and its principles for managing clusters. This approach is more intuitive for teams already deeply integrated with Kubernetes, as it allows them to manage clusters as if they were standard Kubernetes resources.  Teams can use advanced processes such as [GitOps]({{< ref "/blog/gitops" >}}) to manage clusters. 
 
 ## Cluster API architecture
 
