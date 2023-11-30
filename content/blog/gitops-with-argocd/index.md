@@ -1,5 +1,5 @@
 ---
-title: "Gitops with ArgoCD"
+title: "Gitops with Argo CD"
 author: "Pradeep Loganathan"
 date: 2022-08-22T03:37:18+10:00
 lastmod: 2022-08-22T03:37:18+10:00
@@ -9,7 +9,8 @@ tags:
   - devops
   - gitops
   - cicd
-  - argocd
+  - argocd 
+  - argo cd
 categories:
   - platformengineering
 summary: GitOps is a methodology for continuous deployment using a Git repository as the single source of truth. Argo CD is a declarative, continuous delivery GitOps operator for kubernetes. In this post we will deploy ArgoCD to a kind cluster and deploy an application, the GitOps way.
@@ -46,7 +47,7 @@ The main components of Argo CD are
 
 ## How does ArgoCD work? -->
 
-## Getting started with Argo CD on Kind
+## Getting started with argo cd on Kind
 
 To get started with Argo CD let's install it on a Kubernetes cluster. We would then need to configure it and deploy a sample workload to ensure that it is working as expected.
 

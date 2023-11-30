@@ -1,6 +1,6 @@
 ---
 title: "Git Branching strategies"
-lastmod: 2020-01-28T15:55:13+10:00
+lastmod: 2023-11-28T15:55:13+10:00
 date: 2020-01-28T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
@@ -10,26 +10,33 @@ tags:
   - "branching strategies"
   - "source repository"
   - "git branching"
+  - "git branching strategies"
   
 categories:
   - "git"
 
 mermaid: true
 
-summary:  GIT branching strategies allow a code base to evolve organically in a coherent way. A branching strategy is a convention, or a set of rules, that describes when branches are created. Choosing the right branching strategy is key to empower development teams to collaborate effectively.
+summary:  GIT branching strategies are conventions, or a set of rules, that describes when branches are created. Choosing the right branching strategy is key to empower development teams to collaborate effectively.
 
 ShowSummary: true
 ShowDescription: true
 ShowToc: true
 TocOpen: true
 ShowPostNavLinks: true
+
 images:
   - fabrice-villard-Du41jIaI5Ww-unsplash.jpg
+  - images/gitflow.png
+  - images/github-flow.png
+  - images/gitlab-flow.png
+
 cover:
   image: "fabrice-villard-Du41jIaI5Ww-unsplash.jpg"
   alt: "Git Branching strategies"
   caption: "Git Branching strategies"
   relative: false # To use relative path for cover image, used in hugo Page-bundles
+
 editPost:
   URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
   Text: "Suggest changes" # edit text
@@ -38,7 +45,7 @@ editPost:
 
 # Git Branching
 
-[Git]({{< ref "/blog/git-basics" >}}) branches allow a code base to evolve organically in a coherent way. A branch in Git is essentially a pointer to a snapshot of your changes. When you create a branch, you're setting up a new line of development. It enables multiple team members to work on different tasks simultaneously without stepping on each other's toes. It is a fundamental concept for implementing features, fixing bugs, and testing new ideas safely. It is one of Git's most popular features. It is a powerful feature that allows developers to diverge from the main line of development and continue to work independently without disrupting the main codebase. The primary benefits if Git branching are 
+[Git]({{< ref "/blog/git-basics" >}}) branches allow a code base to evolve organically in a coherent way. When you create a git branch, you're setting up a new line of development. Git branches enables multiple team members to work on different tasks simultaneously without stepping on each other's toes. It is a fundamental concept for implementing features, fixing bugs, and testing new ideas safely. It is a powerful feature that allows developers to diverge from the main line of development and continue to work independently without disrupting the main codebase. A branch in Git is essentially a pointer to a snapshot of your changes. It is one of Git's most popular features. The primary benefits of Git branches are 
 
 - __Isolation__: Changes in a branch do not affect other branches or the main codebase until they are merged.
 - __Parallel Development__: Multiple features or fixes can be developed in parallel, speeding up the development process.
@@ -46,11 +53,11 @@ editPost:
 - __Flexibility__: Easy to experiment with new ideas without disturbing the main codebase.
 
 # Git Branching Strategies
-A branching strategy is a convention, or a set of rules, that describes when branches are created, naming guidelines for branches, what use branches should have, and so on. Branching strategies allow for separation of work grouped by concept ideas. These concept ideas can be developed in parallel and may also involve bug fixes and patches. Different projects require different branching models depending on their size, workflow, and deployment strategies such as 
+A branching strategy is a convention, or a set of rules, that describes when git branches are created, naming guidelines for branches, what use branches should have, and so on. Branching strategies allow for separation of work grouped by concept ideas. These concept ideas can be developed in parallel and may also involve bug fixes and patches. Different projects require different branching models depending on their size, workflow, and deployment strategies. Some of the most popular git branching strategies are 
 
-- Scheduled deployment strategy - Gitflow
-- Branch per feature deployment strategy - Github flow
-- State branching strategy - Gitlab flow
+- __Gitflow__ - Scheduled deployment strategy. 
+- __Github flow__ - Branch per feature deployment strategy.
+- __Gitlab flow__ - State branching strategy. 
 
 Let us take a look at each of these branching strategies in detail.
 
@@ -64,9 +71,9 @@ Gitflow was originally designed by Vincent Driessen in 2010. He proposed this br
 
 The other non-permanent branches are
 
-1. Feature branches - Feature branches are used to develop new features. Feature branches will be eventually merged back into the development branch. Each feature branch is as small as possible.
+1. Feature branches - Feature branches are used to develop new features. Feature branches will eventually be merged back into the development branch. Each feature branch is as small as possible.
 
-2. Release branches - Once a set of features & their associated bug fixes have been implemented and merged into the develop branch a release branch is created. The branch is assigned a name composed of the release prefix, followed by the numeric form of choice for your release. One of the standards for the numeric form is semver. The release branch is then subjected to integration and regression testing. Any bugs identified during this phase is fixed and committed directly to the release branch. Once the release branch has been confirmed to be free of bugs, it is merged into the main branch and released into production. These fixes are also merged back into dev and other release branches if any.
+2. Release branches - Once a set of features & their associated bug fixes have been implemented and merged into the develop branch a release branch is created. The branch is assigned a name. This is usually composed of the release prefix, followed by the numeric form of choice for your release. One of the standards for the numeric form is semver. The release branch is then subjected to integration and regression testing. Any bugs identified during this phase is fixed and committed directly to the release branch. Once the release branch has been confirmed to be free of bugs, it is merged into the main branch and released into production. These fixes are also merged back into dev and other release branches if any.
 
 3. Hotfix/Patch branches - Hotfixes are production issues that need an immediate fix before a planned release. The development team creates a hotfix branch from main and applies the appropriate fixes. Once the fixes are tested, the hotfix branch is merged onto the main, to ship a new release.
 
@@ -80,15 +87,19 @@ In the figure below the solid lines represent the long lived branches (main & de
 
 ![Gitflow](images/gitflow.png "Gitflow")
 
+### Gitflow CI/CD design
+
+In the Gitflow model, development and release processes are more structured. A CI pipeline is setup for the develop and feature branches. This CI pipeline is triggered when commits are made to the develop or feature branches. When this CI pipeline is triggered, it runs tests and build processes on artifacts in these branches. This ensures that new features and ongoing development meet quality standards. When the release branch is created from the develop branch a release CI pipeline is triggered. This pipeline executes comprehensive tests including performance and regression tests. The main purpose of this CI pipeline is to prepare and validate code for production release. When code is merged into the main branch a CD pipeline is triggered. It deploys the stable, performant, production ready code to the production environment. This process of triggering continuous integration(CI) on the feature/release branches and continuous deployment(CD) on the main branch results in the deployment of stable releases to production. This is a typical CI/CD design for the gitflow model.
+
 ### Pros
 
-- This is an appropriate workflow for versioned software such as desktop applications, mobile applications etc.
+- This is an ideal workflow for versioned software such as desktop applications, mobile applications etc.
 - Convention based workflow enables developers to easily identify branch to begin work from.
 - This workflow does not require a large initial investment in automated testing.
 
 ### Cons
 
-- Cognitive overload for newbie developers.
+- Cognitive overload for new developers on the team  .
 - The effectiveness of Gitflow depends on the team's adherence to the workflow.
 
 ## Github flow
@@ -100,6 +111,10 @@ Github flow was first described by Scott Chacon on his blog [here](http://scottc
 To work on a new feature a developer creates a feature branch from main and commits their work to this feature branch. The feature branch is kept up to date regularly. When the feature development is complete the developer issues a pull request to the main branch. This initiates a code review. If the pull request is reviewed and merged then the feature is deployed from the main branch. If there are issues then fixes are immediately made and merged back into main. Main is immediately redeployed since it is always in a proven working state. This requires a robust CI/CD process.
 
 ![Github Flow](images/github-flow.png "Github Flow")
+
+### Github flow CI/CD design
+
+In GitHub Flow multiple teams work on different features across different branches. Whenever a commit is pushed to any feature branch, it triggers a CI pipeline. This pipeline builds the project and runs tests. These tests validate code changes in isolation before they are ready for merge into the master branch. Once this pipeline executes successfully, a pull request is opened from the feature branch to the main branch. This pull request triggers a CI pipeline which executes tests and build processes to ensure that the changes in the pull request are safe to merge into the main branch. When changes are merged into the main branch, it triggers a CD pipeline which runs final tests, builds the production-ready version of the project, and then deploys it to the production environment. This ensures that only thoroughly tested and reviewed code gets deployed to production. This is a typical CI/CD setup for github flow. It ensures that all features are independently tested and validated in their respective branches before they are merged, maintaining code quality and stability in the master branch.
 
 ### Pros
 
@@ -123,6 +138,10 @@ Developers create feature branches from the production branch. After development
 
 
 ![Gitlab Flow](images/gitlab-flow.png "Gitlab Flow")
+
+### Github flow CI/CD design
+
+GitLab Flow incorporates environment-specific branches and the CI/CD design should cater to this. When code is committed to a feature branch, it triggers a CI pipeline which builds the project and runs tests. This ensures code quality before merging into higher-level branches. CI pipelines are also triggered when code is merged into environment-specific branches (like staging, pre-prod). These pipelines run extensive tests to validate that the code works in an environment similar to production. When code is merged into the production branch it triggers a CD pipeline. This CD pipeline deploys code to the production environment. This ensures that only fully tested and approved changes are deployed to production.
 
 ### Pros
 
@@ -152,6 +171,7 @@ This table provides a side-by-side comparison of the key aspects of each Git bra
 | **Suitability**        | Versioned software              | Small, fast-paced projects       | Projects with multiple envs.      |
 
 
+
 ## Conclusion
 
-Branching allows teams of developers to easily collaborate inside of one central code base.Choosing the right branching strategy is key to ensure a good cadence of releasing code to production safely. Knowing and understanding the various branching strategies is key to making this decision.
+Branching allows teams of developers to easily collaborate inside of one central code base.Choosing the right branching strategy is key to ensure a good cadence of releasing code to production safely. Knowing and understanding the various branching strategies is key to making this decision. This also ensures that CI/CD process are designed to be triggered effectively ensuring deployment of stable code to production at a faster pace.
