@@ -265,6 +265,27 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 ```
 The above code sample builds the pipeline and adds multiple middleware components such as static files, routing, authorization and MVC.
 
+However, with .NET 6 and onwards, including .NET 8, there has been a shift towards a more streamlined setup that can merge the Program and Startup functionalities into a single file. The newer template for ASP.NET Core applications consolidates the Program and Startup classes into a single Program.cs file for simplicity.
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the DI container.
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+app.UseRouting();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+```
+
+This evolution reflects a trend towards more concise and readable codebases.
+
 ## Conclusion
 
 Using the lifecycle pattern with middleware components in ASP.NET Core offers several advantages that make application development both easier and better in various ways. It enables modular architecture promoting reusability and separation of concerns. It improves maintainability by providing a clear structure and patterns for handling requests and response. It improves performance by enabling asynchronous processing and increases efficiency through conditional branching for middleware components.
