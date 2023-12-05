@@ -7,11 +7,12 @@ draft: false
 comments: true
 toc: true
 showToc: true
+TocOpen: true
 
 description: ""
 
 cover:
-    image: "cover.png"
+    image: "images/kpack.png"
     relative: true
 
 images:
@@ -22,79 +23,166 @@ tags:
   - "post"
 ---
 
+# Kpack - Kubernetes native Buildpacks
 
-Kpack is a Kubernetes-native build service that utilizes [Cloud Native Buildpacks]({{< ref "/blog/kubernetes/cloudnativebuildpacks" >}}) to transform application source code into OCI compliant container images. It is designed specifically for Kubernetes, offering seamless integration and leveraging Kubernetes' features like scalability and resource management. Kpack is particularly suited for organizations adopting cloud-native practices and looking to streamline their CI/CD pipelines.
+Kpack is a Kubernetes-native build service that utilizes [Cloud Native Buildpacks]({{< ref "/blog/kubernetes/cloudnativebuildpacks" >}}) to transform application source code into OCI compliant container images. Kpack extends Kubernetes by creating new custom resources that implement CNB concepts for image configuration, builders, buildpacks and others. These CRDs allow users to define and manage Kpack resources using the kubernetes native declarative api. It fits seamlessly into the Kubernetes ecosystem, making it easier to integrate with existing Kubernetes-based workflows and tools.
 
-Kpack offers several significant benefits for developing modern applications. It automates the image building process, which is essential for CI/CD pipelines. It automatically rebuilds images when it detects changes in the source code. It also automatically rebuilds when it detects changes to the base images or buildpacks, which is crucial for maintaining up-to-date and secure images. KPack uses Cloud Native Buildpacks to standardize builds. This ensures consistency in how applications are built and container images are created, leading to fewer "it works on my machine" problems. It detects changes in source code or buildpacks and triggers rebuilds, reducing manual intervention. Kpack provides automated [builder]({{< ref "/blog/kubernetes/cloudnativebuildpacks#buildpacks" >}})updates which help in keeping applications secure. It ensures that the latest patches and updates are included in the base images, mitigating vulnerabilities. 
+Kpack offers several significant benefits for developing modern applications. It automates the image building process, which is essential for CI/CD pipelines. It automatically rebuilds images when it detects changes in the source code reducing manual intervention. It also automatically rebuilds images when it detects changes to the base images or buildpacks, which ensures images are up-to-date and secure. Kpack provides automated [builder]({{< ref "/blog/kubernetes/cloudnativebuildpacks#buildpacks" >}}) updates. It ensures that the latest patches and updates are included in the base images, mitigating vulnerabilities. 
 
-Kpack can efficiently scale as per the demands of the build process, utilizing Kubernetes' capabilities for resource management. It fits seamlessly into the Kubernetes ecosystem, making it easier to integrate with existing Kubernetes-based workflows and tools. Kpack optimizes the process of building images by caching layers and reusing them across builds, speeding up the build process and reducing resource consumption.
 
 # Kpack components and architecture
 
-Kpack's architecture is designed to leverage Kubernetes features and resources, integrating seamlessly into a Kubernetes environment. Its main components include:
+Kpack's architecture is designed to leverage Kubernetes features and resources, integrating seamlessly into a Kubernetes environment. It defines custom resources that implement concepts from cloud native buildpacks.
 
- - Source Providers: These are integrations with source code repositories (like GitHub, GitLab, etc.) where Kpack watches for changes in the codebase.
+## ClusterStack 
 
- - Builders: Builders in Kpack are responsible for providing the necessary buildpacks and stack (base OS images) to build the application images. Builders are updated automatically to ensure security and efficiency.
+The ClusterStack is a custom resource that provides the build and runtime base images used in the process of building container images. It can be considered as the kpack implementation of the [CNB stack](https://pradeepl.com/blog/kubernetes/cloudnativebuildpacks/#stack).
 
- - Image Configuration: This defines the source code location and the builder to be used. It also specifies where the built image should be pushed, like a Docker registry.
+It consists of two essential components: 
+1. Build image - This is the base image used during the build phase. It contains the build-time dependencies and environment needed to compile or prepare your application. For example, for a Java application, the build image might contain the JDK and build tools like Maven or Gradle. 
+2. Run image. This is the base image used for the runtime environment of your application. It is leaner than the build image and contains only the runtime dependencies. For instance, for a Java application, the run image might only contain the JRE.
 
- - Builds and Rebuilds: Kpack automatically triggers new builds when it detects changes in the source code or updates to the builders. This ensures that the container images are always up-to-date with the latest code and dependencies.
+```yaml
+apiVersion: kpack.io/v1alpha2
+kind: ClusterStack
+metadata:
+  name: base
+spec:
+  id: "io.buildpacks.stacks.jammy"
+  buildImage:
+    image: "paketobuildpacks/build-jammy-base"
+  runImage:
+    image: "paketobuildpacks/run-jammy-base"
+```
 
- - Custom Resource Definitions (CRDs): Kpack extends Kubernetes by adding new CRDs for image configuration, builders, and other settings. These CRDs allow users to define and manage Kpack resources using familiar Kubernetes tools and commands.
+## ClusterBuilder
 
- - Lifecycle: This is a collection of stages that each build goes through in Kpack, including detection (determining which buildpacks to use), analysis (assessing the previous build for optimizations), build (executing buildpacks), and export (creating the final image).
+A ClusterBuilder is a custom resource that specifies the set of buildpacks and the stack to be used for building container images across the Kubernetes cluster. It combines buildpacks and stacks to define how source code should be built into container images. It allows for flexible and consistent image building strategies, ensuring that applications are built efficiently and securely.
 
- 1. ClusterStack
-Definition: A ClusterStack in Kpack is a resource that defines a stack to be used for builds within the cluster. It consists of two essential images: a build image (used during the build process) and a run image (used as the base for the final application image).
-Function: The ClusterStack provides the underlying operating system layers for container images built by Kpack. These layers are updated independently of the application code, ensuring that the OS remains secure and up-to-date.
-Relationships:
-Works in conjunction with ClusterBuilders to create executable images.
-The run image of a ClusterStack becomes the base for the final container image that is produced by the build process.
-2. ClusterBuilder
-Definition: A ClusterBuilder is a Kpack resource that provides information about which buildpacks are available for building images. It's a global resource, meaning it's available across the entire Kubernetes cluster.
-Function: ClusterBuilders define the buildpacks and the order in which they should be tried during the build process. They also reference a specific ClusterStack, ensuring that the buildpacks are compatible with the OS layers provided.
-Relationships:
-Tightly linked with ClusterStacks as they define which stack to use during the build.
-Used by the Kpack image resource to determine how to build the application image.
-3. Builder and Custom Builders
-Builder: A Builder in Kpack is a namespaced resource, similar to a ClusterBuilder but scoped to a specific namespace.
-Custom Builders: These are specialized builders that can be created to suit specific needs or configurations within a namespace.
-4. Image Resource
-Definition: The Image resource in Kpack represents an application and its source code repository. It defines how the application image should be built and where it should be stored.
-Function: When an Image resource is created or updated, Kpack triggers a build process using the defined builder and source code. The result is a container image built according to the specifications.
-Relationships:
-Utilizes the Builder or ClusterBuilder for the build process.
-Relies on the Stack defined in the Builder/ClusterBuilder for its base layers.
-5. Source Providers
-Role: These are integrations with version control systems like GitHub, GitLab, etc., where the source code is hosted.
-Function: Kpack monitors these source providers for changes in the code, triggering rebuilds of the associated Image resources when updates are detected.
-6. Builds
-Automated Builds: Kpack automatically initiates builds when it detects changes in the source code repository or updates to the stack or buildpacks.
-Caching and Optimization: Kpack caches layers from previous builds to optimize resource usage and speed up subsequent builds.
-7. Kpack's Role in CI/CD
-Continuous Integration: Kpack fits into the CI pipeline by automating the process of building container images whenever there's a change in the source code.
-Continuous Deployment: The images built by Kpack can be seamlessly deployed into Kubernetes, aligning with continuous deployment practices.
+A ClusterBuilder consists of:
 
+1. Stack: The ClusterBuilder references a ClusterStack, which provides the base OS images (build and run images) used during the build process. The stack ensures that your applications are built and run on consistent and controlled OS layers.
+
+2. Store: The ClusterBuilder also references a ClusterStore, which contains buildpacks. Buildpacks are modular components that provide framework and runtime support for your applications. For example, there might be buildpacks for Dotnet, Java, Node.js, Python, etc.
+
+3. Order of Buildpacks: The ClusterBuilder defines the order in which buildpacks should be tried during the build process. It allows specifying a sequence of buildpack groups, enabling the creation of custom build strategies.
+
+An example clusterbuilder definition is below
+
+```yaml
+apiVersion: kpack.io/v1alpha2
+kind: Builder
+metadata:
+  name: my-builder
+  namespace: default
+spec:
+  serviceAccountName: kpack-service-account
+  tag: pradeepl/my-builders:latest
+  stack:
+    name: base
+    kind: ClusterStack
+  store:
+    name: default
+    kind: ClusterStore
+  order:
+  - group:
+    - id: paketo-buildpacks/dotnet-core
+  - group:
+    - id: paketo-buildpacks/java
+  - group:
+    - id: paketo-buildpacks/nodejs
+```
+## ClusterStore
+
+ClusterStore is a custom resource that holds a collection of buildpacks used by Kpack to build container images. It provides a centralized and scalable way to manage buildpacks in a Kubernetes cluster. By decoupling buildpack management from individual builders, Kpack allows for greater flexibility and easier maintenance of the buildpacks used across different projects and teams in the cluster.
+
+An example clusterstore definition is below
+
+```yaml
+apiVersion: kpack.io/v1alpha2
+kind: ClusterStore
+metadata:
+  name: default
+spec:
+  sources:
+  - image: gcr.io/paketo-buildpacks/dotnet-core
+  - image: gcr.io/paketo-buildpacks/java
+  - image: gcr.io/paketo-buildpacks/nodejs
+```
+
+## Image
+
+An Image is a custom resource that represents the container image to be built from source code. It defines how to build your application from source, which builder to use, and where to push the resulting container image. 
+
+The Image resource typically includes the following key components:
+
+1. Source Code Location: Specifies where the source code for the image is located, usually a Git repository. It includes details like the repository URL and the specific branch or commit to build from.
+
+2. Builder: Refers to a Builder or ClusterBuilder resource that should be used to build the image. The builder includes the stack (base images) and buildpacks necessary for building the application.
+
+3. Tag: Defines the registry location (repository name and tag) where the built image will be pushed. This could be a Docker Hub repository, Google Container Registry, or any other container image registry.
+
+4. Service Account: Specifies the Kubernetes service account that has the necessary credentials to access the source code repository and image registry.
+
+5. Build Configuration: Additional build configuration settings, like environment variables, can be specified to customize the build process.
+
+A sample image definition is below
+
+```yaml
+apiVersion: kpack.io/v1alpha2
+kind: Image
+metadata:
+  name: sample-image
+  namespace: default
+spec:
+  tag: pradeepl/myapp
+  serviceAccountName: kpack-service-account
+  builder:
+    name: my-builder
+    kind: Builder
+  source:
+    git:
+      url: https://github.com/PradeepLoganathan/AccuWeather
+      revision: 96976f0f4d9b5fceda838fb55c3235961dae4e6c
+  syncPeriod: 30m
+```
+
+## Component relationship
+
+The below diagram summarizes the relationship between the various kpack components
 
 {{< mermaid >}}
-graph TB
-    CS[ClusterStack] -->|Defines OS layers| CB[ClusterBuilder]
-    CB -->|References Stack| B[Builder]
-    CB -->|References Stack| CUB[Custom Builders]
-    B -->|Used by| IR[Image Resource]
-    CUB -->|Used by| IR
-    SP[Source Providers] -->|Trigger Builds| IR
-    IR -->|Triggers| AB[Automated Builds]
-    AB -->|Results in| CI[Container Image]
-
-    classDef default fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef k8s fill:#bbf,stroke:#f66,stroke-width:2px,stroke-dasharray: 5, 5;
-    class CS,CB,B,CUB,IR,AB,CI default;
-    class SP k8s;
-
+graph TD
+  CS[ClusterStack] -->|Defines OS layers| CB[ClusterBuilder]
+  Store[ClusterStore] -->|Provides Buildpacks| CB
+  CB -->|Used by| IR[Image]
+  Repo[Source Code Repository] -->|Source for| IR
+  IR -->|Image pushed to| Registry[Container Registry]
 {{< /mermaid >}}
 
- # Conclusion
+# Installing Kpack
 
- In conclusion, Kpack stands out as an effective tool for automated, consistent, and secure container image builds in Kubernetes environments. Its deep integration with Cloud Native Buildpacks and Kubernetes makes it a valuable asset in modern cloud-native development, especially for organizations looking to enhance their CI/CD practices. In Kpack's architecture, each component plays a vital role in streamlining the process of building and managing container images in a Kubernetes environment. The interaction between ClusterStacks, ClusterBuilders, Image resources, and Source Providers creates an automated, efficient, and scalable system for container image creation and maintenance. This architecture not only facilitates consistent and secure image builds but also integrates smoothly with broader CI/CD workflows, making it a valuable tool in modern cloud-native development.
+Kpack can be installed on any kubernetes cluster. To install kpack, download the latest Kpack release YAML from the [Kpack GitHub Releases page](https://github.com/pivotal/kpack/releases). Once you have the YAML file, apply it to your cluster ```kubectl apply -f <path-to-kpack-release.yaml>```. You can verify the installation by ensuring that the kpack pods are running successfully in the cluster using ```kubectl get pods -n kpack``` 
+
+To install the Kpack CLI, known as kp, you can download the latest binary from the [Kpack Cli GitHub Releases page](https://github.com/buildpacks-community/kpack-cli/releases) and install it on your system. You can verify the install by using ```kp version``` command.
+
+# Building an image with Kpack
+
+The code for this is available on my github [here](https://github.com/PradeepLoganathan/KpackKata).
+
+Now that we have installed Kpack on a kubernetes cluster, we can create the necessary custom resources such as clusterbuilder, clusterstack , clusterstore and image. Before creating these components we need to create a secret for registry access to be able to store our images and if using a private repository another secret to be able to pull code from the private code repository. You can create a secret as below
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-credentials
+  namespace: default
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: <BASE64_ENCODED_DOCKER_CONFIG>
+```
+
+# Conclusion
+
+In conclusion, Kpack stands out as an effective tool for automated, consistent, and secure container image builds in Kubernetes environments. Its deep integration with Cloud Native Buildpacks and Kubernetes makes it a valuable asset in modern cloud-native development, especially for organizations looking to enhance their CI/CD practices. In Kpack's architecture, each component plays a vital role in streamlining the process of building and managing container images in a Kubernetes environment. The interaction between ClusterStacks, ClusterBuilders, Image resources, and Source Providers creates an automated, efficient, and scalable system for container image creation and maintenance. This architecture not only facilitates consistent and secure image builds but also integrates smoothly with broader CI/CD workflows, making it a valuable tool in modern cloud-native development.
