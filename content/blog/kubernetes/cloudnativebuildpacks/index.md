@@ -18,10 +18,7 @@ cover:
     alt: "Cloud native buildpacks"
     caption: "Cloud native buildpacks"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Suggest Changes" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 Container images are a popular and standard format to package applications. Container images bundle a program and its dependencies into a single artifact under a root filesystem. Container images are created according to the [Container Image Format (CIF)](https://github.com/opencontainers/image-spec/blob/main/spec.md) specification created by the Open Container Initiative (OCI). CIF is the container image format used by Docker, Kubernetes, and other container orchestration platforms.

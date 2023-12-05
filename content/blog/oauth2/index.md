@@ -13,10 +13,7 @@ ShowToc: true
 TocOpen: false
 images:
 cover:
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 In todays digital world users expect applications to work with each other seamlessly. They may want to post a picture from the camera application on their mobile phone to a social media website, tweet about a product purchased on amazon to their twitter timeline or import their facebook contacts into linkedin. Users expect these applications to interact seamlessly and share information securely. They expect to be in control of information that is shared and to be able to revoke permissions if necessary. OAuth is not the first attempt at simplifying identity and authorization or using claims based authorization. Frameworks such as WS-Federation and SAML have also provided functionality for the same but OAuth has seen wider adoption. OAuth 2.0 is already the de facto standard for authorization and is supported by leading organizations including Facebook, Google, Microsoft, PayPal, Instagram, Foursquare, and many others.
 

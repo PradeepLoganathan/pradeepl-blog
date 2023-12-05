@@ -22,10 +22,7 @@ cover:
     alt: "Kappa Architecture"
     caption: "Kappa Architecture"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Suggest changes" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 In our [previous blog post]({{< ref "/blog/lambda-architecture">}}), we learned about Lambda architecture, a data processing architecture that combines batch processing with real-time/stream processing. We also identified the pros and cons of this architecture.

@@ -24,10 +24,6 @@ cover:
     alt: "Principles of Cloud Native design - 12 Factor apps"
     caption: "Principles of Cloud Native design - 12 Factor apps"
     relative: true
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
 ---
 
 ## Cloud Native architecture

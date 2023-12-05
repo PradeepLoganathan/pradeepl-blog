@@ -24,10 +24,7 @@ cover:
     alt: "Building a successful API - Understanding the Open api specification (OAS)"
     caption: "Building a successful API - Understanding the Open api specification (OAS)"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 APIs form the building blocks of a connected digital world, enabling applications to collaborate, data to flow seamlessly, and innovation to flourish. In todays digital landscape, Application Programming Interfaces (APIs) serve as the connective tissue that empowers diverse software systems to interact and collaborate seamlessly.  The key to building a successful API is to allow developers and consumers understand the functionality offered by the API in a standard, consistent and easy way. Building an amazing API providing key functionality is challenging. Lowering the barriers to allow for easy consumption of the API is key to ensure that consumers can be easily onboarded to consume the API. Well-structured API documentation eliminates confusion, reduces the learning curve, and accelerates the adoption of your API. Developers should be able to understand how to authenticate, make requests, handle responses, and troubleshoot potential issues effortlessly. By investing in thorough and comprehensible API documentation, you not only empower your users but also establish a solid foundation for building strong developer relationships and driving the success of your API in the competitive digital landscape.

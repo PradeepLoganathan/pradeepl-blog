@@ -27,10 +27,7 @@ tags:
   - "kind"
   - "serverless"
 
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 
 ---
 > The code for this blog post is on github [here.](https://github.com/PradeepLoganathan/install-knative-on-kind-with-kourier)

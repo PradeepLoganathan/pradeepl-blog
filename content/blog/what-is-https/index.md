@@ -26,10 +26,7 @@ cover:
     alt: "What is HTTPS?"
     caption: "What is HTTPS?"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 [HTTP](https://pradeepl.com/blog/what-is-http2/)(Hypertext transfer protocol) is a network protocol used to serve up web pages. HTTPS, or HTTP Secure, was designed to secure communications between a client and the HTTP server. It is a protocol that uses a secure connection to transfer data over the internet. This protocol encrypts HTTP traffic before sending it out on the network. Early versions of HTTPS used a protocol called Secure Socket Layer (SSL) to encrypt the HTTP traffic. Versions 1, 2, and 3 of SSL were discovered to have security flaws. The replacement of SSL 3 was a new protocol called Transport Layer Security (TLS). TLS 1.0 and 1.1 have also been found to have flaws. TLS 1.2 or TLS 1.3 fixed these flaws and should be used, except when legacy systems require the use of older protocols for backward compatibility.

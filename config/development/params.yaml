@@ -1,23 +1,55 @@
 env: development
 title: Pradeep Loganathan's Blog
 description: 'My technical notes and thoughts on software engineering, programming, and life.'
+keywords:
+  - Pradeep Loganathan
+  - kubernetes
+  - Devops
+  - GitOps
+  - ArgoCD
+  - FluxCD
 author: Pradeep Loganathan
 comments: true
 images:
   - Pradeep-Loganathan.jpeg
+
 DateFormat: 'January 2, 2006'
 timeFormat: 'h:mm a'
 dateTimeFormat: 'MMMM Do, YYYY h:mm a'
-language: en
+language: en-us
+languageCode: en-us
+mainSections:
+  - posts
+  - episodes
+podcast:
+  description: Software engineering podcast - description
+  tagline: Software engineering podcast - tagline
+  download_url: https://cdn.pradeepl.com/episodes/
+  cdn_url: https://cdn.pradeepl.com/
+  itunes_url: https://podcasts.apple.com/us/podcast/cloud-native-engineering/id1620074933
+  itunes_id: null
+  google_podcasts_url: null
 editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
+  URL: https://github.com/PradeepLoganathan/pradeepl-blog/tree/main/content
+  Text: "Suggest changes" # edit text
   appendFilePath: true # to append file path to Edit link
+
 ShowFullTextinRSS: true
+
 header:
   title: 'Pradeep Loganathan'
   imageUrl: 'Pradeep-Loganathan.jpeg'
   subtitle: 'cc'
+
+label:
+  text: Pradeep Loganathan
+  icon: Pradeep-Loganathan.jpeg
+  iconHeight: 34
+  iconWidth: 245
+  smallIcon: Pradeep-Loganathan.jpeg
+  smallIconHeight: 65
+  smallIconWidth: 65
+
 ShowShareButtons: true
 ShowReadingTime: true
 ShowAuthor: true
@@ -29,17 +61,22 @@ ShowPostNavLinks: true
 ShowCodeCopyButtons: true
 hideFooter: true
 ShowRssButtonInSectionTermList: true
+
 taxonomies:
   category: categories
   tag: tags
   series: series
   course: course
   episode: episodes
+
 homeInfoParams:
     Title: "Hi there \U0001F44B"
     Content: Welcome to my blog.
    
-socialIcons: # optional
+subscribeInfo:
+    Text: If you liked this post, check out my other [Featured Posts](/categories/featured) or learn more [About Me](/about).
+
+socialIcons:
   - name: "twitter"
     url: "https://twitter.com/pradeepl"
   - name: "facebook"
@@ -50,8 +87,14 @@ socialIcons: # optional
     url: "https://github.com/pradeeploganathan"
   - name: stackoverflow
     url: "https://stackoverflow.com"
+  - name: rss
+    url: /index.xml
+ 
+cover:
+  hidden: false # hide everywhere but not in structured data
+  hiddenInList: false # hide on list pages and home
+  hiddenInSingle: false # hide on single page
 
-  
 fuseOpts:
   isCaseSensitive: false
   shouldSort: true
@@ -74,6 +117,7 @@ profileMode:
       url: /blog
     - name: Podcast
       url: /episodes
+
 giscus:
   repo: PradeepLoganathan/pradeepl-blog
   repoID: R_kgDOGrc4sA

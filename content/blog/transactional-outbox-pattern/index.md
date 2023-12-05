@@ -34,10 +34,7 @@ tags:
   - "pattern"
   - "transactions"
 
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Suggest changes" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 Services/software components often needs to publish messages or events as part of a transaction that updates the database. For instance, Integration events such as Order created, Customer created etc need to be published to external domains which maybe interested in these events. Both the database update and the sending of the message must happen within a transaction. A service might update the database and then crash, for example, before sending the message. If the service doesn’t perform these two operations atomically, a failure could leave the system in an inconsistent state.
