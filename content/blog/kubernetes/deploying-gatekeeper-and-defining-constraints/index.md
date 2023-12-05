@@ -25,10 +25,7 @@ cover:
     alt: "Deploying gatekeeper to a kubernetes cluster and defining constraints"
     caption: "Deploying gatekeeper to a kubernetes cluster and defining constraints"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 This blog post is a follow up to my [previous post]({{< ref "/blog/kubernetes/kubernetes-gatekeeper-an-introduction">}}) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster. We can deploy Gatekeeper to any kubernetes cluster on cloud providers or on premises. For this blog post , I am using Kind to create a cluster locally.

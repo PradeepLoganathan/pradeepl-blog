@@ -21,10 +21,6 @@ cover:
     alt: "Getting started with GraphQL"
     caption: "Getting started with GraphQL"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
 ---
 
 GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification. It is also a runtime designed for fulfilling these queries. [REST APIs](https://pradeepl.com/blog/rest/identifying-resources-and-designing-representations/), adhere to the requirements dictated by the server in the form of an API contract, GraphQL APIs respond to client queries with a response that adheres to the shape of the query specified by the client. GraphQL service is transport agnostic but is typically served over HTTP.

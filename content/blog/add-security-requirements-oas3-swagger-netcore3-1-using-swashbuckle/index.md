@@ -27,10 +27,6 @@ cover:
     alt: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
     caption: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
 ---
 
 ## OpenAPI Security Schemes

@@ -34,10 +34,7 @@ categories:
   - platformengineering
   - softwaresupplychains
 
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Suggest changes" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 

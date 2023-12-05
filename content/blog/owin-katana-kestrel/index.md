@@ -27,10 +27,7 @@ cover:
     alt: "OWIN, Katana and Kestrel"
     caption: "OWIN, Katana and Kestrel"
     relative: true
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 

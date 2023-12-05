@@ -20,10 +20,7 @@ cover:
     alt: "Platform engineering with Backstage"
     caption: "Platform engineering with Backstage"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 ## Internal Developer Platforms (IDP)

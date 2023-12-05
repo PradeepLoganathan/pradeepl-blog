@@ -22,10 +22,7 @@ cover:
     alt: "Lambda Architecture"
     caption: "Lambda Architecture"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Suggest changes" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 Data engineering is the process of designing, building, and maintaining data pipelines that can handle large volumes of data efficiently and effectively. Data engineers face many challenges in dealing with big data, such as scalability, fault tolerance, latency, and complexity. Traditionally, big data processing has been done using a batch processing system where data is processed in large batches at regular intervals. Batch processing is well-suited for data processing tasks that do not require real-time processing, such as running periodic reports or updating databases. The delay between data collection and processing is not critical, and the processing time can be scheduled during off-peak hours. However, this approach has its limitations, especially when it comes to processing real-time data. This is where lambda architecture comes in. One of the solutions that can be used to address these challenges is the Lambda Architecture, a data processing architecture that combines batch and stream processing methods to provide a comprehensive and robust data pipeline for big data scenarios.

@@ -17,10 +17,7 @@ tags:
   - "supply chain security"
   - "devops sydney"
 
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 I had the pleasure of presenting a talk at the Devops Sydney meetup group. The session was recorded and is here {{< youtube id="PWF0oVKcByQ" autoplay="false" color="white" modestbranding="true">}}

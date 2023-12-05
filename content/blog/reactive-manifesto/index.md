@@ -24,10 +24,7 @@ cover:
     alt: "Reactive Manifesto"
     caption: "Reactive Manifesto"
     relative: true
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 ## Cloud Native architecture

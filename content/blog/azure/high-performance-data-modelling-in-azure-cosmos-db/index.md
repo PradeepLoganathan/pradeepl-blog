@@ -21,10 +21,7 @@ cover:
     alt: "High performance Data modelling in Azure Cosmos Db"
     caption: "High performance Data modelling in Azure Cosmos Db"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 Cosmos DB is an extremely powerful cloud native database. It is imperative to understand core concepts involved in modelling data in Cosmos Db to harness its power. Unlike relational databases Cosmos Db provides a lot of flexibility in modelling schema. The two primary knobs to tune performance are latency and throughput. Cosmos Db uses partitions to provide massive scalability and high performance. It is key to understand the concepts of throughput, partitioning and choosing partition keys to be able to model schema effectively.

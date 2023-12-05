@@ -23,10 +23,7 @@ cover:
     alt: "Using Cluster Api to Create Kubernetes Clusters on Azure"
     caption: "Using Cluster Api to Create Kubernetes Clusters on Azure"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 Cluster API (CAPI) allows for the creation, configuration, upgrade, downgrade, and teardown of Kubernetes clusters and their components. If you would like to understand Cluster API and how it enables cluster creation across multiple infrastructure providers, please read my blog post [here]({{< ref "/blog/kubernetes/kubernetes-cluster-api-capi-an-introduction" >}}). In this post let’s look at using CAPI to deploy a Kubernetes cluster in Azure. The end goal is to create a Kubernetes cluster in Azure with three control plane nodes and three worker nodes.

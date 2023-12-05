@@ -22,10 +22,7 @@ cover:
     alt: "REST constraints"
     caption: "REST constraints"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 REST as defined in [Roy T Fielding's thesis](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm) defines **_six architectural constraints_** which make any web service – a truly RESTful API. These are also called as Fielding's constraints. They generalize the Web’s architectural principles and represent them as a framework of constraints or an architectural style. The REST constraints are

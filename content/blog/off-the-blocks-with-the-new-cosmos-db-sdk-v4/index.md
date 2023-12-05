@@ -21,10 +21,7 @@ cover:
     alt: "Off the blocks with the new Cosmos Db SDK-V4"
     caption: "Off the blocks with the new Cosmos Db SDK-V4"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 ### Creating Cosmos Db Infrastructure

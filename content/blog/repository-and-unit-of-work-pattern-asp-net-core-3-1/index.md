@@ -24,10 +24,7 @@ cover:
     alt: "Repository and Unit of work pattern in ASP.net core"
     caption: "Repository and Unit of work pattern in ASP.net core"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 ### Source Code

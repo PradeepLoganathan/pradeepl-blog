@@ -8,10 +8,12 @@ keywords:
   - GitOps
   - ArgoCD
   - FluxCD
+
 author: Pradeep Loganathan
 comments: true
 images:
   - Pradeep-Loganathan.jpeg
+  
 DateFormat: January 2, 2006
 timeFormat: h:mm a
 dateTimeFormat: MMMM Do, YYYY h:mm a
@@ -28,14 +30,17 @@ podcast:
   itunes_url: https://podcasts.apple.com/us/podcast/cloud-native-engineering/id1620074933
   itunes_id: null
   google_podcasts_url: null
+
 editPost:
   URL: https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content
-  Text: Edit this post on github
+  Text: "Suggest changes"
   appendFilePath: true
+
 header:
   title: Pradeep Loganathan
   imageUrl: Pradeep-Loganathan.jpeg
   subtitle: cc
+
 label:
   text: Pradeep Loganathan
   icon: Pradeep-Loganathan.jpeg
@@ -44,6 +49,7 @@ label:
   smallIcon: Pradeep-Loganathan.jpeg
   smallIconHeight: 65
   smallIconWidth: 65
+
 ShowShareButtons: true
 ShowReadingTime: true
 ShowAuthor: true
@@ -56,17 +62,20 @@ ShowCodeCopyButtons: true
 hideFooter: true
 ShowRssButtonInSectionTermList: true
 ShowFullTextinRSS: true
+
 taxonomies:
   category: categories
   tag: tags
   series: series
   course: course
   episode: episodes
+
 homeInfoParams:
   Title: Hi there 👋
   Content: Welcome to my blog.
   subscribeInfo:
     Text: If you liked this post, check out my other [Featured Posts](/categories/featured) or learn more [About Me](/about).
+
 socialIcons:
   - name: twitter
     url: https://twitter.com/pradeepl
@@ -80,6 +89,7 @@ socialIcons:
     url: https://stackoverflow.com/users/4613054/pradeepl
   - name: rss
     url: /index.xml
+
 fuseOpts:
   isCaseSensitive: false
   shouldSort: true
@@ -92,6 +102,7 @@ fuseOpts:
     - permalink
     - summary
     - content
+
 profileMode:
   enabled: true
   title: Notes from my journey designing and building amazing systems with amazing teams
@@ -101,10 +112,11 @@ profileMode:
   imageWidth: 120
   imageHeight: 120
   buttons:
-    - name: Subscribe
-      url: /index.xml
+    - name: Blog
+      url: /blog
     - name: Podcast
-      url: /episodes/index.xml
+      url: /episodes
+
 giscus:
   repo: PradeepLoganathan/pradeepl-blog
   repoID: R_kgDOGrc4sA

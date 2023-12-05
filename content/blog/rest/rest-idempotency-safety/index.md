@@ -21,10 +21,7 @@ cover:
     image: "images/rest-idempotency-safety.png"
     alt: "Rest - Idempotency and Safety"
     caption: "Rest - Idempotency and Safety"
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Suggest changes" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 Implementing HTTP’s uniform interface as discussed in the previous [posts]({{< ref "/blog/rest/rest-communicating-with-verbs-and-status-codes">}}) has a surprisingly good architectural side effect. If it is Implemented as specified in the REST specifications (HTTP specification - RFC 2616), you get two useful properties namely Idempotence and Safety.

@@ -1,22 +1,25 @@
 ---
 title: "{{ replace .Name "-" " " | title }}"
-author: "Pradeep Loganathan"
+lastmod: {{ .Date }}
 date: {{ .Date }}
-
 draft: true
-comments: true
-toc: true
-showToc: true
-
-description: ""
-
-cover:
-    image: "cover.png"
-    relative: true
-
+Author: Pradeep Loganathan
+tags: 
+  - 
+  - 
+  - 
+categories:
+  - 
+#slug: kubernetes/introduction-to-open-policy-agent-opa/
+summary: ""
+ShowToc: true
+TocOpen: false
 images:
-
-
-tags:
-  - "post"
+  - 
+cover:
+    image: "cover.jpg"
+    alt: ""
+    caption: ""
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+ 
 ---

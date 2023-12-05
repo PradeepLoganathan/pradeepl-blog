@@ -29,10 +29,7 @@ cover:
   alt: "Configuration in a .Net Core Console application"
   caption: "Configuration in a .Net Core Console application"
   relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 A .NET core console application is an amazing bare bones application template which lets you quickly test out ideas. At the same time, it can also be used to build a production ready application. Since it is a lightweight application template it does not have functionality such as configuration or dependency injection baked in.

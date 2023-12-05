@@ -22,10 +22,7 @@ cover:
   alt: "Introduction to Kubernetes Admission Controllers"
   caption: "Introduction to Kubernetes Admission Controllers"
   relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "Edit this post on github" # edit text
-  appendFilePath: true # to append file path to Edit link
+ 
 ---
 
 The Kubernetes API server is the gateway to the Kubernetes cluster. The Kubernetes API server implements a RESTful API over HTTP. It performs all API operations and is responsible for storing API objects into a persistent backend store (etcd). All communications and operations between external clients, such as kubectl and the control plane components are translated into RESTful API calls handled by the API server. All interactions between the control plane components also occur through the API server. The API server is stateless and designed to scale horizontally.
