@@ -101,10 +101,10 @@ profileMode:
   imageWidth: 120
   imageHeight: 120
   buttons:
-    - name: Subscribe
-      url: /index.xml
+    - name: Blog
+      url: /blog
     - name: Podcast
-      url: /episodes/index.xml
+      url: /episodes
 giscus:
   repo: PradeepLoganathan/pradeepl-blog
   repoID: R_kgDOGrc4sA

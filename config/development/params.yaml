@@ -26,6 +26,15 @@ ShowTags: true
 ShowCategories: true
 ShowDate: true
 ShowPostNavLinks: true
+ShowCodeCopyButtons: true
+hideFooter: true
+ShowRssButtonInSectionTermList: true
+taxonomies:
+  category: categories
+  tag: tags
+  series: series
+  course: course
+  episode: episodes
 homeInfoParams:
     Title: "Hi there \U0001F44B"
     Content: Welcome to my blog.
@@ -61,7 +70,19 @@ profileMode:
   imageWidth: 140 # custom size
   imageHeight: 140 # custom size
   buttons:
-    - name: feed
-      url: "/index.xml"
-    - name: tags
-      url: "/tags/"
+    - name: Blog
+      url: /blog
+    - name: Podcast
+      url: /episodes
+giscus:
+  repo: PradeepLoganathan/pradeepl-blog
+  repoID: R_kgDOGrc4sA
+  category: BlogPosts
+  categoryID: DIC_kwDOGrc4sM4CRM5A
+  mapping: og:title
+  reactionsEnabled: '1'
+  emitMetadata: '0'
+  inputPosition: bottom
+  theme: preferred_color_scheme
+  lang: en
+  loading: lazy
