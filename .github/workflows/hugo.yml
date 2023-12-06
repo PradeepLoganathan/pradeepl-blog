@@ -1,5 +1,9 @@
 name: Hugo
-on: [push]
+on:
+  push:
+    branches:
+      - main  # Trigger only on push to main branch
+      
 jobs:
 
   build:
