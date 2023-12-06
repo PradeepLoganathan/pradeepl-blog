@@ -1,7 +1,7 @@
 ---
 title: "Kpack"
 author: "Pradeep Loganathan"
-date: 2022-11-16T10:17:38+10:00
+date: 2023-12-06T10:17:38+10:00
 
 draft: false
 comments: true
@@ -20,23 +20,28 @@ images:
 mermaid: true
 
 tags:
-  - "post"
+  - "kpack"
+  - "CI/CD"
+  - "buildpacks"
 ---
+### Source Code
+
+If you wish to follow along with the code used in this post, you can find it [on GitHub here](https://github.com/PradeepLoganathan/KpackKata).
 
 # Kpack - Kubernetes native Buildpacks
 
 Kpack is a Kubernetes-native build service that utilizes [Cloud Native Buildpacks]({{< ref "/blog/kubernetes/cloudnativebuildpacks" >}}) to transform application source code into OCI compliant container images. Kpack extends Kubernetes by creating new custom resources that implement CNB concepts for image configuration, builders, buildpacks and others. These CRDs allow users to define and manage Kpack resources using the kubernetes native declarative api. It fits seamlessly into the Kubernetes ecosystem, making it easier to integrate with existing Kubernetes-based workflows and tools.
 
-Kpack offers several significant benefits for developing modern applications. It automates the image building process, which is essential for CI/CD pipelines. It automatically rebuilds images when it detects changes in the source code reducing manual intervention. It also automatically rebuilds images when it detects changes to the base images or buildpacks, which ensures images are up-to-date and secure. Kpack provides automated [builder]({{< ref "/blog/kubernetes/cloudnativebuildpacks#buildpacks" >}}) updates. It ensures that the latest patches and updates are included in the base images, mitigating vulnerabilities. 
+Kpack offers several significant benefits for developing modern applications. It automates the image building process, which is essential for CI/CD pipelines. It automatically rebuilds images when it detects changes in the source code reducing manual intervention. It also automatically rebuilds images when it detects changes to the base images or buildpacks. This ensures that images are up-to-date and secure. It does this through automated [builder]({{< ref "/blog/kubernetes/cloudnativebuildpacks#buildpacks" >}}) updates. This ensures that the latest patches and updates are included in the base images, thus mitigating any newly identified vulnerabilities. 
 
 
 # Kpack components and architecture
 
-Kpack's architecture is designed to leverage Kubernetes features and resources, integrating seamlessly into a Kubernetes environment. It defines custom resources that implement concepts from cloud native buildpacks.
+Kpack's architecture is designed to leverage Kubernetes features and resources, integrating seamlessly into a Kubernetes environment. It defines custom resource definitions(CRD) that implement cloud native buildpack concepts in kubernetes natively. It also defines custom operators to manage these custom resources. Let us take a look at each of these custom resources and how they are composed to achieve seamless image builds.
 
 ## ClusterStack 
 
-The ClusterStack is a custom resource that provides the build and runtime base images used in the process of building container images. It can be considered as the kpack implementation of the [CNB stack](https://pradeepl.com/blog/kubernetes/cloudnativebuildpacks/#stack).
+The ClusterStack is a custom resource that provides the build and runtime base images used in the process of building container images. It can be considered as the kpack implementation of the [CNB stack]({{< ref "/blog/kubernetes/cloudnativebuildpacks#stack" >}})
 
 It consists of two essential components: 
 1. Build image - This is the base image used during the build phase. It contains the build-time dependencies and environment needed to compile or prepare your application. For example, for a Java application, the build image might contain the JDK and build tools like Maven or Gradle. 
@@ -160,17 +165,25 @@ graph TD
   IR -->|Image pushed to| Registry[Container Registry]
 {{< /mermaid >}}
 
-# Installing Kpack
+The ClusterStack Provides the OS layers for both the build and run environments. The ClusterStore supplies buildpacks that are used in the build process. The ClusterBuilder combines the OS layers from ClusterStack and buildpacks from ClusterStore to define how an application's source code should be built into a container image. The Image resource defines the application's build configuration, including its source, the builder it uses and the container registry where it pushes the built container image.
+
+# Getting started with Kpack
+
+Now that we understand Kpack and its architecture, let us get started by installing kpack and containerizing a dotnet application. We will pull the source code for this application from a public github repository and push the containerized image into a container registry.
+
+## Installing Kpack
 
 Kpack can be installed on any kubernetes cluster. To install kpack, download the latest Kpack release YAML from the [Kpack GitHub Releases page](https://github.com/pivotal/kpack/releases). Once you have the YAML file, apply it to your cluster ```kubectl apply -f <path-to-kpack-release.yaml>```. You can verify the installation by ensuring that the kpack pods are running successfully in the cluster using ```kubectl get pods -n kpack``` 
 
 To install the Kpack CLI, known as kp, you can download the latest binary from the [Kpack Cli GitHub Releases page](https://github.com/buildpacks-community/kpack-cli/releases) and install it on your system. You can verify the install by using ```kp version``` command.
 
-# Building an image with Kpack
+## Building an image with Kpack
 
-The code for this is available on my github [here](https://github.com/PradeepLoganathan/KpackKata).
+The yaml definitions for the next steps are available on my github [here](https://github.com/PradeepLoganathan/KpackKata).
 
-Now that we have installed Kpack on a kubernetes cluster, we can create the necessary custom resources such as clusterbuilder, clusterstack , clusterstore and image. Before creating these components we need to create a secret for registry access to be able to store our images and if using a private repository another secret to be able to pull code from the private code repository. You can create a secret as below
+Now that we have installed Kpack on a kubernetes cluster, we can create the necessary custom resources such as clusterbuilder, clusterstack , clusterstore and image. Before creating these components we need to create a secret for registry access to be able to store our images and if using a private repository another secret to be able to pull code from the private code repository. 
+
+You can create a secret as below
 
 ```yaml
 apiVersion: v1
@@ -182,6 +195,8 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: <BASE64_ENCODED_DOCKER_CONFIG>
 ```
+
+To get <BASE64_ENCODED_DOCKER_CONFIG>, you need to base64 encode your Docker config JSON. Apply this secret ```kubectl apply -f registry-secret.yaml```. We now need to create the ClusterStack resource to provide the base image for build and run environments. I am using ```paketobuildpacks/build-jammy-base``` for the as the base image for the build environment and ```paketobuildpacks/run-jammy-base``` as the base image for the run environment. We can now define the buildpacks that will be used to build the dotnet application by creating the Clusterbuilder.I am creating a clusterbuilder with ```paketo-buildpacks/dotnet-core```, ```paketo-buildpacks/java``` and ```paketo-buildpacks/nodejs``` buildpacks. Now that we have the necessary custom resources, we can define an image resource to build the dotnet application. In this image resource, I provide the git url for the application repository, the builder to use and the tag for the container registry. Once this is applied , it will build the application and create the container image and push it to the container registry.
 
 # Conclusion
 
