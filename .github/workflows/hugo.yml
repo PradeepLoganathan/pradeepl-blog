@@ -29,7 +29,7 @@ jobs:
         run: hugo
 
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+        uses: docker pull w9jds/firebase-action:v12.9.0
         with:
           args: deploy --only hosting
         env:
