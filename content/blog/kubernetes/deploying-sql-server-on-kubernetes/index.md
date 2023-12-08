@@ -256,7 +256,7 @@ The key parts of this deployment manifest are
 
 We are deploying two secondary replicas. The replicas are configured as read only replicas. The deployment is as below.
 
-{{< highlight yaml "linenos=table,hl_lines=10-11 18-19,linenostart=1" >}}
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -322,11 +322,11 @@ spec:
       port: 5022
       targetPort: 5022  
   type: LoadBalancer
-{{< /highlight >}}
+```
 
 The other read-ony replica is deployed as below
 
-{{< highlight yaml "linenos=table,hl_lines=8 15-17,linenostart=1" >}}
+```yaml
 
 apiVersion: apps/v1
 kind: Deployment
@@ -394,7 +394,7 @@ spec:
       targetPort: 5022
   type: LoadBalancer    
 
-{{< /highlight >}}
+```
 
 We have now created 3 instances of SQl Server configured with the necessary storage and security. We have also created a load balancer service to expose the necessary ports and endpoints. We are now ready to configure the deployed SQl Servers to form a read scale availability group.
 
