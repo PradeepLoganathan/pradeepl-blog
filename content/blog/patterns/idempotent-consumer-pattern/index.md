@@ -37,7 +37,7 @@ tags:
 
 ## Introduction
 
-[Event-Driven architecture](https://pradeepl.com/blog/architecture/event-driven-architecture/) is itself a distributed system, a field renowned for being difficult, particularly when things go wrong. The fallacies of distributed computing always lurk around the corner. One of the fallacies is that the network is unreliable. This necessitates planning for retries in case of failures.
+[Event-Driven architecture]({{< ref "/blog/architecture/event-driven-architecture" >}} "Event driven architecture") is itself a distributed system, a field renowned for being difficult, particularly when things go wrong. The fallacies of distributed computing always lurk around the corner. One of the fallacies is that the network is unreliable. This necessitates planning for retries in case of failures.
 
 One issue with this is that retries can result in duplicate processing, and this can cause very real problems. Taking a payment twice from someone’s account will lead to an incorrect balance and an irate user. Processing the same message multiple times can lead to inconsistent data and other errors.
 

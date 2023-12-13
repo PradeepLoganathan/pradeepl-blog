@@ -42,7 +42,7 @@ A widely accepted methodology to build cloud native applications is the 12 facto
 
 ## The Twelve Factors
 
-The twelve-factor app principles are a collection of best practices for building microservices-based cloud-native applications. These applications are modular, scalable, and agile. They are designed to perform at web scale and provide high resiliency. These principles are applied to cloud-native applications and are programming language and platform agnostic. The 12 Factors were published in 2012 by Adam Wiggins, founder of Heroku. It is hosted [here](https://12factor.net/). This methodology presents a thought process on how to develop applications and is complementary to other methodologies and thought processes such as the[reactive manifesto]({{< ref "/blog/reactive-manifesto" >}} "Reactive Manifesto").
+The twelve-factor app principles are a collection of best practices for building microservices-based cloud-native applications. These applications are modular, scalable, and agile. They are designed to perform at web scale and provide high resiliency. These principles are applied to cloud-native applications and are programming language and platform agnostic. The 12 Factors were published in 2012 by Adam Wiggins, founder of Heroku. It is hosted [here](https://12factor.net/). This methodology presents a thought process on how to develop applications and is complementary to other methodologies and thought processes such as the [reactive manifesto]({{< ref "/blog/reactive-manifesto" >}} "Reactive Manifesto").
 
 The 12 factors are
 
