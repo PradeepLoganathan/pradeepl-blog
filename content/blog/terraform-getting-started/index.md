@@ -12,6 +12,9 @@ tags:
   - "infrastructure as code"
   - "terraform"
   - "IaC"
+  - "gitops"
+  - "platformengineering"
+
 summary: Terraform is an open source tool created by HashiCorp to define infrastructure as cod using a simple, declarative language called HCL. Terraform is used to deploy and manage infrastructure across a variety of cloud providers & virtualization platforms. It can be used to deploy infrastructure to all major cloud providers such as Azure, AWS, Digital ocean, and virtualization platforms such as VMware, Open stack, and others.
 ShowToc: true
 TocOpen: true
@@ -365,3 +368,11 @@ To apply this terraform script, we need to follow these steps
  - Create an Execution Plan: Execute ```terraform plan```. This command lets you preview the changes Terraform will make without actually applying them. It's a good practice to review this plan to ensure it aligns with your expected changes.
 
  - Apply the Configuration: Run ```terraform apply```. Terraform will prompt you to confirm before it makes any changes. Once confirmed, Terraform will proceed to create the resources as defined in your script.
+
+ # Next steps
+
+If you're new to the concept of Infrastructure as Code, which forms the foundation for tools like Terraform and practices like GitOps, you might find [my introductory guide on Infrastructure as Code]({{< ref "/blog/infrastructure-as-code">}}) helpful.
+To understand how Terraform can be integrated into a GitOps workflow, enhancing automation and consistency in infrastructure management, check out my detailed post on [GitOps]({{< ref "/blog/gitops">}}) and [Gitops using ArgoCD]({{< ref "/blog/gitops-with-argocd">}}).
+If you are ready to take a leap and start off on something more hands-on, my blog post on [Building a kubernetes cluster on AKS]({{< ref "blog/building-a-secure-and-high-performance-aks-kubernetes-cluster-using-terraform">}}) would be an ideal next stop to build on your knowledge of terraform to provision a kubernetes cluster.
+
+For a deeper dive into Terraform, including practical demonstrations of setting up and managing resources on Azure, check out my detailed walkthroughs and video sessions from my meetups: [Getting Started with Terraform on Azure - Part 1]({{< ref "blog/getting-started-with-terraform-on-azure-part-1" >}}) and [Part 2]({{< ref "blog/getting-started-with-terraform-on-azure-part-2" >}}). These sessions complement the insights shared here, offering a visual and interactive approach to mastering Terraform.

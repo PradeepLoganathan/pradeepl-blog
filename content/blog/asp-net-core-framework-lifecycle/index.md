@@ -27,7 +27,7 @@ cover:
     relative: true
 ---
 
-## Lifecycle
+# Lifecycle
 
 A lifecycle is a series of components, events, and stages that process a request or respond to user interaction. This encompasses how a web application handles incoming requests, processes them, and generates responses. The lifecycle offers extension points and hooks into these components so that you can customize the final output. It provides structure and abstraction that makes building complex applications easier. Understanding the lifecycle is crucial for developers as it provides insight into how the framework processes requests, allowing for better control over the application's behavior, customization, and optimization of performance. 
 
@@ -35,9 +35,11 @@ The concept of a lifecycle that handles incoming requests and generates response
 
 The ASP.NET lifecycle has undergone a major overhaul in .Net core. Prior to ASP.Net core, ASP.NET applications were tightly integrated with Internet Information Server(IIS). It depended on IIS for request handling, lifecycle management, etc. ASP.NET core supports OWIN  and the new generation of applications built with ASP.Net core are highly portable. They can run on non-windows platforms such as Linux, Mac OS or even within Docker containers. This cross-platform reach meant that the dependency on IIS had to be removed. To understand more about the secret sauce that enables this head over to [this post about OWIN, Katana, and Kestrel]({{< ref "/blog/owin-katana-kestrel" >}}). ASP.NET Core has been engineered with dependency injection and a modular HTTP middleware pipeline to facilitate application services.
 
-## Middleware
+# Middleware
 
 Middleware components form the basic building blocks of an ASP.NET core pipeline providing capabilities such as the ability to serve files and route requests. Middleware is a series of components that form the applications request pipeline. Middleware components provide many of the underlying application level infrastructures. Routing, CORS, authentication and caching are implemented using middleware. App-specific middleware can also be written. Each middleware component acts on the request as they come in and on the response as it is sent back. It can choose to act on a request, ignore it or pass it to a specific component. These components are called in the order they are added to the pipeline. ASP.Net Core does not have HTTP Modules and handlers. Previously HTTP modules and handlers provided common services such as caching, authorization, and request handling. Modules provided application level services, they provided a hook into application lifecycle events to author reusable services. Handlers were responsible for generating the response. Module and handler execution were driven by application events whereas middleware exaction is dependent on the order in which they are added to the pipeline. Middleware provides the same results as handlers and modules.  The middleware can also integrate with a larger framework like MVC. While middleware executes in the order in which they are added, httphandlers execute every time the associated application event is fired and httpmodule is executed exactly once to generate a response.
+
+# Configuring the Middleware
 
 In ASP.NET Core, the methods Use, Map, and MapWhen are all used to configure the middleware pipeline, but they serve different purposes and are used in different scenarios. Understanding the distinction between them is key to effectively managing how your application handles incoming HTTP requests.
 
@@ -51,7 +53,7 @@ In ASP.NET Core, the methods Use, Map, and MapWhen are all used to configure the
 
 Let's see each of these in further detail
 
-### Use
+## Use
 
 A middleware can be added to the pipeline using app.Use(). app.Use() adds a requestdelegate to the applications request pipeline. It can be written as an inline delegate or a separate class. This is an extension method and has a delegate taking two parameters. The first parameter is an HTTPContext and the second one is a RequestDelegate. A basic middleware written with Use is below.
 
@@ -89,7 +91,7 @@ This prints the below output
 
 ![Asp.Net core Multiple Middleware](images/multiple-middleware.png "Using Map to add Middleware")
 
-### Map
+## Map
 
 The Map() method adds the capability to branch the middleware pipeline processing. The branching is based on specific request path matches. This method takes two parameters: PathString and the delegate named Configuration. If the path matches the pathString provided, then the components are added to the middleware pipeline. 
 
@@ -132,7 +134,7 @@ This prints the below output when we navigate to the branch1 path. If we do not 
 
 !["Using Map to add multiple middleware branches"](images/multiple-middleware-with-Map.png "Using Map to add multiple middlewares")
 
-### MapWhen
+## MapWhen
 
 MapWhen works like Map() but provides more control over branching based on URL, request headers, query strings, and so on. The MapWhen() method returns Boolean after checking any condition from the HttpContext as a parameter.
 
@@ -148,7 +150,7 @@ app.MapWhen( context => context.Request.Query.ContainsKey("querypath1"), (appbui
 
 ![](images/multiple-middleware-with-MapWhen.png)
 
-### Run()
+## Run()
  
 Run short circuits the pipeline. The Run method is used to add middleware and immediately return a response. It should be added at the end of the middleware since Run() ends the pipeline and won't call anything after itself.
 
@@ -159,13 +161,13 @@ app.Run(async context =>
 });
 ```
  
-## Built-In Middleware
+# Built-In Middleware
  
 Asp.net core has a lot of cross-cutting functionality built in as middleware. These are pre-built and available out of the box with Asp.net Core. Examples of pre-built middleware are Authentication, Routing, Session, Static files etc. 
 
 ![aspnet core middleware](images/aspnetcore-middleware.png)
 
-## Building your own Middleware component
+# Building your own Middleware component
 
 Building your own middleware component in ASP.NET Core involves creating a class that encapsulates the logic you want to execute as part of the request processing pipeline. You can then register this middleware in the application's request pipeline. You can create a middleware class by defining a class with an Invoke or InvokeAsync method that takes HttpContext as a parameter. Dependencies required by the component can be injected through the constructor.
 
@@ -219,7 +221,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 
 By following these steps, you can create custom middleware tailored to your application's specific needs, enabling you to add custom logic to the request handling pipeline of your ASP.NET Core application.
 
-## Setting up the middleware pipeline
+# Setting up the middleware pipeline
  
 Program and startup are the two main classes involved in setup and configuration of the pipeline. Program is a low-level entry point into the application through Main(). Main calls startup which configures all the middleware components. An ASP.NET Core application is a console application hosting a web application. Main creates a webhostbuilder and chains a series of methods to build the application. UseKestrel() sets up the Kestrel web server which is a cross-platform web server. The UseStartup method allows us to specify an application configuration class using a type parameter. This influences details such as how the HTTP pipeline is set up. The build and run methods implement the configuration and startup the application.
 
@@ -282,6 +284,6 @@ app.Run();
 
 This evolution reflects a trend towards more concise and readable codebases.
 
-## Conclusion
+# Conclusion
 
 Using the lifecycle pattern with middleware components in ASP.NET Core offers several advantages that make application development both easier and better in various ways. It enables modular architecture promoting reusability and separation of concerns. It improves maintainability by providing a clear structure and patterns for handling requests and response. It improves performance by enabling asynchronous processing and increases efficiency through conditional branching for middleware components.
