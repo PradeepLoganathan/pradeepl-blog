@@ -26,10 +26,10 @@ jobs:
           extended: false # optional, default is false
 
       - name: Build
-        run: hugo
+        run: hugo --minify
 
       - name: Deploy to Firebase
-        uses: docker pull w9jds/firebase-action:v12.9.0
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
