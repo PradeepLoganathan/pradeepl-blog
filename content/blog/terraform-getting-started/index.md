@@ -14,7 +14,7 @@ tags:
   - "IaC"
 summary: Terraform is an open source tool created by HashiCorp to define infrastructure as cod using a simple, declarative language called HCL. Terraform is used to deploy and manage infrastructure across a variety of cloud providers & virtualization platforms. It can be used to deploy infrastructure to all major cloud providers such as Azure, AWS, Digital ocean, and virtualization platforms such as VMware, Open stack, and others.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - images/terraform-getting-started.png
 cover:
@@ -25,13 +25,17 @@ cover:
  
 ---
 
-## Introduction
+In today's rapidly evolving tech landscape, the concept of Infrastructure as Code (IaC) has revolutionized how we manage and provision infrastructure. As I explored in my [previous post on IaC]({{< ref "/blog/infrastructure-as-code" >}}), this paradigm shift involves managing infrastructure with code-based tools, providing agility, consistency, and repeatability.
 
-Terraform is an open source tool created by HashiCorp to define [infrastructure as code](https://pradeepl.com/blog/infrastructure-as-code/) using a simple, declarative language called HCL. Terraform is used to deploy and manage infrastructure across a variety of cloud providers & virtualization platforms. It can be used to deploy infrastructure to all major cloud providers such as Azure, AWS, Digital ocean, and virtualization platforms such as VMware, Open stack, and others.
+Terraform stands out in this domain. It's not just a tool but a game changer in how we approach infrastructure automation. In this post, we delve into Terraform, a key player in the IaC arena, to understand its mechanics, benefits, and why it's becoming the go-to solution for many DevOps professionals. We'll explore its core components, how it fits into the IaC model, and provide hands-on examples to get you started. Whether you're new to Terraform or looking to deepen your understanding, this post will guide you through its essentials and best practices, building upon the foundations laid in our discussion on IaC.
+
+# Introduction
+
+Terraform is an open source tool created by HashiCorp to define [infrastructure as code]({{< ref "/blog/infrastructure-as-code" >}}) using a simple, declarative language called HashiCorp Configuration Language(HCL), or optionally JSON. Terraform is used to deploy and manage infrastructure across a variety of cloud providers & virtualization platforms. It can be used to deploy infrastructure to all major cloud providers such as Azure, AWS, Digital ocean, and virtualization platforms such as VMware, Open stack, and others.
 
 Terraform code is written in the HashiCorp Configuration Language (HCL) in files with the extension .tf. It is a declarative language, so your program needs to describe the infrastructure you want and Terraform will figure out how to create it. Using Terraform, we can create, configure, or delete resources. Terraform allows automatic resource provisioning by building dependency graphs. Compared to low-level REST APIs, scripting languages and SDKs, Terraform has a clean, high-level API. The state of your infrastructure is described, stored, versioned, and shared.
 
-## Installing Terraform
+# Installing Terraform
 
 Terraform is remarkably simple to get started with on any platform. To install Terraform on windows simply head over to the terraform downloads page [here](https://www.terraform.io/downloads.html) and download the zip file. Extract the binary to a folder. Add the folder to the path environment variable so that you can execute it from anywhere on the command line. If you use chocolatey then use the below command
 
@@ -44,16 +48,17 @@ On macOS we can use homebrew to install terraform using the below command
 ```shell
 brew install terraform
 ```
+Confirm your installation by opening your command line or terminal and typing ```terraform -v```. You should see the installed version of Terraform displayed.
 
-## Terraform Components
+# Terraform Components
 
-Before starting off on terraform it is essential to understand the basic building blocks needed to create a terraform script to provision and deploy resources.
+Before starting off on terraform it is essential to understand the basic building blocks needed to create terraform based automation to provision and deploy resources.
 
-### Provider
+## Providers
 
-The provider is the connector to the underlying infrastructure you want to manage such as AWS, Azure, or a variety of other Cloud, network, storage, and SaaS services. A provider is responsible for understanding the API interactions and exposing the resources for the chosen platform. This is how your declarative code will interact with the management API of whichever platform you are building on. They provide configuration like connection details and authentication credentials. They provide the abstraction layer between Terraform’s configuration language and the management of resources within the service itself. Providers are not shipped with Terraform. To download the necessary providers, we need to run the terraform init command which installs any required providers. The provider block must be declared in code, though it can have varying degrees of configuration. A single set of configuration files/deployment can use more than a single provider.
+The provider is the connector to the underlying cloud or infrastructure service that you want to manage such as AWS, Azure, or other on-premises services. A provider is responsible for understanding the API interactions and exposing the resources for the chosen platform. Each provider offers a unique set of resources and data sources that you can use to manage that service's infrastructure components. For example, the AWS provider allows you to manage AWS resources like EC2 instances, S3 buckets, etc. This is how your declarative code will interact with the management API of whichever platform you are building on. They provide the abstraction layer between Terraform’s configuration language and the management of resources within the service itself. Providers are not shipped with Terraform. To download the necessary providers, we need to run the terraform init command which installs any required providers. To use a provider, you must declare it in your Terraform configuration, often specifying necessary details like version and region. This declaration allows Terraform to interact with the respective service's API, thus enabling the creation, management, and updating of resources under that provider.A single set of configuration files/deployment can use more than a single provider.
 
-To connect to AWS we need to use the below provider code
+To connect to AWS using the AWS provider, we need to use the below code
 
 ```terraform
 provider "aws" { 
@@ -104,11 +109,11 @@ We can now export these to setup the terraform environment variables as below
 
 A full list of the available providers is on the terraform website [here](https://www.terraform.io/docs/providers/index.html).
 
-### Resources
+## Resources
 
-Resources are the basic building blocks in a Terraform-defined deployment. Resources correspond to several kinds of provider-based resources. Resources represent the infrastructure components you want to manage - VNets, VPC's, networks, firewalls, DNS entries, etc. The parameters of a resource are reflective of that particular class of resource. The resource object is constructed of a type, name, and a block containing the configuration of the resource. There are, however, “meta-arguments” that Terraform makes available for all resources. An example of three different resources namely resource group, vnet and a subnet in Azure is below.
+Resources are the basic building blocks in a Terraform-defined deployment. Resources correspond to several kinds of provider-based resources. Resources represent the infrastructure components you want to manage - VNets, VPC's, networks, firewalls, DNS entries, etc. Each resource type is specific to its provider and has a set of configurable parameters.The parameters of a resource are reflective of that particular class of resource. The resource object is constructed of a type, name, and a block containing the configuration of the resource. There are, however, “meta-arguments” that Terraform makes available for all resources. When you declare a resource in your configuration, Terraform knows how to create, update, and delete that specific infrastructure piece. An example of three different resources namely resource group, vnet and a subnet in Azure is below.
 
-```terraform
+```json
 #create the resource group
 resource "azurerm_resource_group" "rg" {
     name = "ateam-resource-group"
@@ -134,9 +139,15 @@ resource "azurerm_subnet" "subnet1" {
 
 The first type of resource here is an azure resource group. Each type of the resource is linked to a provider; you can tell which by the leftmost value in the type, here azurerm. This indicates that this type of resource is provided by the azurerm provider, hence it is denoted as azurerm\_resource-group. The name of the resource is specified next. This name is defined by you—here we’ve named this rg. The name of the resource should describe what the resource is or does. The combination of type and name must be unique in your configuration. Hence there can be only one resource group named rg in your configuration.
 
-### Data
+## Modules
 
-The data elements are optional elements and are primarily data sources. Data sources provide a mechanism to gather data from the provider. A data source represents a piece of read-only information that is fetched from the provider every time you run Terraform. It is a mechanism to query the provider’s APIs for data and to make that data available to the rest of your Terraform code. Data sources provide a mechanism to gather data from the provider. A data source represents a piece of read-only information that is fetched from the provider every time you run Terraform. Once you have defined a data source, you can use the data elsewhere in your Terraform configuration. Each Terraform provider exposes a variety of data sources. Data sources are most powerful when retrieving information about dynamic entities - those whose properties change value often. e.g AMI id's, regions etc.
+Modules are containers for multiple resources that are used together. A module can include resources, variables, outputs, and even other modules. They are used to create reusable, composable, and maintainable components. Modules allow users to encapsulate a set of resources and configurations into a single logical unit, which can then be reused across different projects or shared with others. For example, if you're creating a module for a basic Azure network infrastructure, your module might include resources like a virtual network, subnets, and network security groups.
+
+This modular approach not only helps in organizing your Terraform configurations but also promotes the reuse of code, making your infrastructure management more efficient and error-resistant.
+
+## Data Sources
+
+In Terraform, data sources allow you to fetch and compute data from outside of Terraform which can then be used within your Terraform configuration. Data sources provide a mechanism to gather data from the provider. A data source represents a piece of read-only information that is fetched from the provider every time you run Terraform. It is a mechanism to query the provider’s APIs for data and to make that data available to the rest of your Terraform code. Data sources can retrieve information like an AWS AMI ID or an Azure subscription ID, which can be used to configure resources. Once you have defined a data source, you can use the data elsewhere in your Terraform configuration. Each Terraform provider exposes a variety of data sources. Data sources are most powerful when retrieving information about dynamic entities - those whose properties change value often. e.g AMI id's, regions etc.
 
 ```terraform
 data "azurerm_subscription" "current" {
@@ -167,9 +178,9 @@ data "aws_ami" "web" {
 
 The above code sample shows a data source to list AMI's in AWS with additional filters.
 
-### Variables
+## Variables
 
-Variables in Terraform are a fantastic way to define centrally controlled reusable values. The information in Terraform variables is saved independently from the deployment plans, which makes the values easy to read and edit from a single file. Variables in Terraform represent parameters for Terraform modules. A variable is defined in Terraform by using a variable block with a label. The label must be a unique name, you cannot have variables with the same name in a configuration. It is also good practice to include a description and type. The variable type specifies the [type constraint](https://www.terraform.io/docs/configuration/types.html) that the defined variable will accept. 
+Variables in Terraform are a fantastic way to define centrally controlled reusable values. They are are used to make your Terraform configurations more dynamic and flexible.The information in Terraform variables is saved independently from the deployment plans, which makes the values easy to read and edit from a single file. Variables in Terraform represent parameters for Terraform modules. A variable is defined in Terraform by using a variable block with a label. The label must be a unique name, you cannot have variables with the same name in a configuration. It is also good practice to include a description and type. The variable type specifies the [type constraint](https://www.terraform.io/docs/configuration/types.html) that the defined variable will accept. 
 
 ```terraform
 variable "location" {
@@ -217,7 +228,7 @@ resource "azurerm_subnet" "subnet1" {
 
 The above example now uses variables to define the location of the resources and the address space of the virtual network.
 
-#### Input variables
+### Input variables
 
 Depending on the usage, the variables are divided into inputs and outputs. The input variables are used to define values that configure your infrastructure. These values can be used repeatedly without having to remember their every occurrence in the event it needs to be updated. For defining input variables, it's typical to create a separate ```variables.tf``` file and store the variable configurations in there.
 
@@ -227,7 +238,7 @@ Input variables can be assigned in many ways. They can be passed in when calling
 terraform apply -var="location=australiaeast" -var "vnet_address_space=[`"10.0.0.0/16`"]"
 ```
 
-#### Output variables
+### Output variables
 
 Output variables, in contrast, are used to get information about the infrastructure after deployment. These can be useful for passing on information such as IP addresses for connecting to the server.
 
@@ -246,6 +257,111 @@ output "pip" {
 }
 ```
 
-In the above example we have a resource which defines a public IP address. We also have an output variable called pip which can be used to reference the public IP address created by the resource. A complete code sample to standup a Windows virtual machine in Azure using Terraform is [here](https://pradeepl.com/blog/creating-a-windows-vm-using-terraform/).
+In the above example we have a resource which defines a public IP address. We also have an output variable called pip which can be used to reference the public IP address created by the resource. Both input and output variables enhance modularity and reusability in your Terraform configurations, making them more maintainable and scalable.
 
-In this post we looked at the basics of terraform and the HCL language. In the next post we will dig into terraform lifecycle and state management.
+# State Management
+
+Terraform's state management tracks the state of your infrastructure in a state file. This file maps your real-world resources to your configuration, helping Terraform keep track of what it has created and manage changes efficiently. This state file, is typically named ```terraform.tfstate```, and includes metadata about the infrastructure like resource IDs and attributes. Terraform uses this state to map real-world resources to your configuration and to keep track of dependencies. This allows for efficient and safe changes to your infrastructure, as Terraform can determine what needs to be created, updated, or deleted. It's crucial to handle this state file carefully, especially in team environments, to avoid conflicts and maintain consistency. For distributed teams or more complex setups, remote state backends such as Terraform Cloud can be used for better state management.
+
+# Executing Infrastructure Change - Plan & Apply
+
+In the previous sections, we explored Terraform's core components, such as providers, resources, modules, and state management. Understanding these elements is crucial for creating and managing your infrastructure. Now, let's delve into two fundamental Terraform commands that bring your configurations to life: ```terraform plan``` and ```terraform apply```. These commands represent the execution phase of Terraform, where your infrastructure planning turns into reality. They ensure that the changes you make are predictable, safe, and aligned with your infrastructure goals.
+
+**Terraform Plan**: This command is used for creating an execution plan. It enables you to preview the changes that Terraform plans to make to your infrastructure, based on your configuration files. This step is crucial for verifying that the changes match your expectations before any changes are actually made to the infrastructure.
+
+**Terraform Apply**: After reviewing the plan, the terraform apply command is used to apply the proposed changes. This command will alter the infrastructure to match the desired state described in the configuration files. It's essential to review the plan carefully before applying it, as this step will make actual changes to your infrastructure.
+
+These commands ensure that you have full visibility and control over the changes Terraform will make, reducing the risk of unintended consequences.
+
+# Terraform in Action: Setting Up an Azure Virtual Machine
+
+We have so far understood how terraform enables infrastructure automation using IaC principles, and the various components of terraform. Let us now put in action by using terraform to provision a Windows virtual machine in Azure. We will use the azure terraform provider and create the necessary resources such a an Azure resource group, virtual network, subnets, network interfaces and other components needed to provision a virtual machine. The terraform code is below
+
+```terraform
+provider "azurerm" {
+  version = "=2.8.0"
+  features {}
+}
+
+#create the resource group
+resource "azurerm_resource_group" "rg" {
+    name = "ateam-resource-group"
+    location = "australiaeast"
+}
+
+#create the virtual network
+resource "azurerm_virtual_network" "vnet1" {
+    resource_group_name = azurerm_resource_group.rg.name
+    location = "australiaeast"
+    name = "dev"
+    address_space = ["10.0.0.0/16"]
+}
+
+#create a subnet within the virtual network
+resource "azurerm_subnet" "subnet1" {
+    resource_group_name = azurerm_resource_group.rg.name
+    virtual_network_name = azurerm_virtual_network.vnet1.name
+    name = "devsubnet"
+    address_prefixes = ["10.0.0.0/24"]
+}
+
+##create the network interface for the VM
+resource "azurerm_public_ip" "pub_ip" {
+    name = "vmpubip"
+    location = "australiaeast"
+    resource_group_name = azurerm_resource_group.rg.name
+    allocation_method = "Dynamic"
+}
+
+resource "azurerm_network_interface" "vmnic" {
+    location = "australiaeast"
+    resource_group_name = azurerm_resource_group.rg.name
+    name = "vmnic1"
+
+    ip_configuration {
+        name = "vmnic1-ipconf"
+        subnet_id = azurerm_subnet.subnet1.id
+        private_ip_address_allocation = "Dynamic"
+        public_ip_address_id = azurerm_public_ip.pub_ip.id
+    }
+}
+
+##end creating network interface for the VM
+
+
+##create the actual VM
+resource "azurerm_windows_virtual_machine" "devvm" {
+    name = "development-vm"
+    location = "australiaeast"
+    size = "Standard_A1_v2"
+    admin_username = "pradeep"
+    admin_password = "kq7UciQluJt%3dtj"
+    resource_group_name = azurerm_resource_group.rg.name
+
+    network_interface_ids = [azurerm_network_interface.vmnic.id]
+    
+    os_disk {
+        caching = "ReadWrite"
+        storage_account_type = "Standard_LRS"
+    }
+
+    source_image_reference {
+        publisher = "MicrosoftWindowsServer"
+        offer = "WindowsServer"
+        sku = "2016-Datacenter"
+        version = "latest"
+    }
+
+}
+##end creating VM
+```
+
+This Terraform script begins by specifying the Azure provider and its version. The script then proceeds to create a resource group, a virtual network, and a subnet within the network, all located in Australia East. Next, it sets up a network interface for a virtual machine, including a public IP. Finally, it concludes with the creation of an Azure Windows Virtual Machine, specifying its size, admin credentials, network interface, and OS image details. This example serves as a practical demonstration of using Terraform to deploy resources in Azure.
+
+To apply this terraform script, we need to follow these steps
+
+ - Initialize Terraform: Run ```terraform init``` in your project directory. This command initializes the project, installs the Azure provider, and prepares Terraform to manage the infrastructure.
+
+ - Create an Execution Plan: Execute ```terraform plan```. This command lets you preview the changes Terraform will make without actually applying them. It's a good practice to review this plan to ensure it aligns with your expected changes.
+
+ - Apply the Configuration: Run ```terraform apply```. Terraform will prompt you to confirm before it makes any changes. Once confirmed, Terraform will proceed to create the resources as defined in your script.
