@@ -24,7 +24,7 @@ cover:
 
 ## Introduction
 
-Hexagonal Architecture , also known as Ports and Adapters architecture was formally defined by Alistair Cockburn in his book, "Hexagonal Architecture". This design aims to decouple business logic from other parts of the component, especially the persistence, eventing and services layers. The core application logic is insulated with an isolation perimeter. A component, built on the ports and adapters pattern, exposes a set of ports to which one or more adapters can be added as necessary. The application as a whole is modelled as a hexagon, with the business domain located inside and the ports/adapters on the periphery. The business domain only cares about its own language and concepts. It uses ports to talk to whatever it needs.
+Hexagonal Architecture , also known as Ports and Adapters architecture was formally defined by Alistair Cockburn in his book, "Hexagonal Architecture". This design aims to decouple business logic from other parts of the component, especially the persistence, eventing and services layers. The core application logic is insulated with an isolation perimeter. This insulation is achieved through the strategic use of 'ports' and 'adapters', ensuring that changes in external layers do not impact the core functionality. A component, built on the ports and adapters pattern, exposes a set of ports to which one or more adapters can be added as necessary. The application as a whole is modelled as a hexagon, with the business domain located inside and the ports/adapters on the periphery. The business domain only cares about its own language and concepts. It uses ports to talk to whatever it needs. This approach not only enhances maintainability but also elevates the ease of testing and integration.
 
 ## Port
 
