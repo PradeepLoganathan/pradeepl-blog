@@ -2,24 +2,26 @@
 title: "Policy as Code: Revolutionizing IT Compliance and Governance."
 lastmod: 2023-12-16T20:34:02+05:30
 date: 2022-01-02T20:34:02+05:30
-draft: true
+draft: false
 Author: Pradeep Loganathan
 tags: 
-  - 
-  - 
-  - 
+  - IaC
+  - PaC
+  - Policy
+  - compliance
+  - platformengineering
 categories:
-  - 
+  - platformengineering
 #slug: kubernetes/introduction-to-open-policy-agent-opa/
-summary: ""
+summary: "Policy as Code is the idea of writing code to manage and automate policies. Policy as Code arose as a natural progression from Infrastructure as Code."
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - images/policy-as-code.jpeg
 cover:
     image: "images/policy-as-code.jpeg"
-    alt: ""
-    caption: ""
+    alt: "Policy as Code"
+    caption: "Policy as Code"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
  
 ---
