@@ -10,3 +10,6 @@ public
 settings.json
 
 .firebase/hosting.cHVibGlj.cache
+
+resources
+resources/**
