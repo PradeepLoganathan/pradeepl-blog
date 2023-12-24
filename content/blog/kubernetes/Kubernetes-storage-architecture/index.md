@@ -7,7 +7,8 @@ draft: false
 comments: true
 toc: true
 showToc: true
-TocOpen: false
+TocOpen: true
+
 tags: 
   - storage
   - kubernetes
@@ -27,7 +28,7 @@ images:
 ---
 
 
-## Kubernetes Storage concepts
+# Kubernetes Storage concepts
 
 Applications that run on Kubernetes can be stateless or stateful. Kubernetes abstracts away persistent storage from ephemeral pods and containers. Kubernetes provides the ability to dynamically create storage resources. The Kubernetes storage architecture is based on volumes as the primary abstraction. Volumes are created and managed by Kubernetes. It is bound to pods and containers. Volumes are attached to the nodes where the pods and containers are running. Volumes are mounted to the containers and are bound to persistent storage. 
 
@@ -40,9 +41,9 @@ Kubernetes provides a structured way to manage persistent storage. It provides A
 
 Let us look at each of the above storage types in further detail.
 
-### Volumes
+## Volumes
 
-Volumes are the fundamental abstraction of storage in kubernetes. A volume is a storage device exposed by a node that is accessible to containers on the node. Volumes are mounted into containers in a pod allowing containers to access storage as a local filesystem. It can be mounted as a read-only or read-write volume. It can be mounted by more than one container in a pod allowing the pods to share data. A volume has an explicit lifetime that coincides with its pod. It is defined as part of the pod spec. When the pod is deleted access to the volume is removed but the data in the volume is not destroyed. There are different types of volumes. The full list of volume types is [here.](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) There are many volume types for the various cloud environments, networked filesystems and various other needs. The configuration values for the volumes are dependent on the volume type. For example, an NFS volume would need to be configured with the NFS server location and the path.
+Volumes are the fundamental abstraction of storage in kubernetes. A volume is a storage device exposed by a node that is accessible to containers on the node. Volumes are mounted into containers in a pod allowing containers to access storage as a local filesystem. It can be mounted as a read-only or read-write volume. A volume can be access by multiple containers in a pod. It can be mounted by more than one container in a pod allowing the pods to share data. A volume has an explicit lifetime that coincides with its pod. It is defined as part of the pod spec. When the pod is deleted access to the volume is removed but the data in the volume is not destroyed. There are different types of volumes. The full list of volume types is [here.](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes) There are many volume types for the various cloud environments, networked filesystems and various other needs. The configuration values for the volumes are dependent on the volume type. For example, an NFS volume would need to be configured with the NFS server location and the path.
 
 To define a volume in kubernetes, we need to specify the type of volume and the volume name. `` emptyDir `` volume is the simplest type of volume. It creates an empty volume which can be used by the application running in the pod. By default, emptyDir volumes are persisted on the medium backing the node, either disk, SSD or network storage. A volume of type emptyDir  lasts for the lifetime of the Pod. It continues to exist even if the Container terminates and restarts. In the example below, I am creating a volume named scratchvolume of type emptyDir in lines 15-17. This volume is mounted in the pod by specifying the volume name in lines 11-13.
 
@@ -88,7 +89,7 @@ spec:
           mountPath: /etc/config
 ```
 
-### Storage Class
+## Storage Class
 
 Applications workloads have varying storage needs. Some workloads require fast access to storage and some others may need to retain and backup data. A storage class is a Kubernetes object that provides the ability to define different types or class of storage. The type of the storage can be based on storage attributes such as storage speed, backup/retention policy, quality of service levels( premium vs standard disk) etc.A persistent volume can select the storage class when it is created. The storage class is defined in the storage class section of the persistent volume. 
 
@@ -124,7 +125,7 @@ allowVolumeExpansion: true
 
 The ```provisioner``` assigned to the storage class takes care of provisioning the storage. The provisioner is responsible for creating the storage and assigning the PersistentVolume to the claim. Most Kubernetes providers come with a list of existing provisioners. The parameters defined in the StorageClass definition are passed to the provisioner and are specific to each provisioner plugin. The ```volumeBindingMode``` field specifies how the volume is bound to the pod. The default value is ```Immediate```. The ```WaitForFirstConsumer``` value indicates that the volume is bound to the pod when the first pod consumes the volume. The ```Immediate``` value indicates that the volume is bound to the pod when the pod is created. The ```reclaimPolicy``` indicates whether the persistent volume should be deleted or retained when the pod is deleted. The default value is ```Delete```. The ```Retain``` value indicates that the persistent volume should be retained when the pod is deleted. The ```allowVolumeExpansion``` field indicates whether the persistent volume can be expanded. 
 
-### Persistent Volumes
+## Persistent Volumes
 
 Persistent volumes are storage resources provisioned ahead of time by the cluster administrator. Administrators can provision external storage and create persistent volumes specific to a cluster. Persistent volumes are backed by a storage medium such as a disk, SSD or network storage. Persistent volumes can be provisioned statically or dynamically.
 
@@ -154,7 +155,7 @@ Capacity is the size of this PersistentVolume. The persistentVolumeReclaimPolicy
 * ReadOnlyMany (ROX) - The storage is accessible for read-only operations, by several clients.
 * ReadWriteMany (RWX) - The storage is accessible for read and write operations, by several clients.
 
-### Persistent Volume Claims
+## Persistent Volume Claims
 
 A persistent volume claim is created by a developer and defines the storage needs of an application workload. The persistent volume claim is bound to a persistent volume by the Kubernetes control plane. The persistent volume claim is created in the namespace of the pod that is using the persistent volume. 
 A PVC is both a request for storage and an identifier that establishes a claim on the storage once it’s granted. . A PVC requests access to a PV using one of the following access modes:
@@ -189,7 +190,7 @@ PVs and PVCs work together as follows:
 * The storage administrator can either create PVs explicitly in response, or create a StorageClass that can dynamically provision new PVs as needed.
 * Kubernetes manages the binding of PVCs to PVs.
 
-### Putting it all together
+## Putting it all together
 
 ![Kubernetes storage architecture - Whiteboard](Kubernetes-Storage-Architecture-whiteboard.png)
 

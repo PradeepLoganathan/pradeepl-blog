@@ -3,7 +3,6 @@ title: "Cloud Native Summit - Secure your supply chain "
 author: "Pradeep Loganathan"
 lastmod: 2022-06-18T13:12:36+10:00
 date: 2022-06-18T13:12:36+10:00
-Author: "Pradeep Loganathan"
 
 draft: false
 comments: true

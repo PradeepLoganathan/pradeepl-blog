@@ -15,6 +15,11 @@
       "source": "/blog/repository-and-unit-of-work-pattern-asp-net-core-3-1",
       "destination": "/blog/repository-and-unit-of-work-pattern-asp-net-core",
       "type": 301
-    } ]
+    },
+    {
+      "source": "/blog/add-security-requirements-oas3-swagger-netcore3-1-using-swashbuckle",
+      "destination": "/blog/securing-openapi-endpoint-dotnet",
+      "type": 301
+    }  ]
   }
 }

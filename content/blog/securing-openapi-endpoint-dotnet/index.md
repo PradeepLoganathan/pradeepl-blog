@@ -1,5 +1,5 @@
 ---
-title: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
+title: "Securing the  OAS/Swagger endpoint in dotnet"
 lastmod: 2020-06-25T15:55:13+10:00
 date: 2020-06-25T15:55:13+10:00
 draft: false
@@ -24,12 +24,12 @@ images:
   - JWT-token-Swagger.jpg
 cover:
     image: "neonbrand-3BfDXcn9sqM-unsplash.jpg"
-    alt: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
-    caption: "Adding security to OAS 3 / Swagger in .net core 3.1 using swashbuckle"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    alt: "Securing the  OAS/Swagger endpoint in dotnet using swashbuckle"
+    caption: "Securing the  OAS/Swagger endpoint in dotnet using swashbuckle"
+    relative: false 
 ---
 
-## OpenAPI Security Schemes
+# OpenAPI Security Schemes
 
 As part of documenting API's, OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements. Defining the security requirements for an API is key to enable developers to use the API. The OAS 3 definitions for security is described in a [previous blog post here]({{< ref "/blog/openapi-specification-swagger">}}). It can be used to specify the below security schemes for an API
 
@@ -45,7 +45,9 @@ Swashbuckle and NSwag are examples of nuget packages that provide functionality 
 
 Let us look at using swashbuckle to generate the swagger definition and to also define the bearer, API key and oAuth2 Security schemes below. We can install swashbuckle using
 
+```shell
 Dotnet install Swashbuckle.AspNetCore -Version 5.3.3
+```
 
 Installing swashbuckle gives you access to below 3 namespaces which are key to generate the OAS document and the corresponding Swagger UI.
 
@@ -55,7 +57,7 @@ Installing swashbuckle gives you access to below 3 namespaces which are key to g
 
 Swashbuckle uses the OpenAPISecurityScheme object to specify the security schemes and the OpenApiSecurityRequirement object to specify the Security requirements needed by the API. The Security scheme and the security requirements can be added to the generated OAS json using the AddSecurityDefinition & the AddSecurityRequirement methods, respectively. The sections below detail adding a bearer, api key and oAuth2 security requirements to the OAS json by calling the AddSwaggerGen method in ConfigureServices metod of the startup class.
 
-### Bearer Security Scheme
+## Bearer Security Scheme
 
 The code below specifies a bearer security scheme and the associated parameters for this security scheme. We are specifying the name of the http authorization scheme as defined in RFC7235 to be bearer, we are specifying that the bearer token is in the header with the scheme type of http.
 
@@ -104,7 +106,7 @@ The above code results in the swagger UI requiring a [JWT bearer token]({{< ref 
 
 Bearer token - Swagger UI
 
-### API Key Security Scheme
+## API Key Security Scheme
 
 The code below specifies an API key security scheme. This code can be used when we use an API key to authenticate requests to the API.
 
@@ -153,7 +155,7 @@ services.AddSwaggerGen(c =>
 });
 ```
 
-### OAuth2 Security Scheme
+## OAuth2 Security Scheme
 
 We can also add an implicit flow grant as a security scheme using the code below.
 

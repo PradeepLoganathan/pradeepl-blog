@@ -8,7 +8,9 @@ toc: true
 showToc: true
 TocOpen: true
 description: ""
+
 summary: SLSA (Supply chain Levels for Software Artifacts) is a security framework designed to ensure the integrity and security of the software supply chain. It is a set of guidelines and best practices that aim to prevent tampering, improve integrity, and secure packages and infrastructure in software development and deployment. 
+
 cover:
     image: "images/SLSA-Pradeep-Loganathan.png"
     alt: "Supply chain Levels for Software Artifacts"
