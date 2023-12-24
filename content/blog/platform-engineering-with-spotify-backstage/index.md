@@ -1,5 +1,5 @@
 ---
-title: "Internal developer portals with Backstage"
+title: "Platform engineering with Backstage"
 author: "Pradeep Loganathan"
 date: 2022-05-03T14:06:19+10:00
 draft: false
@@ -10,7 +10,7 @@ tags:
   - platforms
 categories:
   - platformengineering
-summary: Backstage is an open source platform for building Internal developer portals. It improves the overall developer experience by delivering the core features of a developer portal, such as Software Catalogs, templates, and documentation. 
+summary: Backstage is an open source platform for building Internal developer platforms. It improves the overall developer experience by delivering the core features of a developer portal, such as Software Catalogs, templates, and documentation. 
 ShowToc: true
 TocOpen: true
 images:
@@ -19,11 +19,11 @@ cover:
     image: "backstage-cover.png"
     alt: "Platform engineering with Backstage"
     caption: "Platform engineering with Backstage"
-    relative: false 
+    relative: false # To use relative path for cover image, used in hugo Page-bundles
+ 
 ---
 
-
-# Internal Developer Platforms (IDP)
+## Internal Developer Platforms (IDP)
 
 An Internal Developer Platform (IDP) is a set of self-service tools, processes and services that help accelerate development velocity and reduce time to market. An IDP provides a standardized way for development teams to configure and deploy applications and application infrastructure. It is a self-service layer allowing developers to self-serve infrastructure requirements without having to worry about container orchestration, storage provisioning etc. IDPs support a range of infrastructure and hosting options such as public cloud, private cloud and on-premises environments. Development teams can self-serve infrastructure provisioning, application deployment or create new services thus reducing the load on platform teams. IDPs streamline infrastructure decisions and integrate with existing build and deploy pipelines while providing role-based access control to developers without the need for working through a wall of YAML files.
 
@@ -31,50 +31,46 @@ For example, a developer creating a new microservice would start by creating a r
 
 IDPs provide key features such as Infrastructure orchestration, Environment management, Deployment management, Application configuration management, and role-based access control. They promote automation, enhance integration, improve security and improve collaboration.
 
-# Backstage
+## Backstage
 
 Backstage is an open source platform for building Internal developer platforms. It improves the overall developer experience by delivering the core features of a developer portal, such as Software Catalogs, templates, and documentation. It helps build self-service internal tooling to enable teams to create workloads that meet compliance, regulatory and engineering requirements. It unifies tooling, services, apps, data, and docs into a single UI that allows developers to create, manage, and explore services and components. It thus brings together all aspects of a service such as its codebase, documentation, environments, infrastructure and the people who build them.  It's functionality can be extended with third-party plugins such as [kubernetes](https://backstage.io/docs/features/kubernetes/installation){:target="_blank"}, [Argo CD](https://github.com/RoadieHQ/roadie-backstage-plugins), [github](https://github.com/backstage/backstage/tree/master/plugins/github-actions), [AWS Proton](https://github.com/awslabs/aws-proton-plugins-for-backstage), [Harbor](https://github.com/BESTSELLER/backstage-plugin-harbor) and many [others](https://github.com/backstage/backstage/tree/master/plugins).
 
 Backstage was originally developed at Spotify as an internal developer portal. It was open sourced as a CNCF sandbox project in September 2020. It became a [CNCF incubating project](https://www.cncf.io/blog/2022/03/15/backstage-project-joins-the-cncf-incubator/) in March 2022. Backstage's [vision](https://backstage.io/docs/overview/vision) is to "to provide engineers with the best developer experience in the world.". Backstage provides a host of features out of the box such as Service catalog, Quick start templates, documentation explorer and a robust plugin ecosystem. Let us look at some of these features.
 
-## Service Catalog
+### Service Catalog
 
 A Service Catalog enables enterprise teams to create an organized and curated collection of all software assets within an organization.The service catalog also stores a range of metadata, including documentation,  ownership, programming language, source code, current version, previous updates etc.
 
 ![Backstage Service Catalog](images/Backstage-Service-Catalog.png#center)
 
-## Software Templates
+### Software Templates
 
 [Backstage templates](https://backstage.io/docs/features/software-templates/software-templates-index) lets you define a code skeleton with organizational best practices built in. Templates ensure that software meets your requirements around security or compliance from the very beginning. Developers can use these skeletons to create new services or other workloads.
 
 ![Backstage Templates](images/Backstage-Templates.png#centre)
 
-## Tech Documentation
+### Tech Documentation
 
 [Backstage Techdocs](https://backstage.io/docs/features/techdocs/techdocs-overview) provides developers the ability to generate documentation from markdown files. It allows developers to use the docs as code option by authoring markdown files along with code. Backstage will create and render a documentation + metadata site automatically using MkDocs.
 
-## Plugins
+### Plugins
 
 The plugin library allows you to extend Backstage with third-party plugins. The plugin library is a collection of plugins that can be installed and configured to extend Backstage. 
-
-# Backstage technology stack
+## Backstage technology stack
 
 [Backstage](https://github.com/backstage/backstage) is a react based framework providing an extensible plugin architecture. It uses the Yarn package manager. It also uses the Lerna monorepo library for managing multi-package repositories. Backstage can be deployed to run on Nodejs.
 
-# Getting started with Backstage
+## Getting started with Backstage
 
 Backstage requires an LTS version of node and Yarn installed as prerequisites. Backstage consists of the scaffolding tools and the Backstage plugin library to create a new frontend deployment of the Backstage console. We can install it using npx as below. npx runs code built with Node.js and published through the npm registry. It allows you to run and execute packages without having to install them locally or globally. npx is installed when you install node package manager.
 
 ```shell
-
 npx @backstage/create-app
-
 ```
 
 I am choosing sqlite as the backend database for this sample deployment. PostgresSQL is the preferred database for production deployments.
 
-```shell
-? Enter a name for the app [required]
+```? Enter a name for the app [required]
 >> Please enter a name for the app
 ? Enter a name for the app [required] pradeep-backstage-app
 ? Select database for the backend [required] SQLite
@@ -171,7 +167,6 @@ $ backstage-cli package start
 ......
 ......
 ......
-
 ```
 
 This starts as a development server running on port 3000 running your very own vanilla Internal Developer Platform on Backstage.
@@ -304,6 +299,6 @@ I am adding the plugin using the simple method.
 
 We have now created a starter Internal Developer Platform using Backstage. We can package the app as a docker container and deploy it to a kubernetes cluster. The steps to deploy a backstage app to a kubernetes cluster is [here](https://backstage.io/docs/deployment/k8s)
 
-# Conclusion
+## Conclusion
 
 Internal Developer platforms play a key role in developer UX and improve development velocity. They make teams independent and provide a paved path self serve infrastrcuture, environments etc by applying organizational best practices. Backstage provides the necessary framework to create an IDP that suits an organization. Backstage has a rich ecosystem of plugins that allow the IDP to extended and enhanced. Backstage powers the IDP's of large organizations like spotify, american airlines and others. It is a key open source project with great ecosystem of contributors. So what are you waiting for ?
