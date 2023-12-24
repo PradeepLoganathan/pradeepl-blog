@@ -1,5 +1,5 @@
 ---
-title: "Softwaresupplychains"
+title: "Software Supply Chains"
 author: "Pradeep Loganathan"
 date: 2023-11-17T08:19:45+10:00
 
@@ -7,7 +7,7 @@ draft: true
 comments: true
 toc: true
 showToc: true
-
+tocOpen: true
 description: ""
 
 cover:
@@ -22,7 +22,11 @@ tags:
   - "post"
 ---
 
-In an age where digital innovation is a necessity, software supply chains have become a cornerstone of technological success. In our interconnected digital world, a well-oiled software supply chain is synonymous with innovation, efficiency, and security. The importance of understanding and mastering software supply chains cannot be overstated. But what exactly is a software supply chain? At its core, it is the intricate network of processes, people, and technologies working in synergy to bring software from conception to deployment. Much like its manufacturing counterpart, a software supply chain encompasses everything from the sourcing of raw materials (code, libraries, and dependencies) to the final delivery of the product (functional software applications).
+In an age where digital innovation is a necessity, software supply chains have become a cornerstone of technological success. Software development has evolved from a linear process to a complex network of interdependent components. This evolution has given rise to the software supply chain, a multi-faceted process encompassing everything from code creation to deployment. In this interconnected digital world, an efficient software supply chain is synonymous with innovation, efficiency, and security. Just as a traditional supply chain is crucial for manufacturing and distributing physical goods, a software supply chain is essential for developing, delivering, and maintaining digital products. The importance of understanding and mastering software supply chains cannot be overstated. But what exactly is a software supply chain and why does it matter much more now?
+
+At its core, the software supply chain is an intricate network of processes, people, and technologies working in synergy to bring software from conception to deployment. Much like its manufacturing counterpart, a software supply chain encompasses everything from the sourcing of raw materials (code, libraries, and dependencies) to the final delivery of the product (functional software applications). Let us understand this more in the next section.
+
+# What is a Software Supply Chain
 
 A supply chain is not just a process but an ecosystem. It encompasses all the elements and activities involved in creating, maintaining, and delivering software products. 
 
@@ -62,3 +66,6 @@ graph LR
  - Software Updates and Patch Management : Regular updates are essential for addressing issues, improving functionality, and patching vulnerabilities. This includes regular updates, patches, performance monitoring, and responding to user feedback. The goal is to ensure the software remains functional, efficient, and secure throughout its lifecycle.
 
  - Maintenence and Monitoring :  Monitoring and Feedback loops are crucial for the ongoing health of the software. Real-time monitoring tools provide valuable insights into the performance and usage of the software, forming the basis for data-driven decisions and continuous improvements.
+
+ 
+# Why Software Supply Chains matter
