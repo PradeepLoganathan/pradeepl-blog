@@ -17,7 +17,7 @@ TocOpen: true
 images:
   - 
 cover:
-    image: "images/cover.png"
+    image: "images/IaC.png"
     alt: ""
     caption: ""
     relative: false # To use relative path for cover image, used in hugo Page-bundles

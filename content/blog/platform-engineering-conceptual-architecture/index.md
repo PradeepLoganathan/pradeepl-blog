@@ -1,5 +1,5 @@
 ---
-title: "Platform Engineering Conceptual Architecture"
+title: "Building Digital Foundations: A Deep Dive into Platform Architecture"
 lastmod: 2023-12-18T09:03:57+05:30
 date: 2023-12-18T09:03:57+05:30
 draft: true
