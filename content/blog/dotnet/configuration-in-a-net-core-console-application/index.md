@@ -50,7 +50,7 @@ Install-Package Microsoft.Extensions.Configuration.EnvironmentVariables
 
 Installing packages for Configuration
 
-Once these packages are installed it provides the necessary functionality to use the ```ConfigurationBuilder``` class. In the below code block I am adding a json configuration file called appsettings.json. I am also adding environmental variables and command line as a configuration source.
+Once these packages are installed it provides the necessary functionality to use the ```ConfigurationBuilder``` class. In the below gist I am adding a json configuration file called appsettings.json. I am also adding environmental variables and command line as a configuration source.
 
 ```csharp
 static async Task Main(string[] args)
@@ -64,7 +64,7 @@ static async Task Main(string[] args)
 }
 ```
 
-Each configuration source overrides the configuration source in the order in which it is has been added to the configuration builder. It is important to add your configuration sources in the right order based as the precedence is by order. When a configuration source is loaded and a key already exists from a configuration source added earlier, it overwrites the previous value.
+Adding configuration sources and building the ConfigurationBuilder
 
 Now that we have built our configuration providers, we can use them as below
 
@@ -73,7 +73,9 @@ var section = Configuration.GetSection("Sectionofsettings");
 var section = Configuration.GetValue("Onesetting");
 ```
 
-We can The Sections can also be assigned to strongly typed objects representing the configuration using the Bind method.
+Getting configuration sections and values
+
+Each configuration source overrides the configuration source in the order in which it is has been added to the configuration builder. The Sections can also be assigned to strongly typed objects representing the configuration using the Bind method.
 
 As an example, if we have the below class representing an imaginary logging configuration
 
