@@ -21,7 +21,7 @@ images:
   - images/multiple-middleware-with-MapWhen.png
   - images/multiple-middleware.png
 cover:
-    image: "aspnetcore-framework-lifecycle-cover.png"
+    image: "images/aspnetcore-framework-lifecycle-cover.png"
     alt: "asp.net core framework lifecycle"
     caption: "asp.net core framework lifecycle"
     relative: true

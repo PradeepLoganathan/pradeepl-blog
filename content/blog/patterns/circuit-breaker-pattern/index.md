@@ -14,12 +14,14 @@ summary: Circuit breakers help to avoid one failing component tearing down other
 ShowToc: true
 TocOpen: true
 images:
-  - images/Pradeep-Loganathan-Circuit-Breaker.png
+  - images/circuit-breaker-pattern.png
+  - images/Circuit-Breaker-sequence.png
+  
 cover:
     image: "images/Circuit-Breaker-pattern.png"
     alt: "Circuit Breaker pattern"
     caption: "Circuit Breaker Design Pattern"
-    relative: true # To use relative path for cover image, used in hugo Page-bundle
+    relative: true
  
 series: ["Design Patterns"]
 ---
@@ -29,7 +31,7 @@ This not only benefits the caller by insulating it from the faulty service but a
 
 A circuit breaker is used to isolate a faulty service. A Circuit breaker is used to wrap a fragile function call (or an integration point with an external service) in a special (circuit breaker) object, which monitors for failures. Once the failures reach a certain threshold, the circuit breaker trips, and all further calls to the circuit breaker return with an error, without the protected call being made at all. In the diagram below a circuit breaker is used to wrap calls to Service B and is designed to trip whenever Service B reaches a failure threshold.
 
-![](images/Pradeep-Loganathan-Circuit-Breaker.png)
+![](images/Circuit-Breaker-sequence.png)
 
 Circuit Breaker
 

@@ -1,13 +1,32 @@
 ---
 title: "AWS CloudFormation"
-date: "2019-07-26"
+lastmod: 2019-07-21T15:55:13+10:00
+date: 2017-05-30T15:55:13+10:00
+draft: false
+Author: Pradeep Loganathan
+tags:
+  - IaC
+  - AWS
+  - automation
 categories: 
-  - "cloud"
+  - cloud
+  - platformengineering
+  
+summary:  AWS CloudFormation is an IaC tool for creating AWS resources in a declarative way. 
+ShowToc: true
+TocOpen: true
+images:
+  - images/aws-cloudformation-pradeepl.png
+cover:
+    image: "images/aws-cloudformation-pradeepl.png"
+    alt: "AWS CloudFormation"
+    caption: "AWS CloudFormation"
+    relative: true
 ---
 
 ## Introduction
 
-AWS CloudFormation is an [Infrastructure as Code (IaC)]({{< ref "/blog/infrastructure-as-code">}}) tool for specifying resources in a declarative way. It is an alternative to using the AWS console, CLI, or various SDKs for deploying your AWS infrastructure. This service helps in creating and managing a collection of related AWS resources. The service is organized around the concept of templates & stacks. A cloudformation template typically describes a set of AWS resources and their configuration in order to start an application. We can create templates to describe AWS resources and any associated dependencies or runtime parameters required to run your application. In addition to provisioning AWS resources, CloudFormation can also be used to update them in an orderly and predictable manner. Terraform is an alternative to cloudformation. Configuration management tools such as Ansible and Puppet also include support for deploying AWS resources.
+AWS CloudFormation is an [Infrastructure as Code (IaC)]({{< ref "/blog/infrastructure-as-code">}}) tool for creating AWS resources in a declarative way. It is an alternative to using the AWS console, CLI, or various SDKs for deploying your AWS infrastructure. This service helps in creating and managing a collection of related AWS resources. The service is organized around the concept of templates & stacks. A cloudformation template typically describes a set of AWS resources and their configuration in order to start an application. We can create templates to describe AWS resources and any associated dependencies or runtime parameters required to run your application. In addition to provisioning AWS resources, CloudFormation can also be used to update them in an orderly and predictable manner. Terraform is an alternative to cloudformation. Configuration management tools such as Ansible and Puppet also include support for deploying AWS resources.
 
 ## Benefits
 

@@ -22,15 +22,15 @@ cover:
 
 This post is part of a three post series on Azure Event Grid
 
-[Part 1 - Azure Event Grid - Introduction](https://pradeepl.com/blog/azure/azureeventgrid-introduction)
+[Part 1 - Azure Event Grid - Introduction]({{< ref "/blog/azure/azureeventgrid-introduction" >}})
 
-[Part 2 - Azure Event Grid - Create Topics](https://pradeepl.com/blog/azure/azureeventgrid-createtopic)
+[Part 2 - Azure Event Grid - Create Topics]({{< ref "/blog/azure/azureeventgrid-createtopic" >}})
 
-[Part 3 - Azure Event Grid - Creating Custom events](https://pradeepl.com/blog/azure/azureeventgrid-createcustomevents)
+[Part 3 - Azure Event Grid - Creating Custom events]({{< ref "/blog/azure/azureeventgrid-createcustomevents" >}})
 
-An introduction to Event driven architecture is essential to understand the architectural pattern supported by Azure event grid and is located [here](https://pradeepl.com/architecture/event-driven-architecture/).
+An introduction to Event driven architecture is essential to understand the architectural pattern supported by Azure event grid and is located [here]({{< ref "/blog/architecture/event-driven-architecture" >}}).
 
-Azure Event Grid is an eventing back plane that enables [eventdriven](https://pradeepl.com/blog/architecture/event-driven-architecture/), [reactive](https://pradeepl.com/blog/reactive-manifesto/) programming. It is a cloud-based publisher and subscriber service that helps users build an event-based reactive architecture for their applications. It sends HTTP requests as notifications. Event grid has in-built support for events from Azure services. It allows you to choose the Azure service or resource that you want to be notified about. These notifications contain events that happen in the publisher. It enables event management across different Azure resources such as blob storage, functions, logic apps etc. Instead of creating a polling mechanism in your application that polls for changes, the apps get notified when an event happens automatically.
+Azure Event Grid is an eventing back plane that enables [eventdriven]({{< ref "/blog/architecture/event-driven-architecture" >}}), [reactive programming]({{< ref "/blog/reactive-manifesto" >}}) . It is a cloud-based publisher and subscriber service that helps users build an event-based reactive architecture for their applications. It sends HTTP requests as notifications. Event grid has in-built support for events from Azure services. It allows you to choose the Azure service or resource that you want to be notified about. These notifications contain events that happen in the publisher. It enables event management across different Azure resources such as blob storage, functions, logic apps etc. Instead of creating a polling mechanism in your application that polls for changes, the apps get notified when an event happens automatically.
 
 ![Azure Event Grid ](images/azure-event-grid-1024x689.png "Azure Event Grid")
 
@@ -58,4 +58,4 @@ In the above example the event source is an azure blob storage. There are multip
 
 Publisher, Topic - Subscription, Handler
 
-The next part of the series is [here]((https://pradeepl.com/blog/azure/azureeventgrid-createtopic))
+The next part of the series is [here]({{< ref "/blog/azure/azureeventgrid-createtopic" >}})

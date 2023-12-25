@@ -20,7 +20,7 @@ TocOpen: false
 images:
   - 12-factor-apps.png
 cover:
-    image: "12-factor-apps.png"
+    image: "images/12-factor-apps.png"
     alt: "Principles of Cloud Native design - 12 Factor apps"
     caption: "Principles of Cloud Native design - 12 Factor apps"
     relative: true

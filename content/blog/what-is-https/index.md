@@ -17,19 +17,19 @@ summary: HTTPS is a network protocol used to serve up web pages. HTTPS, or HTTP 
 ShowToc: true
 TocOpen: false
 images:
+  - images/what-is-https-pradeepl.png 
   - images/HTTP-with-TLS.png
   - images/HTTP-without-TLS.png
   - images/TLS-Handshake.png
-  - images/micah-williams-lmFJOx7hPc4-unsplash.jpg
 cover:
-    image: "images/micah-williams-lmFJOx7hPc4-unsplash.jpg"
+    image: "images/what-is-https-pradeepl.png"
     alt: "What is HTTPS?"
     caption: "What is HTTPS?"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 
-[HTTP](https://pradeepl.com/blog/what-is-http2/)(Hypertext transfer protocol) is a network protocol used to serve up web pages. HTTPS, or HTTP Secure, was designed to secure communications between a client and the HTTP server. It is a protocol that uses a secure connection to transfer data over the internet. This protocol encrypts HTTP traffic before sending it out on the network. Early versions of HTTPS used a protocol called Secure Socket Layer (SSL) to encrypt the HTTP traffic. Versions 1, 2, and 3 of SSL were discovered to have security flaws. The replacement of SSL 3 was a new protocol called Transport Layer Security (TLS). TLS 1.0 and 1.1 have also been found to have flaws. TLS 1.2 or TLS 1.3 fixed these flaws and should be used, except when legacy systems require the use of older protocols for backward compatibility.
+[HTTP]({{< ref "/blog/http2" >}})(Hypertext transfer protocol) is a network protocol used to serve up web pages. HTTPS, or HTTP Secure, was designed to secure communications between a client and the HTTP server. It is a protocol that uses a secure connection to transfer data over the internet. This protocol encrypts HTTP traffic before sending it out on the network. Early versions of HTTPS used a protocol called Secure Socket Layer (SSL) to encrypt the HTTP traffic. Versions 1, 2, and 3 of SSL were discovered to have security flaws. The replacement of SSL 3 was a new protocol called Transport Layer Security (TLS). TLS 1.0 and 1.1 have also been found to have flaws. TLS 1.2 or TLS 1.3 fixed these flaws and should be used, except when legacy systems require the use of older protocols for backward compatibility.
 
 HTTPS provides security to HTTP. HTTPS secures HTTP by using TLS over TCP on port 443. TLS is a protocol that can provide security to any TCP connection. Generally, establishing an HTTPS connection involves the client and server negotiating which protocol to use. The ideal outcome is that the client and server agree on the most secure, mutually supported protocol and cipher.
 
@@ -72,5 +72,3 @@ Secure TLS connections between the client and server have at least one of the fo
 - To prevent the undetected loss or alteration of the data during transmission, each transmitted message includes message integrity check using a message authentication code
 
 A detailed post on implementing https in an ASP.Net Core web application is [here]({{< ref "/blog/https-in-asp-net-core">}})
-
-> Photo by [Micah Williams](https://unsplash.com/@mr_williams_photography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/safe?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)

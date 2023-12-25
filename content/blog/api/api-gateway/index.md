@@ -17,12 +17,12 @@ summary: An API Gateway provides a single and unified API entry point across one
 ShowToc: true
 TocOpen: false
 images:
-  - azlan-baharudin--XBAEOR2ysM-unsplash.jpg
+  - images/api-gateway-cover.jpg
 cover:
-    image: "azlan-baharudin--XBAEOR2ysM-unsplash.jpg"
+    image: "images/api-gateway-cover.jpg"
     alt: "API Gateway - Should you build one?"
     caption: "API Gateway - Should you build one?"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: false 
 ---
 
 ## What is an API Gateway ?

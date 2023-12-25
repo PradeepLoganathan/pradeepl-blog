@@ -10,6 +10,7 @@ TocOpen: false
 tags: 
   - Azure
   - Eventdriven
+
 categories: 
   - "azure"
 summary: "Azure Event Grid is an eventing back plane that enables event-driven and reactive programming. In this blog post series we will understand Azure Event Grid and look at developing an event driven application using Azure Event Grid as the backplane"
@@ -22,11 +23,11 @@ cover:
 
 This post is part of a three post series on Azure Event Grid
 
-[Part 1 - Azure Event Grid - Introduction](https://pradeepl.com/blog/azure/azureeventgrid-introduction)
+[Part 1 - Azure Event Grid - Introduction]({{< ref "/blog/azure/azureeventgrid-introduction" >}})
 
-[Part 2 - Azure Event Grid - Create Topics](https://pradeepl.com/blog/azure/azureeventgrid-createtopic)
+[Part 2 - Azure Event Grid - Create Topics]({{< ref "/blog/azure/azureeventgrid-createtopic" >}})
 
-[Part 3 - Azure Event Grid - Creating Custom events](https://pradeepl.com/blog/azure/azureeventgrid-createcustomevents)
+[Part 3 - Azure Event Grid - Creating Custom events]({{< ref "/blog/azure/azureeventgrid-createcustomevents" >}}))
 
 
 An azure eventgrid event object has the below schema. Azure also gives you an option to select an alternate schema called Cloud Schema. For now let's look at the event grid schema.
