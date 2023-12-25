@@ -16,7 +16,7 @@ categories:
   - "cloud"
 summary: The twelve-factor app principles are a collection of best practices for building microservices-based cloud-native applications. These applications are modular, scalable, and agile. They are designed to perform at web scale and provide high resiliency.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - 12-factor-apps.png
 cover:

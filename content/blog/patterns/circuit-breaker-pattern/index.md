@@ -16,9 +16,9 @@ TocOpen: true
 images:
   - images/circuit-breaker-pattern.png
   - images/Circuit-Breaker-sequence.png
-  
+
 cover:
-    image: "images/Circuit-Breaker-pattern.png"
+    image: "images/circuit-breaker-pattern.png"
     alt: "Circuit Breaker pattern"
     caption: "Circuit Breaker Design Pattern"
     relative: true
