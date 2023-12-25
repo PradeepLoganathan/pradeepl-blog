@@ -28,7 +28,7 @@ cover:
  
 ---
 
-This blog post is a follow up to my [previous post]({{< ref "/blog/kubernetes/kubernetes-gatekeeper-an-introduction">}}) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster. We can deploy Gatekeeper to any kubernetes cluster on cloud providers or on premises. For this blog post , I am using Kind to create a cluster locally.
+This blog post is a follow up to my [previous post]({{< ref "/blog/kubernetes/opa-gatekeeper">}}) introducing policy management and implementation using gatekeeper. In this post we will look at deploying gatekeeper, creating policies using constraints and constraint templates. We will create a constraint and test the same. To get started, let us create a cluster. We can deploy Gatekeeper to any kubernetes cluster on cloud providers or on premises. For this blog post , I am using Kind to create a cluster locally.
 
 ## The Basics
 
@@ -160,7 +160,7 @@ pod/gatekeeper-controller-manager-66f474f785-kkqdc condition met
 pod/gatekeeper-controller-manager-66f474f785-klsz2 condition met
 ```
 
-Now that we have confirmed that all the gatekeeper components are up and running, let us create a [constraint template]({{< ref "/blog/kubernetes/kubernetes-gatekeeper-an-introduction#constraint-template" >}}) and implement a [constraint]({{< ref "/blog/kubernetes/kubernetes-gatekeeper-an-introduction#constraint" >}}).
+Now that we have confirmed that all the gatekeeper components are up and running, let us create a [constraint template]({{< ref "/blog/kubernetes/opa-gatekeeper#constraint-template" >}}) and implement a [constraint]({{< ref "/blog/kubernetes/opa-gatekeeper#constraint" >}}).
 
 ## Creating and Implementing Constraints
 
@@ -207,7 +207,7 @@ spec:
         } 
 ```
 
-This container template validates all containers being created. If the containers have an image repository which is not part of the allow list of repositories it flags a violation. The allowed list of container repositories is passed in as a template parameter. It uses Rego policy language to specify the validation policy . I have authored a [blog post]({{< ref "/blog/kubernetes/introduction-to-open-policy-agent-opa#REGO" >}}) providing an introduction to rego. In this template the rego code extracts the container spec. It then checks if `` container.image `` contains any of the repos specified by the `` input.parameters.repo `` array and assigns the value to satisfied. If `` satisfied `` is not set, we know that the image was not pulled from the list of allowed repositories. The allowed list of repositories is passed in as a parameter as specified in line 14. The list of repositories is passed in as an array of strings. This is indicated by the data type of the parameter in line 15. Now that we have created the constraint template let us deploy it to the cluster.
+This container template validates all containers being created. If the containers have an image repository which is not part of the allow list of repositories it flags a violation. The allowed list of container repositories is passed in as a template parameter. It uses Rego policy language to specify the validation policy . I have authored a [blog post]({{< ref "/blog/kubernetes/open-policy-agent-opa#REGO" >}}) providing an introduction to rego. In this template the rego code extracts the container spec. It then checks if `` container.image `` contains any of the repos specified by the `` input.parameters.repo `` array and assigns the value to satisfied. If `` satisfied `` is not set, we know that the image was not pulled from the list of allowed repositories. The allowed list of repositories is passed in as a parameter as specified in line 14. The list of repositories is passed in as an array of strings. This is indicated by the data type of the parameter in line 15. Now that we have created the constraint template let us deploy it to the cluster.
 
 ### Apply Constraint Template
 
