@@ -15,21 +15,21 @@ summary: GraphQL is a query language for APIs. It is a query language that provi
 ShowToc: true
 TocOpen: false
 images:
-  - giorgio-grani-cDsakT8anSw-unsplash.jpg
+  - images/graphql-cover.jpg
 cover:
-    image: "giorgio-grani-cDsakT8anSw-unsplash.jpg"
+    image: "images/graphql-cover.jpg"
     alt: "Getting started with GraphQL"
     caption: "Getting started with GraphQL"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
 ---
 
-GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification. It is also a runtime designed for fulfilling these queries. [REST APIs](https://pradeepl.com/blog/rest/identifying-resources-and-designing-representations/), adhere to the requirements dictated by the server in the form of an API contract, GraphQL APIs respond to client queries with a response that adheres to the shape of the query specified by the client. GraphQL service is transport agnostic but is typically served over HTTP.
+GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification. It is also a runtime designed for fulfilling these queries. [REST APIs]({{< ref "/blog/rest/identifying-resources-and-designing-representations" >}}), adhere to the requirements dictated by the server in the form of an API contract, GraphQL APIs respond to client queries with a response that adheres to the shape of the query specified by the client. GraphQL service is transport agnostic but is typically served over HTTP.
 
 GraphQL was developed by Lee Byron, Nick Schrock, and Dan Schafer at Facebook in 2012. It was shared with the broader community in 2015 and is now governed through the GraphQL foundation. You can read more about it here… [Introducing the GraphQL Foundation (leebyron.com)](https://leebyron.com/introducing-the-graphql-foundation/)
 
 # REST vs GraphQL
 
-GraphQL is not a replacement for REST API’s, it complements a REST API by compensating for some of the drawbacks of using the [REST specification](https://pradeepl.com/rest/what-is-rest/). (I have also seen some teams replace the REST design completely with a GraphQL approach.) Some of the drawbacks of REST API’s are
+GraphQL is not a replacement for REST API’s, it complements a REST API by compensating for some of the drawbacks of using the [REST specification]({{< ref "/blog//rest/what-is-rest" >}}). (I have also seen some teams replace the REST design completely with a GraphQL approach.) Some of the drawbacks of REST API’s are
 
 ## Overfetching
 
@@ -132,7 +132,7 @@ GET https://api.themoviedb.org/3/movie/550/
 }
 ```
 
-Overfetching can be solved either by specifying the fields required in the HTTP request using query parameters. However, this does not scale well in complex scenarios. Another option is to create a [BFF (Backend for Frontend)](https://pradeepl.com/blog/api-gateway/#backend-for-frontend-bff). BFF’s are API’s which provide a facade around a backend API and are customized for a specific front end. In the above example we can use a BFF to provide a facade around the /products endpoint called maybe /mobile-products and allow mobile clients to call a /mobile-products endpoint which only provides the two fields that the mobile clients are interested in. This causes proliferation of BFF’s based on client applications.
+Overfetching can be solved either by specifying the fields required in the HTTP request using query parameters. However, this does not scale well in complex scenarios. Another option is to create a [BFF (Backend for Frontend)]({{< ref "/blog/api/api-gateway#backend-for-frontend-bff" >}}). BFF’s are API’s which provide a facade around a backend API and are customized for a specific front end. In the above example we can use a BFF to provide a facade around the /products endpoint called maybe /mobile-products and allow mobile clients to call a /mobile-products endpoint which only provides the two fields that the mobile clients are interested in. This causes proliferation of BFF’s based on client applications.
 
 ## Underfetching
 

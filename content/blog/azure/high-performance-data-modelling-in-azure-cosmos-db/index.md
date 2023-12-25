@@ -10,14 +10,14 @@ categories:
   - "cosmosdb"
 tags: 
   - "comosdb"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
-summary: A Repository is used to manage aggregate persistence and retrieval. The repository mediates between the data-access layer and the domain.The unit of work pattern keeps track of all changes to aggregates. Once all updates of the aggregates in a scope are completed, the tracked changes are played onto the database in a transaction
+
+summary: It is imperative to understand core concepts involved in modelling data in Cosmos Db to harness its power. It is an extremely powerful cloud native database.
 ShowToc: true
 TocOpen: false
 images:
-  - cover.jpg
+  - images/CosmosDB-pradeepl.jpg
 cover:
-    image: "cover.jpg"
+    image: "images/CosmosDB-pradeepl.jpg"
     alt: "High performance Data modelling in Azure Cosmos Db"
     caption: "High performance Data modelling in Azure Cosmos Db"
     relative: false # To use relative path for cover image, used in hugo Page-bundles

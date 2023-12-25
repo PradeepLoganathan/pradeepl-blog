@@ -18,10 +18,10 @@ series: ["REST"]
 images:
   - "images/REST-architectural-constraints.png"
 cover:
-    image: "images/REST-architectural-constraints.png"
-    alt: "REST constraints"
-    caption: "REST constraints"
-    relative: true # To use relative path for cover image, used in hugo Page-bundles
+    image: "images/representational-state-transfer-rest.png"
+    alt: "Representational State Transfer - REST"
+    caption: "Representational State Transfer - REST"
+    relative: true
  
 ---
 

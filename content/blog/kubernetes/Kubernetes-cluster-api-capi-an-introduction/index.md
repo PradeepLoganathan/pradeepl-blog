@@ -339,7 +339,7 @@ A _MachineHealthCheck_ crd identifies when a node is unhealthy and needs to be r
 
 The Cluster API thus allows us to standup clusters across multiple infrastructure providers both in the cloud and on-premises. The below blog posts go into detail on using CAPI to standup clusters
 
-* [Using CAPI to create Kubernetes clusters on Azure.](https://pradeepl.com/blog/kubernetes/using-cluster-api-to-create-kubernetes-clusters-on-azure/)
+* [Using CAPI to create Kubernetes clusters on Azure.]({{< ref "/blog/kubernetes/using-cluster-api-to-create-kubernetes-clusters-on-azure" >}})
 * Using CAPI to create Kubernetes clusters on AWS.
 
 ## Conclusion

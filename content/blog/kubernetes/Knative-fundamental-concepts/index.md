@@ -162,4 +162,4 @@ Knative build was spun off into the Tekton pipeline project. [This]({{< ref "/bl
 
 ## Installation & First Run
 
-We now have a good grounding of the fundamentals of Knative. This is critical to understand as part of taking steps to building [event driven architectures](https://pradeepl.com/blog/architecture/event-driven-architecture/) on Kubernetes. [This blog post](https://pradeepl.com/blog/kubernetes/deploying-a-serverless-knative-application-on-kind/) takes you through installing Knative and running a simple hello world app.
+We now have a good grounding of the fundamentals of Knative. This is critical to understand as part of taking steps to building [event driven architectures]({{< ref "/blog/architecture/event-driven-architecture" >}}) on Kubernetes. [This blog post]({{< ref "/blog/kubernetes/deploying-a-serverless-knative-application-on-kind" >}}) takes you through installing Knative and running a simple hello world app.

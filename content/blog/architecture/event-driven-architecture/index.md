@@ -16,12 +16,12 @@ summary: Event driven architecture (EDA) is an architectural paradigm where beha
 ShowToc: true
 TocOpen: true
 images:
-  - "images/cover.png"
+  - "images/eda-cover.png"
 cover:
-    image: "images/cover.png"
+    image: "images/eda-cover.png"
     alt: "Event Driven Architecture"
     caption: "Event Driven Architecture"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: false 
 ---
 
 # Introduction
@@ -105,7 +105,7 @@ Events can be grouped into logical collections of events called topics. Topics a
 
 An event-driven architecture in general comprises of three essential pieces: an event emitter, an event channel, and an event consumer. The event emitters are responsible for gathering state changes or events that occur within the event-driven system. They simply get the event and send it to the next step of the process which is the event channel. The event channel serve two purposes. one is to simply channel or funnel the event to a particular waiting consumer where the event will be processed and acted upon. Alternatively, the channel itself can react to the event, and perform some level of pre-processing on the event and then send it down to the consumers for the final processing. In some instances Pipelining is also possible where a consumer enriches an event and re-publishes it to the channel. Event processors/consumers are components that perform a specific task based on the event being processed.
 
-!["Event Driven Architecture"](images/Event-Driven-Architecture-1024x378.png)
+!["Event Driven Architecture"](images/Event-Driven-Architecture.png)
 
 Event Driven Architecture
 

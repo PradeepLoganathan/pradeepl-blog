@@ -22,7 +22,7 @@ images:
   - images/gitops-process.svg
 
 cover:
-    image: "Gitops-cover.png"
+    image: "images/Gitops-cover.webp"
     alt: "GitOps"
     caption: "GitOps"
     relative: true  # To use relative path for cover image, used in hugo Page-bundles

@@ -17,17 +17,15 @@ summary:
 ShowToc: true
 TocOpen: false
 images:
-  - images/andres-dallimonti-kjqTlMHLci4-unsplash.jpg
+  - images/terraform-aks-pradeepl.jpg
 cover:
-    image: "images/andres-dallimonti-kjqTlMHLci4-unsplash.jpg"
+    image: "images/terraform-aks-pradeepl.jpg"
     alt: "Building a secure and high-performance AKS Kubernetes cluster using Terraform"
     caption: "Building a secure and high-performance AKS Kubernetes cluster using Terraform"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
- 
-
+    relative: false 
 ---
 
-I have been part of a couple of build outs where we built [Kubernetes](https://pradeepl.com/kubernetes/kubernetes-concepts-pods/) clusters to run our cloud workloads. These builds involved deploying AKS clusters using terraform and AzDO. Designing the AKS infrastructure is key to ensure that the cloud workloads running on them can be deployed, secured, and hosted effectively. In this post I am documenting the general steps involved in building out a Kubernetes infrastructure on Azure Kubernetes Service (AKS) using terraform and deploy workloads using Azure devops (AzDO) and Helm charts.
+I have been part of a couple of build outs where we built Kubernetes clusters to run our cloud workloads. These builds involved deploying AKS clusters using terraform and AzDO. Designing the AKS infrastructure is key to ensure that the cloud workloads running on them can be deployed, secured, and hosted effectively. In this post I am documenting the general steps involved in building out a Kubernetes infrastructure on Azure Kubernetes Service (AKS) using terraform and deploy workloads using Azure devops (AzDO) and Helm charts.
 
 You can follow along as we build the AKS Kubernetes cluster using the code at [this github repository](https://github.com/PradeepLoganathan/azure_aks_terraform).
 
@@ -560,7 +558,7 @@ Plan: 11 to add, 0 to change, 3 to destroy.
 ------------------------------------------------------------------------
 ```
 
-!["Terraform Plan"](images/terraform-apply-1024x488.png)
+!["Terraform Plan"](images/terraform-apply.png)
 
 ```shell
 Terraform Apply -auto-approve
