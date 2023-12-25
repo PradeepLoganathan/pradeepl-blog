@@ -12,7 +12,7 @@ tags:
   - platformengineering
 categories:
   - platformengineering
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
+
 summary: "Policy as Code is the idea of writing code to manage and automate policies. Policy as Code arose as a natural progression from Infrastructure as Code."
 ShowToc: true
 TocOpen: true
@@ -22,9 +22,15 @@ cover:
     image: "images/policy-as-code.jpeg"
     alt: "Policy as Code"
     caption: "Policy as Code"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: false 
  
 ---
+
+# Policy
+
+We all interact with various policies on a daily basis, often without even realizing it. They are a set of principles, guidelines or rules that guide our decisions and actions imperceptibly. They are designed to guide decisions and achieve rational outcomes. Policies are established by organizations, governments, or other entities to ensure consistent and efficient operations. They ensure compliance with laws and regulations, and guide decision-making processes. These could be Government policies, Workplace policies, educational policies, and others. For instance, a company might have a policy about expense management which employees need to follow every day. Similarly, a government's environmental policy shapes how businesses and individuals interact with the environment on a daily basis.
+
+Organizations are governed by standards and controls established by statutory authorities. Organizational policies are setup to enforce these standards and controls. They are generally setup by Governance, Risk and Compliance (GRC) teams within an organization. For e.g the GRC team may work with the platform engineering team to ensure that sensitive data is encrypted in transit in order to adhere to industry standards. Policies governing IT infrastructure and projects are crucial for ensuring that information technology resources are built & used effectively, securely, and in alignment with an organization's standards and controls. These could be Security policies, Disaster recovery policies, Privacy policies, Software development policies, and many others. 
 
 # The Emergence of Policy as Code
 
@@ -38,9 +44,11 @@ In the following sections, we will delve deeper into the history of policy manag
 
 # From Manual to Automated: The Shift in Policy Management
 
-In the early days of IT, policy management was predominantly a manual and often cumbersome process. It involved extensive documentation, rigorous manual reviews, and a significant amount of human intervention. This approach, while straightforward, was fraught with challenges. It was not only time-consuming but also prone to errors and inconsistencies. As IT environments were relatively simple and changes less frequent, this method, despite its drawbacks, was manageable.
+Organizations generally start off with naive policy implementation processes. It is predominantly a manual and often cumbersome process. It starts off with tribal or personalized knowledge. It evolves to extensive documentation ( wiki based or document based), rigorous manual reviews, and a significant amount of human intervention. This approach, while straightforward, is fraught with challenges. It is not only time-consuming but also prone to errors and inconsistencies. As long as IT environments are relatively simple and changes less frequent, this method, despite its drawbacks, is manageable. As IT environments become more complex these policies are hard coded and automated. Any updates or enhancements to policies requires code changes that can be extensive and require multiple levels of reviews.
 
-The landscape began to shift with the advent of automation in IT operations. The concept of [Infrastructure as Code (IaC)]({{< ref "/blog/infrastructure-as-code" >}}) emerged as a game-changer, allowing teams to manage and provision infrastructure through code rather than manual processes. This evolution marked a significant step towards more agile and consistent IT operations, setting the stage for similar transformations in policy management.
+This landscape began to shift with the advent of automation in IT operations. The concept of [Infrastructure as Code (IaC)]({{< ref "/blog/infrastructure-as-code" >}}) emerged as a game-changer, allowing teams to manage and provision infrastructure through code rather than manual processes. This evolution marked a significant step towards more agile and consistent IT operations, setting the stage for similar transformations in policy management. Polices became configurable and dynamic. Engines which could interpret machine based polices and apply constraints played a key role in ensuring consistency across multiple dynamically provisioned environments. This allowed for a better degree of control in agile operations.
+
+![](images/policy-evolution.png)
 
 # Policy as Code: A Natural Progression
 

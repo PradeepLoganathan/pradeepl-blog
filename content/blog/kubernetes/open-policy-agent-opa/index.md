@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Open Policy Agent (OPA)"
+title: "Open Policy Agent (OPA) - Revolutionizing Policy as Code"
 lastmod: 2021-12-16T15:55:13+10:00
 date: 2021-12-16T15:55:13+10:00
 draft: false
@@ -11,13 +11,13 @@ tags:
 categories:
   - Kubernetes
 #slug: kubernetes/introduction-to-open-policy-agent-opa/
-summary: The Open Policy Agent (OPA) is an open-source engine to author declarative policies as code and use those policies as a component of the decision-making process. OPA provides a high-level declarative language ‘Rego’ to author policy as code.
+summary: The Open Policy Agent (OPA) is a policy engine to author declarative policies as code and use those policies as a component of the decision-making process. 
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
-  - introduction-to-open-policy-agent-opa-cover.jpg
+  - images/introduction-to-open-policy-agent-opa-cover.jpg
 cover:
-    image: "introduction-to-open-policy-agent-opa-cover.jpg"
+    image: "images/introduction-to-open-policy-agent-opa-cover.jpg"
     alt: "Introduction to Open Policy Agent (OPA)"
     caption: "Introduction to Open Policy Agent (OPA)"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
@@ -36,7 +36,7 @@ A modern approach to resolve this is to enable entitlement externalization. Enti
 3. Policy Decision Point (PDP) – The PDP provides the actual entitlement decision. The PDP applies a set of policies to the request to determine an allow or deny outcome.
 4. Policy Information Point (PIP) – The PIP supplies additional data and information to the PDP to make entitlement decisions.
 
-![Policy externalization - Architecture](Policy-externalization-Architecture.png)
+![Policy externalization - Architecture](images/Policy-externalization-Architecture.png)
 
 Entitlement Externalization – Services
 
@@ -44,7 +44,7 @@ OPA follows a similar architecture. OPA accepts structured data as input (JSON) 
 
 OPA can be used to define and enforce policies across microservices components, CI/CD pipelines, API gateways et al. OPA is utilized for several use cases like authorizing terraform based infrastructure changes, REST API authorization etc. OPA is additionally used for Kubernetes policy enforcement as an Admission Controller. Many enterprises use OPA to fulfil the above use cases. Chef uses OPA to bake in IAM capabilities in their [Chef automate product](https://www.youtube.com/watch?v=jrrW855xL3s). Netflix uses OPA to regulate access to its API resources. Other than Netflix, Cloudflare, Pinterest, Intuit, Capital One, State Street, and many others use OPA as a policy definition and enforcement tool. OPA became a CNCF sandbox project in 2018 and graduated from CMCF in February 2021.
 
-![](OPA-Everywhere.png)
+![](images/OPA-Everywhere.png)
 
 Add fine grained policy management to multiple projects
 
@@ -60,7 +60,7 @@ Using OPA provides the following benefits
 
 ## OPA Architecture
 
-![](OPA-design.png)
+![](images/OPA-design.png)
 
 Image source : <https://www.openpolicyagent.org/docs/>
 
@@ -74,7 +74,7 @@ OPA can be installed by downloading the latest release from their [github page](
 
 ```console
 #download opa
-❯ curl -L -o opa https://github.com/open-policy-agent/opa/releases/download/v0.35.0/opa_linux_amd64
+❯ curl -L -o opa https://github.com/open-policy-agent/opa/releases/download/v0.60.0/opa_linux_amd64
 % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                      Dload  Upload   Total   Spent    Left  Speed
 100   652  100   652    0     0   1852      0 --:--:-- --:--:-- --:--:--  1847
@@ -90,11 +90,12 @@ You can now check to see if OPA is installed by checking its version
 ```console
 #check opa version
 ❯ opa version
-Version: 0.35.0
-Build Commit: a54537a
-Build Timestamp: 2021-12-01T02:11:19Z
-Build Hostname: 7e15c2339707
-Go Version: go1.17.3
+Version: 0.60.0
+Build Commit: a1a2ae3cbb5fdddf306b1ef67ca5a856fd94fa15
+Build Timestamp: 2023-12-20T22:07:16Z
+Build Hostname: df283db3521d
+Go Version: go1.21.5
+Platform: linux/amd64
 WebAssembly: available
 ```
 
@@ -135,7 +136,7 @@ We can run OPA as a server using the –server flag as below.
 
 This starts a server which runs by default at port 8181. We can use this to build policies and test them.
 
-![](OPA-Server.png)
+![](images/opa-server.png)
 
 ## OPA Server
 

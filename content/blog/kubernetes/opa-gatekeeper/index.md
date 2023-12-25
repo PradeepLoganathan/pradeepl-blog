@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes Gatekeeper – An introduction"
+title: "OPA Gatekeeper - Transforming Kubernetes with Dynamic Policy Enforcement"
 lastmod: 2022-01-07T15:55:13+10:00
 date: 2022-01-07T15:55:13+10:00
 draft: false
@@ -11,15 +11,15 @@ tags:
 categories:
   - Kubernetes
 #slug: kubernetes/kubernetes-opa-gatekeeper-an-introduction/
-summary: Gatekeeper is a Kubernetes-native policy controller that enables resource validation and audit functionality for a Kubernetes cluster. It is an open-source customizable Kubernetes admission webhook used for cluster policy administration and governance.
+summary: OPA Gatekeeper is a Kubernetes-native policy controller that enables resource validation and audit functionality for a Kubernetes cluster.
 ShowToc: true
 TocOpen: true
 images:
-  - images/Kubernetes-Gatekeeper-Cover.png
+  - images/OPA-Gatekeeper-Cover.png
 cover:
-    image: "images/Kubernetes-Gatekeeper-Cover.png"
-    alt: "Kubernetes Gatekeeper – An introduction"
-    caption: "Kubernetes Gatekeeper – An introduction"
+    image: "images/OPA-Gatekeeper-Cover.png"
+    alt: "OPA Gatekeeper – An introduction"
+    caption: "OPA Gatekeeper – An introduction"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
