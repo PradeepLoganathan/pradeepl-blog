@@ -16,11 +16,11 @@ categories:
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: In this post we will deploy MS Sql Server in a kubernetes cluster. We will then configure it as an always on availability group.We will also look at synchronization and failover.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
-  - Deploying_sql_server_on_kubernetes.png
+  - images/Deploying_sql_server_on_kubernetes.png
 cover:
-    image: "Deploying_sql_server_on_kubernetes.png"
+    image: "images/Deploying_sql_server_on_kubernetes.png"
     alt: "Deploying Sql Server on Kubernetes for High Availability and Disaster Recovery"
     caption: "Deploying Sql Server on Kubernetes for High Availability and Disaster Recovery"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
@@ -50,7 +50,7 @@ Availability Groups offer two synchronization options to synchronize the seconda
  
 We can build a SQL Server Availability Group on a Kubernetes cluster. The overall design of the build out is below. We are deploying 3 instances of sql server with one instance as primary with read/write and two secondaries as read replicas for read scale out. One of the replicas is synchronized concurrently with the primary replica. The other replica is asynchronously synchronized with the primary replica.
 
-!["Single Cluster Availability Group"](Single-Availability-Group.png)
+!["Single Cluster Availability Group"](images/Single-Availability-Group.png)
 ## Persistent Storage
 
 Since we are deploying a stateful workload on kubernetes we need to define the necessary storage structures. The cluster needs to provision storage, the pods need to mount the storage provisioned as volumes and a request for the storage should be defined in the manifest as a persistent volume claim. We would need to create these before we can deploy SQL Server on kubernetes.
@@ -435,7 +435,7 @@ replicaset.apps/mssqlag-secondary2-deployment-5ff7f7cfc7   1         1         1
 
 A graphical representation of the cluster with the persistent volumes and volume claims is shown below
 
-![Example image](SQL_Server_On_Kubernetes.png)
+!["SQL Server on Kubernetes"](images/SQL_Server_On_Kubernetes.png)
 ## Configuring the Read Scale Availability Group
 
 ### Configuring the Primary SQL Server
@@ -817,9 +817,9 @@ Total execution time: 00:00:00.021
 
 This confirms that any data inserted into the primary replica is replicated to the secondaries.
 
-## Syncronous commit performance
+## Synchronous commit performance
 
-Since we have setup the Availability group for syncronous commit any transaction on the primary will wait on the synchronized secondary databases to harden the log before it is committed to the primary. This wait type is expected for synchronous-commit Availability Groups and indicates the time to send, write, and acknowledge log commit to the secondary databases. We can query the ```sys.dm_os_wait_stats``` DMV to get metrics on the wait time.
+Since we have setup the Availability group for synchronous commit any transaction on the primary will wait on the synchronized secondary databases to harden the log before it is committed to the primary. This wait type is expected for synchronous-commit Availability Groups and indicates the time to send, write, and acknowledge log commit to the secondary databases. We can query the ```sys.dm_os_wait_stats``` DMV to get metrics on the wait time.
 
 ```sql
 # waiting_tasks_count and wait_time_ms. Both columns represent the number of commands and the wait time respectively taken to commit on secondary and acknowledge on the primary.
@@ -840,7 +840,7 @@ average wait time
 
 ## Availability Group failover
 
-We need to first check if the secondary replica is ready for failover using the below sql command. The ```sys.dm_hadr_database_replica_cluster_states``` DMV returns information about the health of the availability databases in the always on availablilty group. If the ```is_failover_ready``` bit is set to 1 then the secondary is synchronized and ready to failover.
+We need to first check if the secondary replica is ready for failover using the below sql command. The ```sys.dm_hadr_database_replica_cluster_states``` DMV returns information about the health of the availability databases in the always on availability group. If the ```is_failover_ready``` bit is set to 1 then the secondary is synchronized and ready to failover.
 
 ```sql
 SELECT is_failover_ready
@@ -871,7 +871,7 @@ join sys.availability_groups_cluster ag ON gs.group_id = ag.group_id
 WHERE gs.primary_replica = 'mssql-primary'
 ```
 
-This query returns empty indicating that the primary is down and not synchornizing.  However if we run this query for the secondary we can see that the secondary is up but not synchornizing.
+This query returns empty indicating that the primary is down and not synchronizing.  However if we run this query for the secondary we can see that the secondary is up but not synchronizing.
 
 ```sql
 name    (No column name)    synchronization_health
@@ -901,6 +901,6 @@ Total execution time: 00:00:00.190
 
 ## Conclusion
 
- ![finally](finally.gif)
+ ![finally](images/finally.gif)
 
- In this post we have run through the steps required to setup a read scale an availability group on a Kubernetes cluster. We have ensured that the availabiity group synchronizes data and the secondary replicas can be used to scale reads. This enables the primary to perform better since the read load is distributed across the secondaries. A lot of workloads perform multiple reads and few writes and this is a huge performance boost for any workload. We have also completed a failover to a secondary and ensured that the data integrity is maintained. 
+ In this post we have run through the steps required to setup a read scale an availability group on a Kubernetes cluster. We have ensured that the availability group synchronizes data and the secondary replicas can be used to scale reads. This enables the primary to perform better since the read load is distributed across the secondaries. A lot of workloads perform multiple reads and few writes and this is a huge performance boost for any workload. We have also completed a failover to a secondary and ensured that the data integrity is maintained. 

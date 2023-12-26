@@ -30,6 +30,11 @@
       "source": "/blog/kubernetes/introduction-to-open-policy-agent-opa",
       "destination": "/blog/kubernetes/open-policy-agent-opa",
       "type": 301
+    },
+    {
+      "source": "blog/kubernetes/kubernetes-cluster-api-capi-an-introduction",
+      "destination": "blog/kubernetes/cluster-api-capi",
+      "type": 301
     }]
   }
 }

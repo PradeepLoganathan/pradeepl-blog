@@ -22,7 +22,6 @@ cover:
     caption: "Introduction to Open Policy Agent (OPA)"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
  
-
 ---
 
 The [Open Policy Agent (OPA)](https://www.cncf.io/projects/open-policy-agent-opa/) is an open-source engine to author declarative policies as code and use those policies as a component of the decision-making process. OPA started off in 2016 as an open-source project by Styra, with the goal of unifying policy enforcement across heterogeneous technology stacks. OPA provides a high-level declarative language ‘Rego’ to author policy as code. Declaring policies as code allows us to persist them in source control and version them.
