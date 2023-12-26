@@ -11,7 +11,7 @@ showToc: true
 description: ""
 
 cover:
-    image: "cover.png"
+    image: images/cover.png
     relative: true
 
 images:

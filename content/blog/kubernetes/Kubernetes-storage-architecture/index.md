@@ -17,14 +17,14 @@ categories:
 description: "Kubernetes abstracts away persistent storage from ephemeral pods and containers."
 
 cover:
-    image: "Kubernetes-Storage-Architecture.-Cover.png"
+    image: "images/Kubernetes-Storage-Architecture.-Cover.png"
     relative: true
     caption: "Kubernetes Storage Architecture"
     alt: "Kubernetes Storage Architecture"
 
 images:
-  - Kubernetes-Storage-Architecture.-Cover.png
-  - Kubernetes-Storage-Architecture-whiteboard.png
+  - images/Kubernetes-Storage-Architecture.-Cover.png
+  - images/Kubernetes-Storage-Architecture-whiteboard.png
 ---
 
 
@@ -192,6 +192,6 @@ PVs and PVCs work together as follows:
 
 ## Putting it all together
 
-![Kubernetes storage architecture - Whiteboard](Kubernetes-Storage-Architecture-whiteboard.png)
+![Kubernetes storage architecture - Whiteboard](images/Kubernetes-Storage-Architecture-whiteboard.png)
 
 When a workload in pod1 requests storage, the associated persistent volume claim created by the developer is used to bind to a Persistent Volume. The Persistent Volume is now avaialbale to the workload running in that pod. 

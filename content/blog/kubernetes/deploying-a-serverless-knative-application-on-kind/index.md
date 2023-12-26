@@ -13,15 +13,17 @@ TocOpen: false
 summary: "In this post we will walk through steps to create a Knative serving instance on a local Kind cluster. We will deploy kourier as the networking layer. We will then deploy an application on this cluster and see it scaling up and down"
 
 cover:
-  image: "knative.png"
+  image: "images/knative.png"
   relative: true
   alt: "Deploying a serverless knative application on kind"
   caption: "Deploying a serverless knative application on kind"
 
 images:
-  - cover.jpg
+  - images/cover.jpg
+
 categories:
   - Kubernetes
+  
 tags:
   - "knative"
   - "kind"

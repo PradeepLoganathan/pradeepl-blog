@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes Cluster API (CAPI) – An introduction"
+title: "Cluster API (CAPI) – A Practical Guide to Building Kubernetes Clusters"
 lastmod: 2021-12-12T15:55:13+10:00
 date: 2021-12-08T15:55:13+10:00
 draft: false
@@ -14,37 +14,35 @@ summary: Cluster API brings declarative, Kubernetes-style APIs to cluster creati
 ShowToc: true
 TocOpen: true
 images:
-  - datacenter-racks.jpg
+  - images/datacenter-racks.jpg
 cover:
-    image: "ClusterAPI-Cover.png"
+    image: "images/ClusterAPI-Cover.png"
     alt: "Kubernetes Cluster API - CAPI - An Introduction"
     caption: "Kubernetes Cluster API - CAPI - An Introduction"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
-editPost:
-  URL: "https://github.com/PradeepLoganathan/pradeepl-blog/tree/master/content"
-  Text: "suggest changes to this post" # edit text
-  appendFilePath: true # to append file path to Edit link
+
 ---
-## Introduction
+
+# Introduction
 
 There are many ways to get a Kubernetes cluster up and running. There are over 125+ different K8s certified distributions, hosting providers, and installers. A comprehensive list is [here](https://www.cncf.io/certification/software-conformance/). Most of the public cloud providers offer managed Kubernetes solutions (AKS, EKS, GKE…) that abstract away the K8s cluster creation process behind their proprietary APIs. These offer you a fantastic way to get started on creating and running K8s cluster workloads on their specific platforms. Another option is to use tooling such as [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/),[kOps](https://kops.sigs.k8s.io/), [Kubespray](https://github.com/kubernetes-sigs/kubespray), and many others. These tools provide the necessary functionality to create clusters on different cloud providers as well as on-premises infrastructure, enabling multi-cloud and hybrid-cloud scenarios. If you are of the more adventurous kind, then you can try and create it from scratch. [Kelsey Hightower](https://twitter.com/kelseyhightower) demonstrates one such method [here](https://github.com/kelseyhightower/kubernetes-the-hard-way). This involves everything from installing custom Linux services, generating TLS certificates, and a host of other steps.
 
-## Platform Diversity
+# Platform Diversity
 
 A survey by [Anchore](https://anchore.com/software-supply-chain-security-report/) demonstrates the diversity of Kubernetes platforms used across the board.
 
-![Container platform diversity](Container_platforms_used.png)
+![Container platform diversity](images/Container_platforms_used.png)
 
 While having multiple options to create a Kubernetes cluster is great, it results in massive operational and governance challenges. If you want to migrate your K8s cluster to a different cloud provider, you will need to rewrite your IaC code completely. If you need to change your bootstrap tool you would need to rewrite your IaC code again. Cluster creation is just one part of the problem, we need to perform cluster upgrades, deletion, scaling operations, etc. Cluster lifecycle management is challenging, especially if you are managing a fleet of clusters. Each of the above cluster creation options has strong opinions on the lifecycle management process of the cluster. All these problems become exacerbated as we create multiple clusters sometimes across cloud providers and on-premises systems. Additionally, a cluster requires other components such as load balancers, VPC/VNET and many others to provide the necessary functionality. Each of the above providers has highly opinionated and proprietary mechanisms to provision these into the cluster.
 
 As organizations scale , they often find themselves overseeing multiple Kubernetes clusters spread across multiple environments, including on-premises data centers and public clouds. This expansion brings its own set of challenges. Clusters might end up being configured differently, posing a hurdle in maintaining uniformity across the board. Regular updates and maintenance tasks for these clusters can be time-consuming. Ensuring that every cluster complies with security policies and regulatory requirements adds another layer of complexity. Additionally, optimally managing resources across these diverse clusters demands advanced and strategic planning. 
 
 
-## Cluster SIG
+# Cluster SIG
 
 To address the above challenges the [Cluster Lifecycle Special Interest Group](https://github.com/kubernetes/community/tree/master/sig-cluster-lifecycle) came together to identify a better way of creating a cluster, configuring it, and managing its lifecycle. The primary objective of this SIG is to simplify the creation, configuration, upgrade, downgrade, and teardown of Kubernetes clusters and their components. This should work across multiple providers, infrastructure types and enable uniformity, interoperability, extensibility, and simplicity. This would ideally use the same Kubernetes primitives and declarative model that have proven to be successful and is well known. The underlying cluster infrastructure, like virtual machines, networks, load balancers etc., would be managed the same way that developers manage application workloads. This should enable consistent and repeatable cluster deployments across a wide variety of infrastructure environments. Thus, the Cluster API was born primarily focusing on providing declarative API’s and tooling to simplify provisioning, managing, and operating multiple Kubernetes clusters.
 
-## Cluster API
+# Cluster API
 
 The Cluster API enables us to
 
@@ -56,20 +54,20 @@ The Cluster API enables us to
 
 The Cluster API is designed to be a consistent, declarative API. It enables broader use cases such as hybrid-cloud and multi-cloud, allowing providers to implement platform specific intrinsics in a standardized manner. Specifically designed for managing the entire lifecycle of Kubernetes clusters, including upgrades, scaling, and configuration changes, in a Kubernetes-centric way. Cluster API is designed to be Kubernetes-native, meaning it uses the Kubernetes API and its principles for managing clusters. This approach is more intuitive for teams already deeply integrated with Kubernetes, as it allows them to manage clusters as if they were standard Kubernetes resources.  Teams can use advanced processes such as [GitOps]({{< ref "/blog/gitops" >}}) to manage clusters. 
 
-## Cluster API architecture
+# Cluster API architecture
 
 The cluster api architecture consists of the Core API and the providers.
 
 * Core API - The core API consists of CRD's that model the infrastructure and configuration needed to create Kubernetes clusters. These CRD's model the physical servers, virtual machines and other infrastructure components.
 * Providers - The providers implement the necessary functionality and services for each infrastructure environment.
 
-!["Cluster API - Design"](ClusterAPI%20-%20Design.png#center)
+!["Cluster API - Design"](images/ClusterAPI-Design.png#center)
 
-### Cluster Types
+## Cluster Types
 
 Cluster API distinguishes between two distinct types of clusters, the management cluster, and the Workload clusters. It also uses a bootstrap cluster to enable bootstrapping the other clusters.
 
-#### Bootstrap Cluster
+### Bootstrap Cluster
 
 A bootstrap cluster is used to create the management cluster. It is a temporary cluster typically created locally using kind. It is destroyed once the management cluster is created. A bootstrap cluster performs the following actions
 
@@ -78,43 +76,43 @@ A bootstrap cluster is used to create the management cluster. It is a temporary 
 * Join the control plane and worker nodes to the cluster.
 * Install and configure networking plugin (Calico CNI), CSI volume provisioners, cluster-autoscaler and other core Kubernetes components.
 
-#### Management Cluster
+### Management Cluster
 
 A management cluster is also called a control-plane cluster. A management cluster is used to create and manage the lifecycle of workload clusters. This is a long-lived cluster. It contains the Custom Resource Definitions (CRD’s) and hosts the CAPI controllers to manage the resources.
 
-#### Workload Clusters
+### Workload Clusters
 
 Workload clusters are provisioned and managed by the management cluster using CAPI resources defined on the management cluster. The workload clusters are not CAPI-enabled and are not aware of the CAPI CRD’s or controllers. Typically, you would end up building multiple workload clusters. The workload clusters are used to host the application workloads.
 
-### Management Cluster Components
+## Management Cluster Components
 
 The management cluster hosts three distinct types of components namely
 
-#### Cluster API Core Manager
+### Cluster API Core Manager
 
 This controller manager is responsible for managing the lifecycle of the cluster. It understands the Cluster, Machine, MachineDeployment and MachineSet resources which are used to declare a cluster without any specific infrastructure details. The specific infrastructure declaration of the cluster is by other resource types that the bootstrap and infrastructure providers understand. These resource instances are referenced from the core CRDs.
 
-#### Bootstrap Provider
+### Bootstrap Provider
 
 The purpose of this provider is to generate a cloud-init script that can be used by the infrastructure providers when creating the machines for the clusters. It converts a Machine into a Kubernetes Node. There can be multiple implementations of this provider and each implementation will have its own CRD. The default provider is [CABPK](https://github.com/kubernetes-retired/cluster-api-bootstrap-provider-kubeadm) which uses kubeadm for bootstrapping the cluster. CABPK’s main responsibility is to convert a `KubeadmConfig` bootstrap object into a cloud-init script that is going to turn a Machine into a Kubernetes Node using `kubeadm`. The infrastructure provider will pick up the cloud-init script and proceed with the machine creation and the actual bootstrap. There are also other bootstrap providers such as [CABPT](https://github.com/talos-systems/cluster-api-bootstrap-provider-talos) which is a bootstrap provider for deploying [Talos](https://www.talos.dev/) based Kubernetes nodes.  
 
-#### Infrastructure Provider
+### Infrastructure Provider
 
 The infrastructure providers provision infrastructure in the target operating environment for the Kubernetes clusters. They use the bootstrap configuration created by the bootstrap provider. The actual infrastructure provisioned will depend on which provider you use. Each provider will have its own CRD implementations (infrastructure specific versions of Cluster, Machine, MachineTemplate). For example, The vSphere provider ([CAPV](https://github.com/kubernetes-sigs/cluster-api-provider-vsphere)) will provision components like virtual machines on a vSphere instance. The AWS provider ([CAPA](https://cluster-api-aws.sigs.k8s.io/)) will provision components like a VPC, NAT Gateway, EC2 Instances etc. There are providers for Azure, GCP, Packet, Metal3, OpenStack and others.  
 
-## Cluster API – Components
+# Cluster API – Components
 
 The Cluster API is implemented as several custom resource definitions (CRD) and controllers which are grouped into the Cluster API core manager and several types of “providers”. The Cluster API uses declarative resources to specify how a cluster topology should be configured.
 
-### Custom Resource Definitions (CRD’s)
+## Custom Resource Definitions (CRD’s)
 
 The Cluster API uses a bunch of custom resource definitions which represent the infrastructure and the configuration needed to create and manage a kubernetes cluster. Each CRD is managed by its corresponding controller. The controller is responsible to ensure that the desired state and the real state are reconciled. The Cluster API Core manager uses these controllers to manage the lifecycle of each cluster 
 
-!["Cluster API - Architecture"](CAPI-architecture.png#center)
+!["Cluster API - Architecture"](images/CAPI-architecture.png#center)
 
 Let us now understand each of these CRD’s better.
 
-#### Cluster
+### Cluster
 
 The _Cluster_ resource represents a Kubernetes cluster with necessary configuration parameters such as pod network CIDR, service network CIDR, API endpoints, Service domains etc. An infrastructure provider uses this information to create a Kubernetes cluster. This template was generated to deploy a cluster on azure.
 
@@ -252,7 +250,7 @@ spec:
 
 ```
 
-#### MachineDeployment
+### MachineDeployment
 
 A _MachineDeployment_ is a definition for a well-managed set of machines. It manages changes to machines by destroying and recreating them. It is similar to a deployment. It manages the MachineSet and allows for rollout/rollback. Each change to a MachineDeployment creates and scales up a new MachineSet to replace the old one. It reconciles changes to the Machine resources, by having a solid rolling-out strategy between MachineSets configurations similar to Deployments.
 
@@ -323,25 +321,25 @@ spec:
       preKubeadmCommands: []
 ```
 
-#### MachineSet
+### MachineSet
 
 A _MachineSet_ represents a group of machines. It is similar to a replicaset. The MachineSet controller will create machines based on the defined _replicas_ and the machine template. This ensures that the desired number of Machine resources are up and running.
 
-#### Machine
+### Machine
 
 A _Machine_ represents a K8s node. It represents an instance at a provider, which can be any kind of server, like an Azure VM, an AWS EC2 instance, a PXE booted bare-metal server or a Raspberry Pi. It is a declarative spec for a platform or infrastructure component that hosts a Kubernetes node such as a bare metal server or a VM. A machine resource is immutable. When a machine spec is updated, the controller deletes the machine and creates a new one that conforms to the new spec.
 
-#### MachineHealthCheck
+### MachineHealthCheck
 
 A _MachineHealthCheck_ crd identifies when a node is unhealthy and needs to be replaced.
 
-## Using CAPI to Standup Clusters
+# Using Cluster API to Standup Clusters
 
 The Cluster API thus allows us to standup clusters across multiple infrastructure providers both in the cloud and on-premises. The below blog posts go into detail on using CAPI to standup clusters
 
 * [Using CAPI to create Kubernetes clusters on Azure.]({{< ref "/blog/kubernetes/using-cluster-api-to-create-kubernetes-clusters-on-azure" >}})
 * Using CAPI to create Kubernetes clusters on AWS.
 
-## Conclusion
+# Conclusion
 
 The cluster API architecture allows for the creation of clusters in a declarative manner. It uses a familiar programming model and enables infrastructure providers to create clusters using an open, extensible model for implementation. It allows teams to use gitops processes to create clusters inline with how they deploy applications.

@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes Gatekeeper – An introduction"
+title: "OPA Gatekeeper - Transforming Kubernetes with Dynamic Policy Enforcement"
 lastmod: 2022-01-07T15:55:13+10:00
 date: 2022-01-07T15:55:13+10:00
 draft: false
@@ -11,15 +11,15 @@ tags:
 categories:
   - Kubernetes
 #slug: kubernetes/kubernetes-opa-gatekeeper-an-introduction/
-summary: Gatekeeper is a Kubernetes-native policy controller that enables resource validation and audit functionality for a Kubernetes cluster. It is an open-source customizable Kubernetes admission webhook used for cluster policy administration and governance.
+summary: OPA Gatekeeper is a Kubernetes-native policy controller that enables resource validation and audit functionality for a Kubernetes cluster.
 ShowToc: true
 TocOpen: true
 images:
-  - images/Kubernetes-Gatekeeper-Cover.png
+  - images/OPA-Gatekeeper-Cover.png
 cover:
-    image: "images/Kubernetes-Gatekeeper-Cover.png"
-    alt: "Kubernetes Gatekeeper – An introduction"
-    caption: "Kubernetes Gatekeeper – An introduction"
+    image: "images/OPA-Gatekeeper-Cover.png"
+    alt: "OPA Gatekeeper – An introduction"
+    caption: "OPA Gatekeeper – An introduction"
     relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
@@ -27,7 +27,7 @@ cover:
 
 ## Introduction
 
-[Gatekeeper](https://github.com/open-policy-agent/gatekeeper) is a Kubernetes-native policy controller that enables resource validation and audit functionality for a Kubernetes cluster. It is an open-source customizable [Kubernetes admission webhook]({{< ref "/blog/kubernetes/introduction-to-kubernetes-admission-controllers">}}) used for cluster policy administration and governance. It evaluates Kubernetes resource creation/modification requests against defined policies to determine whether to allow or deny a Kubernetes resource from being created, modified, or deleted. The policy evaluation happens on the server-side as the API request flows through the Kubernetes API server. This ensures that there is a single centralized point of policy evaluation per cluster. It uses [Open Policy Agent (OPA)]({{< ref "/blog/kubernetes/introduction-to-open-policy-agent-opa">}}) for policy definition and evaluation. For an in-depth exploration of how Policy as Code enhances policy management and enforcement in Kubernetes and beyond, don't miss my comprehensive post [Policy as Code: Revolutionizing IT Compliance and Governance]({{< ref "/blog/policy-as-code" >}})
+[Gatekeeper](https://github.com/open-policy-agent/gatekeeper) is a Kubernetes-native policy controller that enables resource validation and audit functionality for a Kubernetes cluster. It is an open-source customizable [Kubernetes admission webhook]({{< ref "/blog/kubernetes/introduction-to-kubernetes-admission-controllers">}}) used for cluster policy administration and governance. It evaluates Kubernetes resource creation/modification requests against defined policies to determine whether to allow or deny a Kubernetes resource from being created, modified, or deleted. The policy evaluation happens on the server-side as the API request flows through the Kubernetes API server. This ensures that there is a single centralized point of policy evaluation per cluster. It uses [Open Policy Agent (OPA)]({{< ref "/blog/kubernetes/open-policy-agent-opa">}}) for policy definition and evaluation. For an in-depth exploration of how Policy as Code enhances policy management and enforcement in Kubernetes and beyond, don't miss my comprehensive post [Policy as Code: Revolutionizing IT Compliance and Governance]({{< ref "/blog/policy-as-code" >}})
 
 Gatekeeper uses the OPA constraint framework to create custom resource definition (CRD)-based policies. Using CRDs provides a Kubernetes native experience, allows for separation of concerns, and decouples policy authoring from policy implementation. Policy authors can create policy templates which are referred to as constraint templates. The constraint template models the policy definition. These constraint templates can be shared and reused across clusters. Constraints are implemented using constraint templates. These constraints implement and enforce the policies defined by the constraint templates. Gatekeeper uses these constraints to enable resource validation and audit functionality. Gatekeeper can be implemented in any Kubernetes cluster.
 

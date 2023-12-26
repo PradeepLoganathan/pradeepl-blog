@@ -15,26 +15,26 @@ summary: Admission controllers provide extension points that augment Kubernetes 
 ShowToc: true
 TocOpen: true
 images:
-  - Admission-Controllers-Cover.png
-  - Admission-controller-webhook-Architecture.png
+  - images/Admission-Controllers-Cover.png
+  - images/Admission-controller-webhook-Architecture.png
 cover:
-  image: "Admission-Controllers-Cover.png"
+  image: "images/Admission-Controllers-Cover.png"
   alt: "Introduction to Kubernetes Admission Controllers"
   caption: "Introduction to Kubernetes Admission Controllers"
-  relative: true # To use relative path for cover image, used in hugo Page-bundles
+  relative: true 
  
 ---
 
 The Kubernetes API server is the gateway to the Kubernetes cluster. The Kubernetes API server implements a RESTful API over HTTP. It performs all API operations and is responsible for storing API objects into a persistent backend store (etcd). All communications and operations between external clients, such as kubectl and the control plane components are translated into RESTful API calls handled by the API server. All interactions between the control plane components also occur through the API server. The API server is stateless and designed to scale horizontally.
 
-## Kubernetes HTTP Request flow
+# Kubernetes API request lifecycle
 
 ![Kubernetes HTTP request flow](Admission-Controllers-Architecture.png)
 
 The above diagram depicts a simplified Kubernetes API request lifecycle. When the API server is called the request goes through the Authentication, Authorization and Admission control stages.  
 The authentication components are responsible for authenticating the client sending the request. The API server supports different authentication methods such as HTTP basic auth, bearer token, client certificates etc. Authentication has plugin extensions that can support different authentication providers such as Azure AD, OIDC etc. If authentication is successful, the request is passed along to the authorization components. The authorization components determine if the user has the necessary privileges to perform the requested action. This determines, for example, if the user can create deployments, list pods etc. Authorization is also pluggable and multiple authorization modules can be configured. However, if any authorization module approves or denies the request the response is returned immediately to the caller. If the request is authenticated and authorized successfully, it is passed on to the admission controllers.
 
-## Admission Controllers
+# Admission Controllers
 
 Admission controllers provide extension points that augment Kubernetes functionality. Admission controllers determine if the request is well-formed and approve or reject the API request. The admission controllers can potentially apply modifications to the request before it is processed. Admission controllers simply accept or deny Kubernetes resource API requests. It is important to know that they only act on create, update, delete, or proxy requests. These controllers cannot mutate or change requests to list resources. Several admission controllers are built into the Kubernetes API server. These are compiled and shipped with the kube-apiserver binary and can be enabled selectively by administrators. The list of built-in admission controllers is in the Kubernetes documentation [here.](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#what-does-each-admission-controller-do) These admission controllers perform specific actions on specific object types. For example, the [LimitRanger](https://kubernetes.io/docs/concepts/policy/limit-range/) admission controller sets default limits for Pods that do not have specified limits based on the constraints specified in the LimitRange object of the namespace. Another example is the [AlwaysPullImages](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#alwayspullimages) admission controller, which sets the ImagePullPolicy of every pod to AlwaysPullImages. These built-in admission controllers may be enabled or disabled depending on the Kubernetes version. Cloud providers such as AWS, Azure and Google may also enable or disable some of these admission controllers on their managed Kubernetes offerings. Admission controllers can be enabled by the cluster administrator using –admission-control-config-file or the –enable-admission-plugins parameters.
 
@@ -44,7 +44,7 @@ Admission controllers provide extension points that augment Kubernetes functiona
 
 Admission controllers follow a two-step process. The first phase is the mutating phase, where changes are made to the resource requests. The second phase is the validating phase where the resource requests are validated. If a request is disallowed during the validating phase the entire request gets rejected and error messages are generated to indicate the cause of the failure.
 
-## Types of admission controllers
+# Types of Admission Controllers
 
 There are two types of admission controllers
 
@@ -53,13 +53,13 @@ There are two types of admission controllers
 
 Let us take a look at them in detail.
 
-### Mutating admission controllers
+## Mutating admission controllers
 
 Mutating admission controllers take in Kubernetes resource specifications and return an updated resource specification. They modify the resource attributes before they are passed into subsequent phases. They also perform side-effect calculations or make external calls (in the case of custom admission controllers).
 
 An example of a mutating admission controller is the [ServiceAccount](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/) admission controller. This admission controller acts whenever a request to create or update a pod is submitted. If the pod does not have a service account, it adds the field and sets it to the default service account for the namespace. It adds imagepullsecrets and a volume mounted at /var/run/secrets/kubernetes.io/serviceaccount to allow the pod to access its service account token.
 
-#### Using a mutating admission controller
+### Using a mutating admission controller
 
 Let us add a mutating admission controller to the pipeline and mutate an incoming request. As described earlier, we can see how the AlwaysPullImages admission controller modifies an incoming request to specify that the image should always be pulled. To demonstrate this, we can create a kind cluster and add the necessary admission controllers in addition to the default. I have used the enable-admission-plugins section to specify the admission controllers that would be needed. The kind cluster definition is below
 
@@ -156,11 +156,11 @@ items:
 
 Mutating admission controllers ensure that operational policies are implemented on any new object creation or object update requests. This ensures that configuration drift can be controlled using an automated process.
 
-### Validating admission controllers
+## Validating admission controllers
 
 Validating controllers admit or reject a request. They do not modify a request. E.g., the [NamespaceLifeCycle](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#namespacelifecycle) admission controller ensures new object creation requests cannot be made in a namespace that is terminating or non-existent. It also ensures that Kubernetes native namespaces cannot be deleted.
 
-#### Using a validating admission controller
+### Using a validating admission controller
 
 Let us see how we can use a validating admission controller to validate and accept or reject object creation/update requests. The LimitRanges admission controller can be used to set the maximum and minimum limits on CPU, RAM and storage requests within a namespace at the object level. Let us create a LimitRange that defines a minimum and maximum memory allocation. Let us specify a minimum limit of 256 MB and a maximum limit of 512 MB using the below yaml definition.
 
@@ -213,7 +213,7 @@ Error from server (Forbidden): error when creating "memory-default-2gi.yaml": po
 
 As expected, the LimitRanges admission controller prevented the creation of this pod as its memory requirements violated the memory limits set for the namespace.
 
-## Why use Admission Controllers
+# Why use Admission Controllers
 
 Admission controllers are a key component of the Kubernetes request lifecycle. They offer several advantages
 
@@ -222,12 +222,12 @@ Admission controllers are a key component of the Kubernetes request lifecycle. T
 * Admission controllers can be used to validate configuration and prevent configuration drift. This helps in preventing resource misconfiguration and resource management.
 * Admission controllers enable policy-based security rules. It can be used to disallow containers from running with root privileges, prevent containers from pulling images from unauthorized sources etc.
 
-## Dynamic Admission Controllers
+# Dynamic Admission Controllers
 
 Admission controllers are compiled and distributed with the Kubernetes API server. Kubernetes provides a bunch of admission controllers out of the box. However, they do not provide all the necessary functionality that organizations may need to implement custom policies. They could only be configured when the API server was started either through the –enable-admission-plugins flag or the –admission-control-config-file. Cluster admins did not have an option to add or remove controllers dynamically at a later point in time. Dynamic admission controllers were built to solve this problem. They were released in version 1.17. A dynamic admission controller is an HTTP application that processes admissions requests. It can be deployed as a service in the cluster or can be deployed outside the cluster. Some cloud providers host dynamic admission controllers in their Function-As-A-Service(FAAS) offering. The API server connects to it through the Kubernetes service object or an arbitrary URL.
 
 The current default set of admission controllers includes two dynamic admission controllers namely, [validating admission webhook](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#validatingadmissionwebhook) and [mutating admission webhook](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#mutatingadmissionwebhook). These allow developers to customize admission logic on create, update, and delete actions performed on any resource. They can be developed as extensions and run as webhooks which can be configured at runtime. Mutating admission webhooks are invoked first and can modify requests. After all, modifications are complete, the validating admission webhooks are invoked to either accept or reject the request. We will look at building dynamic admission controllers in a subsequent post.
 
-## Conclusion
+# Conclusion
 
 Admission controllers are a key component of the admission process performed by the Kubernetes API server. They enable fine-grained control over the object creation, update, and deletion process. They are extensible using admission webhooks enabling developers to build custom admission logic.

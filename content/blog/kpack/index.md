@@ -1,5 +1,5 @@
 ---
-title: "Kpack"
+title: "Kpack - Streamlining Container Builds in Kubernetes"
 author: "Pradeep Loganathan"
 date: 2023-12-06T10:17:38+10:00
 
