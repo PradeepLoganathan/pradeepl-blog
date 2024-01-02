@@ -13,8 +13,7 @@ tags:
   - "REST"
   - "API"
 categories: 
-  - "architecture"
-  - "cloud"
+  - "REST"
 summary: REST API's have a very rich vocabulary to communicate a variety of statuses and results. The verbs put, post, update, get and others are used to indicate the action that must be performed. The status indicate the result of the actions performed by the verbs.
 ShowToc: true
 TocOpen: true
@@ -29,13 +28,11 @@ cover:
  
 ---
 
-## Overview of HTTP
-
 In the previous [blog post]({{< ref "/blog/rest/what-is-rest" >}})  we talked about REST resources, Identifiers and Representations. In this post we will look at how we can connect the various resources and their representations with identifiers using the [HTTP protocol]({{< ref "/blog/http2" >}}).
 
-In a RESTful system, clients and servers interact only by sending each other messages that follow a predefined protocol. The REST architectural style is primarily associated with designs that use HTTP as the transport protocol.  Even though we always associate the web with HTTP, it is but one of the long lived and dominant protocols. Protocols such as FTP, Gopher, Archie, Veronica, Jughead, Prospero etc. were part of the ecosystem but gave way to HTTP as it began to emerge as the dominant protocol. Some of the goodness of these protocols were also folded into the HTTP specification.
+In a RESTful system, clients and servers interact only by sending each other messages that follow a predefined protocol. The [REST architectural style]({{< ref "/blog/rest/rest-architectural-constraints" >}}) is primarily associated with designs that use HTTP as the transport protocol. Even though we always associate the web with HTTP, it is but one of the long lived and dominant protocols. Protocols such as FTP, Gopher, Archie, Veronica, Jughead, Prospero etc. were part of the ecosystem but gave way to HTTP as it began to emerge as the dominant protocol. Some of the goodness of these protocols were also folded into the HTTP specification.
 
-HTTP is an open protocol that defines a standard way for user agents to interact with both resources and the servers that produce the resources. It is an application-level protocol that defines operations for transferring representations between clients and servers .HTTP is a document-based protocol, in which the client puts a document in an envelope and sends it to the server. The server responds by putting a response document in another envelope and sending it back to the client. As an application protocol, HTTP is designed to keep interactions between clients and servers visible to libraries, servers, proxies, caches, and other tools. Visibility is a key characteristic of HTTP. When a protocol is visible, caches, proxies, firewalls, etc., can monitor and even participate in the protocol. Features like Caching responses, automatically invalidating cached responses, detecting concurrent writes, and preventing resource changes, Content negotiation and Safety and Idempotency depend entirely on keeping requests and responses visible. 
+HTTP is an open protocol that defines a standard way for user agents to interact with both resources and the servers that produce the resources. It is an application-level protocol that defines operations for transferring representations between clients and servers. HTTP is a document-based protocol, in which the client puts a document in an envelope and sends it to the server. The server responds by putting a response document in another envelope and sending it back to the client. As an application protocol, HTTP is designed to keep interactions between clients and servers visible to libraries, servers, proxies, caches, and other tools. Visibility is a key characteristic of HTTP. When a protocol is visible, caches, proxies, firewalls, etc., can monitor and even participate in the protocol. Features like Caching responses, automatically invalidating cached responses, detecting concurrent writes, and preventing resource changes, Content negotiation and Safety and Idempotency depend entirely on keeping requests and responses visible. 
 
 ## The Uniform Interface
 
@@ -156,7 +153,5 @@ Some of the commonly used HTTP status codes are below: -
 * 405 Method not allowed. The HTTP verb used on a resource is not allowed. For instance, doing a PUT on a resource that is read-only.
 
 * 500 Internal server error - A generic error code indicating that the server encountered an unexpected condition that prevented it from fulfilling the request. Normally, this response is accompanied by an error message explaining what went wrong.
-
-
 
 The above methods, status codes and messages define the protocol semantics of HTTP. Understanding the HTTP verbs, status codes and request response messages are key to defining restful architectures successfully on the HTTP protocol. We now understand the basic plumbing involved in RESTful architectures and in the [next blog post]({{< ref "/blog/rest/rest-architectural-constraints" >}}) we will look at the architectural constraints of REST.

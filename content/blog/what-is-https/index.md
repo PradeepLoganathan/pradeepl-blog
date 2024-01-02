@@ -29,9 +29,9 @@ cover:
  
 ---
 
-[HTTP]({{< ref "/blog/http2" >}})(Hypertext transfer protocol) is a network protocol used to serve up web pages. HTTPS, or HTTP Secure, was designed to secure communications between a client and the HTTP server. It is a protocol that uses a secure connection to transfer data over the internet. This protocol encrypts HTTP traffic before sending it out on the network. Early versions of HTTPS used a protocol called Secure Socket Layer (SSL) to encrypt the HTTP traffic. Versions 1, 2, and 3 of SSL were discovered to have security flaws. The replacement of SSL 3 was a new protocol called Transport Layer Security (TLS). TLS 1.0 and 1.1 have also been found to have flaws. TLS 1.2 or TLS 1.3 fixed these flaws and should be used, except when legacy systems require the use of older protocols for backward compatibility.
+[HTTP]({{< ref "/blog/http2" >}})(Hypertext transfer protocol) is a network protocol used to serve up web pages. HTTPS, or HTTP Secure, was designed to secure communications between a client and the HTTP server. The main purpose of HTTPS is to provide a secure channel over which data can be transmitted between a web browser and a web server. This is especially important when transferring sensitive information, like credit card details, login credentials, etc. This protocol encrypts HTTP traffic before sending it out on the network. Early versions of HTTPS used a protocol called Secure Socket Layer (SSL) to encrypt the HTTP traffic. Versions 1, 2, and 3 of SSL were discovered to have security flaws. The successor of SSL 3 was a new protocol called Transport Layer Security (TLS). TLS is a cryptographic protocol designed to provide secure communication over a computer network. The primary aim of TLS is to provide privacy and data integrity between two or more communicating computer applications. It's used in various applications like email, messaging, voice over IP, and HTTPS. Earlier versions of TLS have also been found to have flaws. TLS 1.3 fixed these flaws and should ideally be used, except when legacy systems require the use of older protocols for backward compatibility.
 
-HTTPS provides security to HTTP. HTTPS secures HTTP by using TLS over TCP on port 443. TLS is a protocol that can provide security to any TCP connection. Generally, establishing an HTTPS connection involves the client and server negotiating which protocol to use. The ideal outcome is that the client and server agree on the most secure, mutually supported protocol and cipher.
+HTTPS secures HTTP by using TLS over TCP on port 443. Generally, establishing an HTTPS connection involves the client and server negotiating which protocol to use. The ideal outcome is that the client and server agree on the most secure, mutually supported protocol and cipher.
 
 ## HTTP over the wire
 
@@ -40,15 +40,11 @@ HTTP is most commonly used to transmit web pages. The text on a web page is firs
 
 !["Http without TLS"](images/HTTP-without-TLS.png)
 
-HTTP without TLS
-
 ## HTTP with TLS - HTTPS
 
 TLS works inside TCP and sometimes UDP to provide a secure communication channel. Since it sits on top of the transport layer, it allows protocols higher in the chain to remain unchanged. HTTPS is then basically the same as the HTTP protocol, but it is sent inside a TLS channel. The protocol hides the actual data being sent across the wire. Attackers can only see what port, domain, and IP address are connected with it. There are other communication protocols that support TLS, such as web sockets (WSS), email (SMTPS), and FTP (FTPS). The visual representation with the addition of TLS when use with HTTP is below
 
 !["HTTP with TLS"](images/HTTP-with-TLS.png)
-
-HTTP with TLS
 
 ## TLS Handshake
 
@@ -60,10 +56,10 @@ The server selects the highest mutually supported version of SSL/TLS to use. It 
 
 Steps in the SSL/TLS handshake
 
-- Step A: The client sends a Hello message to the target server. This message includes the version of SSL or TLS the client is using and the client's preferences for encryption algorithms (cipher suite), a compression method, and a random string value for use in computations.
-- Step B: If all goes well, the server responds with its Hello message, which contains the server's choice for the cipher suite (from the client's list), a session ID, and its own random string value. The server then provides a digital certificate to the client. The server may request a certificate from the client.
-- Step C: The client verifies the server's certificate. If verified, it sends the random string value, encrypted with the server's public key, to the server. This value will generate the encryption key for any subsequent messages.
-- Step D: After exchanging encrypted finished messages to signal the end of the handshake's creation, the client and server transmit data and messages that have been encrypted with the shared key.
+- __Step A__: The client sends a Hello message to the target server. This message includes the version of SSL or TLS the client is using and the client's preferences for encryption algorithms (cipher suite), a compression method, and a random string value for use in computations.
+- __Step B__: If all goes well, the server responds with its Hello message, which contains the server's choice for the cipher suite (from the client's list), a session ID, and its own random string value. The server then provides a digital certificate to the client. The server may request a certificate from the client.
+- __Step C__: The client verifies the server's certificate. If verified, it sends the random string value, encrypted with the server's public key, to the server. This value will generate the encryption key for any subsequent messages.
+- __Step D__: After exchanging encrypted finished messages to signal the end of the handshake's creation, the client and server transmit data and messages that have been encrypted with the shared key.
 
 Secure TLS connections between the client and server have at least one of the following properties
 
