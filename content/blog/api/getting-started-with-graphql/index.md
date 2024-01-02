@@ -29,7 +29,7 @@ GraphQL was developed by Lee Byron, Nick Schrock, and Dan Schafer at Facebook in
 
 # REST vs GraphQL
 
-GraphQL is not a replacement for REST API’s, it complements a REST API by compensating for some of the drawbacks of using the [REST specification]({{< ref "/blog//rest/what-is-rest" >}}). (I have also seen some teams replace the REST design completely with a GraphQL approach.) Some of the drawbacks of REST API’s are
+GraphQL is not a replacement for REST API’s, it complements a REST API by compensating for some of the drawbacks of using the [REST specification]({{< ref "/blog/rest/what-is-rest" >}}). (I have also seen some teams replace the REST design completely with a GraphQL approach.) Some of the drawbacks of REST API’s are
 
 ## Overfetching
 

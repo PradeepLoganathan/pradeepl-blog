@@ -7,7 +7,17 @@ comments: true
 toc: true
 showToc: true
 TocOpen: false
+ShowPostNavLinks: true
+ShowRssButtonInSectionTermList: true
 summary: "Cross-Origin Resource Sharing or CORS is a mechanism that enables a web browser to perform cross-domain requests. Cross-domain requests are HTTP requests for resources hosted on a different domain than the domain of the resource making the request."
+tags: 
+  - "architecture"
+  - "cloud"
+  - "cloud native"
+  - "REST"
+  - "API"
+categories: 
+  - "REST"
 series: ["REST"]
 cover:
   image: CORS-cover.png"
@@ -17,21 +27,19 @@ cover:
  
 ---
 
-### Introduction
-
 Cross-Origin Resource Sharing or CORS is a mechanism that enables a web browser to perform "cross-domain" requests. Cross-domain requests are HTTP requests for resources hosted on a different domain than the domain of the resource making the request. CORS is a [W3 Spec](http://www.w3.org/TR/cors/) supported in HTML5 that manages XMLHttpRequest access to a different domain. It provides a set of request and response headers for defining which domains can access data and which HTTP methods they can utilize. But first, let us understand what same origin policy and its associated challenges are.
 
-### Same Origin Policy
+## Same Origin Policy
 
 Browsers implement a "same origin" policy for scripts to ensure security and prevent malicious attacks. A web application using XMLHttpRequest can only make HTTP requests to its own domain. The origin of a  resource such as a JavaScript file is defined by the domain of the HTML page which includes it.For e.g, I have a google analytics script embedded on my blog which is provided by Google. Since I copied it over into my scripts section, it has the same origin as my blog domain and can perform actions on my website. Imagine a scenario where you are logged into your online mail in your browser and click on a link which takes you to a malicious site in another tab. Without the same origin policy JavaScript on this malicious website can do anything with your mail account that you can do. It can send emails, downloading contacts etc. In an API enabled world, this gets even worse since the JavaScript on the browser can now call API's on your behalf without your explicit knowledge and permission.
 
 However, with the prevalence and rapid rise of JavaScript frameworks such as Angular, REACT, Ionic, Vue and others, JavaScript code now needs to be able to access API's across domains natively. CORS enables this functionality transparently and securely. The server providing the resource is in charge and can decide to support CORS by using the necessary response headers and indicating the Domains allowed, the Headers supported, Methods allowed and the response headers that the client can read.
 
-### CORS HTTP headers
+## CORS HTTP headers
 
 If a server wants its resources to be available securely to other domains, it should use the below headers to control access to it resources. The headers are
 
-- Access-Control-Allow-Origin: This header is used to control access to the resource and make it available for specific domains If you want to restrict it to specific domains( e.g. siteb.com ), the response header can be modified to allow the same by marking the header as Access-Control-Allow-Origin: https://siteb.com. If another site such as sitec.com tries to get access to this resource now, it will trigger an XMLHttpRequest error and deny access to the requesting JavaScript code. To allow access to the resource acros all domains thie header should be marked as Access-Control-Allow-Origin: \*.
+- Access-Control-Allow-Origin: This header is used to control access to the resource and make it available for specific domains If you want to restrict it to specific domains( e.g. siteb.com ), the response header can be modified to allow the same by marking the header as Access-Control-Allow-Origin: https://siteb.com. If another site such as sitec.com tries to get access to this resource now, it will trigger an XMLHttpRequest error and deny access to the requesting JavaScript code. To allow access to the resource across all domains this header should be marked as Access-Control-Allow-Origin: \*.
 
 - Access-Control-Allow-Methods: This header indicates the methods that can be used on the resource from other domains. The acceptable values are the HTTP verbs POST, PUT, GET, etc.
 
@@ -85,7 +93,7 @@ In this case, the server responds with a Access-Control-Allow-Origin: \* which m
 Access-Control-Allow-Origin: http://alloweddomain.org  
 Note that now, no domain other than http://alloweddomain.org (identified by the ORIGIN: header in the request) can get access to the resource in a cross-site manner. The Access-Control-Allow-Origin header should contain the value that was sent in the request's Origin header.
 
-### CORS in ASP.NET Core 3.1
+## CORS in ASP.NET Core
 
 In ASP.Net Core 3.1 CORS functionality for the pipeline is defined in the package Microsoft.AspNetCore.MVC.Cors. It can be included in the pipeline by adding cors to the middleware in the startup class as below.
 
