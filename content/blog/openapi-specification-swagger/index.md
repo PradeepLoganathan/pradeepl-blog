@@ -62,6 +62,14 @@ The terms Swagger and OpenAPI are used interchangeably. Swagger began in 2011 as
 
 The Open-API specification is defined [here](http://spec.openapis.org/oas/v3.0.3). Some of the tooling supporting version 3.0 of OAS is listed [here](https://github.com/OAI/OpenAPI-Specification/blob/master/IMPLEMENTATIONS.md). A complete overview of the OAS 3.0.3 specification is provided [here](https://swagger.io/specification/). OAS 3.0 aims to simplify the structure and also increase reusability of components, such as parameters, headers, examples, and security schemes. An understanding of this spec is key to helping developers use an API effectively.
 
+## Generating Client Libraries
+
+There is tooling to read in an Open API specification and generate SDKs (client libraries). A good place to find a list of available tools is [OpenAPI.tools](https://openapi.tools/). One tool which is open source and has an optional paid cloud service is [Fern](https://buildwithfern.com/?utm_source=PradeepLoganathan/openapi-specification-swagger/clients). Using Fern, you can generate SDKs in Node.js/Typescript, Python, Go, Java, C#, and Ruby. Plus, you can publish the outputted clients to GitHub and package managers like npm and PyPI. 
+
+## Generating API Documentation 
+
+There is tooling to read in an Open API specification and generate API docs. Again, check out [OpenAPI.tools](https://openapi.tools/). One tool that makes it easy to get started building documentation within 5 minutes is [Fern](https://buildwithfern.com/?utm_source=PradeepLoganathan/openapi-specification-swagger/docs). In addition to your API reference, can add arbitrary pages by writing markdown and keep your documentation versioned next to your code.
+
 ## Open API Specification file structure
 
 An Open API file allows you to describe your entire API, including the following:
