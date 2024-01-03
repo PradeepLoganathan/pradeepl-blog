@@ -10,7 +10,6 @@ tags:
 categories:
   - "api"
   - "design"
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
 summary: Representing dates in an API is a common but often not well thought out functionality.We need to be very cognizant of representing dates, intervals, and periods in the API Payload. There are two generally accepted date formats for API's.
 ShowToc: true
 TocOpen: false

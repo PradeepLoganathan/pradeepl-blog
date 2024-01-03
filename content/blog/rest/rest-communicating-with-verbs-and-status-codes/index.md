@@ -28,7 +28,7 @@ cover:
  
 ---
 
-In the previous [blog post]({{< ref "/blog/rest/what-is-rest" >}})  we talked about REST resources, Identifiers and Representations. In this post we will look at how we can connect the various resources and their representations with identifiers using the [HTTP protocol]({{< ref "/blog/http2" >}}).
+In the previous [blog post]({{< ref "/blog/rest/REST-API-what-is-rest" >}})  we talked about REST resources, Identifiers and Representations. In this post we will look at how we can connect the various resources and their representations with identifiers using the [HTTP protocol]({{< ref "/blog/http2" >}}).
 
 In a RESTful system, clients and servers interact only by sending each other messages that follow a predefined protocol. The [REST architectural style]({{< ref "/blog/rest/rest-architectural-constraints" >}}) is primarily associated with designs that use HTTP as the transport protocol. Even though we always associate the web with HTTP, it is but one of the long lived and dominant protocols. Protocols such as FTP, Gopher, Archie, Veronica, Jughead, Prospero etc. were part of the ecosystem but gave way to HTTP as it began to emerge as the dominant protocol. Some of the goodness of these protocols were also folded into the HTTP specification.
 
