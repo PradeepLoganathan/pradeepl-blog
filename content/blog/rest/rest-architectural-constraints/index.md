@@ -54,7 +54,7 @@ The uniform interface defines a contract for communication between the client an
 
 ### Identification of resources
 
-As discussed in [What is REST?]({{< ref "/blog/rest/what-is-rest">}}) resources are uniquely identified by URI's. These identifiers are stable and do not change across interactions even when the resource state changes.
+As discussed in [What is REST?]({{< ref "/blog/rest/REST-API-what-is-rest">}}) resources are uniquely identified by URI's. These identifiers are stable and do not change across interactions even when the resource state changes.
 
 ### Manipulation of resources through representations
 

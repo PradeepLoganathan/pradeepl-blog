@@ -35,6 +35,11 @@
       "source": "blog/kubernetes/kubernetes-cluster-api-capi-an-introduction",
       "destination": "blog/kubernetes/cluster-api-capi",
       "type": 301
+    },
+    {
+      "source": "blog/rest/what-is-rest",
+      "destination": "blog/rest/REST-API-what-is-rest",
+      "type": 301
     }]
   }
 }

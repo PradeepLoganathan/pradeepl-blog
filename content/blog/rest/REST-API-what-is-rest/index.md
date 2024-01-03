@@ -1,5 +1,5 @@
 ---
-title: "What is REST?"
+title: "REST API - What is REST?"
 lastmod: "2016-09-21T15:55:13+10:00"
 date: "2016-09-21T15:55:13+10:00"
 draft: false
@@ -41,13 +41,15 @@ The Web has radically transformed the way we produce and share information. It h
 
 With this focus on “API first”, as developers we need to worry about “How consumable is the API? Does it follow standards? is it secure? How do you handle versioning?”
 
-There are various architectural models for developing API First systems. such as REST, SOAP, CORBA, COM, RPC etc. One of the foremost models gaining a lot of ground currently is REST. REST stands for **Representational State Transfer**. Rest is a client server communication model which is stateless, resource based, and Idempotent. As an architectural model REST defines Resources, Identifiers, and state representations as basic blocks. REST is not a protocol, a file format, or a development framework. It’s a set of design constraints: statelessness, Client-server etc, collectively called the Fielding's constraints as they were first identified in [Roy T. Fielding’s 2000 dissertation](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) on software architecture, which gathered them together under the name “REST". In the real-world REST uses HTTP as the protocol and Web servers as REST servers.
+There are various architectural models for developing API First systems. such as REST, SOAP, gRPC etc. One of the foremost models gaining a lot of ground currently is REST. REST stands for **Representational State Transfer**. Rest is a client server communication model which is stateless, resource based, and Idempotent. As an architectural model REST defines Resources, Identifiers, and state representations as basic blocks for building API's. REST is not a protocol, a file format, or a development framework, it is a set of design constraints. These design constraints collectively called the Fielding's constraints were first identified in [Roy T. Fielding’s 2000 dissertation](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) on software architecture, which gathered them together under the name “REST". In the real-world REST uses HTTP as the protocol and Web servers as REST servers.
 
 # REST Fundamentals
 
+The REST architectural model is primarily used to build API's generally called as RESTful API's. These are based on fundamental building blocks of REST as detailed below.
+
 ## Resources
 
-Resources are the fundamental building blocks of web-based systems. Anything that can be named can be a resource (Person, Product, device, web page etc.). Almost anything can be modelled as a resource and then made available for manipulation over the network. The only restriction is that every resource must have a URL. On the Web, we use a URL to give each resource a globally unique address. Giving something a URL turns it into a resource.
+Resources are the fundamental building blocks of web-based systems. Anything that can be named can be a resource (Person, Product, device, web page etc.). Almost anything can be modelled as a resource and then made available for manipulation over the network. The only restriction is that every resource must have a globally unique address. On the Web, we use a URL to give each resource a globally unique address. Giving something a URL turns it into a resource.
 
 ## Resources Identifiers
 
@@ -64,5 +66,20 @@ Since a resource can have multiple representations, the client needs to negotiat
 # Putting it together- How resources, identifiers, and representations drive interactions.
 
 On the web we need to act on objects and subjects represented by resources. These resources are acted upon through verbs provided by HTTP methods. The four main verbs of the uniform interface are GET, POST, PUT, and DELETE. These verbs are used to communicate between systems. HTTP also defines a set of response codes to respond back to verbs such as 200 OK, 201 Created, 301 Moved Permanently, 303 See Other, 404 Not Found etc. Together verbs and status codes provide a general framework for operating on resources over the network. You can call GET on a service or resource as many times as you want with no side effects
+
+# Comparison with other Communication architectures
+
+## REST vs SOAP
+
+SOAP stands for Simple Object Access Protocol. REST is centered around resources, each accessible via a URI, while SOAP actions are defined in the protocol and the body of the message. SOAP, with its extensive use of XML, requires more bandwidth and processing power. REST uses standard HTTP and is more lightweight, making it suitable for web services that are exposed on the internet. SOAP supports built-in error handling and can be used with a variety of protocols, whereas REST typically uses standard HTTP error responses.
+
+## REST vs gRPC
+
+Both REST and gRPC are used for client-server communication. They are used for building APIs that allow different software systems to communicate with each other. REST API's typically use JSON as the data exchange format while gRPC uses protobuf (Protocol Buffers). Protobuf is a binary format that is more efficient than JSON and less verbose. However, JSON is human readable unlike Protobuf which is binary ( think debugging ). The binary nature of protobuf combined with the fact that it utilizes multiplexing on HTTP2 makes it better from a performance perspective. gRPC natively supports  Unary, Server streaming, Client streaming, and Bidirectional streaming. This means both the client and the server can send and receive multiple requests and responses simultaneously on a single connection. REST is primarily a request-response model where the client must wait for the server to respond. gRPC uses its own status codes, which are separate from HTTP status codes, whereas REST uses standard HTTP status codes. The REST architectural style works better for public facing API's due to its ease of understanding. It works better for simpler, synchronous client-server interactions. gRPC works better for real-time or streaming API's. It is ideal for API's that are built for high load and with higher performance expectations.
+
+# REST in the real world
+
+The REST architectural style is used to design and implement different architectures. REST aligns well with microservices design due to its scalable and independent nature. Each microservice can expose a RESTful API, allowing services to communicate seamlessly and be independently developed, deployed, and scaled. REST's statelessness is key in microservices, as it simplifies the interaction between services and enhances the system's resilience. REST APIs are pivotal in the API economy, enabling businesses to extend their services and data to external developers and partners.
+They foster a vibrant ecosystem by allowing easy integration with various platforms and services, thereby enhancing innovation and collaboration. REST's simplicity and statelessness make it suitable for the constrained environments of IoT. RESTful APIs facilitate efficient communication between IoT devices and servers. The lightweight nature of REST is advantageous in edge computing scenarios where resources are limited and low latency is crucial.
 
 In the [next blog post]({{< ref "/blog/rest/rest-communicating-with-verbs-and-status-codes" >}}) we will look at how resources, resource representations and resource identifiers come together to drive interactions in a RESTful manner.
