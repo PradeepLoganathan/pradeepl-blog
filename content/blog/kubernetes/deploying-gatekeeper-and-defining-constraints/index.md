@@ -14,7 +14,7 @@ categories:
   - Kubernetes
   - security
   - policy
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+
 summary: In this post we will deploy gatekeeper to a kubernetes cluster. We will then define constraints and ensure that gatekeeper enforces those constraints.
 ShowToc: true
 TocOpen: open

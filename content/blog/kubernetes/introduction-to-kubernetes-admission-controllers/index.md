@@ -9,7 +9,7 @@ tags:
   - Kubernetes
 categories:
   - Kubernetes
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+
 summary: Admission controllers provide extension points that augment Kubernetes functionality. Admission controllers determine if the request is well-formed and approve or reject the API request.
 # description: Admission controllers provide extension points that augment Kubernetes functionality. Admission controllers determine if the request is well-formed and approve or reject the API request.
 ShowToc: true
@@ -29,7 +29,7 @@ The Kubernetes API server is the gateway to the Kubernetes cluster. The Kubernet
 
 # Kubernetes API request lifecycle
 
-![Kubernetes HTTP request flow](Admission-Controllers-Architecture.png)
+![Kubernetes HTTP request flow](images/Admission-Controllers-Architecture.png)
 
 The above diagram depicts a simplified Kubernetes API request lifecycle. When the API server is called the request goes through the Authentication, Authorization and Admission control stages.  
 The authentication components are responsible for authenticating the client sending the request. The API server supports different authentication methods such as HTTP basic auth, bearer token, client certificates etc. Authentication has plugin extensions that can support different authentication providers such as Azure AD, OIDC etc. If authentication is successful, the request is passed along to the authorization components. The authorization components determine if the user has the necessary privileges to perform the requested action. This determines, for example, if the user can create deployments, list pods etc. Authorization is also pluggable and multiple authorization modules can be configured. However, if any authorization module approves or denies the request the response is returned immediately to the caller. If the request is authenticated and authorized successfully, it is passed on to the admission controllers.

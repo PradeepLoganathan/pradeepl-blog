@@ -13,7 +13,7 @@ tags:
   - "read scale availability group"
 categories:
   - Kubernetes
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+
 summary: In this post we will deploy MS Sql Server in a kubernetes cluster. We will then configure it as an always on availability group.We will also look at synchronization and failover.
 ShowToc: true
 TocOpen: true

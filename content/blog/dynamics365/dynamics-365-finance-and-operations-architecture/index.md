@@ -9,7 +9,7 @@ categories:
 tags: 
   - "architecture"
   - "d365"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+
 summary: "Dynamics 365 for Finance and Operations is designed and architected for the cloud. It can be deployed as an on-premises system or on the cloud."
 ShowToc: true
 TocOpen: false

@@ -11,7 +11,7 @@ tags:
   - "Eventsourcing"
 categories:
   - Architecture
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+
 summary: Event driven architecture (EDA) is an architectural paradigm where behavior is composed by reacting to events. In this paradigm events imply a significant change in state.
 ShowToc: true
 TocOpen: true
