@@ -15,7 +15,7 @@ categories:
 #slug: kubernetes/kubernetes-opa-gatekeeper-an-introduction/
 summary: An API Gateway provides a single and unified API entry point across one or more internal APIs. It mediates, routes, and invokes a respective endpoint after request verification, content filtering, authentication, and authorization.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - images/api-gateway-cover.jpg
 cover:
@@ -98,7 +98,7 @@ An API Gateway can act as a load balancer to handle client requests efficiently.
 
 ### Quality of Service
 
-An API gateway can define metrics of requirements for ensuring service availability, performance, integrity, and reliability. These metric definitions are called as QoS policies. QoS policies can be attached to specific services managed by the API gateway. QoS policies make use of patterns such as [Circuit Breaker]({{ <ref "patterns/circuit-breaker-pattern/" > }}), [Bulkhead Isolation]({{ <ref "/patterns/bulkhead-isolation/"> }}) etc. to provide necessary reliability and fault tolerance.
+An API gateway can define metrics of requirements for ensuring service availability, performance, integrity, and reliability. These metric definitions are called as QoS policies. QoS policies can be attached to specific services managed by the API gateway. QoS policies make use of patterns such as [Circuit Breaker]({{< ref "/blog/patterns/circuit-breaker-pattern" >}}), [Bulkhead Isolation]({{< ref "/blog/patterns/bulkhead-isolation" >}}) etc. to provide necessary reliability and fault tolerance.
 
 ## Backend for Frontend (BFF)
 

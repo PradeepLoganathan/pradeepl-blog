@@ -13,7 +13,7 @@ categories:
 #slug: api/graphql/
 summary: GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification.
 ShowToc: true
-TocOpen: false
+TocOpen: true
 images:
   - images/graphql-cover.jpg
 cover:
@@ -23,9 +23,21 @@ cover:
     relative: false # To use relative path for cover image, used in hugo Page-bundles
 ---
 
-GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification. It is also a runtime designed for fulfilling these queries. [REST APIs]({{< ref "/blog/rest/identifying-resources-and-designing-representations" >}}), adhere to the requirements dictated by the server in the form of an API contract, GraphQL APIs respond to client queries with a response that adheres to the shape of the query specified by the client. GraphQL service is transport agnostic but is typically served over HTTP.
+# What is GraphQL?
 
-GraphQL was developed by Lee Byron, Nick Schrock, and Dan Schafer at Facebook in 2012. It was shared with the broader community in 2015 and is now governed through the GraphQL foundation. You can read more about it here… [Introducing the GraphQL Foundation (leebyron.com)](https://leebyron.com/introducing-the-graphql-foundation/)
+GraphQL is a query language for APIs and a server-side runtime for executing those queries by using a type system you define for your data. It is a query language that provides for client-tailored queries and also a runtime designed for fulfilling these queries. Unlike traditional REST API design, it allows clients to request only the data they need, making it an efficient choice for complex systems and high-performance applications. [REST APIs]({{< ref "/blog/rest/identifying-resources-and-designing-representations" >}}), adhere to the requirements dictated by the server in the form of an API contract, GraphQL APIs respond to client queries with a response that adheres to the shape of the query specified by the client. GraphQL service is transport agnostic but is typically served over HTTP.
+
+GraphQL was developed by Lee Byron, Nick Schrock, and Dan Schafer at Facebook in 2012. It was shared with the broader community and open sourced in 2015. It is now governed through the GraphQL foundation. You can read more about it here… [Introducing the GraphQL Foundation (leebyron.com)](https://leebyron.com/introducing-the-graphql-foundation/). Since then, it has gained a significant following in the developer community for its ability to optimize API workflows and enhance the performance of web applications.
+
+# Why choose GraphQL?
+
+GraphQL was designed to make client-server communication more efficient, precise, and flexible. It allows clients (such as web or mobile applications) to precisely define the structure of the data they require or need to manipulate. The flexibility and efficiency of GraphQL provides several advantages over traditional API architectures such as REST or SOAP.
+
+GraphQL provides for efficient data retrieval. Clients have the power to request exactly what they need, no more, no less. This minimizes data transfer, reducing latency and improving performance, especially crucial for mobile networks or devices with limited bandwidth.
+
+GraphQL minimizes network round trips. Multiple resources can be requested in a single query, reducing the number of network round trips and significantly speeding up the application.
+
+GraphQL implements strong typing & Introspection. The schema serves as a contract between the client and the server. This strong typing, coupled with the ability for the API to be introspected, provides a powerful platform for tooling and IDE integrations, making development more efficient and less prone to runtime errors.
 
 # REST vs GraphQL
 
