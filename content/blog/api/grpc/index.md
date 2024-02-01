@@ -37,7 +37,7 @@ Choosing an architectural style to build API's is a matter of trade offs and pri
 - High Performance: Utilizes HTTP/2 protocol, enabling multiplexed requests and server push capabilities, significantly reducing latency and bandwidth usage. [See this blog post]({{< ref "/blog/http2" >}}) to understand more about these HTTP2 features.
 - Contract-First API Development: Uses Protocol Buffers to define service contracts, ensuring a clear, platform-independent, and language-neutral definition of service interfaces and data structures.
 - Streaming Support: Offers four types of service methods, including server streaming, client streaming, and bidirectional streaming, facilitating real-time communication and efficient data transfer.
-- Language Agnosticity: Supports code generation in multiple languages, allowing seamless interoperation between services written in different programming languages.
+- Language Agnostic: Supports code generation in multiple languages, allowing seamless interoperability between services written in different programming languages.
 
 # Understanding Protocol Buffers
 
