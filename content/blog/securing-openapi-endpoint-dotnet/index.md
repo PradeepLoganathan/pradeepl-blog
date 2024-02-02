@@ -26,7 +26,7 @@ cover:
     image: "neonbrand-3BfDXcn9sqM-unsplash.jpg"
     alt: "Securing the  OAS/Swagger endpoint in dotnet using swashbuckle"
     caption: "Securing the  OAS/Swagger endpoint in dotnet using swashbuckle"
-    relative: false 
+    relative: true 
 ---
 
 # OpenAPI Security Schemes

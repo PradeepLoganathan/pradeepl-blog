@@ -20,7 +20,7 @@ cover:
     image: "cover.jpg"
     alt: "Getting started with Cosmos DB"
     caption: "Getting started with Cosmos DB"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

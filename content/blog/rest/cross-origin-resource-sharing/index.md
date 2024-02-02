@@ -23,7 +23,7 @@ cover:
   image: CORS-cover.png"
   alt: "CORS"
   caption: "CORS"
-  relative: false # To use relative path for cover image, used in hugo Page-bundles
+  relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

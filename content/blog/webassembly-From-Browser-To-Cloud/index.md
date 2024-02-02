@@ -20,7 +20,7 @@ cover:
     image: "images/WebAssembly-WASM-WASI.png"
     alt: "WebAssembly, WASM and WASI"
     caption: "WebAssembly - From the browser to the Cloud"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

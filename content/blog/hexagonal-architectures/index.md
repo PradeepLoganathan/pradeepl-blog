@@ -18,7 +18,7 @@ cover:
     image: "Hexagonal-Architecture-cover.png"
     alt: "Hexagonal architectures"
     caption: "Hexagonal architectures"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

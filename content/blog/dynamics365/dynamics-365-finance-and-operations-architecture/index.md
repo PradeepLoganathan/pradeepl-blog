@@ -19,7 +19,7 @@ cover:
     image: "Dynamics-365.jpg"
     alt: "Dynamics 365 Finance and operations - Architecture"
     caption: "Dynamics 365 Finance and operations - Architecture"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

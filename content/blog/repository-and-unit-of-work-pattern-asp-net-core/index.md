@@ -23,7 +23,7 @@ cover:
     image: "repository-and-unit-of-work-pattern-asp-net-core-cover.png"
     alt: "Repository and Unit of work pattern in ASP.net core"
     caption: "Repository and Unit of work pattern in ASP.net core"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

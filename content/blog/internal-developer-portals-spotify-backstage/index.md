@@ -19,7 +19,7 @@ cover:
     image: "backstage-cover.png"
     alt: "Platform engineering with Backstage"
     caption: "Platform engineering with Backstage"
-    relative: false 
+    relative: true 
 ---
 
 

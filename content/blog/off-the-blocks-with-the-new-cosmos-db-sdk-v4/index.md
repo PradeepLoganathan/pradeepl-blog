@@ -20,7 +20,7 @@ cover:
     image: "lachlan-donald-YVT5aF2QM7M-unsplash.jpg"
     alt: "Off the blocks with the new Cosmos Db SDK-V4"
     caption: "Off the blocks with the new Cosmos Db SDK-V4"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

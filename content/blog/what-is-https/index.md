@@ -25,7 +25,7 @@ cover:
     image: "images/what-is-https-pradeepl.png"
     alt: "What is HTTPS?"
     caption: "What is HTTPS?"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 
