@@ -20,7 +20,7 @@ cover:
     image: "images/graphql-cover.jpg"
     alt: "Getting started with GraphQL"
     caption: "Getting started with GraphQL"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
 ---
 
 # What is GraphQL?

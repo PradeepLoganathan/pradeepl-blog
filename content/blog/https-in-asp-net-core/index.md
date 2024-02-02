@@ -22,7 +22,7 @@ cover:
     image: "images/alexander-ehrenhofer-yI4pFmN9ges-unsplash.jpg"
     alt: "Https in ASP.Net Core"
     caption: "Https in ASP.Net Core"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

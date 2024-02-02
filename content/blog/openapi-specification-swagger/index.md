@@ -23,7 +23,7 @@ cover:
     image: "openapi-specification-swagger.png"
     alt: "Building a successful API - Understanding the Open api specification (OAS)"
     caption: "Building a successful API - Understanding the Open api specification (OAS)"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

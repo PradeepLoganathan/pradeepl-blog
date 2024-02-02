@@ -21,7 +21,7 @@ cover:
     image: "images/eda-cover.png"
     alt: "Event Driven Architecture"
     caption: "Event Driven Architecture"
-    relative: false 
+    relative: true 
 ---
 
 # Introduction

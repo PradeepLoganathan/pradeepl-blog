@@ -20,7 +20,7 @@ cover:
     image: "images/platform-engineering-pradeepl.jpeg"
     alt: "Platform engineering"
     caption: "Platform engineering"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

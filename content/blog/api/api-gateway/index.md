@@ -22,7 +22,7 @@ cover:
     image: "images/api-gateway-cover.jpg"
     alt: "API Gateway - Should you build one?"
     caption: "API Gateway - Should you build one?"
-    relative: false 
+    relative: true 
 ---
 
 ## What is an API Gateway ?

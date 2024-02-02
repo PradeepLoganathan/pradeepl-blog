@@ -35,7 +35,7 @@ cover:
   image: "fabrice-villard-Du41jIaI5Ww-unsplash.jpg"
   alt: "Git Branching strategies"
   caption: "Git Branching strategies"
-  relative: false # To use relative path for cover image, used in hugo Page-bundles
+  relative: true # To use relative path for cover image, used in hugo Page-bundles
 
  
 ---

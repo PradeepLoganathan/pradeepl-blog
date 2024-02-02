@@ -20,7 +20,7 @@ cover:
     image: "images/CosmosDB-pradeepl.jpg"
     alt: "High performance Data modelling in Azure Cosmos Db"
     caption: "High performance Data modelling in Azure Cosmos Db"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

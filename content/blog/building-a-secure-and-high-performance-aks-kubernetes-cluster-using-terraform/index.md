@@ -22,7 +22,7 @@ cover:
     image: "images/terraform-aks-pradeepl.jpg"
     alt: "Building a secure and high-performance AKS Kubernetes cluster using Terraform"
     caption: "Building a secure and high-performance AKS Kubernetes cluster using Terraform"
-    relative: false 
+    relative: true 
 ---
 
 I have been part of a couple of build outs where we built Kubernetes clusters to run our cloud workloads. These builds involved deploying AKS clusters using terraform and AzDO. Designing the AKS infrastructure is key to ensure that the cloud workloads running on them can be deployed, secured, and hosted effectively. In this post I am documenting the general steps involved in building out a Kubernetes infrastructure on Azure Kubernetes Service (AKS) using terraform and deploy workloads using Azure devops (AzDO) and Helm charts.

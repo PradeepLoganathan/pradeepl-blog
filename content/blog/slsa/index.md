@@ -15,7 +15,7 @@ cover:
     image: "images/SLSA-Pradeep-Loganathan.png"
     alt: "Supply chain Levels for Software Artifacts"
     caption: "Supply chain Levels for Software Artifacts - SLSA"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
 
 images:
   - images/SLSA-Pradeep-Loganathan.png

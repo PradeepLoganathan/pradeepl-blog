@@ -22,7 +22,7 @@ cover:
     image: "images/policy-as-code.jpeg"
     alt: "Policy as Code"
     caption: "Policy as Code"
-    relative: false 
+    relative: true 
  
 ---
 

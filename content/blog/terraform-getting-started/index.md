@@ -24,7 +24,7 @@ cover:
   image: "images/terraform-getting-started.png"
   alt: "Terraform - getting started"
   caption: "Terraform - getting started"
-  relative: false # To use relative path for cover image, used in hugo Page-bundles
+  relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

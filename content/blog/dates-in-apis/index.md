@@ -19,7 +19,7 @@ cover:
     image: "paul-buffington-M07hwL1O8ZI-unsplash.jpg"
     alt: "Dates in API's"
     caption: "Dates in API's"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 

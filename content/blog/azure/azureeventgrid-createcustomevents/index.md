@@ -18,7 +18,7 @@ cover:
     image: "images/azure-event-grid-create-custom-topics.png"
     alt: "Azure Event Grid - Introduction"
     caption: "Azure Event Grid - Introduction"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
 ---
 
 This post is part of a three post series on Azure Event Grid
