@@ -28,7 +28,7 @@ cover:
 
 In the evolving landscape of web services and API design, the choice of architectural style plays a pivotal role in shaping the efficiency, scalability, and robustness of API interactions. Architectural styles such as SOAP and REST have long dominated API design. The technical landscape is evolving rapidly and technologies such as gRPC and GraphQL now provide strong alternatives to these established architectural frameworks. In this blog post we will look at how gRPC helps build a fast and efficient API and also implement an "HelloWorld" gRPC api with dotnet.
 
-gRPC is a modern, open-source, high-performance Remote Procedure Call (RPC) framework that can run in any environment. It enables client and server applications to communicate transparently and simplifies the building of connected systems. Developed by Google, gRPC is part of the Cloud Native Computing Foundation (CNCF). gRPC is a high-performance, language-agnostic RPC framework, leveraging HTTP/2 for transport, Protocol Buffers as the interface description language, and providing features like authentication, load balancing, and many others. The primary strength of gRPC lies in its ability to facilitate efficient, low-latency communication between services, making it an ideal choice for microservices architectures and systems where performance is paramount. Since its introduction, gRPC has seen widespread adoption across various industries and applications, particularly benefiting microservices architectures due to its efficiency and cross-platform capabilities.
+gRPC is a modern, open-source, light-weight, high-performance Remote Procedure Call (RPC) framework. It enables services to communicate efficiently with built-in support for load balancing, tracing, health checking, and authentication.  Developed by Google, gRPC is part of the Cloud Native Computing Foundation (CNCF). gRPC is a high-performance, language-agnostic RPC framework, leveraging HTTP/2 for transport, Protocol Buffers as the interface description language, and providing features like authentication, load balancing, and many others. The primary strength of gRPC lies in its ability to facilitate efficient, low-latency communication between services, making it an ideal choice for microservices architectures and systems where performance is paramount. Since its introduction, gRPC has seen widespread adoption across various industries and applications, particularly benefiting microservices architectures due to its efficiency and cross-platform capabilities.
 
 # The Compelling Case for gRPC: Performance and Flexibility
 
@@ -41,7 +41,7 @@ Choosing an architectural style to build API's is a matter of trade offs and pri
 
 # Understanding Protocol Buffers
 
-Before diving into building a gRPC service using dotnet, it is essential to understand protocol buffers. Protocol Buffers (Protobuf) are a language-agnostic, platform-neutral, extensible mechanism for serializing and deserializing data. They are integral to gRPC for defining service interfaces and payload messages. They are a method of serializing structured data, similar to XML or JSON, but smaller, faster, and simpler. You define how you want your data to be structured once, and then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.
+Before diving into building a gRPC service using dotnet, it is essential to understand protocol buffers. Protocol Buffers (Protobuf) are an Interface definition language(IDL). They are a language-agnostic, platform-neutral, extensible mechanism for serializing data. In Protobuf, we do not write any logic as we do in a programming language, but instead, we write data schemas. These schemas are contracts to be used for serialization and are to be fulfilled by deserialization. They are a method of serializing structured data, similar to XML or JSON, but smaller, faster, and simpler. You define how you want your data to be structured once, and then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.
 
 Protobuf definitions are written in .proto files. It allows you to define simple data structures (messages) and services in a clear, human-readable format. The .proto files can be compiled into source code for various programming languages. This makes Protobuf an excellent choice for backend/frontend data exchange and for systems where multiple languages are used. Protobuf data is serialized into a binary format, which results in significantly smaller and faster messages compared to XML or JSON, reducing network overhead and improving performance. Protobuf is designed to handle schema evolution. You can add new fields to your message formats without breaking backward compatibility. Older code will ignore new fields, and new code can handle missing optional fields.
 
@@ -51,6 +51,14 @@ Protocol Buffers provide several advantages:
 - Code Generation: Automatic generation of client and server code in multiple languages from a single .proto file.
 - Efficiency: Binary serialization results in lower network usage and faster data transfer.
 - Simple Service Definition: Defining a service in a .proto file is straightforward, and gRPC handles the rest.
+
+## Types
+
+### Well-Known Types
+
+### Google Common Types
+
+## Services
 
 ## Defining messages and services
 
