@@ -91,7 +91,7 @@ sequenceDiagram
 
 ## Implementation Considerations
 
-There are a few key considerations when implementing this pattern. You need a mechanism to store and quickly check the unique identifiers of processed messages. The check for duplicates should be efficient to avoid performance bottlenecks. The solution should scale as the number of messages increases. Over time, the list of processed message IDs can grow. Mechanisms to clean up old entries are important. This pattern is generally implemented in conjunction with the [transactional outbox pattern]({{ <ref "/patterns/transactional-outbox-pattern/"> }})
+There are a few key considerations when implementing this pattern. You need a mechanism to store and quickly check the unique identifiers of processed messages. The check for duplicates should be efficient to avoid performance bottlenecks. The solution should scale as the number of messages increases. Over time, the list of processed message IDs can grow. Mechanisms to clean up old entries are important. This pattern is generally implemented in conjunction with the [transactional outbox pattern]({{< ref "/blog/transactional-outbox-pattern" >}})
 
 The incoming unique message identifier needs to be updated in the idempotent repository. There are two considerations to update the incoming message identifier
 
