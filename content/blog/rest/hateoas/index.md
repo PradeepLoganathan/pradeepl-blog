@@ -21,7 +21,7 @@ cover:
     image: "images/HATEOAS.png"
     alt: "REST- HATEOAS"
     caption: "REST- HATEOAS"
-    relative: false # To use relative path for cover image, used in hugo Page-bundles
+    relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
 
