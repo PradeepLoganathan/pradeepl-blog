@@ -2,24 +2,25 @@
 title: "Hateos"
 lastmod: 2024-01-30T14:51:18+10:00
 date: 2024-01-30T14:51:18+10:00
-draft: true
+draft: false
 Author: Pradeep Loganathan
 tags: 
   - REST
   - API
-  - 
+  - HATEOAS
+  - Hypermedia
 categories:
   - REST
 #slug: kubernetes/introduction-to-open-policy-agent-opa/
-summary: ""
+summary: "HATEOAS is a key aspect of building Restful web services. It is a key aspect of REST principles"
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - images/HATEOAS.png
 cover:
-    image: "images/cover.jpg"
-    alt: ""
-    caption: ""
+    image: "images/HATEOAS.png"
+    alt: "REST- HATEOAS"
+    caption: "REST- HATEOAS"
     relative: false # To use relative path for cover image, used in hugo Page-bundles
  
 ---
