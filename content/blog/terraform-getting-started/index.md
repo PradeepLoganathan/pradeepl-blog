@@ -16,6 +16,7 @@ tags:
   - "platformengineering"
 
 summary: Terraform is an open source tool created by HashiCorp to define infrastructure as cod using a simple, declarative language called HCL. Terraform is used to deploy and manage infrastructure across a variety of cloud providers & virtualization platforms. It can be used to deploy infrastructure to all major cloud providers such as Azure, AWS, Digital ocean, and virtualization platforms such as VMware, Open stack, and others.
+# description: Terraform is an open source tool created by HashiCorp to define infrastructure as cod using a simple, declarative language called HCL. Terraform is used to deploy and manage infrastructure across a variety of cloud providers & virtualization platforms. It can be used to deploy infrastructure to all major cloud providers such as Azure, AWS, Digital ocean, and virtualization platforms such as VMware, Open stack, and others.
 ShowToc: true
 TocOpen: true
 images:

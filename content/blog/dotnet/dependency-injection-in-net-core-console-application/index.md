@@ -17,7 +17,6 @@ ShowSummary: true
 ShowDescription: true
 ShowToc: true
 TocOpen: true
-ShowPostNavLinks: true
 images:
   - dependency-injection-in-net-core-console-application-cover.png
 cover:

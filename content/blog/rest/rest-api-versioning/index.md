@@ -1,7 +1,7 @@
 ---
-title: "{{ replace .Name "-" " " | title }}"
-lastmod: {{ .Date }}
-date: {{ .Date }}
+title: "Evolving Seamlessly: The Ultimate Guide to Versioning REST APIs"
+lastmod: 2024-02-05T11:36:22+10:00
+date: 2024-02-05T11:36:22+10:00
 draft: true
 Author: Pradeep Loganathan
 tags: 
@@ -10,9 +10,7 @@ tags:
   - 
 categories:
   - 
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
-description: "meta description"
-summary: "summary used in summary pages"
+summary: ""
 ShowToc: true
 TocOpen: true
 images:
@@ -24,3 +22,5 @@ cover:
     relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
+
+

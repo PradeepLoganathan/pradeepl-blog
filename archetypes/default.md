@@ -11,7 +11,9 @@ tags:
 categories:
   - 
 #slug: kubernetes/introduction-to-open-policy-agent-opa/
-summary: ""
+description: "meta description"
+summary: "summary used in summary pages"
+ShowSummary: true
 ShowToc: true
 TocOpen: false
 images:

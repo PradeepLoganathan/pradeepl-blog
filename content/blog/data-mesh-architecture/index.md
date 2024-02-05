@@ -12,6 +12,7 @@ tags:
 categories: 
   - "datamesh"
 summary: "Data Mesh architecture is a modern approach to data engineering and data operations that aims to improve the scalability, agility, and innovation of data teams within organizations. It is based on the principles of domain-oriented ownership, product thinking, self-serve data infrastructure, platform thinking, data as a first-class citizen, democratized data access, and a culture of collaboration."
+# description: "Data Mesh architecture is a modern approach to data engineering and data operations that aims to improve the scalability, agility, and innovation of data teams within organizations. It is based on the principles of domain-oriented ownership, product thinking, self-serve data infrastructure, platform thinking, data as a first-class citizen, democratized data access, and a culture of collaboration."
 ShowToc: true
 TocOpen: true
 images:

@@ -17,7 +17,8 @@ categories:
   - "oas"
   - "api"
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
-summary: A group of people within Heroku developed the 12 Factors in 2012. This is essentially a manifesto describing the rules and guidelines that needed to be followed to build a microservices based cloud-native application.
+summary: OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements.
+# description: OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements.
 ShowToc: true
 TocOpen: false
 images:

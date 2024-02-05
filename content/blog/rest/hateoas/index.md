@@ -13,6 +13,7 @@ categories:
   - REST
 #slug: kubernetes/introduction-to-open-policy-agent-opa/
 summary: "HATEOAS is a key aspect of building Restful web services. It is a key aspect of REST principles"
+# description: "HATEOAS is a key aspect of building Restful web services. It is a key aspect of REST principles"
 ShowToc: true
 TocOpen: true
 images:

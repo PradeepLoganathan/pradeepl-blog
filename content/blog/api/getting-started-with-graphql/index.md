@@ -11,6 +11,7 @@ tags:
 categories:
   - api
 #slug: api/graphql/
+# desciption: GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification.
 summary: GraphQL is a query language for APIs. It is a query language that provides for client-tailored queries. It is an API specification.
 ShowToc: true
 TocOpen: true

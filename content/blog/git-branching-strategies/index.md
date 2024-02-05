@@ -23,7 +23,7 @@ ShowSummary: true
 ShowDescription: true
 ShowToc: true
 TocOpen: true
-ShowPostNavLinks: true
+
 
 images:
   - fabrice-villard-Du41jIaI5Ww-unsplash.jpg

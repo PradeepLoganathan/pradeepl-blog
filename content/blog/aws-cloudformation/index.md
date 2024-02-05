@@ -13,6 +13,7 @@ categories:
   - platformengineering
   
 summary:  AWS CloudFormation is an IaC tool for creating AWS resources in a declarative way. 
+# description:  AWS CloudFormation is an IaC tool for creating AWS resources in a declarative way. 
 ShowToc: true
 TocOpen: true
 images:

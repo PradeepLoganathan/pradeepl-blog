@@ -8,6 +8,7 @@ toc: true
 showToc: true
 TocOpen: false
 summary: "Richardson's Maturity Model breaks down the journey towards building a truly RESTful API into levels, each adding more constraints and adhering more closely to REST principles."
+# description: "Richardson's Maturity Model breaks down the journey towards building a truly RESTful API into levels, each adding more constraints and adhering more closely to REST principles."
 tags: 
   - "architecture"
   - "cloud"

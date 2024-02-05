@@ -10,8 +10,8 @@ categories:
   - "cosmosdb"
 tags: 
   - "comosdb"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: Cosmos DB is a cloud native database engine on Azure. It is a born-in the-cloud database with no legacy compatibility requirements. It can expose data using a variety of models and API's.
+# description: Cosmos DB is a cloud native database engine on Azure. It is a born-in the-cloud database with no legacy compatibility requirements. It can expose data using a variety of models and API's.
 ShowToc: true
 TocOpen: false
 images:

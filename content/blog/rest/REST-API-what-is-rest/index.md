@@ -1,5 +1,5 @@
 ---
-title: "REST API - What is REST?"
+title: "Demystifying REST: How API-First Design is Redefining Web Interactions"
 lastmod: "2016-09-21T15:55:13+10:00"
 date: "2016-09-21T15:55:13+10:00"
 draft: false
@@ -14,7 +14,7 @@ tags:
   - microservices
   - design
   - architecture
-
+# description: "Rest is a client server communication model which is stateless, resource based, and Idempotent."
 summary: "Rest is a client server communication model which is stateless, resource based, and Idempotent."
 
 ShowToc: true

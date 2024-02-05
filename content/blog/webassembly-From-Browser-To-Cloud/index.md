@@ -16,6 +16,7 @@ tags:
 categories: 
   - "CloudNative"
 summary: "WebAssembly(WASM) is a low-level assembly-like language that is designed for efficient execution and compact representation. WebAssembly systems interface(WASI) is a runtime specification and a standard for WebAssembly interaction with the operating system."
+# description: "WebAssembly(WASM) is a low-level assembly-like language that is designed for efficient execution and compact representation. WebAssembly systems interface(WASI) is a runtime specification and a standard for WebAssembly interaction with the operating system."
 cover:
     image: "images/WebAssembly-WASM-WASI.png"
     alt: "WebAssembly, WASM and WASI"

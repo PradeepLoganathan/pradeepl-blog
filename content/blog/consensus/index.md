@@ -15,6 +15,7 @@ tags:
   - "Raft"
   - "Paxos"
 summary: Consensus is one of the most important and fundamental problems in distributed computing. Simply put, the goal of consensus is to get several nodes to agree on something. It is a distributed computing concept that is used to provide a means of agreeing to a single version of truth by all peers on the distributed network.
+# description: Consensus is one of the most important and fundamental problems in distributed computing. Simply put, the goal of consensus is to get several nodes to agree on something. It is a distributed computing concept that is used to provide a means of agreeing to a single version of truth by all peers on the distributed network.
 ShowToc: true
 TocOpen: false
 

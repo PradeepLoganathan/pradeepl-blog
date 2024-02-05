@@ -4,7 +4,6 @@ lastmod: 2016-09-20T15:55:13+10:00
 date: 2016-09-20T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
-ShowPostNavLinks: true
 ShowRssButtonInSectionTermList: true
 tags: 
   - "architecture"
@@ -15,6 +14,7 @@ tags:
 categories: 
   - "REST"
 summary: REST API's have a very rich vocabulary to communicate a variety of statuses and results. The verbs put, post, update, get and others are used to indicate the action that must be performed. The status indicate the result of the actions performed by the verbs.
+# description: REST API's have a very rich vocabulary to communicate a variety of statuses and results. The verbs put, post, update, get and others are used to indicate the action that must be performed. The status indicate the result of the actions performed by the verbs.
 ShowToc: true
 TocOpen: true
 series: ["REST"]
