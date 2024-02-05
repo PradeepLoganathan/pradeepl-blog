@@ -12,6 +12,7 @@ categories:
   - "api"
   - "rest"
 summary: Implementing the REST architectural principles results in the both Idempotency and safety being incorporated into the system. This is not however not completely automatic and needs to be thought through in detail. 
+# description: Implementing the REST architectural principles results in the both Idempotency and safety being incorporated into the system. This is not however not completely automatic and needs to be thought through in detail. 
 ShowToc: true
 TocOpen: true
 series: ["REST"]

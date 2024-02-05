@@ -10,7 +10,7 @@ categories:
   - "blockchain"
   - "cryptography"
 
-summary: "A hash is a one-way function that maps data of any arbitrary length to an output digest of fixed length."
+# description: "A hash is a one-way function that maps data of any arbitrary length to an output digest of fixed length."
 ShowToc: true
 TocOpen: true
 ---

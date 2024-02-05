@@ -14,6 +14,7 @@ categories:
   - "http"
 #slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: HTTPS is a network protocol used to serve up web pages. HTTPS, or HTTP Secure, was designed to secure communications between a client and the HTTP server. It is a protocol that uses a secure connection to transfer data over the internet.
+# description: HTTPS is a network protocol used to serve up web pages. HTTPS, or HTTP Secure, was designed to secure communications between a client and the HTTP server. It is a protocol that uses a secure connection to transfer data over the internet.
 ShowToc: true
 TocOpen: false
 images:

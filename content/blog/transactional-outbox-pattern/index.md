@@ -14,6 +14,7 @@ TocOpen: true
 mermaid: true
 
 summary: Transactional Outbox is a pattern to reliably publish messages without the use of distributed transactions. It uses an Outbox and a message dispatcher  to reliably persist state and publish messages.
+# description: Transactional Outbox is a pattern to reliably publish messages without the use of distributed transactions. It uses an Outbox and a message dispatcher  to reliably persist state and publish messages.
 
 cover:
   image: "Transactional_Outbox_Pattern.jpg"
