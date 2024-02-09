@@ -28,10 +28,6 @@ cover:
 
 Web applications are dynamic and data-driven, often handling sensitive information that needs to be protected from unauthorized access. While search engines like Google and Bing play a pivotal role in indexing and caching web content, this beneficial feature can sometimes lead to unintended exposure of sensitive data. It's crucial for developers and web administrators to grasp the implications of search engine indexing and caching and implement strategies to mitigate potential risks.
 
-## The Double-Edged Sword of Search Engine Caching
-
-Search engines crawl the web to index and cache a vast array of information, making it easily accessible to users. However, this mechanism can inadvertently expose sensitive data from web applications to unauthorized users. Understanding the impact of search engine indexing and caching is vital to prevent the unintended exposure of sensitive application data.
-
 ## Cacheable HTTPS Responses and Their Pitfalls
 
 HTTPS secures communications between the browser and web application, safeguarding data in transit. However, HTTPS responses are inherently cacheable, and if not handled securely, they can lead to data leaks. When a web application returns sensitive data in an HTTPS response, that data is cached in plain text, posing a significant security risk. To avoid this, sensitive data should never be included in response messages.

@@ -40,11 +40,11 @@ The ```IConfiguration``` and the ```ConfigurationBuilder``` types are available 
 The above NuGet packages can be installed using the install-package command as below.
 
 ```shell
-Install-Package Microsoft.Extensions.Configuration
-Install-Package Microsoft.Extensions.Configuration.Json
-Install-Package Microsoft.Extensions.Configuration.CommandLine
-Install-Package Microsoft.Extensions.Configuration.Binder
-Install-Package Microsoft.Extensions.Configuration.EnvironmentVariables 
+dotnet add package Microsoft.Extensions.Configuration
+dotnet add package Microsoft.Extensions.Configuration.Json
+dotnet add package Microsoft.Extensions.Configuration.CommandLine
+dotnet add package Microsoft.Extensions.Configuration.Binder
+dotnet add package Microsoft.Extensions.Configuration.EnvironmentVariables 
 ```
 
 Installing packages for Configuration
@@ -79,8 +79,8 @@ As an example, if we have the below class representing an imaginary logging conf
 ```csharp
 class LoggingConfig
 {
-  public string LogPath {get;set;}
-  public LogLevel Level {get;set;}
+    public string LogPath {get;set;}
+    public LogLevel Level {get;set;}
 }
 ```
 
@@ -91,9 +91,9 @@ We can then strongly bind it using Configuration.Bind("LogSettings", LoggingConf
 ```csharp
  public void ConfigureServices(IServiceCollection services)
  {
-  var loggingConfig = new LoggingConfig(); 
-  Configuration.Bind("loggingSettings", loggingConfig);  // binding here
-  services.AddSingleton(loggingConfig);
+    var loggingConfig = new LoggingConfig(); 
+    Configuration.Bind("loggingSettings", loggingConfig);  // binding here
+    services.AddSingleton(loggingConfig);
  }
  ```
 

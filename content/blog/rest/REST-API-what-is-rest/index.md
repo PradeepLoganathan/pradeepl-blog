@@ -1,9 +1,10 @@
 ---
 title: "Demystifying REST: How API-First Design is Redefining Web Interactions"
-lastmod: "2016-09-21T15:55:13+10:00"
-date: "2016-09-21T15:55:13+10:00"
+lastmod: "2016-09-18T15:55:13+10:00"
+date: "2016-09-18T15:55:13+10:00"
 draft: false
 Author: Pradeep Loganathan
+ShowPostNavLinks: true 
 categories: 
   - rest
   - design
