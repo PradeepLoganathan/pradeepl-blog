@@ -41,24 +41,92 @@ Choosing an architectural style to build API's is a matter of trade offs and pri
 
 # Understanding Protocol Buffers
 
-Before diving into building a gRPC service using dotnet, it is essential to understand protocol buffers. Protocol Buffers (Protobuf) are an Interface definition language(IDL). They are a language-agnostic, platform-neutral, extensible mechanism for serializing data. In Protobuf, we do not write any logic as we do in a programming language, but instead, we write data schemas. These schemas are contracts to be used for serialization and are to be fulfilled by deserialization. They are a method of serializing structured data, similar to XML or JSON, but smaller, faster, and simpler. You define how you want your data to be structured once, and then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.
-
-Protobuf definitions are written in .proto files. It allows you to define simple data structures (messages) and services in a clear, human-readable format. The .proto files can be compiled into source code for various programming languages. This makes Protobuf an excellent choice for backend/frontend data exchange and for systems where multiple languages are used. Protobuf data is serialized into a binary format, which results in significantly smaller and faster messages compared to XML or JSON, reducing network overhead and improving performance. Protobuf is designed to handle schema evolution. You can add new fields to your message formats without breaking backward compatibility. Older code will ignore new fields, and new code can handle missing optional fields.
+Before diving into building a gRPC service using dotnet, it is essential to understand protocol buffers. Protocol Buffers (Protobuf) might appear as an Interface Definition Language (IDL) at first glance, but it's much more. It's a powerful tool for defining and exchanging structured data efficiently across diverse systems and languages. They are a language-agnostic, platform-neutral, extensible mechanism for serializing data. In Protobuf, we do not write any logic as we do in a programming language, but instead, we write data schemas. These schemas are contracts to be used for serialization and are to be fulfilled by deserialization. They are a method of serializing structured data, similar to XML or JSON, but smaller, faster, and simpler. You define how you want your data to be structured once, and then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.
 
 Protocol Buffers provide several advantages:
 
-- Strongly-Typed Interfaces: Ensures type safety in communication between client and server.
-- Code Generation: Automatic generation of client and server code in multiple languages from a single .proto file.
-- Efficiency: Binary serialization results in lower network usage and faster data transfer.
-- Simple Service Definition: Defining a service in a .proto file is straightforward, and gRPC handles the rest.
+- Language-agnostic and Platform-neutral: Define data structures once in a human-readable .proto file and generate code for various languages (C++, Java, Python, Go, etc.) and platforms, ensuring seamless communication.
+- Strongly-Typed Interfaces: Ensures type safety in communication between client and server, preventing data corruption and unexpected behavior.
+- Code Generation: Protobuf compilers automate the creation of boilerplate code for data serialization and deserialization, saving you time and effort.
+- Binary Efficiency: Binary serialization results  in a compact binary format compared to human-readable formats like JSON or XML, resulting in smaller data sizes and faster processing, especially for large datasets.
+- Schema Evolution: Add new fields to your message formats without breaking existing implementations. Older clients will simply ignore new fields, preserving backward compatibility.
 
-## Types
+# Building Blocks: Messages and Types
 
-### Well-Known Types
+The heart of Protobuf lies in defining messages, which are blueprints for structured data. These messages are composed of named fields, each with a specific type. Understanding these types is crucial for crafting efficient and accurate data definitions.
 
-### Google Common Types
+## Scalar Types
 
-## Services
+These are the fundamental building blocks, representing basic data values such as
+
+- Integers: int32, int64 for whole numbers (e.g., age, product ID).
+- Strings: string for text data (e.g., name, address).
+- Floating-point numbers: float, double for decimal values (e.g., price, scientific measurements).
+- Booleans: bool for true/false values (e.g., active status, flag).
+
+## Composite Types
+
+Complex data structures can be created by combine these basic types such as
+
+### Nested messages
+
+Create nested message hierarchies to represent intricate data relationships (e.g., Address message containing nested Street, City, and Country messages). In the example below, the Person message has a nested Address message, effectively grouping address-related data under a single structure.
+
+```protobuf
+message Person {
+  string name = 1;
+  int32 age = 2;
+  
+  message Address {
+    string street = 1;
+    string city = 2;
+    string state = 3;
+  }
+  
+  Address address = 3;
+}
+```
+
+### Enums
+
+Define named constants for a set of related values. In the example below, the Color enum defines constants for different colors with assigned integer values.
+
+```protobuf
+enum Color {
+  RED = 0;
+  GREEN = 1;
+  BLUE = 2;
+}
+```
+
+### Maps
+
+Represent key-value pairs where keys can be strings or integers (e.g., user_preferences map with string keys and string values).
+
+```protobuf
+message User {
+  Person person = 1;
+  Color color = 2;
+  map<string, string> user_preferences = 3;
+}
+```
+
+## Well-Known Types
+
+Google provides pre-defined types for common data structures, simplifying usage:
+
+- Timestamp: Represents a point in time with nanosecond precision.
+- Duration: Represents a span of time between two timestamps.
+- StringValue, Int32Value, etc.: Wrapper types for basic types.
+
+## Custom Types
+
+Extend the capabilities beyond built-in options for specific needs:
+
+- Extend existing message types with additional fields for specialized data.
+- Define custom options for data validation or behavior control.
+
+By understanding these different types and their uses within message structures, you can effectively design data exchange mechanisms that are efficient, flexible, and interoperable across diverse systems.
 
 ## Defining messages and services
 
@@ -114,6 +182,7 @@ message CreateCustomerResponse {
 Creating a gRPC service involves defining your service and message types in a .proto file, generating the server and client-side code, and then implementing the service logic. Here's how you can build your first gRPC service in .NET:
 
 ## Writing Your First Proto file
+
 1. Define the Service and Messages:
 
 - Navigate to the Protos directory in your project.
@@ -150,7 +219,7 @@ message HelloReply {
 - service Greeter: Defines a service with a method named SayHello.
 - Generating C# Code from Proto files
 
-## Configure the Protobuf Tooling:
+## Configure the Protobuf Tooling
 
 - Edit the .csproj file in your project and ensure it contains a reference to the Grpc.AspNetCore package and a <Protobuf> item group like this:
 
@@ -169,6 +238,7 @@ Run dotnet build. The build process automatically generates the C# classes for t
 ## Implementing the Server Side
 
 1. Create a Service Class:
+
 - Navigate to the Services directory.
 - Create a new C# class file named GreeterService.cs.
 - Implement the service class by inheriting from the generated base class and overriding the method(s):
@@ -186,9 +256,11 @@ public class GreeterService : Greeter.GreeterBase
     }
 }
 ``````
+
 ## Implementing the Client Side
 
 1. Create a Client
+
 - In a real-world scenario, the client would be a separate project or application. For demonstration purposes, you can create a client within the same project or a different one.
 - Add the necessary NuGet packages (Grpc.Net.Client, Google.Protobuf, Grpc.Tools) to your client project.
 - Use the generated client class to call the service:
@@ -203,5 +275,3 @@ Console.WriteLine("Greeting: " + reply.Message);
 You've now successfully defined your service and message types, generated the necessary code, implemented the server side of your gRPC service, and created a client to consume the service. Running both the server and client will allow you to see gRPC in action as your client sends a greeting request to the server and receives a response.
 
 In the next section, we'll discuss best practices in gRPC development to ensure your services are efficient, maintainable, and secure.
-
-
