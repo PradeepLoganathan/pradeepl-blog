@@ -7,6 +7,9 @@ main:
     weight: 50 
   - name: Podcasts
     pageref: /episodes
+    weight: 40
+  - name: slides
+    url: https://slides.pradeepl.com/
     weight: 30
   - name: Blog
     pageref: /blog
