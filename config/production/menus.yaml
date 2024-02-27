@@ -9,7 +9,7 @@ main:
     pageref: /episodes
     weight: 40
   - name: slides
-    url: https://slides.pradeepl.com/
+    pageref: /slides
     weight: 30
   - name: Blog
     pageref: /blog

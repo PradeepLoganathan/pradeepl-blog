@@ -30,7 +30,7 @@ cover:
 APIs form the building blocks of a connected digital world, enabling applications to collaborate, data to flow seamlessly, and innovation to flourish. In todays digital landscape, Application Programming Interfaces (APIs) serve as the connective tissue that empowers diverse software systems to interact and collaborate seamlessly.  The key to building a successful API is to allow developers and consumers understand the functionality offered by the API in a standard, consistent and easy way. Building an amazing API providing key functionality is challenging. Lowering the barriers to allow for easy consumption of the API is key to ensure that consumers can be easily onboarded to consume the API. Well-structured API documentation eliminates confusion, reduces the learning curve, and accelerates the adoption of your API. Developers should be able to understand how to authenticate, make requests, handle responses, and troubleshoot potential issues effortlessly. By investing in thorough and comprehensible API documentation, you not only empower your users but also establish a solid foundation for building strong developer relationships and driving the success of your API in the competitive digital landscape.
 The Open API specification defines a standard, language-agnostic interface for REST APIs, allowing both humans and computers to discover and understand the capabilities of the service without access to source code.
 
-## OpenAPI Specification
+# OpenAPI Specification
 
 The OpenAPI Specification (OAS) is an open-source framework that allows developers to define and document APIs in a format that is both human and machine readable. Originating from the Swagger framework, OAS has become the industry standard for API specification, offering a common language that ensures both clarity and functionality across different API services. It enables developers to describe the entire API, including available endpoints, operation parameters, authentication methods, and contact information, providing a blueprint for building consistent and secure APIs. The APIs defined by the spec can be constructed in any language with any tool or framework. This specification is detailed [here.](https://www.openapis.org/).
 
@@ -62,11 +62,19 @@ The terms Swagger and OpenAPI are used interchangeably. Swagger began in 2011 as
 
 The Open-API specification is defined [here](http://spec.openapis.org/oas/v3.0.3). Some of the tooling supporting version 3.0 of OAS is listed [here](https://github.com/OAI/OpenAPI-Specification/blob/master/IMPLEMENTATIONS.md). A complete overview of the OAS 3.0.3 specification is provided [here](https://swagger.io/specification/). OAS 3.0 aims to simplify the structure and also increase reusability of components, such as parameters, headers, examples, and security schemes. An understanding of this spec is key to helping developers use an API effectively.
 
-## Generating Client Libraries
+# Practical Application of OpenAPI Specifications
 
-There is tooling to read in an Open API specification and generate SDKs (client libraries). A good place to find a list of available tools is [OpenAPI.tools](https://openapi.tools/). One tool which is open source and has an optional paid cloud service is [Fern](https://buildwithfern.com/?utm_source=PradeepLoganathan/openapi-specification-swagger/clients). Using Fern, you can generate SDKs in Node.js/Typescript, Python, Go, Java, C#, and Ruby. Plus, you can publish the outputted clients to GitHub and package managers like npm and PyPI. 
+The OpenAPI specification enables the creation of tools that make it easier to develop, consume and manage API's. The [OpenAPI tools](https://openapi.tools/) website lists tools that use the OpenAPI specification to enable some amazing functionality.
 
-## Generating API Documentation 
+## Code Generation
+
+One of the key advantages of OAS is its capability to facilitate the creation of client-side code to interact with the API. By detailing server information, security measures, and API structure within the specification, developers can automatically generate models and service objects that represent and call the API. This automation is supported across various languages and frameworks.
+
+An example of this is [Fern](https://buildwithfern.com/?utm_source=PradeepLoganathan/openapi-specification-swagger/clients). Using Fern, you can generate SDKs in Node.js/Typescript, Python, Go, Java, C#, and Ruby. Plus, you can publish the generated clients to GitHub and package managers like npm and PyPI.
+
+It is also possible to generate the API implementation stubs from the OAS. This leads to an important debate over whether to develop the API specification or the server-side code first. This discussion revolves around two main methodologies: "Design First" and "Code First." Each approach has its proponents and detractors, and the choice between them often depends on the specific needs of the project, the preferences of the development team, and the requirements of the stakeholders involved.
+
+## Generating API Documentation
 
 There is tooling to read in an Open API specification and generate API docs. Again, check out [OpenAPI.tools](https://openapi.tools/). One tool that makes it easy to get started building documentation within 5 minutes is [Fern](https://buildwithfern.com/?utm_source=PradeepLoganathan/openapi-specification-swagger/docs). In addition to your API reference, can add arbitrary pages by writing markdown and keep your documentation versioned next to your code.
 
@@ -82,7 +90,7 @@ An Open API file allows you to describe your entire API, including the following
 
 The structure of an Open API file version 3.0 is below
 
-!["OAS File structure"](images/OAS3-File-structure.png)
+!["OAS File structure"](images/OAS3-File-structure.png#center)
 
 OAS 3.0 File structure
 
