@@ -2,16 +2,16 @@
 title: "gRPC and .NET: Crafting Cutting-Edge APIs"
 lastmod: 2024-01-31T09:39:01+10:00
 date: 2024-01-31T09:39:01+10:00
-draft: true
+draft: false
 Author: Pradeep Loganathan
 tags: 
   - api
   - grpc
   - architecture
 categories:
-  - 
+  - api
 #slug: kubernetes/introduction-to-open-policy-agent-opa/
-summary: ""
+summary: "Dive into gRPC with this tutorial – understand Protocol Buffers, define services, and implement a gRPC server in .NET for fast, efficient communication."
 ShowToc: true
 TocOpen: false
 images:
@@ -46,11 +46,11 @@ Before diving into building a gRPC service using dotnet, it is essential to unde
 
 Protocol Buffers provide several advantages:
 
-- Language-agnostic and Platform-neutral: Define data structures once in a human-readable .proto file and generate code for various languages (C++, Java, Python, Go, etc.) and platforms, ensuring seamless communication.
-- Strongly-Typed Interfaces: Ensures type safety in communication between client and server, preventing data corruption and unexpected behavior.
-- Code Generation: Protobuf compilers automate the creation of boilerplate code for data serialization and deserialization, saving you time and effort.
-- Binary Efficiency: Binary serialization results  in a compact binary format compared to human-readable formats like JSON or XML, resulting in smaller data sizes and faster processing, especially for large datasets.
-- Schema Evolution: Add new fields to your message formats without breaking existing implementations. Older clients will simply ignore new fields, preserving backward compatibility.
+- ___Language-agnostic and Platform-neutral___: Define data structures once in a human-readable .proto file and generate code for various languages (C++, Java, Python, Go, etc.) and platforms, ensuring seamless communication.
+- ___Strongly-Typed Interfaces___: Ensures type safety in communication between client and server, preventing data corruption and unexpected behavior.
+- ___Code Generation___: Protobuf compilers automate the creation of boilerplate code for data serialization and deserialization, saving you time and effort.
+- ___Binary Efficiency___: Binary serialization results  in a compact binary format compared to human-readable formats like JSON or XML, resulting in smaller data sizes and faster processing, especially for large datasets.
+- ___Schema Evolution___: Add new fields to your message formats without breaking existing implementations. Older clients will simply ignore new fields, preserving backward compatibility.
 
 # Building Blocks: Defining Data Structures with Protocol Buffers
 
