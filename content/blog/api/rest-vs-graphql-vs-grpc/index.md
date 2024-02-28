@@ -30,7 +30,7 @@ cover:
 
 APIs are vital for creating modern digital experiences that can be accessed easily, customized, and securely integrated with backend systems. APIs are the modern equivalent of "plug and play" connectors in software. They simplify how systems communicate, offering flexibility and independence within an enterprise
 
-The API landscape is constantly evolving, with new tools and trends emerging to shape the way we build and consume data. One of the most significant decisions as part of building API's is selecting the API architectural style you will be using.  But even amidst this change, three technologies stand out as the reigning champions: [REST]({{< ref "/series/rest" >}}), GraphQL, and gRPC. Each boasts unique strengths and weaknesses, making the decision of which one to use a strategic challenge. This detailed exploration aims to provide a comprehensive understanding of these technologies, highlighting their comparative advantages, disadvantages, and optimal use cases to inform a strategic decision-making process.
+The API landscape is constantly evolving, with new tools and trends emerging to shape the way we build and consume data. One of the most significant decisions as part of building API's is selecting the API architectural style you will be using.  But even amidst this change, three technologies stand out as the reigning champions: [REST]({{< ref "/series/rest" >}}), [GraphQL]({{< ref "/blog/api/getting-started-with-graphql" >}}), and [gRPC]({{< ref "/blog/api/grpc" >}}). Each boasts unique strengths and weaknesses, making the decision of which one to use a strategic challenge. This detailed exploration aims to provide a comprehensive understanding of these technologies, highlighting their comparative advantages, disadvantages, and optimal use cases to inform a strategic decision-making process.
 
 # REST - The Timeless Standard
 
@@ -79,9 +79,9 @@ REST, the veteran of the group, continues to enjoy widespread adoption and matur
 
 GraphQL empowers clients to request only what they need, reducing overfetching and optimizing performance. It shines in:
 
-Single-page applications (SPAs): Streamlined data retrieval and real-time updates enhance user experience in dynamic SPAs.
-Complex data structures: Nested data becomes a breeze with efficient single-request retrieval, improving development efficiency.
-Real-time updates and subscriptions: Push notifications keep users informed, ideal for data-intensive, dynamic applications.
+- Single-page applications (SPAs): Streamlined data retrieval and real-time updates enhance user experience in dynamic SPAs.
+- Complex data structures: Nested data becomes a breeze with efficient single-request retrieval, improving development efficiency.
+- Real-time updates and subscriptions: Push notifications keep users informed, ideal for data-intensive, dynamic applications.
 
 ## Considerations
 
@@ -129,9 +129,8 @@ The selection among REST, GraphQL, and gRPC hinges on the specific requirements 
 | Complexity | Low | Medium | High |
 | Ideal Use Cases | Public APIs, simple operations | SPAs, complex data, real-time | Microservices, streaming, data-intensive |
 
-Remember, this table is just a starting point. The best way to choose your champion is to carefully evaluate your project's requirements and conduct your own research. By understanding the latest advancements and considerations, you can make an informed decision that sets your API on the path to success.
+Remember, this table is just a starting point. The best way to choose your foundational architecture is to carefully evaluate your project's requirements and conduct your own research. By understanding the latest advancements and considerations, you can make an informed decision that sets your API on the path to success.
 
-REST stands out for its maturity, simplicity, and broad applicability, particularly in scenarios prioritizing broad accessibility.
-GraphQL excels in environments where dynamic data fetching and real-time communication are essential, offering unparalleled client-side efficiency and flexibility. gRPC is the go-to for scenarios requiring high performance, efficient communication, and strong type safety, especially in microservices architectures and real-time streaming applications.
+REST stands out for its maturity, simplicity, and broad applicability, particularly in scenarios prioritizing broad accessibility. GraphQL excels in environments where dynamic data fetching and real-time communication are essential, offering unparalleled client-side efficiency and flexibility. gRPC is the go-to for scenarios requiring high performance, efficient communication, and strong type safety, especially in microservices architectures and real-time streaming applications.
 
 In essence, the decision is nuanced and context-dependent, underscoring my favorite adage ***"it depends."*** A thorough analysis of project needs, performance requirements, and development capabilities is crucial in making an informed choice that aligns with strategic goals and operational efficiencies.
