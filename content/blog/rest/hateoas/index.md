@@ -1,5 +1,5 @@
 ---
-title: "Hateos"
+title: "Mastering REST: The Role of HATEOAS in API Design"
 lastmod: 2024-01-30T14:51:18+10:00
 date: 2024-01-30T14:51:18+10:00
 draft: false
