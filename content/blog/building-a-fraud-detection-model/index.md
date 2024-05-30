@@ -1,8 +1,8 @@
 ---
-title: "Building a Fraud Detection Model"
+title: "Building a Fraud Detection Model using AI/ML"
 lastmod: 2024-05-15T11:39:06+10:00
 date: 2024-05-15T11:39:06+10:00
-draft: true
+draft: false
 Author: Pradeep Loganathan
 tags: 
   - 
