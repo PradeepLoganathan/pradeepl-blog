@@ -12,7 +12,7 @@ categories:
   - 
 #slug: kubernetes/introduction-to-open-policy-agent-opa/
 description: 
-summary: "summary used in summary pages"
+summary: "Fraud detection involves finding patterns in data. In this blog post we will build a very naive AI/ML model for fraud detection"
 ShowToc: true
 TocOpen: true
 images:
