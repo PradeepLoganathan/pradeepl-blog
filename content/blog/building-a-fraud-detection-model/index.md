@@ -25,232 +25,232 @@ cover:
  
 ---
 
-## What is Fraud Detection?
-
-Fraud detection is the process of identifying and preventing fraudulent transactions, activities, or behavior in various industries, including finance, e-commerce, insurance, and government. Fraud can take many forms, including:
-
-* Financial fraud (e.g., credit card fraud, money laundering)
-* Identity fraud (e.g., phishing, identity theft)
-* Online fraud (e.g., transaction fraud, account takeover)
-* Insurance fraud (e.g., claims fraud, premium fraud)
-* Healthcare fraud (e.g., medical billing fraud, prescription fraud)
-
-## Why is Fraud Detection Important?
-
-Fraud detection is crucial for several reasons:
-
-* Financial losses: Fraud can result in significant financial losses for individuals, businesses, and organizations.
-* Reputation damage: Fraud can damage an organization's reputation and erode customer trust.
-* Legal and regulatory issues: Fraud can lead to legal and regulatory issues, resulting in fines, penalties, and even criminal prosecution.
-* National security: Fraud can be linked to criminal organizations and terrorist financing, posing a threat to national security.
-
-## Fraud Detection Methods
-
-Fraud detection typically involves identifying fraudulent transactions among a set of transactions. The foundational idea behind most fraud detection models is anomaly detection. This can be framed as a binary classification problem, where each transaction is labeled as either fraudulent or non-fraudulent. We establish patterns of "normal" behavior and then identify transactions or activities that deviate significantly from these patterns as potential fraud. Fraud detection methods can be categorized into two main approaches:
-
-* Rules-Based Approach: This approach uses predefined rules to identify fraudulent transactions or behavior. Rules are based on historical data, industry expertise, and regulatory requirements.
-* Machine Learning Approach: This approach uses machine learning algorithms to analyze patterns and anomalies in data, identifying potential fraud. Machine learning models can be trained on historical data and adapt to new fraud patterns.
-
-## Rules-Based Engines: A Solid Foundation for Fraud Detection
-
-In the world of fraud detection, rules-based engines serve as the first line of defense. These systems rely on a set of carefully crafted rules, developed by experts, to identify suspicious transactions. For example, a rule might flag a transaction above $10,000 or one originating from a high-risk country. The strength of this approach lies in its transparency and simplicity. Each decision can be traced back to a specific rule, providing clear explanations for stakeholders and regulators. Examples of rules based engines for fraud detection are [FICO Falcon Fraud Manager](https://www.fico.com/en/products/fico-falcon-fraud-manager), [NICE Actimize](https://www.niceactimize.com/fraud-management/), [FRISS](https://www.friss.com/) and others. While rules-based engines are an excellent starting point, especially for organizations with limited data or resources, they have limitations. As fraudsters become more sophisticated, their tactics evolve, rendering static rules less effective. This is where machine learning models come into play.
-
-## Machine Learning: Adapting to the Evolving Fraud Landscape
-
-Machine learning models offer a dynamic and adaptive approach to fraud detection. Unlike rigid rules, these models learn from vast datasets of historical transactions, uncovering subtle patterns and anomalies that might escape human observation. Through techniques like logistic regression, decision trees, or even deep neural networks, these models continuously refine their understanding of fraudulent behavior. This adaptability is crucial in the face of ever-changing fraud tactics. However, transitioning to machine learning requires substantial amounts of labeled data for training, specialized expertise to build and maintain the models, and a focus on interpretability to ensure decisions remain transparent.
-
-## Training and Building an ML model for Fraud detection
-
-With this let's get started on building a very naive fraud detection model using Python. This guide is intended as a demonstration for getting started with machine learning and building models. We will use a Jupyter notebook to demonstrate the steps involved in data preprocessing, feature engineering, model training, and evaluation.
 
 
-### Step 1: Importing Libraries
+## Introduction
 
-First, we need to import the necessary libraries. These include ```pandas``` for data manipulation, ```numpy``` for numerical operations, ```matplotlib```, ```seaborn``` for data visualization, and several modules from ```sklearn``` for machine learning.
+Fraud detection is a critical task for financial institutions. Identifying fraudulent transactions can save millions of dollars and protect users from malicious activities. In this blog post, we will build a fraud detection model using a public dataset from Kaggle and deploy it as a Flask API. We'll cover the entire process, including data preparation, model building, evaluation, and deployment.
+
+## Setting Up Your Environment
+
+Let's begin by ensuring you have the necessary tools installed.
+
+```bash
+pip install pandas numpy scikit-learn matplotlib seaborn imbalanced-learn flask
+```
+
+## Dataset Overview
+
+We will use the [Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) from Kaggle. This dataset contains transactions made by European cardholders in September 2013. It has 284,807 transactions, with 492 frauds, making it highly imbalanced.
+
+### Loading the Dataset
+
+First, let's load the dataset into a pandas DataFrame.As discussed we will use the "Credit Card Fraud Detection" dataset available on [Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
 
 ```python
 import pandas as pd
-import numpy as np
+
+# Load the dataset
+data = pd.read_csv('creditcard.csv')
+
+# Display the first few rows
+print(data.head())
+print(data.describe())
+```
+
+Key points to note about this dataset are
+
+* Imbalanced Dataset: Fraudulent transactions are rare, so the dataset is heavily imbalanced.
+* Anonymized Features: Features are labeled V1, V2, ... V28 due to privacy concerns.
+* Time and Amount: These are the only features not transformed with PCA.
+
+## Data Preparation
+
+Before building the model, we need to prepare the data. This includes handling missing values, scaling features, and splitting the dataset into training and test sets.
+
+### Handling Missing Values
+
+Let's check for any missing values in the dataset.
+
+```python
+# Check for missing values
+print(data.isnull().sum())
+```
+The dataset has no missing values, so we can proceed to the next step.
+
+### Scaling Features
+
+The features Time and Amount need to be scaled. We will use StandardScaler for this purpose.
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+# Scale the 'Amount' and 'Time' features
+scaler = StandardScaler()
+data[['Amount', 'Time']] = scaler.fit_transform(data[['Amount', 'Time']])
+```
+
+### Splitting the Dataset
+
+We will split the dataset into training and test sets. We'll use 70% of the data for training and 30% for testing.
+
+```python
+from sklearn.model_selection import train_test_split
+
+# Split the dataset
+X = data.drop('Class', axis=1)
+y = data['Class']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+```
+
+## Exploratory Data Analysis (EDA)
+
+Performing EDA helps us understand the data better. We will visualize the class distribution and correlation matrix.
+
+### Class Distribution
+
+Let's plot the distribution of the target variable Class.
+
+```python
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import accuracy_score, classification_report
-import pickle
+
+# Plot class distribution
+sns.countplot(x='Class', data=data)
+plt.title('Class Distribution')
+plt.show()
 ```
 
-### Step 2: Loading the Dataset
+### Correlation Matrix
 
-We will load a dataset containing transaction data. This dataset should have features related to the transactions and a target variable indicating whether a transaction is fraudulent or not. We'll load the dataset and perform some initial exploration to understand its structure and content using the code below.
+Visualizing the correlation matrix helps identify relationships between features.
 
 ```python
-# Load the dataset
-df = pd.read_csv('transactions.csv')
-
-# Explore the dataset
-# Display the first few rows of the dataset
-print(df.head())
-# Get information about the dataset (columns, non-null values, data types)
-print(df.info())
-# Get basic statistics about the numerical columns
-print(df.describe())
-# Check the distribution of the class label
-print(df['Is Fraud'].value_counts())
-
-```
-
-In the above code the ```pd.read_csv```  function from the pandas library is used to read the transactions.csv file into a DataFrame. This ```df.head()``` method returns the first five rows of the DataFrame by default. It helps you quickly inspect the data and understand its structure. It produces output similar to below
-
-```
-Transaction ID   Amount   Time                          Location             Merchant Type  Customer Age   Card Type      Online Transaction      Country       Device Type  IP Address         PurchaseCount  AveragePurchaseValue Product Category Transaction Frequency  Is Fraud  
-qw243457a        1576.08  2024-04-13 16:37:06.167515    North Jennifer       Gas               75.0          Amex            False              Czech Republic  Desktop       61.225.111.230       2.0                   60.90         Health               Monthly           0  
-fh465784d        4520.34  2024-02-07 15:45:27.648097    West Heatherborough  Restaurant        62.0          Mastercard      True               Slovakia        Mobile        195.161.202.92       7.0                   85.09         Food                 Daily             0  
-yi476896d        1649.20  2023-09-24 07:25:51.750003    Port Ronnie          Electronics       55.0          Mastercard      True               Spain           Mobile        156.61.89.70         1.0                   81.15         Furniture            Weekly            1  
-hi575685s        787.04   2023-12-07 15:14:06.510224    Lake Joshuaview      Electronics       37.0          Amex            False              Latvia          Desktop       203.85.61.245        7.0                  102.18         Books                Daily             0  
-wt465883v        4221.80  2023-12-09 16:39:24.631475    Andrewhaven          Pharmacy          53.0          Discover        True               Sweden          Tablet        88.99.161.204        4.0                  158.90         Beauty               Weekly            0  
-```
-
-The ```df.info()``` method provides a concise summary of the DataFrame. This helps us understand the dataset better. The output from this method is below
-
-```cmd
-RangeIndex: 20000 entries, 0 to 19999
-Data columns (total 18 columns):
- #   Column                  Non-Null Count  Dtype  
----  ------                  --------------  -----  
- 0   Transaction ID          19982 non-null  float64
- 1   Amount                  19983 non-null  float64
- 2   Time                    19981 non-null  object 
- 3   Location                19980 non-null  object 
- 4   Merchant Type           19982 non-null  object 
- 5   Customer Age            19983 non-null  float64
- 6   Card Type               19984 non-null  object 
- 7   Online Transaction      19980 non-null  object 
- 8   Country                 19984 non-null  object 
- 9   Device Type             19974 non-null  object 
- 10  IP Address              19982 non-null  object 
- 11  Purchase Count          19970 non-null  float64
- 12  Average Purchase Value  19974 non-null  float64
- 13  Product Category        19966 non-null  object 
- 14  Transaction Frequency   19969 non-null  object 
- 15  Velocity                19975 non-null  float64
- 16  Merchant Risk           19974 non-null  float64
- 17  Is Fraud                19978 non-null  float64
-dtypes: float64(8), object(10)
-memory usage: 2.7+ MB
-```
-
-The output indicates the number of non-null entries, column names, data types, and memory usage. This information is useful for identifying missing values and understanding the types of data you're working with.  The ```df.describe()``` method generates descriptive statistics for the numerical columns in the DataFrame. It includes measures such as count, mean, standard deviation, minimum, 25th percentile (Q1), median (Q2), 75th percentile (Q3), and maximum. These statistics help you understand the distribution and spread of the numerical features. The ```df['Is Fraud'].value_counts()``` method counts the occurrences of each unique value in the 'Is Fraud' column. It's particularly useful for understanding the class distribution in a classification problem, helping to identify if the dataset is balanced or imbalanced. The above methods help us get a better understanding of the data that we will be using to train our model. We can now further explore this dataset to understand data distribution and patterns using exploratory data analysis.
-
-### Step 3: Exploratory Data Analysis (EDA)
-
-EDA helps us understand the data and identify any patterns or anomalies. We will visualize the distribution of the target variable and examine correlations between features.
-
-```python
-# 1. Univariate Analysis
-# Histogram of Transaction Amounts
-plt.figure(figsize=(10, 6))
-sns.histplot(df['Amount'], kde=True, bins=30)
-plt.title('Distribution of Transaction Amounts')
-plt.show()
-
-# 2. Bar plot of Merchant Type frequencies
-plt.figure(figsize=(10, 6))
-sns.countplot(x='Merchant Type', data=df)
-plt.title('Frequency of Merchant Types')
-plt.xticks(rotation=45)
-plt.show()
-
-# 3. Bivariate Analysis
-# Box plot of Amount by Merchant Type
+# Correlation matrix
+corr_matrix = data.corr()
 plt.figure(figsize=(12, 8))
-sns.boxplot(x='Merchant Type', y='Amount', data=df)
-plt.title('Transaction Amounts by Merchant Type')
-plt.xticks(rotation=45)
-plt.show()
-
-
-# 4. Fraudulent transaction profiling
-fraud_df = df[df['Is Fraud'] == 1]
-sns.histplot(fraud_df['Amount'], kde=True, bins=30, label='Fraud')
-sns.histplot(df[df['Is Fraud'] == 0]['Amount'], kde=True, bins=30, label='Non-Fraud')
-plt.title('Amount Distribution for Fraudulent vs. Non-Fraudulent Transactions')
-plt.legend()
-plt.show()
-
-# 5. Time-based analysis
-df['Time'] = pd.to_datetime(df['Time'])
-df['Hour'] = df['Time'].dt.hour
-fraud_by_hour = df.groupby('Hour')['Is Fraud'].mean()
-plt.plot(fraud_by_hour, marker='o')
-plt.title('Fraud Rate by Hour of Day')
-plt.xlabel('Hour')
-plt.ylabel('Fraud Rate')
+sns.heatmap(corr_matrix, annot=True, fmt='.2f')
+plt.title('Correlation Matrix')
 plt.show()
 ```
 
-The first histogram visualizes the distribution of transaction amounts in the dataset. This graph provides a clear picture of how transaction amounts are distributed in your dataset, which is essential for further analysis and model building in your fraud detection project. Understanding the distribution helps in engineering features that can improve model performance. It produces the below graph output. ![Distributed Transaction Amounts](images/disti-tran-amount.png). We can observe that the transaction amounts range from 0 to approximately 10,000. There is a high frequency of transactions within the lower range (0 to around 4,000). The frequency of transactions remains relatively stable within this range. The data is heavily skewed towards lower transaction amounts, with a long tail extending towards higher amounts. The KDE line shows that the highest density of transactions is within the 0 to 4,000 range. Beyond 4,000, the density sharply declines, indicating fewer transactions of higher amounts. 
+## Model Building
 
-
-
-### Step 4: Data Preprocessing
-
-Data preprocessing involves handling missing values, encoding categorical variables, and scaling numerical features. In our case, we'll focus on scaling the features.
+We will use a Random Forest classifier for this task. Random Forests are robust and often perform well on imbalanced datasets.
 
 ```python
-# Separate features and target variable
-X = data.drop(columns=['is_fraud'])
-y = data['is_fraud']
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 
-# Scale the features
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+# Train the model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = model.predict(X_test)
 ```
 
-### Step 5: Building the Model Pipeline
+## Model Evaluation
 
-We will use a logistic regression model for this simple fraud detection task. We will create a pipeline that includes scaling and the logistic regression model.
+Evaluating the model's performance is crucial. We will use precision, recall, F1-score, and ROC-AUC score for evaluation.
+
+### Classification Report and Confusion Matrix
 
 ```python
-# Create a pipeline with scaling and logistic regression
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('logistic_regression', LogisticRegression(max_iter=1000))
-])
+# Classification report
+print(classification_report(y_test, y_pred))
+
+# Confusion matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
+sns.heatmap(conf_matrix, annot=True, fmt='d')
+plt.title('Confusion Matrix')
+plt.show()
 ```
 
-### Step 6: Training and Evaluating the Model
+### ROC-AUC Score
 
-We split the data into training and testing sets, train the model, and evaluate its performance.
+The ROC-AUC score provides a single metric to evaluate the model's performance.
 
 ```python
-# Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Fit the pipeline to the training data
-pipeline.fit(X_train, y_train)
-
-# Make predictions on the testing set
-y_pred = pipeline.predict(X_test)
-
-# Evaluate the model
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print("Classification Report:\n", classification_report(y_test, y_pred, zero_division=1))
+# ROC-AUC score
+roc_auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
+print(f'ROC-AUC Score: {roc_auc:.2f}')
 ```
+## Saving the Model
 
-### Step 7: Saving the Model
-
-We can save the trained model using `pickle` for future use.
+Save the trained model to a file so it can be loaded by the Flask app.
 
 ```python
+import pickle
+
 # Save the model
-with open('fraud_detection_model.pkl', 'wb') as file:
-    pickle.dump(pipeline, file)
+with open('fraud_detection_model.pkl', 'wb') as f:
+    pickle.dump(model, f)
 ```
+
+## Model Deployment
+
+Now that we have a trained model, we'll deploy it as a Flask API. Flask is a lightweight web framework for Python.
+
+### Setting Up Flask
+
+First, install Flask if you haven't already
+
+```bash
+pip install Flask
+```
+
+### Creating the Flask API
+
+Create a new file called app.py and add the following code to set up the Flask API
+
+```python
+from flask import Flask, request, jsonify
+import pickle
+import pandas as pd
+
+# Load the trained model
+model = pickle.load(open('fraud_detection_model.pkl', 'rb'))
+
+app = Flask(__name__)
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json(force=True)
+    df = pd.DataFrame([data])
+    prediction = model.predict(df)
+    return jsonify({'prediction': int(prediction[0])})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+### Testing the API
+
+Run the Flask app
+
+```bash
+python app.py
+```
+
+To test the API, you can use a tool like curl or Postman to send a POST request to http://127.0.0.1:5000/predict with JSON data. You can use a curl command as below
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"Time":-1.359807134,"V1":-0.0727811733094,"V2":2.536346737,"V3":1.378155224,"V4":0.001542962,"V5":0.300687081,"V6":0.47668358,"V7":-0.358792343,"V8":0.676280733,"V9":0.027056132,"V10":0.082794295,"V11":0.078497073,"V12":-0.39500069,"V13":-0.33832077,"V14":0.462387778,"V15":-0.57534921,"V16":-0.346379052,"V17":0.623157105,"V18":0.855191578,"V19":-0.254117518,"V20":0.11794168,"V21":-0.064306244,"V22":0.305486771,"V23":-0.00610653,"V24":0.002678882,"V25":0.024708905,"V26":0.001694461,"V27":0.01771508,"V28":0.000774177,"Amount":149.62}' http://127.0.0.1:5000/predict
+```
+
+This command sends a JSON object representing a transaction to the API and returns a prediction.
 
 ## Conclusion
 
-In this post, we walked through the process of building a simple fraud detection model. We covered data loading, exploratory data analysis, data preprocessing, model building, and evaluation. This is a naive approach and can be further improved with more advanced techniques and domain-specific knowledge. 
+In this blog post, we built a fraud detection model using the Credit Card Fraud Detection Dataset from Kaggle. We performed data preparation, exploratory data analysis, feature engineering, model building, and evaluation. Finally, we deployed the model as a Flask API. This end-to-end project demonstrates how to tackle fraud detection and deploy a machine learning model for real-world use.
 
-Feel free to experiment with different models and techniques to improve the performance of your fraud detection system.
+You can find the complete code on GitHub.
+
+## Code and Resources
+
+[Credit Card Fraud Detection Dataset]()
+
+[GitHub Repository]()
+
+By following these steps, you will have a fully functional fraud detection model and a deployed API ready for use. Happy coding!
