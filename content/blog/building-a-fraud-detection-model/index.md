@@ -1,25 +1,30 @@
 ---
-title: "Building a Fraud Detection Model using AI/ML"
+title: "Using AI/ML to build a Fraud Detection Model"
 lastmod: 2024-05-15T11:39:06+10:00
 date: 2024-05-15T11:39:06+10:00
 draft: false
 Author: Pradeep Loganathan
 tags: 
-  - 
-  - 
-  - 
+  - AI
+  - ML
+  - AI/ML
+  - DataScience
+  - Machine Learning
+  - FraudDetection
 categories:
-  - 
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
+  - AI
 description: 
-summary: "Fraud detection involves finding patterns in data. In this blog post we will build a very naive AI/ML model for fraud detection"
+summary: "Fraud detection involves finding patterns in data. In this blog post we will build an AI/ML model for fraud detection"
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - images/cover.webp
+  - images/class-imbalance.png
+  - images/confusion-matrix.png
+  - images/correlation-matrix.png
 cover:
     image: "images/cover.webp"
-    alt: ""
+    alt: "Build an AI/ML based Fraud Detection Model  "
     caption: ""
     relative: true # To use relative path for cover image, used in hugo Page-bundles
 math: katex 
@@ -359,7 +364,6 @@ This is the harmonic mean of precision and recall.
 
 The model performs well with high accuracy and precision, but there is room for improvement in recall. This means the model is very good at predicting legitimate transactions and correctly identifying fraudulent ones it predicts, but it misses some fraudulent transactions. Further tuning or using more advanced methods may help in improving recall while maintaining precision.
 
-
 Evaluate precision and recall to understand the trade-off between catching all fraud cases and minimizing false alarms.
 Consider the F1-score as a balanced measure of overall performance.
 The ROC-AUC score provides a general idea of the model's discriminatory power.
@@ -486,6 +490,8 @@ You can find the complete code on GitHub.
 
 ## Code and Resources
 
-[Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+- [Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+
+- [Code for Fraud Detection model](https://github.com/PradeepLoganathan/Fraud-Detection-Model/blob/main/FraudDetection.ipynb)
 
 By following these steps, you will have a fully functional fraud detection model and a deployed API ready for use. Happy coding!
