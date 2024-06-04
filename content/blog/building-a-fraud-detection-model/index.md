@@ -22,10 +22,8 @@ cover:
     alt: ""
     caption: ""
     relative: true # To use relative path for cover image, used in hugo Page-bundles
- 
+math: katex 
 ---
-
-
 
 ## Introduction
 
@@ -322,30 +320,42 @@ The confusion matrix provides a summary of the performance of a classification m
 
 ## Key Metrics
 
-- **Accuracy**: 
+* **Accuracy**
+
+{{< math >}}
   \[
   \frac{TP + TN}{TP + TN + FP + FN} = \frac{39 + 28430}{39 + 28430 + 2 + 10} = \frac{28469}{28481} \approx 0.9996
   \]
-  This indicates that the model is highly accurate overall.
+{{< /math >}}
 
-- **Precision (for the positive class)**: 
+This indicates that the model is highly accurate overall.
+
+* **Precision (for the positive class)**
+{{< math >}}
   \[
   \frac{TP}{TP + FP} = \frac{39}{39 + 2} \approx 0.9512
   \]
-  This measures the accuracy of positive predictions, i.e., how many predicted fraud cases are actually fraud.
+{{< /math >}}
 
-- **Recall (for the positive class)**: 
+This measures the accuracy of positive predictions, i.e., how many predicted fraud cases are actually fraud.
+
+* **Recall (for the positive class)**
+{{< math >}}
   \[
   \frac{TP}{TP + FN} = \frac{39}{39 + 10} \approx 0.7959
   \]
-  This measures the model's ability to correctly identify actual fraud cases.
+{{< /math >}}
+
+This measures the model's ability to correctly identify actual fraud cases.
 
 - **F1 Score**: 
+{{< math >}}
   \[
   2 \times \frac{Precision \times Recall}{Precision + Recall} = 2 \times \frac{0.9512 \times 0.7959}{0.9512 + 0.7959} \approx 0.8657
   \]
-  This is the harmonic mean of precision and recall.
+{{< /math >}}
 
+This is the harmonic mean of precision and recall.
 
 The model performs well with high accuracy and precision, but there is room for improvement in recall. This means the model is very good at predicting legitimate transactions and correctly identifying fraudulent ones it predicts, but it misses some fraudulent transactions. Further tuning or using more advanced methods may help in improving recall while maintaining precision.
 
@@ -477,7 +487,5 @@ You can find the complete code on GitHub.
 ## Code and Resources
 
 [Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
-
-[Jupyter Notebook](https://github.com/PradeepLoganathan/pradeepl-blog/blob/main/static/FraudDetection.html)
 
 By following these steps, you will have a fully functional fraud detection model and a deployed API ready for use. Happy coding!

@@ -1,0 +1,5 @@
+{{ if (eq $.Page.Params.math "katex") }}
+  {{ partial "helpers/katex.html" . }}
+{{ else if (eq $.Page.Params.math "mathjax") }}
+  {{ partial "helpers/mathjax.html" . }}
+{{ end }}
