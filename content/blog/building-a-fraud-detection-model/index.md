@@ -297,9 +297,59 @@ The confusion matrix produced is below
 
 ![alt text](images/confusion-matrix.png)
 
-### Interpreting the Results
+### Confusion Matrix Interpretation
 
-Examine the confusion matrix to see how many transactions are correctly or incorrectly classified.
+The confusion matrix provides a summary of the performance of a classification model. Here's a breakdown of the information contained in the confusion matrix you provided:
+
+- **True Positives (TP)**: The number of correctly predicted positive cases.
+  - In this matrix, TP = 39 (bottom-right cell).
+
+- **True Negatives (TN)**: The number of correctly predicted negative cases.
+  - In this matrix, TN = 28430 (top-left cell).
+
+- **False Positives (FP)**: The number of incorrectly predicted positive cases.
+  - In this matrix, FP = 2 (top-right cell).
+
+- **False Negatives (FN)**: The number of incorrectly predicted negative cases.
+  - In this matrix, FN = 10 (bottom-left cell).
+
+## Interpretation
+
+- **High True Negative Rate**: The model correctly identifies a large number of legitimate transactions (28430).
+- **Low False Positive Rate**: Only 2 legitimate transactions are incorrectly labeled as fraudulent, indicating the model has a low rate of false alarms.
+- **Moderate True Positive Rate**: The model correctly identifies 39 fraudulent transactions.
+- **False Negatives**: There are 10 fraudulent transactions that the model failed to identify, classifying them as legitimate.
+
+## Key Metrics
+
+- **Accuracy**: 
+  \[
+  \frac{TP + TN}{TP + TN + FP + FN} = \frac{39 + 28430}{39 + 28430 + 2 + 10} = \frac{28469}{28481} \approx 0.9996
+  \]
+  This indicates that the model is highly accurate overall.
+
+- **Precision (for the positive class)**: 
+  \[
+  \frac{TP}{TP + FP} = \frac{39}{39 + 2} \approx 0.9512
+  \]
+  This measures the accuracy of positive predictions, i.e., how many predicted fraud cases are actually fraud.
+
+- **Recall (for the positive class)**: 
+  \[
+  \frac{TP}{TP + FN} = \frac{39}{39 + 10} \approx 0.7959
+  \]
+  This measures the model's ability to correctly identify actual fraud cases.
+
+- **F1 Score**: 
+  \[
+  2 \times \frac{Precision \times Recall}{Precision + Recall} = 2 \times \frac{0.9512 \times 0.7959}{0.9512 + 0.7959} \approx 0.8657
+  \]
+  This is the harmonic mean of precision and recall.
+
+
+The model performs well with high accuracy and precision, but there is room for improvement in recall. This means the model is very good at predicting legitimate transactions and correctly identifying fraudulent ones it predicts, but it misses some fraudulent transactions. Further tuning or using more advanced methods may help in improving recall while maintaining precision.
+
+
 Evaluate precision and recall to understand the trade-off between catching all fraud cases and minimizing false alarms.
 Consider the F1-score as a balanced measure of overall performance.
 The ROC-AUC score provides a general idea of the model's discriminatory power.
@@ -428,6 +478,6 @@ You can find the complete code on GitHub.
 
 [Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
 
-[GitHub Repository]()
+[Jupyter Notebook](https://github.com/PradeepLoganathan/pradeepl-blog/blob/fraud-improve/static/FraudDetection.html)
 
 By following these steps, you will have a fully functional fraud detection model and a deployed API ready for use. Happy coding!
