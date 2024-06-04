@@ -478,6 +478,6 @@ You can find the complete code on GitHub.
 
 [Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
 
-[Jupyter Notebook](https://github.com/PradeepLoganathan/pradeepl-blog/blob/fraud-improve/static/FraudDetection.html)
+[Jupyter Notebook](https://github.com/PradeepLoganathan/pradeepl-blog/blob/main/static/FraudDetection.html)
 
 By following these steps, you will have a fully functional fraud detection model and a deployed API ready for use. Happy coding!
