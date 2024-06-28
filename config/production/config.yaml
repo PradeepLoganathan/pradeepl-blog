@@ -36,6 +36,19 @@ minify:
   disableXML: true
 
 outputFormats:
+  Feed:
+    mediaType: "application/rss+xml"
+    baseName: "feed"
+    isHTML: false
+    isPlainText: true
+    rel: "alternate"
+    permalinkable: true
+  rss:
+    mediaType: "application/rss+xml"
+    baseName: "feed"
+    isHTML: false
+    isPlainText: true
+    rel: "alternate"
   aacfeed:
     MediaType: "application/rss+xml"
     BaseName: "index"
@@ -55,11 +68,12 @@ outputFormats:
 
 outputs:
     home:
-        - HTML
-        - RSS
-        - JSON # is necessary
-        - aacfeed
-        - mp3feed
+      - HTML
+      - Feed
+      - RSS
+      - JSON # is necessary
+      - aacfeed
+      - mp3feed
      
 assets:
     favicon: "/favicon.ico"

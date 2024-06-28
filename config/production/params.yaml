@@ -88,7 +88,7 @@ socialIcons:
   - name: stackoverflow
     url: https://stackoverflow.com/users/4613054/pradeepl
   - name: rss
-    url: /index.xml
+    url: /feed.xml
 
 fuseOpts:
   isCaseSensitive: false

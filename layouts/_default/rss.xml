@@ -1,0 +1,21 @@
+{{- /* layouts/_default/rss.xml */ -}}
+{{ "<" | safeHTML }}?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0">
+  <channel>
+    <title>{{ .Site.Title | html }}</title>
+    <link>{{ .Site.BaseURL | absURL }}</link>
+    <description>{{ .Site.Params.description | html }}</description>
+    <language>{{ .Site.LanguageCode }}</language>
+    <lastBuildDate>{{ now.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</lastBuildDate>
+    <generator>Hugo -- gohugo.io</generator>
+    {{ range where .Site.RegularPages "Section" "blog" }}
+    <item>
+      <title>{{ .Title | html }}</title>
+      <link>{{ .Permalink | absURL | html }}</link>
+      <description>{{ .Summary | plainify | html }}</description>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</pubDate>
+      <guid>{{ .Permalink | absURL | html }}</guid>
+    </item>
+    {{ end }}
+  </channel>
+</rss>

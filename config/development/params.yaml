@@ -34,7 +34,7 @@ editPost:
   Text: "Suggest changes" # edit text
   appendFilePath: true # to append file path to Edit link
 
-ShowFullTextinRSS: true
+ShowFullTextinRSS: false
 
 header:
   title: 'Pradeep Loganathan'
@@ -88,7 +88,7 @@ socialIcons:
   - name: stackoverflow
     url: "https://stackoverflow.com"
   - name: rss
-    url: /index.xml
+    url: /feed.xml
  
 cover:
   hidden: false # hide everywhere but not in structured data
