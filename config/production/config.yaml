@@ -36,6 +36,12 @@ minify:
   disableXML: true
 
 outputFormats:
+  rss:
+    mediaType: "application/rss+xml"
+    baseName: "feed"
+    isHTML: false
+    isPlainText: true
+    rel: "alternate"
   aacfeed:
     MediaType: "application/rss+xml"
     BaseName: "index"
