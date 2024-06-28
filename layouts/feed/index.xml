@@ -1,4 +1,4 @@
-{{- /* layouts/_default/rss.xml */ -}}
+{{- /* layouts/feed/index.xml */ -}}
 {{ "<" | safeHTML }}?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0">
   <channel>
