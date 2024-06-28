@@ -34,7 +34,7 @@ editPost:
   Text: "Suggest changes" # edit text
   appendFilePath: true # to append file path to Edit link
 
-ShowFullTextinRSS: true
+ShowFullTextinRSS: false
 
 header:
   title: 'Pradeep Loganathan'
