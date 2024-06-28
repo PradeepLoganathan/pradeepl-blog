@@ -88,7 +88,7 @@ socialIcons:
   - name: stackoverflow
     url: "https://stackoverflow.com"
   - name: rss
-    url: /index.xml
+    url: /feed.xml
  
 cover:
   hidden: false # hide everywhere but not in structured data
