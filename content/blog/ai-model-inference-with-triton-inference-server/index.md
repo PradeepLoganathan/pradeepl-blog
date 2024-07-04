@@ -1,6 +1,5 @@
-
 ---
-title: "Triton Inference Server Demystified: A Technical Deep Dive with Real-World Applications"
+title: "Triton Inference Server: Accelerating AI in the Real World"
 lastmod: 2024-07-04T11:21:00+10:00
 date: 2024-07-04T11:21:00+10:00
 draft: false
@@ -12,18 +11,23 @@ tags:
 - Triton
 - NVIDIA
 categories:
-- Technical Deep Dive
-- AI Infrastructure
+  - AI
+  - Machine Learning
+  - Data Science
+  - Technology
+  - Software Development
 description: "Unleash the power of NVIDIA Triton Inference Server for scalable and efficient AI model deployment. Explore its architecture, configuration, optimization techniques, real-world use cases, and best practices."
 summary: "This in-depth technical guide dissects NVIDIA Triton Inference Server, showcasing its architecture, model management, configuration, and optimization strategies. Explore real-world use cases, compare Triton with other inference servers, and learn best practices for maximizing model performance."
+ShowToc: true
+TocOpen: true
 images:
 - "images/triton-architecture.png"
 - "images/triton-config.png"
 - "images/triton-metrics.png"
 ---
-## Introduction: Triton Inference Server: Accelerating AI in the Real World
+## Introduction
 
-The proliferation of AI models in various industries demands efficient and scalable inference solutions. NVIDIA Triton Inference Server has emerged as a leading platform to address this need, empowering organizations to deploy complex models with high performance and reliability. In this technical deep dive, we will explore the intricacies of Triton, from its architecture and model management to configuration and optimization strategies, real-world applications, best practices, and comparisons with other leading inference servers.
+The proliferation of AI models in various industries demands efficient and scalable inference solutions. For a detailed deep dive on AI/ML model inference [read this blog post here.]({{< ref "/blog/ai-model-inference-explained" >}}) NVIDIA Triton Inference Server has emerged as a leading platform to address this need, empowering organizations to deploy complex models with high performance and reliability. In this technical deep dive, we will explore the intricacies of Triton, from its architecture and model management to configuration and optimization strategies, real-world applications, best practices, and comparisons with other leading inference servers.
 
 ## Triton's Architectural Blueprint
 
