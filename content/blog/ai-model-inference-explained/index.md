@@ -1,7 +1,7 @@
 ---
 title: "Model Inference Explained: Turning AI Models into Real-World Solutions"
-lastmod: 2024-07-04T15:57:35+10:00
-date: 2024-07-04T15:57:35+10:00
+lastmod: 2024-07-04T11:21:00+10:00
+date: 2024-07-04T11:21:00+10:00
 draft: false
 author: Pradeep Loganathan
 tags: 
