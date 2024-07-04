@@ -157,7 +157,7 @@ Here's a breakdown of this journey:
 4. **Postprocessing:**
    * **Refining the Output:** In some cases, the model's output might require further refinement or interpretation. Postprocessing steps can include formatting the results, applying thresholds, or translating numerical values into meaningful labels. This final step ensures that the output is in a usable form for decision-making or further analysis.
 
-![alt text](image.png)
+![ML Pipeline](images/simple-ml-pipeline.png "ML Pipeline")
 
 By understanding these steps, we gain insight into how raw data is transformed into actionable intelligence through model inference. Each step is critical in ensuring that the inference process is efficient, accurate, and scalable, allowing machine learning models to make a tangible impact in real-world applications.
 
