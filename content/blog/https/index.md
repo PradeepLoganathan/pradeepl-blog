@@ -136,4 +136,5 @@ Secure TLS connections between the client and server have at least one of the fo
 
 - To prevent the undetected loss or alteration of the data during transmission, each transmitted message includes message integrity check using a message authentication code
 
-A detailed post on implementing https in an ASP.Net Core web application is [here]({{< ref "/blog/https-in-asp-net-core">}}). A detailed post on generating SSL certificates using letsencrypt and certbot is [here]({{< ref "/blog/generate-wildcard-ssl-certificate-using-letsencrypt-certbot">}})
+A detailed post on implementing https in an ASP.Net Core web application is [here]({{< ref "/blog/https-in-asp-net-core">}}).
+
