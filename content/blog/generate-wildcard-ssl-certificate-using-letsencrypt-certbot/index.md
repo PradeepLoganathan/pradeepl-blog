@@ -2,7 +2,7 @@
 title: "How to Generate SSL Wildcard Certificates with ACME Challenges, Let's Encrypt, and Certbot"
 lastmod: 2024-07-07T15:47:06+10:00
 date: 2024-07-07T15:47:06+10:00
-draft: true
+draft: false
 author: Pradeep Loganathan
 tags: 
   - SSL
