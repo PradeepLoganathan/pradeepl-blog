@@ -250,7 +250,7 @@ gpstate --version
 ```
 This is my output.
 
-![alt text](images/gp-version.png)
+![alt text](images/gpstate-verify.png)
 
 ### Step 8: Configure Environment for gpadmin
 
