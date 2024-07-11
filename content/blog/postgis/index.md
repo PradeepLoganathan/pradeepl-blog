@@ -1,5 +1,5 @@
 ---
-title: "Postgis"
+title: "Building a Logistic Regression Model with Greenplum, MADlib, and pgvector"
 lastmod: 2024-07-09T14:27:27+10:00
 date: 2024-07-09T14:27:27+10:00
 draft: true
@@ -24,167 +24,465 @@ cover:
     relative: true # To use relative path for cover image, used in hugo Page-bundles
  
 ---
-![alt text](install-postgis.png)
 
-![alt text](image.png)
+## Introduction
 
-![alt text](image-1.png)
+In this blog post, we'll walk through the process of installing MADlib and pgvector on Greenplum, and then use them to build a logistic regression model for loan approvals. We'll cover data preparation, model training, prediction, and evaluation.
 
-![alt text](image-2.png)
+## Part 1: The Technologies: Greenplum, MADlib, and pgvector
 
-![alt text](image-3.png)
+### Greenplum
 
-![alt text](image-4.png)
-
-![alt text](image-5.png)
-
-
-
-
-# Understanding MADlib Logistic Regression Output Tables
-
-When you run the `madlib.logregr_train` function in MADlib, it creates several tables to store various stages of the model training process and its results. Here's a breakdown of the main tables and their purposes:
-
-## Main Output Tables
-
-1. **`loan_model`**:
-   - This is the primary output table that stores the trained logistic regression model parameters.
-   - Contains information like the coefficients of the model, the intercept, and other relevant metadata.
-
-2. **`loan_model_summary`**:
-   - Stores a summary of the logistic regression model training, including statistics like R-squared, adjusted R-squared, p-values, and other diagnostic information.
-   - Useful for evaluating the model's performance and statistical significance.
-
-## Intermediate Tables
-
-MADlib may create several intermediate tables during the training process to facilitate computations. These tables are usually temporary and are cleaned up after the process is completed, but sometimes they might persist if there are errors or if you are debugging the process.
-
-## Inspecting the Tables
-
-You can inspect the created tables to understand the details of the model training:
-
-1. **Inspect the `loan_model` Table**:
-
-   ```sql
-   SELECT * FROM loan_model;
-   ```
-
-   - This will show you the coefficients for each feature, the intercept, and possibly other model parameters.
-
-2. **Inspect the `loan_model_summary` Table**:
-
-   ```sql
-   SELECT * FROM loan_model_summary;
-   ```
-
-   - This will give you a summary of the model's performance and other diagnostic metrics.
-
-## Example of Inspecting Model Tables
-
-Here's how you can inspect the created tables to understand the details of the model:
-
-```sql
--- Inspect the trained model parameters
-SELECT * FROM loan_model;
-
--- Inspect the model summary
-SELECT * FROM loan_model_summary;
-```
-
-## Understanding the Tables
-
-1. **`loan_model` Table**:
-   - **coefficients**: This column contains the coefficients for each feature in the feature vector.
-   - **intercept**: The intercept term for the logistic regression model.
-   - **odds_ratios**: If included, this column will have the odds ratios corresponding to the coefficients.
-
-2. **`loan_model_summary` Table**:
-   - **r_squared**: R-squared value indicating the proportion of the variance in the dependent variable that is predictable from the independent variables.
-   - **adj_r_squared**: Adjusted R-squared value.
-   - **p_values**: P-values for the significance of each coefficient.
-   - **std_err**: Standard error of the coefficients.
-   - **z_stats**: Z-statistics for the coefficients.
-   - **aic**: Akaike Information Criterion for the model.
-   - **bic**: Bayesian Information Criterion for the model.
-
-## Example Data from Tables
-
-To give you an idea, here's an example of what you might find in these tables:
-
-**`loan_model` Table**:
-| Feature        | Coefficient | Intercept |
-|----------------|-------------|-----------|
-| age            | 0.005       | 0.2       |
-| income         | 0.0003      |           |
-| loan_amount    | -0.001      |           |
-| ...            | ...         | ...       |
-
-**`loan_model_summary` Table**:
-| Metric          | Value    |
-|-----------------|----------|
-| r_squared       | 0.85     |
-| adj_r_squared   | 0.84     |
-| p_value_age     | 0.01     |
-| p_value_income  | 0.05     |
-| ...             | ...      |
-
-By inspecting these tables, you can gain insights into the effectiveness and significance of your trained logistic regression model.
-
-
-
-# Using MADlib and pgvector for Loan Application Approval
-
-## Understanding pgvector and MADlib
-
-### pgvector
-
-* **What it is:** A PostgreSQL extension for efficient vector data handling.
-* **Why it's important:** Enables similarity search, recommendation systems, anomaly detection, etc.
-* **Key Features:** Vector data type, specialized indexes, distance metrics, operator support.
+* **The Database:** Greenplum is a massively parallel processing (MPP) database designed for big data analytics. It excels at handling large datasets and complex queries, making it a great choice for machine learning tasks.
+* **Benefits:**
+    * **Scalability:** Handles massive datasets with ease.
+    * **Parallel Processing:** Distributes workloads across multiple nodes for faster query execution.
+    * **SQL-Based:** Allows you to use familiar SQL to interact with your data.
+    * **Extensibility:** Supports various extensions like MADlib and pgvector for enhanced functionality.
 
 ### MADlib
 
-* **What it is:** An open-source library for scalable in-database analytics.
-* **Why it's important:** Performs advanced analytics within the database, improving performance and enabling real-time analysis.
-* **Key Features:** Machine learning algorithms, statistical functions, graph analysis, SQL integration.
+* **The Analytics Library:** MADlib is an open-source library that brings advanced analytics capabilities to your PostgreSQL or Greenplum database.
+* **Benefits:**
+    * **In-Database Analytics:** Eliminates the need to move data out of the database for processing.
+    * **Scalable Algorithms:** Algorithms designed to handle large datasets.
+    * **Variety of Functions:** Provides a wide range of machine learning, statistical, and graph analysis functions.
+    * **Ease of Use:** Integrates seamlessly with SQL, making it accessible to data analysts and scientists.
 
-### Combining pgvector and MADlib
+### pgvector
 
-1. **Feature Engineering:**
-   * Prepare and clean data.
-   * Extract features and vectorize them using pgvector.
+* **The Vector Extension:** pgvector is a PostgreSQL extension that adds support for vector data types and operations.
+* **Benefits:**
+    * **Efficient Vector Storage:** Provides a native way to store vectors within PostgreSQL.
+    * **Similarity Search:** Offers specialized indexes and functions for fast similarity searches.
+    * **Machine Learning Applications:** Great for tasks like recommendation systems, natural language processing, and image analysis.
 
-2. **Model Training:**
-   * Store feature vectors in a PostgreSQL table.
-   * Choose a MADlib algorithm (e.g., logistic regression).
-   * Train the model on the feature vectors.
+## Part 2: The Problem: Loan Approval Prediction
 
-3. **Model Evaluation:**
-   * Assess model performance using relevant metrics.
-   * Optimize hyperparameters if needed.
+The goal of our project is to build a model that can predict whether a loan application should be approved or rejected. This is a binary classification problem, and we'll use logistic regression as our machine learning algorithm.
 
-4. **Prediction:**
-   * Extract features and create vectors for new applications.
-   * Apply the trained model to get predicted probabilities.
-   * Classify applications based on a threshold.
+### Why Logistic Regression?
+
+* **Well-Suited for Binary Classification:** Logistic regression is designed to predict probabilities of a binary outcome (yes/no, approved/rejected).
+* **Interpretability:** The model's coefficients can be interpreted to understand the importance of each feature.
+* **Efficiency:** Logistic regression is relatively computationally efficient, making it suitable for large datasets.
+
+### Input Data:
+
+We'll use a dataset of loan applications, where each application is represented by a set of features (e.g., income, credit score, employment status) and a target variable indicating whether the loan was approved or rejected.
+
+### The Role of pgvector:
+
+We'll use pgvector to store and process the feature vectors (arrays of numbers representing the loan applicant's characteristics) in our database. This will allow us to leverage its capabilities for efficient distance calculations and similarity searches in the future. 
 
 
-## Working with MADlib Tables
 
-**Tables Created by `madlib.logregr_train`:**
 
-* **loan_model:** Stores the trained model coefficients and metadata.
-* **loan_model_summary:** (Optional) Provides a summary of the training process.
-* **pg_temp.\_\_madlib_temp_...:** Temporary tables used during training (can be ignored or dropped).
+## Installing MADlib and pgvector
 
-**Inspecting and Using the Model:**
+### Step 1: Install `m4`
+
+```bash
+sudo yum install m4
+```
+
+### Step 2: Install MADlib
+
+1. Extract MADlib package:
+    ```bash
+    tar xzvf madlib-2.1.0-gp7-rhel8-x86_64.tar.gz
+    ```
+
+2. Install MADlib package:
+    ```bash
+    gppkg install ./madlib-2.1.0-gp7-rhel8-x86_64/madlib-2.1.0-gp7-rhel8-x86_64.gppkg.tar.gz
+    ```
+
+3. Add MADlib to PATH:
+    ```bash
+    export PATH=$PATH:/usr/local/greenplum-db-7.1.0/madlib/Versions/2.1.0/bin
+    ```
+
+4. Install MADlib functions in the database:
+    ```bash
+    madpack -p greenplum -c gpadmin@localhost:5432/risk_feature_store install
+    madpack -s madlib -p greenplum -c gpadmin@localhost:5432/risk_feature_store install-check
+    ```
+
+5. Create MADlib schema and extension:
+    ```sql
+    CREATE SCHEMA madlib;
+    CREATE EXTENSION madlib SCHEMA madlib;
+    GRANT ALL ON SCHEMA madlib TO PUBLIC;
+    ```
+
+6. Verify installation:
+    ```sql
+    SELECT * FROM madlib.version();
+    ```
+
+
+
+## Creating and Using a Model
+
+### Step 1: Create the `loan_applications` Table
 
 ```sql
--- Get coefficients
-SELECT * FROM loan_model;
+CREATE TABLE loan_applications (
+  application_id SERIAL PRIMARY KEY,
+  applicant_name VARCHAR(100),
+  applicant_age INT,
+  applicant_income NUMERIC,
+  loan_amount NUMERIC,
+  loan_duration INT,
+  credit_score INT,
+  property_value NUMERIC,
+  address VARCHAR(255),
+  application_date DATE,
+  decision_date DATE,
+  loan_purpose VARCHAR(50),
+  employment_status VARCHAR(50),
+  employment_length NUMERIC,
+  marital_status VARCHAR(20),
+  number_of_dependents INT,
+  occupation VARCHAR(100),
+  loan_to_value_ratio NUMERIC,
+  estimated_dti NUMERIC,
+  approved BOOLEAN
+);
+```
 
--- Make predictions
-SELECT madlib.logregr_predict(
-  array[23, 93857.78, 124763.49, ...], -- New feature vector
-  'loan_model'                         -- Model table
-) AS probability; 
+### Step 1.1: Load Data
+
+```sql
+COPY loan_applications (
+    applicant_name,
+    applicant_age,
+    applicant_income,
+    loan_amount,
+    loan_duration,
+    credit_score,
+    property_value,
+    address,
+    application_date,
+    decision_date,
+    loan_purpose,
+    employment_status,
+    employment_length,
+    marital_status,
+    number_of_dependents,
+    occupation,
+    loan_to_value_ratio,
+    estimated_dti,
+    approved
+)
+FROM '/home/gpadmin/loan_applications_synthetic.csv'
+DELIMITER ','
+CSV HEADER;
+```
+
+### Step 2: Create and Populate `loan_features` Table
+
+1. Create `loan_features` table:
+    ```sql
+    CREATE TABLE loan_features (
+      application_id INT,
+      applicant_age INT,
+      applicant_income NUMERIC,
+      loan_amount NUMERIC,
+      loan_duration INT,
+      credit_score INT,
+      property_value NUMERIC,
+      loan_to_value_ratio NUMERIC,
+      loan_duration_months INT,
+      loan_purpose_code INT,
+      employment_status_code INT,
+      employment_length NUMERIC,
+      application_date DATE,
+      approved BOOLEAN,
+      feature_vector VECTOR(11)
+    );
+    ```
+
+2. Insert features into `loan_features`:
+    ```sql
+    INSERT INTO loan_features (
+      application_id,
+      applicant_age,
+      applicant_income,
+      loan_amount,
+      loan_duration,
+      credit_score,
+      property_value,
+      loan_to_value_ratio,
+      loan_duration_months,
+      loan_purpose_code,
+      employment_status_code,
+      employment_length,
+      application_date,
+      approved,
+      feature_vector
+    )
+    SELECT
+      application_id,
+      applicant_age,
+      applicant_income,
+      loan_amount,
+      loan_duration,
+      credit_score,
+      property_value,
+      COALESCE(loan_amount / property_value, 0) AS loan_to_value_ratio,
+      loan_duration * 12 AS loan_duration_months,
+      CASE
+          WHEN loan_purpose = 'Home Purchase' THEN 1
+          WHEN loan_purpose = 'Debt Consolidation' THEN 2
+          ELSE 0
+      END AS loan_purpose_code,
+      CASE
+          WHEN employment_status = 'Full-time' THEN 1
+          WHEN employment_status = 'Part-time' THEN 2
+          ELSE 0
+      END AS employment_status_code,
+      COALESCE(employment_length, 0),
+      application_date,
+      approved,
+      ARRAY[
+          COALESCE(applicant_age, 0)::float8,
+          COALESCE(applicant_income, 0)::float8,
+          COALESCE(loan_amount, 0)::float8,
+          COALESCE(loan_duration, 0)::float8,
+          COALESCE(credit_score, 0)::float8,
+          COALESCE(property_value, 0)::float8,
+          COALESCE(loan_amount / property_value, 0)::float8,
+          COALESCE(loan_duration * 12, 0)::float8,
+          COALESCE(CASE
+              WHEN loan_purpose = 'Home Purchase' THEN 1
+              WHEN loan_purpose = 'Debt Consolidation' THEN 2
+              ELSE 0
+          END, 0)::float8,
+          COALESCE(CASE
+              WHEN employment_status = 'Full-time' THEN 1
+              WHEN employment_status = 'Part-time' THEN 2
+              ELSE 0
+          END, 0)::float8,
+          COALESCE(employment_length, 0)::float8
+      ]::VECTOR(11)
+    FROM
+      loan_applications;
+    ```
+
+### Step 3: Create Training Table
+
+1. Drop table if it exists:
+    ```sql
+    DROP TABLE IF EXISTS loan_train;
+    ```
+
+2. Create `loan_train` table:
+    ```sql
+    CREATE TABLE loan_train AS
+    SELECT *
+    FROM (
+        SELECT
+            application_id,
+            approved,
+            ARRAY[
+                COALESCE(applicant_age, 0)::double precision,
+                COALESCE(applicant_income, 0)::double precision,
+                COALESCE(loan_amount, 0)::double precision,
+                COALESCE(loan_duration, 0)::double precision,
+                COALESCE(credit_score, 0)::double precision,
+                COALESCE(property_value, 0)::double precision,
+                COALESCE(loan_amount / property_value, 0)::double precision,
+                (COALESCE(loan_duration, 0) * 12)::double precision,
+                COALESCE(loan_purpose_code, 0)::double precision,
+                COALESCE(employment_status_code, 0)::double precision,
+                COALESCE(employment_length, 0)::double precision
+            ] AS feature_vector,
+            random() as rnd
+        FROM
+            loan_features
+        WHERE
+            approved IS NOT NULL
+    ) subquery
+    WHERE rnd < 0.8;
+    ```
+
+### Step 4: Create Test Table
+
+1. Drop table if it exists:
+    ```sql
+    DROP TABLE IF EXISTS loan_test;
+    ```
+
+2. Create `loan_test` table:
+    ```sql
+    CREATE TABLE loan_test AS
+    SELECT
+        application_id,
+        approved,
+        ARRAY[
+            COALESCE(applicant_age, 0)::double precision,
+            COALESCE(applicant_income, 0)::double precision,
+            COALESCE(loan_amount, 0)::double precision,
+            COALESCE(loan_duration, 0)::double precision,
+            COALESCE(credit_score, 0)::double precision,
+            COALESCE(property_value, 0)::double precision,
+            COALESCE(loan_amount / property_value, 0)::double precision,
+            (COALESCE(loan_duration, 0) * 12)::double precision,
+            COALESCE(loan_purpose_code, 0)::double precision,
+            COALESCE(employment_status_code, 0)::double precision,
+            COALESCE(employment_length, 0)::double precision
+        ] AS feature_vector
+    FROM
+        loan_features
+    WHERE
+        approved IS NOT NULL
+        AND application_id NOT IN (SELECT application_id FROM loan_train);
+    ```
+
+### Step 5: Train Logistic Regression Model
+
+1. Drop existing model tables if they exist:
+    ```sql
+    DROP TABLE IF EXISTS loan_model CASCADE;
+    DROP TABLE IF EXISTS loan_model_summary;
+    ```
+
+2. Train the model:
+    ```sql
+    SELECT madlib.logregr_train(
+        'loan_train',    -- Source table
+        'loan_model',    -- Output model table
+        'approved',      -- Dependent variable
+        'feature_vector' -- Independent variable(s)
+    );
+    ```
+
+### Step 6: Make Predictions
+
+1. Predict using the model and get probabilities:
+    ```sql
+    SELECT lt.application_id,
+           madlib.logregr_predict_prob(lt.feature_vector, lm.coef) AS probability
+    FROM loan_test lt, loan_model lm;
+    ```
+
+
+## Evaluating the Model
+
+### Step 7: Evaluate the Model
+
+1. Match predictions with actual values:
+
+    ```sql
+    WITH predictions AS (
+        SELECT
+            lt.application_id,
+            madlib.logregr_predict_prob(lt.feature_vector, lm.coef) AS probability
+        FROM
+            loan_test lt, loan_model lm
+    )
+    SELECT
+        p.application_id,
+        p.probability,
+        lt.approved AS actual,
+        CASE
+            WHEN (p.probability >= 0.5 AND lt.approved::int = 1) OR (p.probability < 0.5 AND lt.approved::int = 0) THEN 'correct'
+            ELSE 'incorrect'
+        END AS prediction_match
+    FROM
+        predictions p
+    JOIN
+        loan_test lt ON p.application_id = lt.application_id
+    ORDER BY
+        p.application_id;
+    ```
+
+2. Calculate accuracy:
+
+    ```sql
+    SELECT COUNT(*) AS total,
+           SUM(CASE WHEN (probability >= 0.5 AND actual_int = 1) OR (probability < 0.5 AND actual_int = 0) THEN 1 ELSE 0 END)::float / COUNT(*) AS accuracy
+    FROM (
+        SELECT
+            lt.application_id,
+            lt.approved::int AS actual_int,
+            pred.probability
+        FROM
+            loan_test lt
+        JOIN
+            (SELECT lt.application_id,
+                    madlib.logregr_predict_prob(lt.feature_vector, lm.coef) AS probability
+             FROM loan_test lt, loan_model lm
+            ) AS pred
+        ON
+            lt.application_id = pred.application_id
+    ) subquery;
+    ```
+
+3. Calculate confusion matrix:
+
+    ```sql
+    SELECT
+        SUM(CASE WHEN actual_int = 1 AND probability >= 0.5 THEN 1 ELSE 0 END) AS true_positive,
+        SUM(CASE WHEN actual_int = 0 AND probability < 0.5 THEN 1 ELSE 0 END) AS true_negative,
+        SUM(CASE WHEN actual_int = 1 AND probability < 0.5 THEN 1 ELSE 0 END) AS false_negative,
+        SUM(CASE WHEN actual_int = 0 AND probability >= 0.5 THEN 1 ELSE 0 END) AS false_positive
+    FROM (
+        SELECT
+            lt.application_id,
+            lt.approved::int AS actual_int,
+            pred.probability
+        FROM
+            loan_test lt
+        JOIN
+            (SELECT lt.application_id,
+                    madlib.logregr_predict_prob(lt.feature_vector, lm.coef) AS probability
+             FROM loan_test lt, loan_model lm
+            ) AS pred
+        ON
+            lt.application_id = pred.application_id
+    ) subquery;
+    ```
+
+4. Calculate Precision, Recall, and F1 Score:
+
+    ```sql
+    WITH confusion_matrix AS (
+        SELECT
+            SUM(CASE WHEN actual_int = 1 AND probability >= 0.5 THEN 1 ELSE 0 END) AS true_positive,
+            SUM(CASE WHEN actual_int = 0 AND probability < 0.5 THEN 1 ELSE 0 END) AS true_negative,
+            SUM(CASE WHEN actual_int = 1 AND probability < 0.5 THEN 1 ELSE 0 END) AS false_negative,
+            SUM(CASE WHEN actual_int = 0 AND probability >= 0.5 THEN 1 ELSE 0 END) AS false_positive
+        FROM (
+            SELECT
+                lt.application_id,
+                lt.approved::int AS actual_int,
+                pred.probability
+            FROM
+                loan_test lt
+            JOIN
+                (SELECT lt.application_id,
+                        madlib.logregr_predict_prob(lt.feature_vector, lm.coef) AS probability
+                 FROM loan_test lt, loan_model lm
+                ) AS pred
+            ON
+                lt.application_id = pred.application_id
+        ) subquery
+    )
+    SELECT
+        true_positive,
+        true_negative,
+        false_negative,
+        false_positive,
+        true_positive::float / (true_positive + false_positive) AS precision,
+        true_positive::float / (true_positive + false_negative) AS recall,
+        2 * ( (true_positive::float / (true_positive + false_positive)) * (true_positive::float / (true_positive + false_negative)) ) /
+          ( (true_positive::float / (true_positive + false_positive)) + (true_positive::float / (true_positive + false_negative)) ) AS f1_score
+    FROM confusion_matrix;
+    ```
+
+## Conclusion
+
+In this blog post, we have demonstrated how to install MADlib and pgvector, create and prepare data, train a logistic regression model, make predictions, and evaluate the model using Greenplum. This process can be applied to various other use cases where logistic regression and feature vectors are required.
