@@ -1,0 +1,45 @@
+{{ partial "header.html" . }}
+
+<main class="main">
+  <div class="content">
+    <article class="article">
+      <header>
+        <h1>{{ .Title }}</h1>
+        {{ if .Params.subtitle }}
+        <p>{{ .Params.subtitle }}</p>
+        {{ end }}
+      </header>
+      <div class="article-content">
+        {{ .Content }}
+      </div>
+      {{ if .Params.tags }}
+      <footer>
+        <ul class="tags">
+          {{ range .Params.tags }}
+          <li><a href="{{ "/tags/" | relURL }}{{ . | urlize }}">{{ . }}</a></li>
+          {{ end }}
+        </ul>
+      </footer>
+      {{ end }}
+      <!-- Add this section to list the rest of the series -->
+      {{ if .Params.series }}
+      <div class="series-list">
+        <h2>Series: {{ .Params.series }}</h2>
+        <ul>
+          {{ range $index, $post := (where site.RegularPages "Params.series" .Params.series) }}
+          <li>
+            {{ if eq $post.File.Path .File.Path }}
+            <span>{{ $post.Title }}</span>
+            {{ else }}
+            <a href="{{ $post.Permalink }}">{{ $post.Title }}</a>
+            {{ end }}
+          </li>
+          {{ end }}
+        </ul>
+      </div>
+      {{ end }}
+    </article>
+  </div>
+</main>
+
+{{ partial "footer.html" . }}

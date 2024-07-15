@@ -1,0 +1,10 @@
+{{ define "series" }}
+  <h1>Series</h1>
+  <ul>
+    {{ range $series, $posts := .Site.Taxonomies.series }}
+      <li>
+        <a href="{{ $series | urlize }}">{{ $series }}</a> ({{ len $posts }})
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

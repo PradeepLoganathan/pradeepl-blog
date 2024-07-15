@@ -530,8 +530,123 @@ We populate the loan_features table by selecting and transforming data from the 
         2 * ( (true_positive::float / (true_positive + false_positive)) * (true_positive::float / (true_positive + false_negative)) ) /
           ( (true_positive::float / (true_positive + false_positive)) + (true_positive::float / (true_positive + false_negative)) ) AS f1_score
     FROM confusion_matrix;
+
+## Part 5: Using the Loan Approval Model
+
+After training the loan approval model using MADlib, the next step is to use the model for making predictions. This section will cover different methods for deploying and using the model, including batch processing, real-time scoring, and integration with applications.
+
+### Batch Processing
+
+Batch processing is useful when you need to evaluate a large number of loan applications periodically. This method involves creating a new table to store the predictions and then querying the results.
+
+1. **Create a new table to store the results**:
+    ```sql
+    CREATE TABLE loan_predictions AS
+    SELECT
+        lt.application_id,
+        madlib.logregr_predict_prob(lt.feature_vector, lm.coef) AS probability,
+        CASE
+            WHEN madlib.logregr_predict_prob(lt.feature_vector, lm.coef) >= 0.5 THEN TRUE
+            ELSE FALSE
+        END AS approved
+    FROM loan_test lt, loan_model lm;
     ```
+
+2. **Query the predictions**:
+    ```sql
+    SELECT * FROM loan_predictions WHERE approved = TRUE;
+    ```
+
+### Real-Time Scoring
+
+Real-time scoring is essential when you need to evaluate loan applications as they come in, providing immediate feedback. This method involves creating a stored procedure that takes an application’s features as input and returns the approval prediction.
+
+1. **Create a stored procedure**:
+    ```sql
+    CREATE OR REPLACE FUNCTION predict_loan_approval(
+        applicant_age INT,
+        applicant_income NUMERIC,
+        loan_amount NUMERIC,
+        loan_duration INT,
+        credit_score INT,
+        property_value NUMERIC,
+        loan_purpose_code INT,
+        employment_status_code INT,
+        employment_length NUMERIC
+    ) RETURNS BOOLEAN AS $$
+    DECLARE
+        feature_vector VECTOR(11);
+        probability NUMERIC;
+    BEGIN
+        feature_vector := VECTOR[
+            COALESCE(applicant_age, 0)::double precision,
+            COALESCE(applicant_income, 0)::double precision,
+            COALESCE(loan_amount, 0)::double precision,
+            COALESCE(loan_duration, 0)::double precision,
+            COALESCE(credit_score, 0)::double precision,
+            COALESCE(property_value, 0)::double precision,
+            COALESCE(loan_amount / property_value, 0)::double precision,
+            (COALESCE(loan_duration, 0) * 12)::double precision,
+            COALESCE(loan_purpose_code, 0)::double precision,
+            COALESCE(employment_status_code, 0)::double precision,
+            COALESCE(employment_length, 0)::double precision
+        ];
+        SELECT madlib.logregr_predict_prob(feature_vector, lm.coef) INTO probability
+        FROM loan_model lm;
+        RETURN probability >= 0.5;
+    END;
+    $$ LANGUAGE plpgsql;
+    ```
+
+2. **Call the procedure** with application data:
+    ```sql
+    SELECT predict_loan_approval(
+        35, 50000, 15000, 5, 700, 200000, 1, 1, 5.5
+    );
+    ```
+
+## Integration with Applications
+
+For integrating the model into a web or mobile application, you can expose the model as an API. This method allows external applications to send loan application data and receive approval predictions.
+
+1. **Expose the model as an API**:
+    - Use a framework like Flask (Python) or Express (Node.js) to create an endpoint that calls the stored procedure and returns the result.
+
+2. **Example with Flask**:
+    ```python
+    from flask import Flask, request, jsonify
+    import psycopg2
+
+    app = Flask(__name__)
+
+    def get_db_connection():
+        conn = psycopg2.connect(
+            dbname='risk_feature_store',
+            user='gpadmin',
+            password='your_password',
+            host='localhost'
+        )
+        return conn
+
+    @app.route('/predict', methods=['POST'])
+    def predict():
+        data = request.json
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT predict_loan_approval(%s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                    (data['applicant_age'], data['applicant_income'], data['loan_amount'],
+                     data['loan_duration'], data['credit_score'], data['property_value'],
+                     data['loan_purpose_code'], data['employment_status_code'], data['employment_length']))
+        result = cur.fetchone()
+        cur.close()
+        conn.close()
+        return jsonify({'approved': result[0]})
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    ```
+    
 
 ## Conclusion
 
-In this blog post, we have demonstrated how to install MADlib and pgvector, create and prepare data, train a logistic regression model, make predictions, and evaluate the model using Greenplum. This process can be applied to various other use cases where logistic regression and feature vectors are required.
+In this blog post, we have demonstrated how to install MADlib and pgvector, create and prepare data, train a logistic regression model, make predictions, and evaluate the model using Greenplum. This process can be applied to various other use cases where logistic regression and feature vectors are required. Using the loan approval model effectively requires choosing the right deployment strategy based on your application needs. Whether you use batch processing, real-time scoring, or API integration, following best practices ensures that your model delivers accurate and timely predictions to support decision-making processes.
