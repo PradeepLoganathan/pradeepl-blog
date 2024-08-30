@@ -1,17 +1,17 @@
 name: Hugo
+
 on:
   push:
     branches:
       - main  # Trigger only on push to main branch
       
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
 
-      - name: Check out code into the Go module directory
+      - name: Check out code
         uses: actions/checkout@v4
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive)

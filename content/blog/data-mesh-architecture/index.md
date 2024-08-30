@@ -30,8 +30,7 @@ cover:
 
 # Introduction
 
-In the digital era, data is a key part of organizational strategy, shaping decisions, driving innovation, and forging new frontiers of competitive advantage. Data not only powers the engines of innovation but also anchors the operational excellence of organizations. This approach, deeply rooted in ensuring data quality and trust, has been instrumental in maintaining integrity, compliance, and efficiency for daily operations. Organizations have primarily focused on data defense, emphasizing the secure storage, meticulous governance, and stringent compliance of their data assets. This is driven by the need to navigate the regulatory landscapes and protect the organization from data breaches and losses. The proliferation and advancements in data analytics, AI, and machine learning provide unprecedented opportunities to harness data for strategic advantage. Businesses are now recognizing the untapped potential of their vast data reservoirs and the competitive edge they can gain by shifting towards a more offensive data strategy. This shift not only involves adopting new technologies but also entails a cultural and mindset change where data is viewed as a strategic asset, driving growth, innovation, and sustained competitive advantage. 
-
+In today's digital world, data is a strategic asset. Organizations traditionally focused on protecting data (data defense) but are increasingly recognizing the competitive advantages of unlocking its value (data offense). Data mesh architecture offers a new framework that facilitates this shift, improving an organization's data scalability, agility, and innovation.
 
 !["From Data defense to Data Offense"](images/datadefense-to-dataoffense.png)
 

@@ -1,0 +1,4 @@
+{{ $lightImage := .Get "light" }}
+{{ $darkImage := .Get "dark" }}
+
+<img src="{{ if .Site.Params.darkMode }} {{ $darkImage }} {{ else }} {{ $lightImage }} {{ end }}"  alt="{{ .Get "alt" }}"> 
