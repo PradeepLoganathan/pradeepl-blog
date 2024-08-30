@@ -2,7 +2,7 @@
 title: "RabbitMQ vs. Kafka: Which Messaging System is Right for You?"
 date: 2024-07-19T09:13:45+10:00
 lastmod: 2024-07-26T11:10:00+10:00  # Updated to reflect recent changes
-draft: false  # Set to false since it's ready for publication
+draft: true  # Set to false since it's ready for publication
 author: "Pradeep Loganathan"
 tags:
   - RabbitMQ

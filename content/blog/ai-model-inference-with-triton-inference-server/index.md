@@ -2,7 +2,7 @@
 title: "Triton Inference Server: Accelerating AI in the Real World"
 lastmod: 2024-07-04T11:21:00+10:00
 date: 2024-07-04T11:21:00+10:00
-draft: false
+draft: true
 author: "Pradeep Loganathan"
 tags:
 - AI
