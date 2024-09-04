@@ -31,7 +31,7 @@ cover:
 
 - The modern software supply chain is complex and interconnected, making it susceptible to various security threats.
 - Developers play a critical role in securing this ecosystem as they are often the first line of defense against potential threats.
-- **Purpose of this blog**: Provide developers with a practical guide to integrating security throughout the software development lifecycle (SDLC), including handling open-source software and securing CI/CD pipelines.
+- **Purpose of this blog**: Provide developers with a practical guide to integrating security throughout the software development lifecycle (SDLC), including handling open-source software, securing CI/CD pipelines, and leveraging SBOMs and license management.
 
 ---
 
@@ -87,7 +87,19 @@ cover:
   - **End-to-end encryption**: Secure communication between different stages of the pipeline to prevent attacks.
 - Discuss how **DevSecOps** integrates security testing into CI/CD pipelines as part of the continuous feedback loop.
 
-### 5. Secure Deployment and Operations
+### 5. **Software Bill of Materials (SBOMs): Ensuring Transparency in the Supply Chain**
+- **What is an SBOM?**: SBOM is a detailed record of the components, libraries, and dependencies included in the software. It offers transparency in the software supply chain.
+- SBOMs help identify vulnerable or outdated libraries early, ensuring that the components used are secure.
+- Tools like **CycloneDX** and **SPDX** help developers generate SBOMs automatically as part of the CI/CD process.
+- SBOMs can be shared with customers and stakeholders to provide visibility into the software's security and reduce risks during audits or compliance checks.
+
+### 6. **License Management: Ensuring Legal Compliance**
+- Managing OSS licenses is crucial to avoid legal risks, especially when using third-party libraries.
+- **Automated license compliance tools** (e.g., **FOSSA**, **WhiteSource**) can scan dependencies to ensure compliance with licenses like **MIT**, **GPL**, etc.
+- Developers should be aware of license terms and avoid incompatible or restrictive licenses that could lead to legal issues.
+- License management should be integrated into the CI/CD pipeline, alerting developers when a new dependency has license restrictions or conflicts.
+
+### 7. Secure Deployment and Operations
 - Best practices for deploying software in production environments (e.g., **secure configuration management**, **vulnerability scanning**, **penetration testing**).
 - Emphasize monitoring for vulnerabilities and having **incident response plans** in place.
 - Role of **automation** and **continuous monitoring** in maintaining a secure and resilient software supply chain.
@@ -113,7 +125,7 @@ cover:
 ## Conclusion
 
 - Securing the software supply chain is a shared responsibility that requires collaboration across all teams.
-- Developers play a crucial role by adopting secure practices and proactively addressing vulnerabilities.
+- Developers play a crucial role by adopting secure practices, leveraging SBOMs, ensuring license compliance, and proactively addressing vulnerabilities.
 - **Call to action**: Developers should prioritize security in their everyday tasks, leverage CI/CD automation, and contribute to building a more secure and resilient software ecosystem.
 
 ---
