@@ -1,29 +1,42 @@
 ---
-title: "Securing the Software Supply Chain - A Developers Guide"
+title: "Securing the Software Supply Chain: A Developer's Guide"
+
 lastmod: 2024-09-05T07:05:37+10:00
+
 date: 2024-09-05T07:05:37+10:00
+
 draft: true
-Author: Pradeep Loganathan
+
+author: Pradeep Loganathan
+
 tags: 
-  - 
-  - 
-  - 
+  - software security
+  - DevSecOps
+  - supply chain security
+
 categories:
-  - 
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
-description: "meta description"
-summary: "summary used in summary pages"
+  - Development
+  - Security
+  - CI/CD
+
+description: "A comprehensive guide for developers on securing the software supply chain, from design to deployment, with practical tips and tools."
+
+summary: "Learn how to secure the software supply chain by embracing best practices such as secure coding, CI/CD integration, SBOMs, and proactive monitoring."
+
 ShowToc: true
 TocOpen: true
+
 images:
-  - 
+  - "images/secure-software-supply-chain.jpg"
+  - "images/secure-development-loop.png"
+
 cover:
-    image: "images/cover.jpg"
-    alt: ""
-    caption: ""
-    relative: true # To use relative path for cover image, used in hugo Page-bundles
- 
+  image: "images/secure-software-supply-chain.png"
+  alt: "Securing the software supply chain"
+  caption: "A guide to securing the software supply chain for developers."
+  relative: true
 ---
+
 
 ## Introduction
 
