@@ -32,9 +32,7 @@ The STRIDE threat model defines threats in six categories. This approach to thre
 - **D**enial of service (DOS) - A denial of service threat involves denying legitimate users' access to systems or components. An attacker can flood servers with packets to the point that the servers become unavailable or unusable. They can then be overloaded to a point such that they cannot fulfill legitimate requests.
 - **E**levation of privilege - An elevation of privilege threat involves a user or a component being able to access data or programs for which they are not authorized. An attacker can gain elevated authorization for operations beyond what was originally granted. For example, an attacker can execute kernel-mode commands or run processes with additional permissions by elevating privileges.
 
-![](images/Stride-classification.png)
-
-STRIDE classification
+!["STRIDE classification"](images/Stride-classification.png)
 
 STRIDE can be augmented by using a checklist or threat library lists, such as Common Attack Pattern Enumeration and Classification (CAPEC), or Adversarial Tactics, Techniques and Common Knowledge (ATT&CK) and CWE (https://cwe.mitre.org/data/index.html)
 
@@ -42,11 +40,11 @@ STRIDE can be augmented by using a checklist or threat library lists, such as Co
 
 After the threats have been identified and classified, it is essential to rank and prioritize them. Higher priority threats must be addressed. The DREAD methodology can be effective in rating the threats. It provides a consistent way to classify, quantify, and prioritize the risk associated with each risk item. DREAD is an abbreviation for the following terms:
 
-- Damage Potential - Damage potential measures how much injury can result from a risk.
-- Reproducibility - Reproducibility can be measured by how likely it is to happen and how frequently it will occur.
-- Exploitability - Exploitability focuses on the skills and hacker tooling that are needed to exploit the risk. It is an assessment of the effort, monetary investment, and expertise required to launch the exploit.
-- Affected users - The number of users that could be potentially affected by an attack.
-- Discoverability - The likelihood that a vulnerability can be taken advantage of. It is an assessment if the knowledge of the vulnerability requires inside knowledge of the system or can it be easily guessed.
+- **D**amage Potential - Damage potential measures how much injury can result from a risk.
+- **R**eproducibility - Reproducibility can be measured by how likely it is to happen and how frequently it will occur.
+- **E**xploitability - Exploitability focuses on the skills and hacker tooling that are needed to exploit the risk. It is an assessment of the effort, monetary investment, and expertise required to launch the exploit.
+- **A**ffected users - The number of users that could be potentially affected by an attack.
+- **D**iscoverability - The likelihood that a vulnerability can be taken advantage of. It is an assessment if the knowledge of the vulnerability requires inside knowledge of the system or can it be easily guessed.
 
 The DREAD model for assessing risk works by assigning a number against each of the categories above. Then we can apply the formula
 
@@ -54,9 +52,7 @@ The DREAD model for assessing risk works by assigning a number against each of t
 
 using the numbers assigned to come up with a measure of the risk value. Threats can then be quantified, compared, and prioritized based on their risk value. Thus STRIDE and DREAD can be used in conjunction to produce an effective and actionable threat model.
 
-![](images/Dread-classification.png)
-
-DREAD Classification
+!["DREAD Classification"](images/Dread-classification.png)
 
 ### Threat Sharing and Community Support
 
