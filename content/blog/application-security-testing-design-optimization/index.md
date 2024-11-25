@@ -37,15 +37,11 @@ This incident wasn’t just a catastrophic data breach; it was a glaring indictm
 
 In a world where cyber threats evolve faster than software features, it’s time to flip the script. I boldly assert that AST should not just be an integral part of development—it should be the driving force that shapes how we design, develop, and operate as an organization. Placing AST at the apex of systems design can transform our approach to innovation, redefine our success metrics, and ultimately protect the ambitions we strive so hard to achieve.
 
-## The Current Paradigm: Functionality Over Security
-
-### Traditional Priorities in Software Development
+## The Feature Frenzy: Is Security Being Left Behind?
 
 Similar to the teams at Equifax, the primary focus of software development teams in many organizations revolves around delivering features, enhancing user experience, and reducing time-to-market. Agile methodologies and continuous deployment pipelines have accelerated the development process, often emphasizing quantity over quality. While these approaches have driven innovation and user satisfaction, they have inadvertently relegated security to a secondary concern.
 
 Security is frequently treated as an afterthought or a separate phase, disconnected from the core development process. It’s not uncommon for security assessments to occur only after a product is near completion or even post-deployment. This siloed approach creates gaps where vulnerabilities can slip through unnoticed, leaving applications exposed to threats.
-
-### Consequences of the Existing Approach
 
 The sidelining of security has led to a disturbing rise in the number of security breaches and vulnerabilities. High-profile incidents like the Equifax breach are stark reminders of the risks involved. Companies face hidden costs when they neglect security:
 - Financial Losses: Direct costs from breach mitigation, legal fees, and compensation to affected customers can be staggering.
