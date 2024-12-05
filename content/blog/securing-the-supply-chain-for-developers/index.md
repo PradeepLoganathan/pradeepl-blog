@@ -29,9 +29,10 @@ TocOpen: true
 images:
   - "images/secure-software-supply-chain.jpg"
   - "images/secure-development-loop.png"
+  - "images/secure-supply-chain.png"
 
 cover:
-  image: "images/secure-software-supply-chain.png"
+  image: "images/mitochondria.png"
   alt: "Securing the software supply chain"
   caption: "A guide to securing the software supply chain for developers."
   relative: true
@@ -104,6 +105,7 @@ The environment in which you develop your software plays a crucial role in its o
 
 Ensuring the security of your software extends beyond writing secure code. A truly secure software supply chain demands vigilance at every stage, from build to deployment. As developers, integrating security into these processes is vital for maintaining the integrity of your applications.  Let's explore how to fortify these crucial stages.
 
+![Secure Supply Chain](images/secure-supply-chain.png "Secure Supply Chain")
 ### 1. Secure Build Processes
 The build process, where your code transforms into executable software, is a potential vulnerability. Attackers can inject malicious code or tamper with build artifacts if the process isn't adequately secured. Securing the build process ensures that your source code remains untampered throughout its journey from development to production. This involves securing the environment in which the code is compiled, managing dependencies, and ensuring that no malicious code is introduced during the build.
 
