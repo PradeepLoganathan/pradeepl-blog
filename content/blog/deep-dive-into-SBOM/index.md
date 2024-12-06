@@ -2,7 +2,7 @@
 title: "Deep Dive Into SBOM"
 lastmod: 2024-09-09T09:03:26+10:00
 date: 2024-09-09T09:03:26+10:00
-draft: false
+draft: true
 author: "Pradeep Loganathan"
 tags: 
   - SBOM
