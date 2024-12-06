@@ -1,6 +1,7 @@
 baseURL: ""
 title: Pradeep Loganathan's Blog
-paginate: 10
+pagination:
+  pagerSize: 10
 
   
 module:
