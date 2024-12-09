@@ -91,6 +91,21 @@ A proactive, security-first approach flips this dynamic. It embeds security into
 
 When security becomes a guiding principle, the development process becomes not just faster, but also more resilient.
 
+## Security as a First-Class Citizen
+
+To truly prioritize security in software design, it's essential to integrate security into every stage of the development lifecycle. This means considering security requirements during planning, designing with security in mind, implementing secure coding practices, and continuously testing and validating security.
+
+### What Does This Look Like in Practice?
+
+So what does it mean to prioritize security as a first-class citizen in software design? Here are a few examples:
+
+* **Integrating security into the development lifecycle:** At the planning stage, security requirements are gathered and incorporated into the project plan. During the design stage, security is considered as a key aspect of the system architecture. In the implementation stage, secure coding practices are followed, and security testing is integrated into the continuous integration/continuous deployment (CI/CD) pipeline.
+* **Making security-informed design decisions:** When designing a new feature, the development team considers the potential security implications and designs the feature with security in mind. For example, when designing a login feature, the team might decide to implement multi-factor authentication to reduce the risk of password-based attacks.
+* **Prioritizing security-focused testing and validation:** The development team prioritizes security testing and validation, using techniques like penetration testing, fuzz testing, and static analysis to identify vulnerabilities. Security testing is integrated into the CI/CD pipeline, ensuring that security vulnerabilities are caught and addressed early in the development process.
+* **Implementing continuous security monitoring and improvement:** The development team implements continuous security monitoring, using tools like intrusion detection systems and security information and event management (SIEM) systems to detect and respond to security incidents. The team also prioritizes ongoing security improvement, staying up-to-date with the latest security threats and vulnerabilities, and continuously evaluating and improving the security posture of the system.
+
+By prioritizing security as a first-class citizen in software design, development teams can ensure that security is integrated into every stage of the development lifecycle, from planning to deployment. This approach helps to identify and address security vulnerabilities early on, reducing the risk of security breaches and cyber attacks.
+
 ## Operationalize Security-First Development
 
 Shifting security left is more than a mindset—it requires practical steps to embed security into every phase of the software development lifecycle (SDLC). Organizations must adopt processes and tools that make security an integral part of their workflows, enabling teams to move quickly without sacrificing safety.
@@ -100,7 +115,7 @@ Shifting security left is more than a mindset—it requires practical steps to e
 To operationalize security-first development, teams need to focus on three key areas:
 
 1. **Proactive Risk Identification**:
-   - Incorporate **threat modeling** during the design phase to identify and address vulnerabilities early.
+   - Incorporate **threat modeling({{< ref "/blog/threat-modeling" >}})** during the design phase to identify and address vulnerabilities early.
    - Establish clear security acceptance criteria for each feature to ensure risks are managed upfront.
 
 2. **Continuous Validation**:
@@ -183,6 +198,3 @@ As we look to the future, one thing is certain: the next wave of innovation will
 [^12]: McCoy, K. (2017, September 8). **Equifax breach: 30 state attorneys general launch probe**. USA Today. Retrieved from [https://www.usatoday.com/story/money/2017/09/08/equifax-breach-30-state-attorneys-general-launch-probe/646757001/](https://www.usatoday.com/story/money/2017/09/08/equifax-breach-30-state-attorneys-general-launch-probe/646757001/)
 
 [^13]: Sweet, K. (2017, September 14). **Equifax faces mounting criticism over massive data breach**. PBS NewsHour. Retrieved from [https://www.pbs.org/newshour/economy/equifax-faces-mounting-criticism-massive-data-breach](https://www.pbs.org/newshour/economy/equifax-faces-mounting-criticism-massive-data-breach)
-
-
-Photo by Pixabay: https://www.pexels.com/photo/two-motorcycle-racers-turning-at-corner-163291/
