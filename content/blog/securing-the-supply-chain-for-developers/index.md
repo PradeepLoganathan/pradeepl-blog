@@ -32,7 +32,7 @@ images:
   - "images/secure-supply-chain.png"
 
 cover:
-  image: "images/mitochondria.png"
+  image: "images/supply-chain-security.png"
   alt: "Securing the software supply chain"
   caption: "A guide to securing the software supply chain for developers."
   relative: true
