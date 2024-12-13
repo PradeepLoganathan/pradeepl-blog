@@ -356,7 +356,7 @@ This measures the model's ability to correctly identify actual fraud cases.
 - **F1 Score**: 
 {{< math >}}
   \[
-  2 \times \frac{Precision \times Recall}{Precision + Recall} = 2 \times \frac{0.9512 \times 0.7959}{0.9512 + 0.7959} \approx 0.8657
+  2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = 2 \times \frac{0.9512 \times 0.7959}{0.9512 + 0.7959} \approx 0.8657
   \]
 {{< /math >}}
 
