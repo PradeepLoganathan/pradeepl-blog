@@ -2,7 +2,7 @@
 title: "Unmasking the Invisible Adversary:The Evolving Art and Science of Threat Modeling"
 lastmod: 2024-12-13T11:31:49+10:00
 date: 2024-12-13T11:31:49+10:00
-draft: true
+draft: false
 Author: Pradeep Loganathan
 categories: 
   - "Security"
