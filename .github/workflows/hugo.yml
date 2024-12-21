@@ -46,16 +46,20 @@ jobs:
       - name: Build
         run: hugo --minify
 
-      - name: Install html-proofer
+      - name: Install Ruby dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ruby-full build-essential
-          gem install bundler
+          sudo apt-get install -y ruby-full build-essential zlib1g-dev
+      
+      - name: Install html-proofer
+        run: |
+          export GEM_HOME=$HOME/.gem
+          export PATH=$HOME/.gem/bin:$PATH
           gem install html-proofer
-        continue-on-error: true
-
+      
       - name: Validate HTML
         run: |
+          export PATH=$HOME/.gem/bin:$PATH
           htmlproofer ./public --disable-external --check-html --check-img-http
         continue-on-error: true
 
