@@ -30,7 +30,7 @@ cover:
 
 # Lifecycle
 
-A lifecycle is a series of components, events, and stages that process a request or respond to user interaction. This encompasses how a web application handles incoming requests, processes them, and generates responses. The lifecycle offers extension points and hooks into these components so that you can customize the final output. It provides structure and abstraction that makes building complex applications easier. Understanding the lifecycle is crucial for developers as it provides insight into how the framework processes requests, allowing for better control over the application's behavior, customization, and optimization of performance. 
+A lifecycle is a series of components, events, and stages that process a request or respond to user interaction. This encompasses how a web application handles incoming requests, processes them, and generates responses. The lifecycle offers extension points and hooks into these components so that you can customize the final output. It provides structure and abstraction that makes building complex applications easier. Understanding the lifecycle is crucial for developers as it provides insight into how the framework processes requests, allowing for better control over the application's behavior, customization, and optimization of performance.
 
 The concept of a lifecycle that handles incoming requests and generates responses is a common and fundamental aspect of web application development across many languages and frameworks.Languages such as java, python , ruby also provide the concept of a lifecycle.  For example, in Spring-based web applications, the lifecycle includes receiving a request, mapping it to a controller, handling exceptions, processing requests with service and repository layers, and returning a response. Similarly in Flask, the lifecycle includes request routing, view function execution, response generation, and request context teardown.
 
@@ -94,7 +94,7 @@ This prints the below output
 
 ## Map
 
-The Map() method adds the capability to branch the middleware pipeline processing. The branching is based on specific request path matches. This method takes two parameters: PathString and the delegate named Configuration. If the path matches the pathString provided, then the components are added to the middleware pipeline. 
+The Map() method adds the capability to branch the middleware pipeline processing. The branching is based on specific request path matches. This method takes two parameters: PathString and the delegate named Configuration. If the path matches the pathString provided, then the components are added to the middleware pipeline.
 
 ```csharp
 app.Use(async (context, next) =>
@@ -131,7 +131,7 @@ app.Map("/branch1", (appBuilder) =>
 });
 ```
 
-This prints the below output when we navigate to the branch1 path. If we do not navigate to the branch1 path, the previous output is produced since the map condition matching to "branch1" fails and the branch1 middleware is not added to the processing pipeline. 
+This prints the below output when we navigate to the branch1 path. If we do not navigate to the branch1 path, the previous output is produced since the map condition matching to "branch1" fails and the branch1 middleware is not added to the processing pipeline.
 
 !["Using Map to add multiple middleware branches"](images/multiple-middleware-with-Map.png "Using Map to add multiple middlewares")
 
@@ -152,7 +152,7 @@ app.MapWhen( context => context.Request.Query.ContainsKey("querypath1"), (appbui
 ![](images/multiple-middleware-with-MapWhen.png)
 
 ## Run()
- 
+
 Run short circuits the pipeline. The Run method is used to add middleware and immediately return a response. It should be added at the end of the middleware since Run() ends the pipeline and won't call anything after itself.
 
 ```csharp
@@ -161,10 +161,10 @@ app.Run(async context =>
     await context.Response.WriteAsync("This middleware ends the pipeline.");
 });
 ```
- 
+
 # Built-In Middleware
- 
-Asp.net core has a lot of cross-cutting functionality built in as middleware. These are pre-built and available out of the box with Asp.net Core. Examples of pre-built middleware are Authentication, Routing, Session, Static files etc. 
+
+Asp.net core has a lot of cross-cutting functionality built in as middleware. These are pre-built and available out of the box with Asp.net Core. Examples of pre-built middleware are Authentication, Routing, Session, Static files etc.
 
 ![aspnet core middleware](images/aspnetcore-middleware.png)
 
@@ -223,7 +223,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 By following these steps, you can create custom middleware tailored to your application's specific needs, enabling you to add custom logic to the request handling pipeline of your ASP.NET Core application.
 
 # Setting up the middleware pipeline
- 
+
 Program and startup are the two main classes involved in setup and configuration of the pipeline. Program is a low-level entry point into the application through Main(). Main calls startup which configures all the middleware components. An ASP.NET Core application is a console application hosting a web application. Main creates a webhostbuilder and chains a series of methods to build the application. UseKestrel() sets up the Kestrel web server which is a cross-platform web server. The UseStartup method allows us to specify an application configuration class using a type parameter. This influences details such as how the HTTP pipeline is set up. The build and run methods implement the configuration and startup the application.
 
 The startup class has two methods
@@ -262,6 +262,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     });
 }
 ```
+
 The above code sample builds the pipeline and adds multiple middleware components such as static files, routing, authorization and MVC.
 
 However, with .NET 6 and onwards, including .NET 8, there has been a shift towards a more streamlined setup that can merge the Program and Startup functionalities into a single file. The newer template for ASP.NET Core applications consolidates the Program and Startup classes into a single Program.cs file for simplicity.

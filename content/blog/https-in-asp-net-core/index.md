@@ -114,6 +114,7 @@ webBuilder.ConfigureKestrel(serverOptions =>
     });
 });
 ```
+
 Configuring Kestrel as edge server
 
 ### Terminating TLS at a Reverse proxy

@@ -10,7 +10,7 @@ categories:
 This post is part of a three post series on Docker
 
 - [What is Docker](https://pradeeploganathan.com/docker/docker-part-1/)
-- [Docker Architecture](https://pradeeploganathan.com/docker/docker-architecture/) 
+- [Docker Architecture](https://pradeeploganathan.com/docker/docker-architecture/)
 - [Docker on Windows](https://pradeeploganathan.com/docker/docker-part-3-installing-docker-on-windows/)
 
 Docker is a container technology for packaging an application along with all its dependencies. Docker did not invent containers, it made container technology simpler and easier to use. Solomon Hykes started the development of Docker in March 2010 as a PaaS offering from dotCloud, a company which he cofounded along with Sebastien Pahl. This was open sourced in March 2013. In the last quarter of that same year, the name of the company was changed to Docker Inc.

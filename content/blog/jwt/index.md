@@ -30,7 +30,7 @@ cover:
 ---
 > Three part series on JWT tokens
 
-Part 1: What is a JWT Token (This post) 
+Part 1: What is a JWT Token (This post)
 
 [Part 2: Creating a JWT token server in ASP.net core 2.0]({{< ref "/blog/jwt-tokenserver/index.md" >}} "JSON Web Token")  
 
@@ -48,7 +48,7 @@ Self-contained: A JWT token is self-contained and contains all the required iden
 
 ## Structure of a JWT
 
-A JWT token has three parts: Header, Payload, and Signature as shown below. 
+A JWT token has three parts: Header, Payload, and Signature as shown below.
 
 ![JWT token format](images/JWT-Token-Format.png "JWT token format")
 
@@ -105,7 +105,6 @@ Now that we have all the pieces of the JWT, we can compose the JWT as below.
 We can use a tool such as [jwt.io debugger](https://jwt.io/) to visualize a jwt token. The encoded token is on the left and the decoded information is on the right.
 
 ![JWT token structure](images/JWT-token-structure_thumb.png "JWT token structure")
-
 
 ## Token-Based Authentication Flow
 

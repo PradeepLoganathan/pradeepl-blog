@@ -9,4 +9,3 @@ categories:
 
 
 {{< youtube id="d2c-mfyN2Oc" autoplay="true" color="white" modestbranding="true">}}
-

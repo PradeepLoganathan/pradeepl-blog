@@ -73,7 +73,7 @@ Nodes that wish to participate on the network must put in a security deposit bef
 **PROOF OF IMPORTANCE**
 This idea is important and different from Proof of Stake. Proof of importance not only relies on how much stake a user has in the system, but it also monitors the usage and movement of tokens by the user to establish a level of trust and importance. This is used in Nemcoin.
 
-**FEDERATED CONSENSUS OR FEDERATED BYZANTINE CONSENSUS** 
+**FEDERATED CONSENSUS OR FEDERATED BYZANTINE CONSENSUS**
 Used in the stellar consensus protocol, nodes in this protocol keep a group of publicly trusted peers and propagates only those transactions that have been validated by the majority of trusted nodes.
 
 **REPUTATION-BASED MECHANISMS**  
@@ -81,8 +81,8 @@ As the name suggests, a leader is elected on the basis of the reputation it has 
 
 ### Paxos
 
-Paxos ( Lamport, L. (2001). Paxos made simple, SIGACT News 32(4): 51–58 - http://lamport.azurewebsites.net/pubs/paxos-simple.pdf) is a fault tolerant, distributed consensus protocol published in 1989. It is a protocol for  determining consensus in a network of unreliable distributed processes. The algorithm also ensures we have a leader election whenever there is a server failure. Paxos is usually used where durability is required (e.g., to replicate a file or a database), in which the amount of durable state could be large.  
-The Paxos algorithm is used extensively by Amazon web services to power its platform. It is also used by Google chubby lock service (http://labs.google.com/papers/chubby.html). Cassandra uses the Paxos consensus protocol to make sure the writes go linearly.
+Paxos ( Lamport, L. (2001). Paxos made simple, SIGACT News 32(4): 51–58 - <http://lamport.azurewebsites.net/pubs/paxos-simple.pdf>) is a fault tolerant, distributed consensus protocol published in 1989. It is a protocol for  determining consensus in a network of unreliable distributed processes. The algorithm also ensures we have a leader election whenever there is a server failure. Paxos is usually used where durability is required (e.g., to replicate a file or a database), in which the amount of durable state could be large.  
+The Paxos algorithm is used extensively by Amazon web services to power its platform. It is also used by Google chubby lock service (<http://labs.google.com/papers/chubby.html>). Cassandra uses the Paxos consensus protocol to make sure the writes go linearly.
 
 A Paxos node can take up one of three roles:
 
@@ -98,11 +98,11 @@ In the standard Paxos algorithm, proposers send two types of messages to accepto
 If a proposer receives agreement from a majority of the acceptors, it can commit the proposal by sending a commit message with a value.  
 The strict sequencing of proposals solves any problems relating to ordering of messages in the system. The requirement for a majority to commit means that two different values cannot be committed for the same proposal, because any two majorities will overlap in at least one node. Acceptors must write a journal on persistent storage whenever they agree to accept a proposal, because the acceptors need to honor these guarantees after restarting.
 
-ElasticSearch Zendiscovery bug: https://github.com/elastic/elasticsearch/issues/2488
+ElasticSearch Zendiscovery bug: <https://github.com/elastic/elasticsearch/issues/2488>
 
 ### RAFT
 
-Raft is a consensus algorithm that allows distributed systems to keep a shared and managed state (https://raft.github.io/). A visualization of RAFT consensus algorithm is available at http://thesecretlivesofdata.com/raft . A basic cluster can be run on a single node/leader, but if you want redundancy, at least three nodes allows for a single node failure. A Raft cluster is made of nodes that must maintain a replicated state machine in a consistent manner, no matter what: new nodes can join, old nodes can crash or become unavailable, but this state machine must be kept in sync.In Raft, messages and logs are sent only by the cluster leader to its peers, making the algorithm more understandable and easier to implement.
+Raft is a consensus algorithm that allows distributed systems to keep a shared and managed state (<https://raft.github.io/>). A visualization of RAFT consensus algorithm is available at <http://thesecretlivesofdata.com/raft> . A basic cluster can be run on a single node/leader, but if you want redundancy, at least three nodes allows for a single node failure. A Raft cluster is made of nodes that must maintain a replicated state machine in a consistent manner, no matter what: new nodes can join, old nodes can crash or become unavailable, but this state machine must be kept in sync.In Raft, messages and logs are sent only by the cluster leader to its peers, making the algorithm more understandable and easier to implement.
 
 ### Consensus algorithms in Blockchain
 

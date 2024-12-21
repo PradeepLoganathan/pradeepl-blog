@@ -36,7 +36,7 @@ The external environment includes the areas of General, Industry and Competitor 
 
 The industry environment is a set of factors which directly influence a firm’s competitive actions and responses. These factors can be analyzed using Porters Five forces model. Competitor Analysis is used to gather and interpret competitor information. The Competitor environment gives information about a firms direct and indirect competitor and the competitive dynamics expected to impact a firm's efforts to generate an above average return.
 
-### External Environment Analysis.
+### External Environment Analysis
 
 An Opportunity is a general environment condition that is exploited helps a company achieve strategic competitiveness. A threat is a general environmental condition that may hinder a company’s efforts to achieve strategic competitiveness. There are four components of external environmental analysis namely
 
@@ -81,7 +81,7 @@ The five forces of competition
   
       - Brand Identity and Customer Loyalty: Well-established brands with strong customer loyalty can make it challenging for new entrants to gain market share.
 
-2. Bargaining Power of Suppliers: Suppliers can exercise their power by reducing quality or increasing price. Suppliers are powerful when 
+2. Bargaining Power of Suppliers: Suppliers can exercise their power by reducing quality or increasing price. Suppliers are powerful when
     - There are very few large suppliers and they are more concentrated than the industry they sell to.
     - There are no substitutes for the supplier’s product,
     - The firms are not a significant customer to the supplier group,
@@ -108,7 +108,6 @@ The five forces of competition
 | Competitors are strategically diverse. | Competitors are not strategically diverse. |
 | There is excess production capacity. | There is no excess production capacity. |
 | Exit barriers are high. | Exit barriers are low. |
-
 
 ### Competitor Analysis
 

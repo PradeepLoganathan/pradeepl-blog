@@ -11,8 +11,6 @@ It has been a huge decision to leave a well-paying , stable and long-term associ
 
 Folks always feel that a building a startup is cool and fun but I know that the odds of being a successful startup is less that 1%. However I am in good company and am learning fast. [Paul Graham](http://www.paulgraham.com/index.html) ( founder of [yCombinator](http://www.ycombinator.com/)), one of my biggest inspirations has a post about being [relentlessly resourceful](http://www.paulgraham.com/relres.html) and that sort of sums up what I am focussing on every day of this journey. Join in on the discussions and chime in with your thoughts.
 
-https://youtu.be/IxdRukmeEAQ
-
- 
+<https://youtu.be/IxdRukmeEAQ>
 
 Picture Courtesy - [William Stitt](https://unsplash.com/@willpower)

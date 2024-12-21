@@ -81,6 +81,7 @@ The CloudFormation template is an extended data structure that you write using J
   }
 }
 ```
+
 Cloudformation file structure
 
 A brief description of each of the sections in the above template are listed here
@@ -150,7 +151,6 @@ Once we provide a template to the CloudFormation service, the service stores tha
 
 We can use the AWS CLI to create a cloudformation stack from a cloudformation template. In the below example I am using the create-stack command to create a stack from the [**simplecloudformationtemplate.yml**](https://gist.github.com/PradeepLoganathan/11601ed88d6b9e28ee0c9335917108e9#file-simplecloudformationtemplate-yml) template.
 
-
 ```shell
 aws cloudformation create-stack --region ap-southeast-2 --stack-name helloworldstack --template-body file://./simplecloudformationtemplate.yml
 ```
@@ -174,10 +174,11 @@ We can use the command ```aws cloudformation list-stacks``` to list all stacks. 
   "StackDriftStatus": "NOT\_CHECKED"  
 }
 ```
+
 We can delete the stack, along with all its resources, using the below command. This command will clean up all resources created as part of the stack.
 
 ```shell
-$ aws cloudformation delete-stack --region ap-southeast-2 --stack-name helloworldstack
+aws cloudformation delete-stack --region ap-southeast-2 --stack-name helloworldstack
 ```
 
 While all of the above can be achieved by using the AWS CLI tools or the console , Cloudformation automates and provides other key capabilities, make it a key service to build infrastructure on the cloud.

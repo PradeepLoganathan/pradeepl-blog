@@ -246,6 +246,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_auc_sco
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 ```
+
 In this code snippet, we create a Random Forest classifier with 100 decision trees (n_estimators=100). The random_state parameter ensures reproducibility of our results. We then train the model using the fit method, feeding it the training features (X_train) and corresponding labels (y_train).
 
 ### Making Predictions
@@ -256,7 +257,6 @@ Now that our model is trained, let's see how well it performs on the test set (d
 # Predict on the test set
 y_pred = model.predict(X_test)
 ```
-
 
 ## Model Evaluation : Assessing Our Fraud-Fighting Arsenal
 
@@ -273,7 +273,6 @@ Now that our Random Forest model is trained, it's time to put it to the test and
 * F1-Score:  The harmonic mean of precision and recall, providing a single metric that balances both.  It's particularly useful for imbalanced datasets.
 
 * ROC-AUC Curve:The Receiver Operating Characteristic Area Under the Curve (ROC-AUC) is a graphical representation of the model's ability to discriminate between classes at various thresholds. A higher AUC indicates better overall performance.
-
 
 ### Evaluating Our Model
 
@@ -294,7 +293,7 @@ roc_auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
 print(f'ROC-AUC Score: {roc_auc:.2f}')
 ```
 
-NOTE: The model.predict_proba(X_test)[:,1] statement returns the probabilities of all data points belonging to class 1 (fraud).
+NOTE: The model.predict_proba[X_test](:,1) statement returns the probabilities of all data points belonging to class 1 (fraud).
 
 The confusion matrix produced is below
 
@@ -304,24 +303,24 @@ The confusion matrix produced is below
 
 The confusion matrix provides a summary of the performance of a classification model. Here's a breakdown of the information contained in the confusion matrix you provided:
 
-- **True Positives (TP)**: The number of correctly predicted positive cases.
-  - In this matrix, TP = 39 (bottom-right cell).
+* **True Positives (TP)**: The number of correctly predicted positive cases.
+  * In this matrix, TP = 39 (bottom-right cell).
 
-- **True Negatives (TN)**: The number of correctly predicted negative cases.
-  - In this matrix, TN = 28430 (top-left cell).
+* **True Negatives (TN)**: The number of correctly predicted negative cases.
+  * In this matrix, TN = 28430 (top-left cell).
 
-- **False Positives (FP)**: The number of incorrectly predicted positive cases.
-  - In this matrix, FP = 2 (top-right cell).
+* **False Positives (FP)**: The number of incorrectly predicted positive cases.
+  * In this matrix, FP = 2 (top-right cell).
 
-- **False Negatives (FN)**: The number of incorrectly predicted negative cases.
-  - In this matrix, FN = 10 (bottom-left cell).
+* **False Negatives (FN)**: The number of incorrectly predicted negative cases.
+  * In this matrix, FN = 10 (bottom-left cell).
 
 ## Interpretation
 
-- **High True Negative Rate**: The model correctly identifies a large number of legitimate transactions (28430).
-- **Low False Positive Rate**: Only 2 legitimate transactions are incorrectly labeled as fraudulent, indicating the model has a low rate of false alarms.
-- **Moderate True Positive Rate**: The model correctly identifies 39 fraudulent transactions.
-- **False Negatives**: There are 10 fraudulent transactions that the model failed to identify, classifying them as legitimate.
+* **High True Negative Rate**: The model correctly identifies a large number of legitimate transactions (28430).
+* **Low False Positive Rate**: Only 2 legitimate transactions are incorrectly labeled as fraudulent, indicating the model has a low rate of false alarms.
+* **Moderate True Positive Rate**: The model correctly identifies 39 fraudulent transactions.
+* **False Negatives**: There are 10 fraudulent transactions that the model failed to identify, classifying them as legitimate.
 
 ## Key Metrics
 
@@ -353,7 +352,7 @@ This measures the accuracy of positive predictions, i.e., how many predicted fra
 
 This measures the model's ability to correctly identify actual fraud cases.
 
-- **F1 Score**: 
+* **F1 Score**:
 {{< math >}}
   \[
   2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = 2 \times \frac{0.9512 \times 0.7959}{0.9512 + 0.7959} \approx 0.8657
@@ -490,8 +489,8 @@ You can find the complete code on GitHub.
 
 ## Code and Resources
 
-- [Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+* [Credit Card Fraud Detection Dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
 
-- [Code for Fraud Detection model](https://github.com/PradeepLoganathan/Fraud-Detection-Model/blob/main/FraudDetection.ipynb)
+* [Code for Fraud Detection model](https://github.com/PradeepLoganathan/Fraud-Detection-Model/blob/main/FraudDetection.ipynb)
 
 By following these steps, you will have a fully functional fraud detection model and a deployed API ready for use. Happy coding!

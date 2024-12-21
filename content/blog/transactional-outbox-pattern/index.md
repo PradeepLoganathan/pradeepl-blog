@@ -55,7 +55,7 @@ sequenceDiagram
     participant DB as Application Database
     participant OT as Outbox Table
     participant MR as Message Relay Process
-    participant MQ as Message Queue/Event Bus 
+    participant MQ as Message Queue/Event Bus
     participant MS as Destination Microservices
 
     AS->>DB: Perform Business Operation
@@ -75,25 +75,28 @@ sequenceDiagram
 
 {{< /mermaid >}}
 
-
 The process begins with the Application Service (AS) performing a business operation that needs to be recorded in the database. This could be any typical operation like creating, updating, or deleting data. This business operation initiates a database transaction. The transaction ensures that operations are processed in a way that either all succeed or none do, maintaining data integrity. Along with the business operation, a message corresponding to this operation is stored in the Outbox Table (OT) within the same database transaction. This message is meant for other parts of the system that need to be notified about this operation. The Outbox Table acts as a temporary storage for these messages. The database transaction is then committed. This means that both the business operation and the message storage happen atomically — they either both succeed or both fail. After the transaction, the Message Relay Process (MR) periodically checks (polls) the Outbox Table for new messages. When new messages are detected in the Outbox Table, the Message Relay Process retrieves them for further processing. At this stage, there are typically two paths for message delivery, either via a message queue/event bus or by directly calling the service without an intermediary. The Destination Microservices receive the messages and process them accordingly. This could involve updating their own state, triggering other operations, or even sending further messages.
 
 # Components of Outbox pattern
 
 ## Application Service
+
 This is the primary service or application that performs business operations. It's responsible for executing business logic, which often results in changes to the database. This component is where the need to send messages or events to other parts of the system originates.
 
-
 ## Application Database
+
 The central data store used by the application service. It's where the business data is stored and managed. In the context of the Transactional Outbox pattern, the database plays a crucial role in ensuring transactional integrity.
 
 ## Outbox Table
+
 The Transactional outbox pattern uses the primary persistance layer (database, either a SQL or NOSQl) as a temporary message queue. The service that sends messages has an OUTBOX database table. As part of the database transaction that creates, updates, and deletes entities, the service sends messages by inserting them into the OUTBOX table. Atomicity is guaranteed because this is a local ACID transaction. In the case of a NoSql database each aggregate stored as a document in the database has an attribute that is a collection of messages that need to be published. When a service updates an entity in the database, it appends a message to that list. This is atomic because it’s done with a single database operation. A MessageRelay component then reads the OUTBOX table or the outbox collection in the document and publishes the messages to a message broker.
 
 ## Message Relay
+
 This is a separate process or service that monitors the Outbox table for new messages. Once it detects a new message, it retrieves it and handles the delivery to the appropriate destination, such as a message queue or another microservice. This process is responsible for ensuring that messages are sent even if the original application service fails after updating the database. The MessageRelay can be built either as a polling publisher or using the transaction log tailing pattern
 
 ### Polling Publisher
+
 The polling publisher publishes messages by polling the outbox in the database. Polling the database works reasonably well at low scale, however frequently polling the database does not scale well. Additionally, this approach does not work well with NoSQl databases where the query pattern is more complex. In a NoSQL database the application must query documents containing the aggregates, and that may or may not be possible to do efficiently.
 
 ### Transaction log Tailing
@@ -107,6 +110,7 @@ AWS DynamoDB implements transaction log tailing using DynamoDB Streams, which ca
 In [Event driven architecture]({{< ref "/blog/architecture/event-driven-architecture" >}}) this pattern is used in conjunction with the [idempotent consumer pattern]({{< ref "/blog/patterns/idempotent-consumer-pattern" >}}) to provide eventual consistency.
 
 ## Destination Microservices
+
 These are other microservices or external systems that need to receive the messages or events. They subscribe to the message queue or listen for events and act upon them as required.
 
 ## Message Queue/Event Bus
@@ -123,14 +127,13 @@ Imagine an e-commerce system where an order service handles customer orders. Whe
 
 The process flow is as follows
 
- - Place Order in Application Service: A customer places an order through the application. The Order Service (OS) processes this order.
- - Update Order Database: The Order Service updates the order database to record the new order. This includes details like customer information, items purchased, and order status.
- - Create Message for Inventory Update: Along with updating the order, the Order Service creates a message indicating that the inventory needs to be updated. This message is stored in the Outbox Table of the order database as part of the same database transaction.
- - Commit Transaction: The transaction involving both the order update and the message insertion into the outbox is committed to the database.
- - Message Relay Process Checks Outbox: A separate process, the Message Relay, periodically checks the Outbox Table for new messages.
- - Send Message to Inventory Service: Upon finding the new message, the Message Relay forwards it to the Inventory Service, either directly or via a message queue.
- - Inventory Service Updates Stock: The Inventory Service receives the message and updates the stock accordingly. 
-
+- Place Order in Application Service: A customer places an order through the application. The Order Service (OS) processes this order.
+- Update Order Database: The Order Service updates the order database to record the new order. This includes details like customer information, items purchased, and order status.
+- Create Message for Inventory Update: Along with updating the order, the Order Service creates a message indicating that the inventory needs to be updated. This message is stored in the Outbox Table of the order database as part of the same database transaction.
+- Commit Transaction: The transaction involving both the order update and the message insertion into the outbox is committed to the database.
+- Message Relay Process Checks Outbox: A separate process, the Message Relay, periodically checks the Outbox Table for new messages.
+- Send Message to Inventory Service: Upon finding the new message, the Message Relay forwards it to the Inventory Service, either directly or via a message queue.
+- Inventory Service Updates Stock: The Inventory Service receives the message and updates the stock accordingly.
 
 The sequence diagram for this process flow is as follows
 
@@ -163,10 +166,10 @@ The Transactional Outbox pattern is a key pattern in distributed systems. It is 
 
 ## References
 
-> [NServicebus Outbox Pattern](http:// https://docs.particular.net/nservicebus/outbox/ )
-> 
+> [NServicebus Outbox Pattern](http:// <https://docs.particular.net/nservicebus/outbox/> )
+>
 > [Debezium Outbox Pattern](https://debezium.io/blog/2019/02/19/reliable-microservices-data-exchange-with-the-outbox-pattern/)
-> 
+>
 > [CosmosDB Change Feed](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed)
-> 
+>
 > [DynamoDb Streams](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html)

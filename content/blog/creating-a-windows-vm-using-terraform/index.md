@@ -18,8 +18,6 @@ This post is a follow up on the [Terraform 101]({{< ref "/blog/terraform-getting
 
 **[Terraform 101](//www.slideshare.net/pradeep_loganathan/terraform-101-234192420 "Terraform 101")** from **[Pradeep Loganathan](https://www.slideshare.net/pradeep_loganathan)**
 
-  
-
 ## Creating a Windows Virtual Machine
 
 ```terraform

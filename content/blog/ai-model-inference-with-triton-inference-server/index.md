@@ -67,21 +67,25 @@ Triton's configuration file (`config.pbtxt`) is a powerful tool for fine-tuning 
 Triton offers advanced techniques to maximize inference efficiency:
 
 * **Model Pipelining:** Break down complex models into sequential stages, enabling parallel execution on different backends.
+
 ```python
 # Example code for implementing model pipelining
 ```
 
 * **Concurrent Model Execution:** Run multiple models simultaneously on the same GPU for higher throughput.
+
 ```python
 # Example code for configuring concurrent model execution
 ```
 
 * **TensorRT Integration:** Leverage TensorRT's optimizations for NVIDIA GPUs to accelerate inference significantly.
+
 ```python
 # Example code for integrating TensorRT with Triton
 ```
 
 * **Custom Backends:** Develop custom backends using Triton's framework to tailor inference to specific requirements or hardware.
+
 ```python
 # Example code for creating a custom Python backend for Triton
 ```

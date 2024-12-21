@@ -28,7 +28,7 @@ The above command runs the container in interactive mode. The container can be r
 
 To test that the DynamoDb instance running locally I can use the list tables command, to list any tables in the DynamoDb docker instance. With the AWS CLI , I can use the list-tables command as below. Note the --endpoint argument which specifies that the command should be run on the DynamoDb instance running on localhost at port 8000.
 
-> aws dynamodb list-tables --endpoint-url http://localhost:8000
+> aws dynamodb list-tables --endpoint-url <http://localhost:8000>
 
 ![](images/Docker-DynamoDb-list-tables-1024x280.png)
 

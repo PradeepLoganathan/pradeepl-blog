@@ -129,7 +129,7 @@ As you can see both the repository interfaces are exactly similar except for the
 
 #### Generic Repository interface
 
-Generic repository interfaces/classes may have also contributed to global warming as they result in a lot of hot air debates on whether they are downright evil or an amazing abstraction. We need to understand that the generic 
+Generic repository interfaces/classes may have also contributed to global warming as they result in a lot of hot air debates on whether they are downright evil or an amazing abstraction. We need to understand that the generic
 The refactored interface representing a generic repository is as below.
 
 ```csharp

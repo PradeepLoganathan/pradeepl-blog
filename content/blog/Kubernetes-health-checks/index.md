@@ -36,7 +36,7 @@ By leveraging the power of health checks, Kubernetes empowers developers and ope
 
 # Health check types
 
-In Kubernetes, health checks are primarily categorized into three types: Liveness Probes, Readiness Probes, and Startup Probes. Each serves a unique purpose in the lifecycle management of containers. The configuration and management of these health probes can be the difference between a smoothly running system and one plagued with interruptions and downtime. 
+In Kubernetes, health checks are primarily categorized into three types: Liveness Probes, Readiness Probes, and Startup Probes. Each serves a unique purpose in the lifecycle management of containers. The configuration and management of these health probes can be the difference between a smoothly running system and one plagued with interruptions and downtime.
 
 ## Startup probe
 
@@ -52,7 +52,7 @@ A readiness probe is used to identify if a container is ready to recieve traffic
 
 # Configuring Health Probes
 
-Proper configuration of health probes is key to their effectiveness.Kubernetes offers several ways to define probes, with parameters that can be tuned to match the specific needs of your application. Each of the above probe types supports different methods of checking the container's state, like HTTP requests (httpGet), TCP socket (tcpSocket), gRPC endpoint, or executing a command inside the container (exec). Additionally, we can configure parameters like initialDelaySeconds, periodSeconds, timeoutSeconds, successThreshold, and failureThreshold based on the application's characteristics and requirements. 
+Proper configuration of health probes is key to their effectiveness.Kubernetes offers several ways to define probes, with parameters that can be tuned to match the specific needs of your application. Each of the above probe types supports different methods of checking the container's state, like HTTP requests (httpGet), TCP socket (tcpSocket), gRPC endpoint, or executing a command inside the container (exec). Additionally, we can configure parameters like initialDelaySeconds, periodSeconds, timeoutSeconds, successThreshold, and failureThreshold based on the application's characteristics and requirements.
 
 The choice of probe and its configuration can significantly impact the stability and performance of the application. For instance, overly aggressive liveness probes can lead to frequent restarts, while lenient readiness probes might allow traffic to pods that aren't ready, resulting in poor user experience.
 
@@ -60,16 +60,15 @@ Let us take a look at configuring health probes in detail.
 
 ## Health Probe Mechanisms
 
-Health probes can be implemented in a container using different mechanisms to check the containers state. Some of them are 
+Health probes can be implemented in a container using different mechanisms to check the containers state. Some of them are
 
-- Container Execution checks : This can be used to run a command or a script to check the health of the container.  This can be done by executing a command inside the container and checking the return code of the command. The container is restarted when the command returns a failure status code. 
+- Container Execution checks : This can be used to run a command or a script to check the health of the container.  This can be done by executing a command inside the container and checking the return code of the command. The container is restarted when the command returns a failure status code.
 
-- TCP Socket checks : This can be used to determine if a socket connection can be successfully established. This is done by establishing a TCP socket connection to a container on the port specified in the configuration. 
+- TCP Socket checks : This can be used to determine if a socket connection can be successfully established. This is done by establishing a TCP socket connection to a container on the port specified in the configuration.
 
 - HTTP checks : This can be used to verify if HTTP get requests succeed. If the container exposes an HTTP endpoint this probe can be used to perform a HTTP get request against this endpoint. If the get request fails appropriate actions can be taken.
 
 - gRPC checks : This can be used to verify if gRPC requests succeed. This health check is natively available starting from Kubernetes version 1.25.
-
 
 ## Health probe parameters
 
@@ -139,9 +138,9 @@ spec:
       periodSeconds: 5
 ```
 
-This liveness probe checks if the file /usr/share/liveness/html/index.html exists and is readable. If the file exists and is readable, the container is considered healthy. If the cat command is unable to read the file successfully, it will also be considered an error, leading to the container restart. 
+This liveness probe checks if the file /usr/share/liveness/html/index.html exists and is readable. If the file exists and is readable, the container is considered healthy. If the cat command is unable to read the file successfully, it will also be considered an error, leading to the container restart.
 
-##  TCPSocketAction handler
+## TCPSocketAction handler
 
 We can use a TCP connection check to setup the liveness health probe as below.
 
@@ -190,10 +189,10 @@ spec:
       initialDelaySeconds: 5
       periodSeconds: 5
 ```
+
 The probe will connect to the service using the gRPC protocol on port 2379 and consider the container unhealthy if the connection fails.
 
 # Health Probe Optimizations
-
 
 - Probe Effectiveness: The choice of probe and its configuration can significantly impact the stability and performance of the application. For instance, overly aggressive liveness probes can lead to frequent restarts, while lenient readiness probes might allow traffic to pods that aren't ready, resulting in poor user experience.
 
@@ -219,7 +218,6 @@ flowchart LR
     E -->|Fail| D
     D -->|Retry Startup Probe| B
 {{< /mermaid >}}
-
 
 The process begins with the deployment of the container in Kubernetes. After the container starts, the startup probe checks if the application within the container is ready to run. If the startup probe succeeds, it proceeds to the readiness probe. If the startup probe fails, Kubernetes restarts the container.
 

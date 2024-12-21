@@ -42,7 +42,7 @@ cover:
 
 # Git Branching
 
-[Git]({{< ref "/blog/git-basics" >}}) branches allow a code base to evolve organically in a coherent way. When you create a git branch, you're setting up a new line of development. Git branches enables multiple team members to work on different tasks simultaneously without stepping on each other's toes. It is a fundamental concept for implementing features, fixing bugs, and testing new ideas safely. It is a powerful feature that allows developers to diverge from the main line of development and continue to work independently without disrupting the main codebase. A branch in Git is essentially a pointer to a snapshot of your changes. It is one of Git's most popular features. The primary benefits of Git branches are 
+[Git]({{< ref "/blog/git-basics" >}}) branches allow a code base to evolve organically in a coherent way. When you create a git branch, you're setting up a new line of development. Git branches enables multiple team members to work on different tasks simultaneously without stepping on each other's toes. It is a fundamental concept for implementing features, fixing bugs, and testing new ideas safely. It is a powerful feature that allows developers to diverge from the main line of development and continue to work independently without disrupting the main codebase. A branch in Git is essentially a pointer to a snapshot of your changes. It is one of Git's most popular features. The primary benefits of Git branches are
 
 - __Isolation__: Changes in a branch do not affect other branches or the main codebase until they are merged.
 - __Parallel Development__: Multiple features or fixes can be developed in parallel, speeding up the development process.
@@ -50,11 +50,12 @@ cover:
 - __Flexibility__: Easy to experiment with new ideas without disturbing the main codebase.
 
 # Git Branching Strategies
-A branching strategy is a convention, or a set of rules, that describes when git branches are created, naming guidelines for branches, what use branches should have, and so on. Branching strategies allow for separation of work grouped by concept ideas. These concept ideas can be developed in parallel and may also involve bug fixes and patches. Different projects require different branching models depending on their size, workflow, and deployment strategies. Some of the most popular git branching strategies are 
 
-- __Gitflow__ - Scheduled deployment strategy. 
+A branching strategy is a convention, or a set of rules, that describes when git branches are created, naming guidelines for branches, what use branches should have, and so on. Branching strategies allow for separation of work grouped by concept ideas. These concept ideas can be developed in parallel and may also involve bug fixes and patches. Different projects require different branching models depending on their size, workflow, and deployment strategies. Some of the most popular git branching strategies are
+
+- __Gitflow__ - Scheduled deployment strategy.
 - __Github flow__ - Branch per feature deployment strategy.
-- __Gitlab flow__ - State branching strategy. 
+- __Gitlab flow__ - State branching strategy.
 
 Let us take a look at each of these branching strategies in detail.
 
@@ -127,12 +128,11 @@ In GitHub Flow multiple teams work on different features across different branch
 
 ## Gitlab flow
 
-Gitlab flow was created by [Gitlab](https://about.gitlab.com/) in 2014. Gitlab flow introduces the concept of a location or environment for some of the branches. Branches are linked to specific environments, like development, staging, or production. As code is merged from one branch to the other , it is generally deployed to specific environments. E.g when code is merged from a feature branch to develop branch it is deployed to the development environment, when code is merged from a development to release branch , it is deployed to the staging environment etc. This creates more opportunities for testing in the various environments leading to a more stable release to production. 
+Gitlab flow was created by [Gitlab](https://about.gitlab.com/) in 2014. Gitlab flow introduces the concept of a location or environment for some of the branches. Branches are linked to specific environments, like development, staging, or production. As code is merged from one branch to the other , it is generally deployed to specific environments. E.g when code is merged from a feature branch to develop branch it is deployed to the development environment, when code is merged from a development to release branch , it is deployed to the staging environment etc. This creates more opportunities for testing in the various environments leading to a more stable release to production.
 
 ### Gitlab flow workflow steps
 
 Developers create feature branches from the production branch. After development and internal testing, these branches are merged back. For complex projects, a staging branch can be used for pre-production testing. The production branch is updated with fully tested and reviewed code. Gitlab flow uses branch naming conventions to specify which branch is deployed to which environment and most importantly the conditions that need to be met before a branch is deployed to a specific environment. This workflow strategy is a variation of a state branching strategy
-
 
 ![Gitlab Flow](images/gitlab-flow.png "Gitlab Flow")
 
@@ -143,7 +143,7 @@ GitLab Flow incorporates environment-specific branches and the CI/CD design shou
 ### Pros
 
 - Allows for comprehensive testing in different environments.
-- It defines clear pathways for Continuos integration and Continuos delivery 
+- It defines clear pathways for Continuos integration and Continuos delivery
 
 ### Cons
 
@@ -156,18 +156,16 @@ This table provides a side-by-side comparison of the key aspects of each Git bra
 
 | Feature                | Gitflow                         | GitHub Flow                      | GitLab Flow                       |
 |------------------------|---------------------------------|----------------------------------|-----------------------------------|
-| **Main Branches**      | Main, Develop                 | Main                           | Production                        |
-| **Supporting Branches**| Feature, Release, Hotfix        | Feature                          | Feature, (Optional) Release       |
-| **Primary Focus**      | Structured, scheduled releases  | Continuous delivery, simplicity  | Flexibility, environment-oriented |
-| **Release Process**    | Scheduled, from Release branch  | Continuous, from Main          | Continuous, adaptable to env.     |
-| **Best For**           | Larger, structured projects     | Rapid development, small teams   | CI/CD setups, balanced approach   |
-| **Complexity**         | High                            | Low                              | Medium                            |
-| **Testing Strategy**   | Staging before release          | Directly in production           | Multiple environments             |
-| **Merge Flow**         | Feature -> Develop -> Release   | Feature -> Main                | Feature -> Production             |
-| **Hotfixes**           | From Main to Hotfix branch    | Directly on Main               | From Production to Feature branch |
-| **Suitability**        | Versioned software              | Small, fast-paced projects       | Projects with multiple envs.      |
-
-
+| __Main Branches__      | Main, Develop                 | Main                           | Production                        |
+| __Supporting Branches__| Feature, Release, Hotfix        | Feature                          | Feature, (Optional) Release       |
+| __Primary Focus__      | Structured, scheduled releases  | Continuous delivery, simplicity  | Flexibility, environment-oriented |
+| __Release Process__    | Scheduled, from Release branch  | Continuous, from Main          | Continuous, adaptable to env.     |
+| __Best For__           | Larger, structured projects     | Rapid development, small teams   | CI/CD setups, balanced approach   |
+| __Complexity__         | High                            | Low                              | Medium                            |
+| __Testing Strategy__   | Staging before release          | Directly in production           | Multiple environments             |
+| __Merge Flow__         | Feature -> Develop -> Release   | Feature -> Main                | Feature -> Production             |
+| __Hotfixes__           | From Main to Hotfix branch    | Directly on Main               | From Production to Feature branch |
+| __Suitability__        | Versioned software              | Small, fast-paced projects       | Projects with multiple envs.      |
 
 ## Conclusion
 

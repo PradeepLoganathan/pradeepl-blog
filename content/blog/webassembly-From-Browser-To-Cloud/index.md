@@ -80,7 +80,6 @@ WASM at Adobe
 
 [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) is an example of a WebAssembly based framework for running web applications in the browser. It was released in .Net core 3.1 and was updated as part of .Net 5.0. Blazor allows the creation of compelling real-time web experiences using the WebAssembly hosting model. It allows .Net developers to create client side Single page applications (SPA) using C#.
 
-
 ## WebAssembly in the Cloud
 
 Wasm is based on an industry-wide collaborative effort. WASM is language, hardware, and platform-independent. WASM has fast startup times with no cold start issues. It has low resource overheads and is highly portable. It is secure and runs in a highly constrained sandbox. This makes it ideal to be deployed on the edge and for IoT devices which are resource constrained. It also makes it ideal for serverless workloads on the cloud.
@@ -112,7 +111,6 @@ Containers are an ideal tool to host workloads in a safe and secure environment.
 ## Serverless using WebAssembly
 
 In the serverless world , cloud providers manage infrastructure and allow for on-demand provisioning with greater agility. In this model, you provide the code and the cloud provider provisions and manages all resources ( containers, network, OS, app server etc) required to run it. The code runs on a server shared by many others and needs to be isolated to provide security and protect it from vulnerabilities that can be caused by other workloads. Since resources are provisioned dynamically on demand, workloads can suffer from cold start issues while resources are being provisioned due to startup from zero. WebAssembly is ideal under these circumstances due to their fast startup and isolated runtime model. Cloudflare's computing platform called [Workers](https://workers.cloudflare.com/) is a serverless runtime based on the Chrome V8 Javascript engine. It does not use containers or Virtual Machines. Workers hosts the WebAssembly runtime and can be used to deploy WASM modules as serverless functions. This model has significantly fast startup times and requires fewer resources. See this post [here](https://blog.cloudflare.com/cloud-computing-without-containers/) for more details.
-
 
 ## Conclusion
 

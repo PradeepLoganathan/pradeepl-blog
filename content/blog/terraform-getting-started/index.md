@@ -52,6 +52,7 @@ On macOS we can use homebrew to install terraform using the below command
 ```shell
 brew install terraform
 ```
+
 Confirm your installation by opening your command line or terminal and typing ```terraform -v```. You should see the installed version of Terraform displayed.
 
 # Terraform Components
@@ -184,7 +185,7 @@ The above code sample shows a data source to list AMI's in AWS with additional f
 
 ## Variables
 
-Variables in Terraform are a fantastic way to define centrally controlled reusable values. They are are used to make your Terraform configurations more dynamic and flexible.The information in Terraform variables is saved independently from the deployment plans, which makes the values easy to read and edit from a single file. Variables in Terraform represent parameters for Terraform modules. A variable is defined in Terraform by using a variable block with a label. The label must be a unique name, you cannot have variables with the same name in a configuration. It is also good practice to include a description and type. The variable type specifies the [type constraint](https://www.terraform.io/docs/configuration/types.html) that the defined variable will accept. 
+Variables in Terraform are a fantastic way to define centrally controlled reusable values. They are are used to make your Terraform configurations more dynamic and flexible.The information in Terraform variables is saved independently from the deployment plans, which makes the values easy to read and edit from a single file. Variables in Terraform represent parameters for Terraform modules. A variable is defined in Terraform by using a variable block with a label. The label must be a unique name, you cannot have variables with the same name in a configuration. It is also good practice to include a description and type. The variable type specifies the [type constraint](https://www.terraform.io/docs/configuration/types.html) that the defined variable will accept.
 
 ```terraform
 variable "location" {
@@ -200,7 +201,6 @@ variable "vnet_address_space" {
     default = ["10.0.0.0/16"]
 }
 ```
-
 
 In the above example we have two variables, for location and vnet address space. The location variable is of type string and has a default value of australiaeast. The vnet\_address\_space variable is of type list and allows us to define a list of ip address ranges with a single default of 10.0.0.0/16.
 
@@ -364,13 +364,13 @@ This Terraform script begins by specifying the Azure provider and its version. T
 
 To apply this terraform script, we need to follow these steps
 
- - Initialize Terraform: Run ```terraform init``` in your project directory. This command initializes the project, installs the Azure provider, and prepares Terraform to manage the infrastructure.
+- Initialize Terraform: Run ```terraform init``` in your project directory. This command initializes the project, installs the Azure provider, and prepares Terraform to manage the infrastructure.
 
- - Create an Execution Plan: Execute ```terraform plan```. This command lets you preview the changes Terraform will make without actually applying them. It's a good practice to review this plan to ensure it aligns with your expected changes.
+- Create an Execution Plan: Execute ```terraform plan```. This command lets you preview the changes Terraform will make without actually applying them. It's a good practice to review this plan to ensure it aligns with your expected changes.
 
- - Apply the Configuration: Run ```terraform apply```. Terraform will prompt you to confirm before it makes any changes. Once confirmed, Terraform will proceed to create the resources as defined in your script.
+- Apply the Configuration: Run ```terraform apply```. Terraform will prompt you to confirm before it makes any changes. Once confirmed, Terraform will proceed to create the resources as defined in your script.
 
- # Next steps
+# Next steps
 
 If you're new to the concept of Infrastructure as Code, which forms the foundation for tools like Terraform and practices like GitOps, you might find [my introductory guide on Infrastructure as Code]({{< ref "/blog/infrastructure-as-code">}}) helpful.
 To understand how Terraform can be integrated into a GitOps workflow, enhancing automation and consistency in infrastructure management, check out my detailed post on [GitOps]({{< ref "/blog/gitops">}}) and [Gitops using ArgoCD]({{< ref "/blog/gitops-with-argocd">}}).

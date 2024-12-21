@@ -22,4 +22,4 @@ tags:
 ---
 
 Messaging is a fundamental pattern in many applications. It allows for components to communicate with each other. It is also used to implement distributed systems. Messaging augments application design by providing the below functionality
-RabbitMQ is a messaging system that is used in many applications. It is a highly available, high performance, and fault tolerant messaging system. 
+RabbitMQ is a messaging system that is used in many applications. It is a highly available, high performance, and fault tolerant messaging system.

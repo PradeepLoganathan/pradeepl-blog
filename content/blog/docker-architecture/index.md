@@ -8,7 +8,7 @@ categories:
 This post is part of a three-post series on Docker
 
 - [What is Docker](https://pradeeploganathan.com/docker/docker-part-1/)
-- [Docker Architecture](https://pradeeploganathan.com/docker/docker-architecture/) 
+- [Docker Architecture](https://pradeeploganathan.com/docker/docker-architecture/)
 - [Docker on Windows](https://pradeeploganathan.com/docker/docker-part-3-installing-docker-on-windows/)
 
 The concept of containers has been on the making for some time. Docker is currently available in two primary flavors namely, Docker for Linux and Docker for Windows based on the platform on which it is running. Docker for Mac is a version of Docker for Linux. It is also available on all cloud platforms such as Azure, AWS, Google Cloud, and others. The Docker architecture is different based on the platform on which it is running.
@@ -28,7 +28,7 @@ Docker for Linux uses a bunch of Linux constructs to enable containerization of 
 CGroups or control groups provides a mechanism to manage, isolate and limit a group of processes. They allow the control of several aspects of the group's use of resources. Limits can be applied on shared resources such as CPU, Memory, network, or Disk IO. CGroups also allow for accounting, checkpointing, and restarting groups of processes. Cgroups can also be used to snapshot and restore the state of running processes. CGroups were originally implemented by the Engineers at Google in 2006 and was merged into the Linux kernel version 2.6.24, released in January 2008. The Linux Kernel documentation states it succinctly as
 
 > "Control Groups provide a mechanism for aggregating/partitioning sets of tasks, and all their future children, into hierarchical groups with specialized behaviour."
-> 
+>
 > [https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt](https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt)
 
 Control groups are split into different subsystems, such as CPU, CPU sets, memory block I/O, and so on. Each subsystem can be used independently or can be grouped with others. Some of the subsystems managed by cgroups are
@@ -43,7 +43,7 @@ Control groups are split into different subsystems, such as CPU, CPU sets, memor
 
 Control Groups ensure that containers cannot suffer from the noisy-neighbor syndrome, where a single container can consume most or all the available resources of the whole Docker host.
 
-#### **Namespaces** 
+#### **Namespaces**
 
 Namespaces are a kernel security feature that was introduced in Linux kernel version 2.4.19 in 2002. A namespace is an abstraction of global resources such as filesystems, network access, process tree, user IDs etc. Linux namespaces are used to create process that are isolated from the rest of the system without the need to use low level virtualization technology. Each process can be assigned to a namespace and can then only see the resources connected to that namespace. Namespaces limit the visibility a process has on the networking, filesystems, and user ID components of other processes. Container processes are limited to seeing only what is in the same namespace. Linux namespaces are created via the syscall unshare. clone and setns syscalls allow us to manipulate namespaces.
 
@@ -104,7 +104,7 @@ The Docker daemon is the server-side component that runs on the host machine. It
 
 #### Docker REST API
 
-Docker daemon exposes a [REST API](https://pradeeploganathan.com/rest/what-is-rest/), which the Docker client uses to interact with the Docker daemon. The API allows us to control every aspect of Docker from within any application. The Docker REST API is public, and there are alternative management tools that are powered by the API, like [Portainer](https://www.portainer.io/), [Dockstation](https://dockstation.io/), [Shipyard](https://shipyard-project.com/), Docker Universal Control Plane etc. which make effective use of the API to provide control functions. The Docker API client can be written in any language which can make a REST call like C#, Java, JavaScript, Python etc. Docker also offers SDKs for C#, Java, Python and Go languages which makes it easier to interact with a REST API using a native client library. For full list of SDKs or libraries available in various language visit https://docs.docker.com/engine/api/sdks/
+Docker daemon exposes a [REST API](https://pradeeploganathan.com/rest/what-is-rest/), which the Docker client uses to interact with the Docker daemon. The API allows us to control every aspect of Docker from within any application. The Docker REST API is public, and there are alternative management tools that are powered by the API, like [Portainer](https://www.portainer.io/), [Dockstation](https://dockstation.io/), [Shipyard](https://shipyard-project.com/), Docker Universal Control Plane etc. which make effective use of the API to provide control functions. The Docker API client can be written in any language which can make a REST call like C#, Java, JavaScript, Python etc. Docker also offers SDKs for C#, Java, Python and Go languages which makes it easier to interact with a REST API using a native client library. For full list of SDKs or libraries available in various language visit <https://docs.docker.com/engine/api/sdks/>
 
 #### **Docker CLI**
 

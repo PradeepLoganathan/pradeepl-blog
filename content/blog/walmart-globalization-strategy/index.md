@@ -5,4 +5,4 @@ categories:
   - "management"
 ---
 
-http://www.slideshare.net/pradeep_loganathan/globalization-strategy-walmart
+<http://www.slideshare.net/pradeep_loganathan/globalization-strategy-walmart>

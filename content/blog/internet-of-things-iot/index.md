@@ -7,15 +7,11 @@ Microsoft recently announced that Visual Studio will start supporting device dev
 
 Arduino is an open-source physical computing platform based on a simple i/o board and a IDE integrated development environment that implements the Processing/Wiring language. Arduino can be used to develop stand-alone interactive objects and installation or can  be connected to software on your computer. The first Arduino board was produced on January 2005. The project is the result of the collaboration of many people primarily David Cuartielles and Massimo Banzi who taught physical computing. The others would be David Mellis, who built software engine , Tom Igoe and Gianluca Martino.
 
- 
-
 [![image](images/image_thumb.png "image")](http://pradeeploganathan.com/wp-content/uploads/2016/08/image.png)
 
 #### Board Layout
 
 [![image](images/image_thumb-1.png "image")](http://pradeeploganathan.com/wp-content/uploads/2016/08/image-1.png)
-
- 
 
 Starting clockwise from the top center:
 

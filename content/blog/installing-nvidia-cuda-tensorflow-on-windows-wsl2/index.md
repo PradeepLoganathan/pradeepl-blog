@@ -152,6 +152,7 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 ### Expected Output
 
 You should see output confirming the availability of GPUs. For example:
+
 ```
 Num GPUs Available:  1
 ```
@@ -204,4 +205,3 @@ print(device_lib.list_local_devices())
 This quick guide hopefully helps ensure that your environment is ready for GPU-accelerated machine learning with TensorFlow on WSL2. Leveraging the power of GPU can significantly speed up your training and inference processes, allowing you to work with more complex models and larger datasets.
 
 Feel free to reach out if you encounter any issues or need further assistance!
-

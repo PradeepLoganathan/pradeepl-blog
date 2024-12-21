@@ -47,7 +47,7 @@ Each of the steps in the pipeline is a Tekton task. Let us start by installing T
 
 ### Install Core components
 
-Tekton can be installed on any kubernetes cluster version 1.15 or higher. For this blog post, I am deploying tekton on an Azure Kubernetes cluster with version 1.21.9. We can deploy the pipeline, trigger and the interceptor components as below. I strongly advise to run a ``` kubectl get pods --namespace tekton-pipelines --watch``` command to see the status of the pods after installing each component. Ensure that the pods are running before installing the next set of components.
+Tekton can be installed on any kubernetes cluster version 1.15 or higher. For this blog post, I am deploying tekton on an Azure Kubernetes cluster with version 1.21.9. We can deploy the pipeline, trigger and the interceptor components as below. I strongly advise to run a ```kubectl get pods --namespace tekton-pipelines --watch``` command to see the status of the pods after installing each component. Ensure that the pods are running before installing the next set of components.
 
 ```shell
 kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
@@ -143,7 +143,7 @@ tkn task start clonesource \
  --workspace name=source,emptyDir=""
  ```
 
- This produces the below output when the task is run. The task clones the source from the git repository and lists the cloned directory. 
+ This produces the below output when the task is run. The task clones the source from the git repository and lists the cloned directory.
 
  ```bash
  TaskRun started: clonesource-run-qz4w2
@@ -188,4 +188,4 @@ spec:
   tkn taskrun logs clonesource-tr-rt8m9 -n dev-pipelines
   ```
 
-  https://hashnode.com/post/tekton-ci-simplified-ckzleauyw0n6beks1diq6ejvv
+  <https://hashnode.com/post/tekton-ci-simplified-ckzleauyw0n6beks1diq6ejvv>

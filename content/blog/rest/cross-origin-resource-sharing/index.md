@@ -38,7 +38,7 @@ However, with the prevalence and rapid rise of JavaScript frameworks such as Ang
 
 If a server wants its resources to be available securely to other domains, it should use the below headers to control access to it resources. The headers are
 
-- Access-Control-Allow-Origin: This header is used to control access to the resource and make it available for specific domains If you want to restrict it to specific domains( e.g. siteb.com ), the response header can be modified to allow the same by marking the header as Access-Control-Allow-Origin: https://siteb.com. If another site such as sitec.com tries to get access to this resource now, it will trigger an XMLHttpRequest error and deny access to the requesting JavaScript code. To allow access to the resource across all domains this header should be marked as Access-Control-Allow-Origin: \*.
+- Access-Control-Allow-Origin: This header is used to control access to the resource and make it available for specific domains If you want to restrict it to specific domains( e.g. siteb.com ), the response header can be modified to allow the same by marking the header as Access-Control-Allow-Origin: <https://siteb.com>. If another site such as sitec.com tries to get access to this resource now, it will trigger an XMLHttpRequest error and deny access to the requesting JavaScript code. To allow access to the resource across all domains this header should be marked as Access-Control-Allow-Origin: \*.
 
 - Access-Control-Allow-Methods: This header indicates the methods that can be used on the resource from other domains. The acceptable values are the HTTP verbs POST, PUT, GET, etc.
 
@@ -88,9 +88,9 @@ x-powered-by:"ASP.NET"
 date:"Sat, 17 Feb 2018 14:07:48 GMT"
 ```
 
-In this case, the server responds with a Access-Control-Allow-Origin: \* which means that the resource can be accessed by any domain in a cross-site manner. If the resource owners at /api/testapi wished to restrict access to the resource to requests only from http://alloweddomain.org, they would send back:  
-Access-Control-Allow-Origin: http://alloweddomain.org  
-Note that now, no domain other than http://alloweddomain.org (identified by the ORIGIN: header in the request) can get access to the resource in a cross-site manner. The Access-Control-Allow-Origin header should contain the value that was sent in the request's Origin header.
+In this case, the server responds with a Access-Control-Allow-Origin: \* which means that the resource can be accessed by any domain in a cross-site manner. If the resource owners at /api/testapi wished to restrict access to the resource to requests only from <http://alloweddomain.org>, they would send back:  
+Access-Control-Allow-Origin: <http://alloweddomain.org>  
+Note that now, no domain other than <http://alloweddomain.org> (identified by the ORIGIN: header in the request) can get access to the resource in a cross-site manner. The Access-Control-Allow-Origin header should contain the value that was sent in the request's Origin header.
 
 ## CORS in ASP.NET Core
 
@@ -132,6 +132,7 @@ In ASP.Net Core 3.1 CORS functionality for the pipeline is defined in the packag
         }
     }
 ```
+
 In the above startup class, I am adding CORS into the pipeline by calling Service.AddCors and defining a policy. The policy specified is a very liberal policy allowing all headers, origins, and methods. I am then configuring the service by calling app.UseCors() and specifying the policy defined above.
 
 We can define custom CORS policies in ASP.Net core and apply them into the pipeline as needed. In the below example, I am defining two different CORS policies. The CORSPolicies.PublicAPI policy is used for production scenarios and the CORSPolicies.DevAPI policy is used for development purposes. The PublicAPI policy restricts the domains and the methods whereas the DevAPI policy used in the development environment places no such restrictions.

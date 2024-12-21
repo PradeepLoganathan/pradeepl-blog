@@ -341,7 +341,7 @@ service CustomerService {
 
 #### Call Methods
 
-We can now call the methods implemented by the service. Let us call the CreateCustomer method on the CustomerService with 
+We can now call the methods implemented by the service. Let us call the CreateCustomer method on the CustomerService with
 
 ```shell
 grpcurl -plaintext \
@@ -396,4 +396,4 @@ Calling this method produces this output
 
 We have now successfully created a gRPC service in dotnet. We have authored the proto file to define messages and services. We have also implemented the service. We then were able to successfully call the service using `grpcurl` command line tool.
 
-In the next section, we'll discuss best practices in gRPC development to ensure your services are efficient, maintainable, and secure. 
+In the next section, we'll discuss best practices in gRPC development to ensure your services are efficient, maintainable, and secure.

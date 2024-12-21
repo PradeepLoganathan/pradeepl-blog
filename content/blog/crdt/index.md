@@ -8,12 +8,13 @@ categories:
 mermaid: true
 ---
 
-Many moons ago I was working on an online eCommerce platform. The platform used to undergo massive traffic spikes periodically. 
+Many moons ago I was working on an online eCommerce platform. The platform used to undergo massive traffic spikes periodically.
 
 I was trying to implement a distributed counter. I was using a distributed counter because I wanted to be able to increment the counter on multiple servers.
+
 ## CAP Theorem
 
-The CAP theorem was proposed by Eric Brewer. 
+The CAP theorem was proposed by Eric Brewer.
 
 ## CRDT
 

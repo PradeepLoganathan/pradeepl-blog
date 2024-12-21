@@ -8,7 +8,7 @@ categories:
 This post is part of a three-post series on Docker
 
 - [What is Docker](https://pradeeploganathan.com/docker/docker-part-1/)
-- [Docker Architecture](https://pradeeploganathan.com/docker/docker-architecture/) 
+- [Docker Architecture](https://pradeeploganathan.com/docker/docker-architecture/)
 - [Docker on Windows](https://pradeeploganathan.com/docker/docker-part-3-installing-docker-on-windows/)
 
 To install Docker, head over to [Download Docker for Windows](https://download.docker.com/win/stable/InstallDocker.msi "Download Docker for Windows") if you are running windows 10 Pro or enterprise 64 bit and download the installer from this link. If you are on a previous version of Windows, you would need to download Docker [Toolbox](https://www.docker.com/products/docker-toolbox "Docker Toolbox"). Also, you would need to enable Hyper-V virtualization to enable Docker to work. The setup installs the Daemon and the CLI tools. The Docker engine is installed as a service, and you also have a helper on the task bar which is used to further configure Docker. You can also download Kitematic from download.Docker.com to graphically manage Docker containers.

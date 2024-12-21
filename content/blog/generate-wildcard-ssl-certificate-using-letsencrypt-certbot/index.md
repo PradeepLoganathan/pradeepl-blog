@@ -101,7 +101,7 @@ sudo apt install certbot
 
 ### Steps
 
-1. **Initiate Certificate Request:** Run the Certbot certonly command to initiate the process of starting the ACME challenge to verify domain ownership. 
+1. **Initiate Certificate Request:** Run the Certbot certonly command to initiate the process of starting the ACME challenge to verify domain ownership.
 
 ```bash
 sudo certbot certonly --manual --preferred-challenges=dns --email <<email@youremail.com>>

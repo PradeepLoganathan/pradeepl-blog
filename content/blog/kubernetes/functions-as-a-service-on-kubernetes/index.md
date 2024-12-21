@@ -34,6 +34,6 @@ The term serverless is a misnomer, because there are servers involved. In realit
 
 "Serverless computing does not mean that we no longer use servers to host and run code; nor does it mean that operations engineers are no longer required. Rather, it refers to the idea that consumers of serverless computing no longer need to spend time and resources on server provisioning, maintenance, updates, scaling, and capacity planning. Instead, all of these tasks and capabilities are handled by a serverless platform and are completely abstracted away from the developers and IT/operations teams. As a result, developers focus on writing their applications’ business logic."
 
-https://learning.oreilly.com/library/view/learning-serverless/9781492057000/introduction01.html#idm45596691660952
+<https://learning.oreilly.com/library/view/learning-serverless/9781492057000/introduction01.html#idm45596691660952>
 
 ![Robin serverless](/images/tuServerless_Robin.png)

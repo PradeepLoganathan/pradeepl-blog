@@ -49,13 +49,13 @@ When i wrote my previous blog post on threat modeling.. it was much more of a st
 
 The digital battlefield is constantly shifting, with adversaries employing increasingly sophisticated tactics. Understanding the current threat landscape is crucial for effective threat modeling. Here are some key trends:
 
-*   **Living Off the Land (LotL):** Attackers are increasingly using legitimate system tools and native binaries (like PowerShell, `certutil`, or `wmic`) to blend in with normal activity, making detection far more challenging. This requires threat models to consider the misuse of standard system functions.
-*   **Supply Chain Attacks:** The SolarWinds attack highlighted the devastating impact of compromised software supply chains. Threat modeling must now extend to third-party dependencies, open-source components, and even the build pipeline itself. Software Bill of Materials (SBOMs) are becoming essential for this analysis.
-*   **Cloud-Native Exploitation:** Cloud environments introduce unique attack vectors, such as misconfigurations in IAM roles, container escapes, and serverless function vulnerabilities. Threat modeling must account for the shared responsibility model and the specific security challenges of cloud platforms.
-*   **API Exploitation:** With the rise of microservices and API-driven architectures, APIs have become a prime target. Broken authentication, injection flaws, and excessive data exposure are common vulnerabilities that need careful consideration.
-*   **AI and Machine Learning in Attacks:** Adversaries are beginning to leverage AI for automated vulnerability scanning, generating polymorphic malware, and crafting sophisticated phishing campaigns. This necessitates a proactive approach to anticipating AI-driven attacks.
-*   **Ransomware Evolution:** Ransomware attacks are no longer just about encrypting data; they often involve data exfiltration and extortion. Threat modeling must consider data integrity and availability, as well as the potential for reputational damage.
-*   **Deepfakes and Social Engineering:** The increasing sophistication of deepfakes and social engineering tactics can bypass traditional security controls. Threat models should consider how these techniques can be used to manipulate users and gain access to systems.
+- **Living Off the Land (LotL):** Attackers are increasingly using legitimate system tools and native binaries (like PowerShell, `certutil`, or `wmic`) to blend in with normal activity, making detection far more challenging. This requires threat models to consider the misuse of standard system functions.
+- **Supply Chain Attacks:** The SolarWinds attack highlighted the devastating impact of compromised software supply chains. Threat modeling must now extend to third-party dependencies, open-source components, and even the build pipeline itself. Software Bill of Materials (SBOMs) are becoming essential for this analysis.
+- **Cloud-Native Exploitation:** Cloud environments introduce unique attack vectors, such as misconfigurations in IAM roles, container escapes, and serverless function vulnerabilities. Threat modeling must account for the shared responsibility model and the specific security challenges of cloud platforms.
+- **API Exploitation:** With the rise of microservices and API-driven architectures, APIs have become a prime target. Broken authentication, injection flaws, and excessive data exposure are common vulnerabilities that need careful consideration.
+- **AI and Machine Learning in Attacks:** Adversaries are beginning to leverage AI for automated vulnerability scanning, generating polymorphic malware, and crafting sophisticated phishing campaigns. This necessitates a proactive approach to anticipating AI-driven attacks.
+- **Ransomware Evolution:** Ransomware attacks are no longer just about encrypting data; they often involve data exfiltration and extortion. Threat modeling must consider data integrity and availability, as well as the potential for reputational damage.
+- **Deepfakes and Social Engineering:** The increasing sophistication of deepfakes and social engineering tactics can bypass traditional security controls. Threat models should consider how these techniques can be used to manipulate users and gain access to systems.
 
 This evolving landscape demands a dynamic and adaptive approach to threat modeling, one that continuously integrates new intelligence and reflects the latest attacker tactics.
 
@@ -77,7 +77,7 @@ These frameworks remain solid mental models, but you should now pair them with n
 
 ## New Standards and Frameworks
 
-Think of threat modeling as a security roadmap. It helps you identify potential weaknesses in your systems before attackers do, allowing you to patch those holes and keep your data secure. Effective threat modeling is essential to proactively identify and address vulnerabilities. But just like any good roadmap, threat modeling needs to evolve with the times. In recent years, the landscape of threat modeling has evolved significantly. New standards, frameworks, and methodologies have emerged to address the increasing complexity of modern systems. 
+Think of threat modeling as a security roadmap. It helps you identify potential weaknesses in your systems before attackers do, allowing you to patch those holes and keep your data secure. Effective threat modeling is essential to proactively identify and address vulnerabilities. But just like any good roadmap, threat modeling needs to evolve with the times. In recent years, the landscape of threat modeling has evolved significantly. New standards, frameworks, and methodologies have emerged to address the increasing complexity of modern systems.
 
 **[Threat Modeling Manifesto (2020)](<https://www.threatmodelingmanifesto.org/>)**: A community-driven set of values and principles guiding modern threat modeling, emphasizing continuous improvement, collaboration, and delivering actionable insights.
 
@@ -96,9 +96,10 @@ By leveraging the above standards, frameworks, and methodologies, organizations 
 TMaC revolutionizes threat modeling by automating and integrating it into the software development lifecycle. By defining and analyzing threats using code, teams can ensure that security is a core consideration from the outset. TMaC allows teams to define threat models in a declarative format (e.g., YAML). Version-controlling these models ensures they evolve with code, enabling automated updates and integration into CI/CD pipelines.
 
 **Threat Modeling as Code (TMaC)** is an evolution of traditional threat modeling. It uses code to:
- - Document threats: Describe potential security threats in a structured format using code.
- - Analyze threats: Use automated tools to analyze the threats and identify potential vulnerabilities.
- - Mitigate threats: Implement mitigations and countermeasures using code.
+
+- Document threats: Describe potential security threats in a structured format using code.
+- Analyze threats: Use automated tools to analyze the threats and identify potential vulnerabilities.
+- Mitigate threats: Implement mitigations and countermeasures using code.
 
 Tools like IriusRisk, OWASP Threat Dragon, and ThreatSpec empower organizations to streamline their threat modeling processes, identify vulnerabilities early, and implement effective mitigations. With these tools, threat modeling transforms from a static document to a living artifact that updates as services scale, architectures shift, or dependencies change.
 
@@ -106,7 +107,7 @@ Tools like IriusRisk, OWASP Threat Dragon, and ThreatSpec empower organizations 
 
 ## Integrating Threat Modeling into DevSecOps
 
-Traditionally, threat modeling was seen as a one-time activity done at the design stage. But here's the thing: cyber threats don't take breaks.  Modern best practices view threat modeling as a continuous process that weaves its way through every stage of DevSecOps. 
+Traditionally, threat modeling was seen as a one-time activity done at the design stage. But here's the thing: cyber threats don't take breaks.  Modern best practices view threat modeling as a continuous process that weaves its way through every stage of DevSecOps.
 
 1. **Design and Architecture:** Think of threat modeling as the architect's blueprint for security. By incorporating it at the planning stage, you identify potential attack surfaces before you even start writing code.Incorporating threat modeling at the planning stages help identify trust boundaries and potential attack surfaces before development begins.
 2. **Implementation and Testing:** Don't wait until everything is deployed to think about security. Integrate automated checks into CI/CD pipelines. When a new service spins up or a new dependency is introduced, the threat model updates and triggers reassessment.

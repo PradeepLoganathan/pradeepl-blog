@@ -45,7 +45,7 @@ This constraint species that the client and server must be able to evolve indepe
 
 # Stateless
 
-A REST service must be stateless. Each request from the client to the server must contain all the information needed to understand and complete the request. The server should not need any additional information from previous requests to fulfill the current request. This shifts the responsibility of maintaining state to the client freeing the server to focus on fulfilling as many requests as possible. The necessary state to operate the request is contained within the request as a part of the URI, query-string parameters, body, or headers. A stateless service is easily scalable since additional servers can be added or removed as necessary without having to worry about routing subsequent requests to the same server. These can be further load balanced as necessary. 
+A REST service must be stateless. Each request from the client to the server must contain all the information needed to understand and complete the request. The server should not need any additional information from previous requests to fulfill the current request. This shifts the responsibility of maintaining state to the client freeing the server to focus on fulfilling as many requests as possible. The necessary state to operate the request is contained within the request as a part of the URI, query-string parameters, body, or headers. A stateless service is easily scalable since additional servers can be added or removed as necessary without having to worry about routing subsequent requests to the same server. These can be further load balanced as necessary.
 
 # Cacheable
 

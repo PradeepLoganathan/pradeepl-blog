@@ -81,6 +81,7 @@ A good understanding of the key concepts of IaC is key to implementing an effect
 By embracing these core concepts, IaC empowers you to transform infrastructure management into a predictable, efficient, and secure practice. It liberates you from the shackles of manual configuration, allowing you to focus on innovation and agility in a rapidly evolving cloud landscape.
 
 # IaC tooling
+
 IaC represents more than just a collection of tools; it is a philosophical shift towards treating infrastructure as code. There are various tools which help implement key aspects of IaC. Each tool offers unique strengths and caters to specific needs. Let's delve into three popular options and understand what makes them shine:
 
 1. Terraform: Terraform is vendor agnostic in its multi-cloud and hybrid cloud support. Whether you're in AWS, Azure, GCP, or on-premises, Terraform empowers you to manage infrastructure with a consistent approach. Terraform utilizes a human-readable configuration language (HCL) that focuses on desired state, making your code intuitive and easy to collaborate on. It embraces modularity through its extensive library of modules, allowing you to reuse configurations, share best practices, and accelerate development. [This blog post series]({{< ref "/blog/terraform-getting-started" >}}) is a good place to get started with terraform.
@@ -89,13 +90,13 @@ IaC represents more than just a collection of tools; it is a philosophical shift
 
 3. CloudFormation: CloudFormation is the native IaC service for AWS, offering seamless integration and access to the full range of AWS resources and services. This deep integration simplifies deployment, reduces configuration complexity, and leverages native AWS features. CloudFormation utilizes YAML templates to define infrastructure configurations, making it familiar for AWS users and offering a straightforward approach for describing desired state. [This blog post]({{< ref "blog/aws-cloudformation" >}}) is a good place to get started on Cloudformation.
 
-These are just three examples, and the IaC landscape continues to evolve with new tools and capabilities emerging. The best tool choice depends on your specific needs, cloud environment, and existing tooling. 
+These are just three examples, and the IaC landscape continues to evolve with new tools and capabilities emerging. The best tool choice depends on your specific needs, cloud environment, and existing tooling.
 
 Choosing the right tool depends on  factors such as :
 
- - Cloud platform support: Do you need multi-cloud or vendor-specific features?
- - Configuration language preference: Are you comfortable with HCL, YAML, or other languages?
- - Agent-based vs. agentless: Do you need push-based automation or prefer a purely declarative approach?
- - Community and support: Is a vibrant community and extensive resources available?
+- Cloud platform support: Do you need multi-cloud or vendor-specific features?
+- Configuration language preference: Are you comfortable with HCL, YAML, or other languages?
+- Agent-based vs. agentless: Do you need push-based automation or prefer a purely declarative approach?
+- Community and support: Is a vibrant community and extensive resources available?
 
 By understanding the strengths and considerations of different IaC tools, you can make informed decisions and leverage the power of IaC to build and manage your infrastructure efficiently and effectively.

@@ -239,7 +239,7 @@ FOR EACH ROW EXECUTE FUNCTION trg_after_insert();
 
 Ensuring that indexes and constraints are correctly migrated is crucial for maintaining data integrity, enforcing business rules, and optimizing database performance. Here's why this is important:
 
-* **Primary and Foreign Keys:** 
+* **Primary and Foreign Keys:**
 
   * **Compatibility:** Primary and foreign keys are fundamental to maintaining relational integrity between tables. They enforce the relationships defined in your database schema, ensuring that each record in a child table corresponds to a valid record in a parent table. Ensuring compatibility during migration prevents data integrity issues, such as orphaned records, which can lead to inconsistent and unreliable data.
   * **Referential Integrity:** Migrating primary and foreign keys correctly ensures that referential integrity constraints are preserved. This prevents operations that would violate the logical relationships between tables, such as deleting a parent record that still has associated child records.
@@ -253,6 +253,7 @@ Ensuring that indexes and constraints are correctly migrated is crucial for main
 **Example:**
 
 * In SQL Server:
+
   ```sql
   CREATE TABLE Orders (
       OrderID int PRIMARY KEY,
@@ -266,6 +267,7 @@ Ensuring that indexes and constraints are correctly migrated is crucial for main
   ```
 
 * In PostgreSQL:
+
   ```sql
   CREATE TABLE Orders (
     OrderID integer PRIMARY KEY,

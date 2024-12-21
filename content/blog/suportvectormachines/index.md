@@ -15,7 +15,7 @@ SVMs construct hyperplanes or a set of hyperplanes in a high-dimensional space, 
 
 ### Key Concepts
 
-1. **Hyperplane and Margin Maximization**: 
+1. **Hyperplane and Margin Maximization**:
    - SVMs aim for the hyperplane that maximizes the margin between the data points of different classes.
    - Support vectors are the data points that define the margin.
    - Maximizing the margin enhances the model's generalization.

@@ -19,8 +19,6 @@ In todays digital world users expect applications to work with each other seamle
 
 OAuth 2 is an open authorization standard designed to provide an authorization protocol for the web. It is a protocol that provides a framework to exchange authorization information between applications and services. This protocol lets users grant limited access to some of their own content stored on other websites in a standardized and open manner without having to share credentials. Access to this protected content can be requested by an external application or service on behalf of the user. For Example, an application can obtain an user’s consent to call an API on their behalf, without needing the user’s credentials for API access. An application can also obtain authorization to call an API on its own behalf if it owns the content to be accessed. Access is generally granted by issuing a token which the external application can use to access the protected content. It removes the need for a user to hand over their credentials to the external application, which gives the user control over their data. The OAuth 2.0 framework was originally published in 2012. Several RFC's have been published since 2012 which patched and extended the original protocol. A new version OAuth 2.1 is currently in progress to consolidate and simplify commonly used features. It is not yet a final standard, but a draft was published on August 2022 [here](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-07).
 
-
-
 ## OAuth end user flow
 
 To understand how OAuth2 works from an end users perspective, let us work through an example scenario. Siva tracks his cycling workouts on Strava. He wants to share his cycling stats with his friends on facebook. He uses the strava app to share his workout to facebook. Strava then proceeds to ask facebook access to Siva's facebook page. The Facebook app on his phone checks with Siva who is logged in to confirm that he would indeed like Strava to be able to post to his page. Once Siva confirms that he indeed would like to provide Strava access to his page, Facebook issues a token to Strava with the necessary authorization to post to his page. Strava can now use this token to post to Siva's Facebook page. During this whole process Siva never had to provide his facebook credentials to Strava. He can also revoke Strava's access to facebook at any time.
@@ -35,8 +33,6 @@ To understand how OAuth2 works from an end users perspective, let us work throug
 - The user is redirected to the client app with a request code.
 - In the background, the client app sends the grant code to the provider, who sends back an authentication token.
 - The client app uses the access token to make authorized requests to the provider, such as to get user information or wall posts.
-
-
 
  A simple analogy for OAuth2 is using a valet parking service. If you use a valet parking service you the resource owner ( in this case the car being the resource ) need to give a token ( the car keys ) to a client ( in this case the driver ) authorizing him to drive your car , ideally to park it on your behalf. -->
 

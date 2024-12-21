@@ -49,8 +49,7 @@ The RSA signature scheme based on the RSA algorithm is the most widely used digi
 The blockchain uses asymmetric cryptography in order to achieve two goals:
 
 - Identifying accounts
-    
+
 - Authorizing transactions
-    
 
 Picture courtesy - [Bogdan Dada](https://unsplash.com/@bogs)

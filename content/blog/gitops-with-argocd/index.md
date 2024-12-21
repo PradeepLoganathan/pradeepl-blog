@@ -44,7 +44,6 @@ Building on the foundations laid in my previous [exploration of GitOps]({{< ref 
 
 The main components of Argo CD are
 
-
 ## How does ArgoCD work? -->
 
 ## Getting started with argo cd on Kind
@@ -59,7 +58,6 @@ Argo CD can be installed on any kubernetes cluster. The process of installing Ar
 - [Generating Certificates](#generating-certificates-with-cert-manager)
 - [Installing Argo CD](#install-argo-cd)
 - [Configuring the ingress controller](#configure-ingress)
-
 
 ### Create Kubernetes cluster using Kind
 
@@ -253,7 +251,7 @@ NAME                    CLASS    HOSTS          ADDRESS     PORTS     AGE
 argocd-server-ingress   <none>   argocd.local   localhost   80, 443   2m20s
 ```
 
-ArgoCD is now installed. We can view the web UI for Argo CD by navigating to https://argocd.local/. The user id is admin. The password can be obtained by querying the secret named ```argocd-initial-admin-secret``` and base64 decoding it as below.
+ArgoCD is now installed. We can view the web UI for Argo CD by navigating to <https://argocd.local/>. The user id is admin. The password can be obtained by querying the secret named ```argocd-initial-admin-secret``` and base64 decoding it as below.
 
 ```shell
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
@@ -261,11 +259,11 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 ### Argo CD web UI
 
-We have so far run through an extensive set of steps to install and configure Argo CD on a kind cluster. Navigating to https://argocd.local/ opens the Web UI. 
+We have so far run through an extensive set of steps to install and configure Argo CD on a kind cluster. Navigating to <https://argocd.local/> opens the Web UI.
 
 ![Argo CD - Login ](images/argocd-login.png "Argo CD - Login")
 
-We can enter the user id and password to move onto the next steps. 
+We can enter the user id and password to move onto the next steps.
 
 ![Argo CD - Web UI](images/argocd-webui.png "Argo CD - Web UI")
 
@@ -334,7 +332,7 @@ NAMESPACE   NAME        SYNC STATUS   HEALTH STATUS
 argocd      guestbook   Synced        Progressing
 ```
 
-Once ArgoCD has deployed the application the health status changes to healthy to indicate successful deployment. 
+Once ArgoCD has deployed the application the health status changes to healthy to indicate successful deployment.
 
 ```shell
 kubectl get applications -A

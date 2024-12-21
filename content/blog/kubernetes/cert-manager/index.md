@@ -52,7 +52,7 @@ Microservices architectures thrive on the principles of agility, scalability, an
 
 ## How cert-manager Can Help
 
-Cert-manager simplifies TLS certificate management and integrates directly into the Kubernetes ecosystem, easing the challenges associated with microservices. 
+Cert-manager simplifies TLS certificate management and integrates directly into the Kubernetes ecosystem, easing the challenges associated with microservices.
 
 - Automated Certificate Lifecycle Management: cert-manager automates the provisioning, renewal, and management of TLS certificates, ensuring that certificates are always up-to-date without manual intervention.
 - Enhanced Security for Microservices: In a microservices architecture, securing each service is crucial. cert-manager facilitates this by enabling automated, secure TLS certificate issuance for each service, regardless of its scale or complexity.
@@ -78,7 +78,7 @@ Before diving into the setup, ensure you have the following prerequisites covere
 
 ## Helm based installation
 
-Ensure you have Helm installed on your system. You can find Helm [installation instructions here](https://helm.sh/docs/intro/install/).  Check the cert-manager documentation for the minimum supported Kubernetes version, as this may change over time. The installation steps are 
+Ensure you have Helm installed on your system. You can find Helm [installation instructions here](https://helm.sh/docs/intro/install/).  Check the cert-manager documentation for the minimum supported Kubernetes version, as this may change over time. The installation steps are
 
 1. Add the Jetstack Helm Repository: Use the command `helm repo add jetstack https://charts.jetstack.io` to add the Jetstack repository, the official source for cert-manager's Helm chart.
 

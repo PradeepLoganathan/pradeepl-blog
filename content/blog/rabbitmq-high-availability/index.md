@@ -31,7 +31,6 @@ While clusters are great for achieving high availability and fault tolerance the
 
 There are some prerequisites for creating RabbitMQ clusters.
 
-
 * All nodes in the cluster must be running the same version of RabbitMQ and Erlang.
 
 * All the nodes in the cluster must have the same Erlang cookie.

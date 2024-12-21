@@ -48,7 +48,7 @@ Response.Cache.SetCacheability(HttpCacheability.NoCache);
 
 ## Caching of Sensitive Data in HTML Forms Protected by HTTPS
 
-Even forms protected by HTTPS can cache sensitive data in plain text if the `autocomplete="off"` attribute is not implemented correctly. To prevent user-entered data from being cached, the `autocomplete="off"` attribute should be used for every input control in the form. 
+Even forms protected by HTTPS can cache sensitive data in plain text if the `autocomplete="off"` attribute is not implemented correctly. To prevent user-entered data from being cached, the `autocomplete="off"` attribute should be used for every input control in the form.
 
 ```html
 <form autocomplete="off">
@@ -59,7 +59,6 @@ Even forms protected by HTTPS can cache sensitive data in plain text if the `aut
 ```
 
 Sensitive information like passwords and credit card data can be cached in plain text if not handled correctly. For instance, password reset links with tokens can be exploited by attackers using specific Google search queries. To prevent this, it's crucial to ensure that Google does not cache sensitive resources.
-
 
 ## Sensitive Data in URLs: A Risk to Consider
 

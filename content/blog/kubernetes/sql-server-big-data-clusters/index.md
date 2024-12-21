@@ -39,5 +39,3 @@ A Big data cluster is composed of four logical layers. The control plane provide
 ### Data Pool
 
 ### Storage Pool
-
-

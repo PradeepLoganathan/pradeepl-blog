@@ -35,8 +35,7 @@ A survey by [Anchore](https://anchore.com/software-supply-chain-security-report/
 
 While having multiple options to create a Kubernetes cluster is great, it results in massive operational and governance challenges. If you want to migrate your K8s cluster to a different cloud provider, you will need to rewrite your IaC code completely. If you need to change your bootstrap tool you would need to rewrite your IaC code again. Cluster creation is just one part of the problem, we need to perform cluster upgrades, deletion, scaling operations, etc. Cluster lifecycle management is challenging, especially if you are managing a fleet of clusters. Each of the above cluster creation options has strong opinions on the lifecycle management process of the cluster. All these problems become exacerbated as we create multiple clusters sometimes across cloud providers and on-premises systems. Additionally, a cluster requires other components such as load balancers, VPC/VNET and many others to provide the necessary functionality. Each of the above providers has highly opinionated and proprietary mechanisms to provision these into the cluster.
 
-As organizations scale , they often find themselves overseeing multiple Kubernetes clusters spread across multiple environments, including on-premises data centers and public clouds. This expansion brings its own set of challenges. Clusters might end up being configured differently, posing a hurdle in maintaining uniformity across the board. Regular updates and maintenance tasks for these clusters can be time-consuming. Ensuring that every cluster complies with security policies and regulatory requirements adds another layer of complexity. Additionally, optimally managing resources across these diverse clusters demands advanced and strategic planning. 
-
+As organizations scale , they often find themselves overseeing multiple Kubernetes clusters spread across multiple environments, including on-premises data centers and public clouds. This expansion brings its own set of challenges. Clusters might end up being configured differently, posing a hurdle in maintaining uniformity across the board. Regular updates and maintenance tasks for these clusters can be time-consuming. Ensuring that every cluster complies with security policies and regulatory requirements adds another layer of complexity. Additionally, optimally managing resources across these diverse clusters demands advanced and strategic planning.
 
 # Cluster SIG
 
@@ -52,7 +51,7 @@ The Cluster API enables us to
 * Upgrades of Control Plane and Workers on a rolling basis
 * Support for multiple bare metal & public and private cloud providers.
 
-The Cluster API is designed to be a consistent, declarative API. It enables broader use cases such as hybrid-cloud and multi-cloud, allowing providers to implement platform specific intrinsics in a standardized manner. Specifically designed for managing the entire lifecycle of Kubernetes clusters, including upgrades, scaling, and configuration changes, in a Kubernetes-centric way. Cluster API is designed to be Kubernetes-native, meaning it uses the Kubernetes API and its principles for managing clusters. This approach is more intuitive for teams already deeply integrated with Kubernetes, as it allows them to manage clusters as if they were standard Kubernetes resources.  Teams can use advanced processes such as [GitOps]({{< ref "/blog/gitops" >}}) to manage clusters. 
+The Cluster API is designed to be a consistent, declarative API. It enables broader use cases such as hybrid-cloud and multi-cloud, allowing providers to implement platform specific intrinsics in a standardized manner. Specifically designed for managing the entire lifecycle of Kubernetes clusters, including upgrades, scaling, and configuration changes, in a Kubernetes-centric way. Cluster API is designed to be Kubernetes-native, meaning it uses the Kubernetes API and its principles for managing clusters. This approach is more intuitive for teams already deeply integrated with Kubernetes, as it allows them to manage clusters as if they were standard Kubernetes resources.  Teams can use advanced processes such as [GitOps]({{< ref "/blog/gitops" >}}) to manage clusters.
 
 # Cluster API architecture
 
@@ -106,7 +105,7 @@ The Cluster API is implemented as several custom resource definitions (CRD) and 
 
 ## Custom Resource Definitions (CRD’s)
 
-The Cluster API uses a bunch of custom resource definitions which represent the infrastructure and the configuration needed to create and manage a kubernetes cluster. Each CRD is managed by its corresponding controller. The controller is responsible to ensure that the desired state and the real state are reconciled. The Cluster API Core manager uses these controllers to manage the lifecycle of each cluster 
+The Cluster API uses a bunch of custom resource definitions which represent the infrastructure and the configuration needed to create and manage a kubernetes cluster. Each CRD is managed by its corresponding controller. The controller is responsible to ensure that the desired state and the real state are reconciled. The Cluster API Core manager uses these controllers to manage the lifecycle of each cluster
 
 !["Cluster API - Architecture"](images/CAPI-architecture.png#center)
 

@@ -23,7 +23,6 @@ tags:
 
 RabbitMQ provides clustering and high availability out of the box. It is a highly available system that is designed to be highly scalable and fault-tolerant. We can deploy a RabbitMQ cluster on Kubernetes. There are multiple options to deploy a RabbitMQ cluster on Kubernetes. The easiest option is to use the official RabbitMQ Operator.
 
-
 ## Create the Kubernetes cluster
 
 Let us define the cluster name, location and the resource group as variables.
@@ -57,7 +56,7 @@ az aks create \
     --load-balancer-sku standard \
     --node-count 3 \
     --zones 1 2 3
-``` 
+```
 
 Once the cluster is created we can merge the cluster credentials into kubeconfig using the below command
 
@@ -121,6 +120,4 @@ Once this is done we can install the rabbitmq operator using the below command.
 kubectl rabbitmq install-cluster-operator
 ```
 
-
 ## Define the RabbitMQ Cluster
-

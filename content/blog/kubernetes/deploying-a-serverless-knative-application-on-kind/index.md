@@ -183,6 +183,7 @@ secret/webhook-certs created
 ## Setup Knative serving using Kourier
 
 ### Install Kourier
+
 We need to now setup the serving layer for Knative. I am using Kourier as it has the lowest resource requirements and connects to the Knative ingress CRD's directly.
 
 I am installing kourier from the knative repository on github. It also makes sense to wait for the necessary components to be up and running.
@@ -335,7 +336,7 @@ kubectl wait ksvc hello --all --timeout=-1s --for=condition=Ready
 service.serving.knative.dev/hello condition met
 ```
 
-We can get the URL of this service using 
+We can get the URL of this service using
 
 ```shell
 SERVICE_URL=$(kubectl get ksvc hello -o jsonpath='{.status.url}')
@@ -346,7 +347,7 @@ echo $SERVICE_URL
 http://hello.default.127.0.0.1.nip.io
 ```
 
-Let's test the service 
+Let's test the service
 
 ```shell
 curl $SERVICE_URL

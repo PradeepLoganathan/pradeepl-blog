@@ -32,5 +32,4 @@ For those new to Terraform or seeking a more foundational understanding, be sure
 
 If you're interested in seeing how the principles of Terraform align with the broader scope of GitOps, I encourage you to explore my detailed post on [GitOps]({{< ref "/blog/gitops">}}). This post delves into how GitOps methodology can streamline and enhance infrastructure management, complementing what we've covered in these Terraform sessions.
 
-
 {{< youtube id="cB4a54urkmE" autoplay="true" color="white" modestbranding="true">}}

@@ -47,10 +47,11 @@ Availability Groups offer two synchronization options to synchronize the seconda
 2. Asynchronous Commit mode : In Asynchronous commit mode, a transaction on the primary replica will only wait for the transaction to be committed on the primary. It does not wait for transactions to be hardened on the secondary replica.
 
 ## SQL Server Availability Group buildout
- 
+
 We can build a SQL Server Availability Group on a Kubernetes cluster. The overall design of the build out is below. We are deploying 3 instances of sql server with one instance as primary with read/write and two secondaries as read replicas for read scale out. One of the replicas is synchronized concurrently with the primary replica. The other replica is asynchronously synchronized with the primary replica.
 
 !["Single Cluster Availability Group"](images/Single-Availability-Group.png)
+
 ## Persistent Storage
 
 Since we are deploying a stateful workload on kubernetes we need to define the necessary storage structures. The cluster needs to provision storage, the pods need to mount the storage provisioned as volumes and a request for the storage should be defined in the manifest as a persistent volume claim. We would need to create these before we can deploy SQL Server on kubernetes.
@@ -225,7 +226,9 @@ spec:
         persistentVolumeClaim:
           claimName: mssql-primary  
 ---
- # Create the load balancing service
+
+# Create the load balancing service
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -399,6 +402,7 @@ spec:
 We have now created 3 instances of SQl Server configured with the necessary storage and security. We have also created a load balancer service to expose the necessary ports and endpoints. We are now ready to configure the deployed SQl Servers to form a read scale availability group.
 
 We can confirm the overall cluster status using the tanzu command as below
+
 ```shell
 $ tanzu cluster list
 NAME           NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  
@@ -436,6 +440,7 @@ replicaset.apps/mssqlag-secondary2-deployment-5ff7f7cfc7   1         1         1
 A graphical representation of the cluster with the persistent volumes and volume claims is shown below
 
 !["SQL Server on Kubernetes"](images/SQL_Server_On_Kubernetes.png)
+
 ## Configuring the Read Scale Availability Group
 
 ### Configuring the Primary SQL Server
@@ -581,7 +586,7 @@ This copies the certificate and the key to the secondary instances.
 
 Now that we have configured the primary replica, we need to configure the secondary replicas. We need to perform the following steps on the secondary replicas.
 
-1. Create login for AG. It should match the password from the primary script 
+1. Create login for AG. It should match the password from the primary script
 2. Create the certificate using the certificate file created in the primary node
 3. Create AG endpoint
 4. Add node to the availability group
@@ -635,6 +640,7 @@ ALTER AVAILABILITY GROUP [K8sAG] JOIN WITH (CLUSTER_TYPE = NONE)
 ALTER AVAILABILITY GROUP [K8sAG] GRANT CREATE ANY DATABASE
 GO
 ```
+
 We need to perform the same steps as above on the other secondary replica.
 
 ```sql
@@ -710,11 +716,11 @@ sqlcmd -S $ip1 -U sa -P "MySQLP@ssw0rdF0r@zure" -Q "select * from sys.dm_hadr_av
 This DMV returns a row for every availability replica of the AlwaysOn availability group. The output of this command is below
 
 {{< highlight shell >}}
-group_name                     replica_server_name            node_name                     
+group_name                     replica_server_name            node_name
 ------------------------------ ------------------------------ ------------------------------
-K8sAG                          mssql-primary                  mssql-primary                 
-K8sAG                          mssql-secondary1               mssql-secondary1              
-K8sAG                          mssql-secondary2               mssql-secondary2    
+K8sAG                          mssql-primary                  mssql-primary
+K8sAG                          mssql-secondary1               mssql-secondary1
+K8sAG                          mssql-secondary2               mssql-secondary2
 {{< /highlight >}}
 
 This confirms that we have crated an availability group named K8sAG which has 3 replicas mssql-primary, mssql-secondary1 and mssql-secondary2. Any data inserted into the primary replica will be replicated to the other two replicas. We can confirm that the replica state of the database on primary by querying the ```sys.dm_hadr_database_replica_states``` DMV.
@@ -731,8 +737,8 @@ This query confirms the synchronization health of a database on the primary acro
 
 ```sql
 ----------------------------------------------------------------------------------------------------------------------
-database_name	(No column name)	synchronization_health
-SQLTestAG	    database_replica	2
+database_name (No column name) synchronization_health
+SQLTestAG     database_replica 2
 ```
 
 We can also query the overall synchronization health of the availability group K8sAG by querying the ```sys.dm_hadr_availability_group_states``` DMV.
@@ -748,20 +754,21 @@ This query produces the below output indicating that the AG named K8sAG is repli
 
 ```sql
 ----------------------------------------------------------------------------------------------------------------------
-name	  (No column name)	  synchronization_health
-K8sAG    availability_group	   2
+name   (No column name)   synchronization_health
+K8sAG    availability_group    2
 ```
 
 We can also query the ```sys.availability_replicas``` table for information about the replicas configured
 
 ```sql
 Select replica_server_name, endpoint_url, availability_mode_desc from sys.availability_replicas
-replica_server_name	  endpoint_url	              availability_mode_desc
+replica_server_name   endpoint_url               availability_mode_desc
 ----------------------------------------------------------------------------------------------------------------------
-mssql-primary	        tcp://mssql-primary:5022	  SYNCHRONOUS_COMMIT
-mssql-secondary1	    tcp://mssql-secondary1:5022	SYNCHRONOUS_COMMIT
-mssql-secondary2	    tcp://mssql-secondary2:5022	ASYNCHRONOUS_COMMIT
+mssql-primary         tcp://mssql-primary:5022   SYNCHRONOUS_COMMIT
+mssql-secondary1     tcp://mssql-secondary1:5022 SYNCHRONOUS_COMMIT
+mssql-secondary2     tcp://mssql-secondary2:5022 ASYNCHRONOUS_COMMIT
 ```
+
 ## Data Synchronization
 
 We now have a fully configured read scale availability group setup on a Kubernetes cluster. We can now insert data into the primary replica and verify that it is replicated to the secondaries. Let us create a table on the primary replica and insert some data.
@@ -898,9 +905,8 @@ VALUES
 Total execution time: 00:00:00.190
 ```
 
-
 ## Conclusion
 
  ![finally](images/finally.gif)
 
- In this post we have run through the steps required to setup a read scale an availability group on a Kubernetes cluster. We have ensured that the availability group synchronizes data and the secondary replicas can be used to scale reads. This enables the primary to perform better since the read load is distributed across the secondaries. A lot of workloads perform multiple reads and few writes and this is a huge performance boost for any workload. We have also completed a failover to a secondary and ensured that the data integrity is maintained. 
+ In this post we have run through the steps required to setup a read scale an availability group on a Kubernetes cluster. We have ensured that the availability group synchronizes data and the secondary replicas can be used to scale reads. This enables the primary to perform better since the read load is distributed across the secondaries. A lot of workloads perform multiple reads and few writes and this is a huge performance boost for any workload. We have also completed a failover to a secondary and ensured that the data integrity is maintained.

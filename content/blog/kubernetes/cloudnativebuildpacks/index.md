@@ -52,8 +52,7 @@ ENTRYPOINT ["dotnet", "YourApp.dll"]
 
 ```
 
-
-This is a very simple dockerfile. It works fine and looks innocuous but has issues that can turn into larger problems at a later point in time. Some of these issues are 
+This is a very simple dockerfile. It works fine and looks innocuous but has issues that can turn into larger problems at a later point in time. Some of these issues are
 
 - Manual Dependency Management: The Dockerfile explicitly defines base images and requires manual updates. Explicitly defined base images require you to constantly monitor and update them to patch any security issues, which might not be feasible in a fast-paced development environment. Human errors from manually creating Docker files can further make it hard.
 
@@ -67,7 +66,7 @@ This is a very simple dockerfile. It works fine and looks innocuous but has issu
 
 - Standardization: Different teams may use different patterns for Dockerfiles, leading to a lack of standardization. Each development team creates a Dockerfile for each deployable unit. The base images and included frameworks are different for each image. This makes it difficult to manage and maintain.
 
-This problem get further excacerbated as teams across the organization create container images using docker files similar to above. 
+This problem get further excacerbated as teams across the organization create container images using docker files similar to above.
 
 ![Individual Docker files](images/Independent-docker-files.png)
 
@@ -89,8 +88,6 @@ Buildpacks provide a higher level of abstraction compared to Dockerfiles. It rem
 6. Improve security best practices at scale.
 7. Fast base image upgrades by rebasing. This enables container base image upgrades without the need to rebuild the application.
 8. Produces a Software Bill of Materials (SBOM) that can be used to track the software dependencies and versioning.
-
-
 
 ![Buildpack benefits](images/Buildpack-Benefits.png)
 
@@ -153,7 +150,7 @@ The platform coordinates the creation of the container image. It executes the li
 
 Pack is a command-line tool provided by the Cloud Native Buildpacks (CNB) project. It is designed to simplify the process of using buildpacks for building container images from source code. Developers can use pack to build container images locally on their machine. Pack makes it easier for developers to use buildpacks without needing deep knowledge of the underlying processes. It also allows developers to create custom builders, add buildpacks, and configure the build process if necessary.
 
-Pack can be installed by following the instructions [here](https://buildpacks.io/docs/tools/pack/). Once pack has been installed we can use it to build and package applications into container images. Let us create a simple .Net core application and package it into a container image using pack. I will create a sample web api project as below. 
+Pack can be installed by following the instructions [here](https://buildpacks.io/docs/tools/pack/). Once pack has been installed we can use it to build and package applications into container images. Let us create a simple .Net core application and package it into a container image using pack. I will create a sample web api project as below.
 
 ```bash
 # Create a folder for project
@@ -171,7 +168,7 @@ Let us now use pack to create a container image.
 ```bash
 # Package the application into a container image
 pack build weatherapi:0.1 --builder paketobuildpacks/builder:base
-``` 
+```
 
 This command creates the application image using the paketobuildpacks/builder:base builder. A builder is an image that contains all the components necessary to execute a build. There are different builders from Paketo, Heroku, Google and others. This produces the below output. I have redacted the output to only include the needed information.  
 

@@ -30,7 +30,6 @@ Event driven architecture (EDA) is an architectural style where behavior is comp
 
 An event bus serves as the event delivery mechanism. Services listen on topics in the event bus, consume new events, and then react to them. The main advantage of this design is that functional domains are loosely coupled. They do not explicitly refer to each other. The producer of an event does not have any knowledge regarding the event subscribers or what actions may take place as a result of the event. This allows different groups of services to be developed in their own cadence. Furthermore, it minimizes the need for highly coordinated and risky big-bang releases. If behavior needs to be extended so that new systems can react to events, the original plumbing and existing consuming components remain unaffected.
 
-
 ## Characteristics of EDA
 
 The main characteristics of an Event-Driven architecture are
@@ -161,7 +160,7 @@ The Event Notification pattern is crucial for creating a dynamic, responsive, an
 
 The benefits of using event-notification are
 
-- Decoupling : The publisher and subscribers are loosely coupled. The publisher does not need to know who the subscribers are or how they handle the event. This loose coupling allows allows components to evolve independently. 
+- Decoupling : The publisher and subscribers are loosely coupled. The publisher does not need to know who the subscribers are or how they handle the event. This loose coupling allows allows components to evolve independently.
 - Scalability: New subscribers can be added without affecting the publisher, enhancing the system's scalability.
 - Flexibility: Subscribers can choose which events to listen to, allowing for flexible system behavior.
 
@@ -173,15 +172,13 @@ In Event-Carried State Transfer, events carry not just notifications about occur
 
 Implementing this pattern requires careful design of the data payload. Managing the data to be included in events can add complexity, particularly in determining what data is necessary and relevant. This requires careful consideration to balance between providing enough data and avoiding overly large event sizes.Larger event sizes might impact network performance and processing speed, so the size must be managed carefully. Event consumers should handle events idempotently, especially in scenarios where the same event might be received multiple times. Ideally, event consumers should implement the [idempotent consumer pattern]({{< ref "/blog/patterns/idempotent-consumer-pattern">}}) to handle events idempotently. The design should also incorporate data protection to protect sensitive data within events. This is critical to ensure adherence to security and privacy standards.
 
-
 ## Event Sourcing
 
 Event Sourcing is a powerful EDA pattern that provides a robust way of managing system states through an immutable log of events. This pattern provides a comprehensive and auditable history of all changes over time and enables more complex state management and recovery capabilities. In this pattern, instead of storing just the current state of data in a database, every change (event) that affects the state is recorded in an immutable log. The current state can be reconstructed by replaying these events.
 
 In this pattern, the event store acts as the system's source of truth. It is the central component where events are persistently stored. The event store is immutable and contains events that represent state changes. This pattern also provides the concept of projections which are read models created from events, used for querying and displaying data. Periodic snapshots of state can be taken to optimize performance, reducing the need to replay a long series of events.
 
-Implementing this pattern requires careful consideration of data volumes. The volume of events can grow rapidly, requiring efficient storage and management strategies. The implementation should also cater to event schema evolution. Managing changes to the event structure over time while maintaining system integrity can be complex. It is ideal to implement event versioning to handle changes in the structure of events. 
-
+Implementing this pattern requires careful consideration of data volumes. The volume of events can grow rapidly, requiring efficient storage and management strategies. The implementation should also cater to event schema evolution. Managing changes to the event structure over time while maintaining system integrity can be complex. It is ideal to implement event versioning to handle changes in the structure of events.
 
 # Conclusion
 
@@ -191,4 +188,4 @@ We delved into the core concepts of EDA, such as the critical role of well-desig
 
 As we've seen, adopting EDA can lead to systems that are more agile, resilient, and capable of handling complex workflows. It offers a way to decouple system components, leading to easier scalability and maintenance. However, it's also evident that navigating the EDA landscape requires a keen understanding of its principles and the ability to adapt these to your specific context.
 
-The future of software development and system design is increasingly event-driven, especially in an era dominated by real-time data and distributed systems. As technologies continue to evolve, the principles of EDA will become even more relevant. For developers and architects alike, mastering EDA is not just about keeping pace with current trends; it's about being equipped for the future of technology. As you embark on or continue this journey, remember that the key to success lies in understanding the nuances of event interactions and embracing the adaptability that EDA offers. 
+The future of software development and system design is increasingly event-driven, especially in an era dominated by real-time data and distributed systems. As technologies continue to evolve, the principles of EDA will become even more relevant. For developers and architects alike, mastering EDA is not just about keeping pace with current trends; it's about being equipped for the future of technology. As you embark on or continue this journey, remember that the key to success lies in understanding the nuances of event interactions and embracing the adaptability that EDA offers.

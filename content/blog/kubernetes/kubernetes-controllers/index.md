@@ -9,7 +9,6 @@ categories:
 
 Controllers create and manage pods. Controllers respond to pod state and health. Kubernetes lets you assert that resources such as pods are in a certain desired state, with specific versions. Controllers track those resources and attempt to run your software as described. There are a variety of controllers in Kubernetes, primarily ReplicaSets and Deployments.
 
-  
 **_ReplicaSet -_** A ReplicaSet is responsible for reconciling the desired state at all times. The ReplicaSet is used to define and manage a collection of identical pods that are running on different cluster nodes. A ReplicaSet defines the image are used by the containers in the pod and the number of instances of the pod that will run in the cluster. These properties and the many others are called the desired state. If some Pods in the ReplicaSet crash and terminate, the system will recreate Pods with the original configurations on healthy nodes automatically and keep a certain number of processes continuously running. For e.g if you specified three Pods in a ReplicaSet and one fails, Kubernetes will automatically schedule and run another Pod for you. If elementary conditions are met (for example, enough memory and CPU), Pods associated with a ReplicaSet are guaranteed to run. They provide fault-tolerance, high availability, and self-healing capabilities.
 
 ![](images/Replicaset.jpg)

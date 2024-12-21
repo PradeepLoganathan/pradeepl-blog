@@ -28,7 +28,7 @@ Now Docker build has built an image based on instructions from the dockerfile. T
 
 ![](images/docker-image-list.jpg)
 
-In the above screen shot we can see a listing of all images on my system and right at the top is the image we built tagged as thetimeimg based on our -t parameter to the docker build command. Now that we have an image, we can use this image to start a container which will also execute the dotnet console application within the container. We can do so by using the docker run command. 
+In the above screen shot we can see a listing of all images on my system and right at the top is the image we built tagged as thetimeimg based on our -t parameter to the docker build command. Now that we have an image, we can use this image to start a container which will also execute the dotnet console application within the container. We can do so by using the docker run command.
 
 ![](images/docker-run.jpg)
 

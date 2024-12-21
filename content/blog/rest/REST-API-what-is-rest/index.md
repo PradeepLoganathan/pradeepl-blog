@@ -34,11 +34,11 @@ series: ["REST"]
 
 The Web has radically transformed the way we produce and share information. It has democratized information sharing and has revolutionized how information is created and shared. It has also been through major inflection points named only as software engineers would.
 
- - Web 1.0 – Was about static pages.
+- Web 1.0 – Was about static pages.
 
- - Web 2.0 – Is/was about responsive, dynamic content targeted for various form factors such as mobile and tablets. It has evolved primarily into a “Mobile First” movement. Web 2.0 is also largely about User generated content and Social Media
+- Web 2.0 – Is/was about responsive, dynamic content targeted for various form factors such as mobile and tablets. It has evolved primarily into a “Mobile First” movement. Web 2.0 is also largely about User generated content and Social Media
 
- - Web 3.0 – is about being API First. It is about IOT devices, wearable's, smart watches, Smart devices. Building applications to cater to humans and apps alike. It is about connective intelligence, connecting data, concepts, applications, and people.
+- Web 3.0 – is about being API First. It is about IOT devices, wearable's, smart watches, Smart devices. Building applications to cater to humans and apps alike. It is about connective intelligence, connecting data, concepts, applications, and people.
 
 With this focus on “API first”, as developers we need to worry about “How consumable is the API? Does it follow standards? is it secure? How do you handle versioning?”
 
@@ -64,7 +64,7 @@ Access to a resource is always mediated by way of its representations. This sepa
 
 Since a resource can have multiple representations, the client needs to negotiate and indicate the representation needed by the it. There are two ways of doing this. The first is content negotiation, in which the client distinguishes between representations based on the value of an HTTP header. Using content negotiation, consumers can negotiate for specific representation formats from a service. They do so by populating the HTTP Accept request header with a list of media types they’re prepared to process. It is ultimately up to the owner of a resource to decide what constitutes a good representation of that resource in the context of the current interaction, and hence which format should be returned. The resource type returned is also always specified in an HTTP response as one of the HTTP headers (Content-Type). The second is to give the resource multiple URLs—one URL for every representation. When this happens, the server that publishes the resource should designate one of those URLs the official or “canonical” URL.
 
-# Putting it together- How resources, identifiers, and representations drive interactions.
+# Putting it together- How resources, identifiers, and representations drive interactions
 
 On the web we need to act on objects and subjects represented by resources. These resources are acted upon through verbs provided by HTTP methods. The four main verbs of the uniform interface are GET, POST, PUT, and DELETE. These verbs are used to communicate between systems. HTTP also defines a set of response codes to respond back to verbs such as 200 OK, 201 Created, 301 Moved Permanently, 303 See Other, 404 Not Found etc. Together verbs and status codes provide a general framework for operating on resources over the network. You can call GET on a service or resource as many times as you want with no side effects
 

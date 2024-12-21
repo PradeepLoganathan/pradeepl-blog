@@ -100,15 +100,15 @@ public CosmosDriver()
 
 public async Task CreateDatabaseAsync()
 {
-	  try
-	  {
-		this._database = await this._cosmosClient.CreateDatabaseIfNotExistsAsync(_databaseId);
-	  }
-	  catch (Exception e)
-	  {
-		Console.WriteLine(e);
-		throw;
-	  }
+   try
+   {
+  this._database = await this._cosmosClient.CreateDatabaseIfNotExistsAsync(_databaseId);
+   }
+   catch (Exception e)
+   {
+  Console.WriteLine(e);
+  throw;
+   }
 }
 ```
 

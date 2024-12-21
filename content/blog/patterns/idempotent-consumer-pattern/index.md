@@ -62,7 +62,7 @@ The Idempotent Consumer pattern provides the necessary safeguards to allows log
 - A unique identifier for each message. This can be a single identifier or a combination of multiple identifiers e.g. Message Id & Timestamp.
 - An idempotent repository. Idempotent repositories store message identifiers durably across restarts. They can be implemented in database tables, files etc.
 
-When an event arrives, the consumer needs to uniquely identify it using an event key assigned to the event. The idempotent repository is checked to see whether it contains the key, and if it does not, the logic wrapped by it is executed, otherwise it is skipped. 
+When an event arrives, the consumer needs to uniquely identify it using an event key assigned to the event. The idempotent repository is checked to see whether it contains the key, and if it does not, the logic wrapped by it is executed, otherwise it is skipped.
 
 {{< mermaid >}}
 sequenceDiagram
@@ -87,7 +87,6 @@ sequenceDiagram
     end
 
 {{< /mermaid >}}
-
 
 ## Implementation Considerations
 

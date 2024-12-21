@@ -84,7 +84,7 @@ systemd provides key features such as:
 * Socket-based Activation: Services are started on-demand using sockets.
 * Logging: Integrates with journalctl for system and service logging
 
-Windows Subsystem for Linux (WSL) provides a compatibility layer for running Linux binaries natively on Windows. By default, WSL uses a simplified init system to manage the Linux environment, which does not include systemd. This is because WSL aims to be lightweight and systemd introduces additional complexity and resource usage. However, with the introduction of WSL2, which uses a full Linux kernel, it's now possible to enable systemd and take advantage of its features. 
+Windows Subsystem for Linux (WSL) provides a compatibility layer for running Linux binaries natively on Windows. By default, WSL uses a simplified init system to manage the Linux environment, which does not include systemd. This is because WSL aims to be lightweight and systemd introduces additional complexity and resource usage. However, with the introduction of WSL2, which uses a full Linux kernel, it's now possible to enable systemd and take advantage of its features.
 
 Here’s how you can enable systemd in WSL2..
 
@@ -231,7 +231,7 @@ You should see the usual ping output, indicating that the command is functioning
 
 ### Step 7: Install Greenplum Software
 
-Now we are ready to begin the process of downloading the RPM package and installing it in your Rocky Linux environment. First, you need to download the Greenplum RPM package. You can find the latest version of the Greenplum Database RPM on the official Greenplum website or on the Pivotal/Tanzu network. 
+Now we are ready to begin the process of downloading the RPM package and installing it in your Rocky Linux environment. First, you need to download the Greenplum RPM package. You can find the latest version of the Greenplum Database RPM on the official Greenplum website or on the Pivotal/Tanzu network.
 
 1. Download the .rpm file to your local machine. Save it in a directory that you can easily access from your WSL2 environment.
 2. Use the dnf package manager to install the Greenplum RPM package. This command installs the Greenplum software and its dependencies.
@@ -248,6 +248,7 @@ sudo chown -R gpadmin:gpadmin /usr/local/greenplum-db/
 ```bash
 gpstate --version
 ```
+
 This is my output.
 
 ![alt text](images/gp-version.png)
@@ -325,7 +326,7 @@ Initializing the Greenplum database involves creating the necessary directories,
 The final step in setting up your Greenplum database is to validate that the system can be started and stopped correctly. This ensures that all configurations are correct and that Greenplum is functioning as expected.
 
 Validate that you can restart Greenplum. This command starts the Greenplum database cluster, initializing all processes and ensuring that the database is ready for use. Validating the start and stop functionality of Greenplum ensures that your setup is complete and that the database is functioning correctly. This step confirms that all configurations are correct and that Greenplum can be managed effectively.
- 
+
 ```bash
 gpstop
 gpstart
@@ -365,7 +366,6 @@ SELECT * FROM sample_table;
 I get the below output on running the select
 
 ![alt text](images/select-output.png)
-
 
 ## Conclusion
 

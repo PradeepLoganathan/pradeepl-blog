@@ -41,7 +41,6 @@ Reactive systems are distributed systems that are responsive, resilient, elastic
 
 The Reactive Manifesto describes the key tenets of Reactive systems. This manifesto distils the knowledge built across various organizations in building highly reliable and scalable applications. The Reactive Manifesto is currently at v.2.0, which was initially published on September 16, 2014. The manifesto is published at GitHub [here](https://github.com/reactivemanifesto/reactivemanifesto).  
 
-
 ## Tenets of Reactive Manifesto
 
 The Reactive Manifesto identifies four key design characteristics of a reactive system. The key tenets of a reactive system are

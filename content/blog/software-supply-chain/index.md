@@ -28,7 +28,7 @@ At its core, the software supply chain is an intricate network of processes, peo
 
 # What is a Software Supply Chain
 
-A supply chain is not just a process but an ecosystem. It encompasses all the elements and activities involved in creating, maintaining, and delivering software products. 
+A supply chain is not just a process but an ecosystem. It encompasses all the elements and activities involved in creating, maintaining, and delivering software products.
 
 {{< mermaid >}}
 
@@ -51,21 +51,20 @@ graph LR
 
 {{< /mermaid >}}
 
- - Source Code Creation and Management : The genesis of a software supply chain lies in Source Code Creation and Management. This phase involves setting up a solid foundation with clean and efficient coding practices, underpinned by robust version control systems like Git. Developers lay the foundation of the software, adhering to coding standards and using version control systems like Git to manage changes and collaborate efficiently. This stage is critical in establishing the quality and maintainability of the software.
+- Source Code Creation and Management : The genesis of a software supply chain lies in Source Code Creation and Management. This phase involves setting up a solid foundation with clean and efficient coding practices, underpinned by robust version control systems like Git. Developers lay the foundation of the software, adhering to coding standards and using version control systems like Git to manage changes and collaborate efficiently. This stage is critical in establishing the quality and maintainability of the software.
 
- - Dependency Management : A pivotal aspect of modern software development is Dependency Management. It involves the careful selection and management of third-party libraries and frameworks that complement and enhance the functionality of the software. Managing these dependencies involves ensuring compatibility, maintaining up-to-date versions, and securing the supply chain against vulnerabilities introduced through these external sources.
+- Dependency Management : A pivotal aspect of modern software development is Dependency Management. It involves the careful selection and management of third-party libraries and frameworks that complement and enhance the functionality of the software. Managing these dependencies involves ensuring compatibility, maintaining up-to-date versions, and securing the supply chain against vulnerabilities introduced through these external sources.
 
- - Build Process : The Build Process is the heart of the software supply chain.Transitioning from code to a deployable software product is the role of the Build Process It involves compiling source code, packaging it, and creating deployable artifacts. This stage is heavily automated in most modern workflows, employing Continuous Integration (CI) tools to streamline and expedite the process.
+- Build Process : The Build Process is the heart of the software supply chain.Transitioning from code to a deployable software product is the role of the Build Process It involves compiling source code, packaging it, and creating deployable artifacts. This stage is heavily automated in most modern workflows, employing Continuous Integration (CI) tools to streamline and expedite the process.
 
- - Testing and Quality Assurance : Testing and Quality Assurance are the safeguards implemented in a software supply chain. It is integral to maintaining the integrity of the software supply chain. Automated testing frameworks, code quality checks, and security scanning are employed to ensure that the software is reliable, performant, and secure.
+- Testing and Quality Assurance : Testing and Quality Assurance are the safeguards implemented in a software supply chain. It is integral to maintaining the integrity of the software supply chain. Automated testing frameworks, code quality checks, and security scanning are employed to ensure that the software is reliable, performant, and secure.
 
- - Release Management : Release Management is about getting the software out to the users. It involves strategies for versioning, managing different release branches, and ensuring that new features can be released and rolled back safely.
+- Release Management : Release Management is about getting the software out to the users. It involves strategies for versioning, managing different release branches, and ensuring that new features can be released and rolled back safely.
 
- - Deployment Mechanisms : Deployment Mechanisms have evolved significantly. From traditional release cycles to continuous deployment, each method offers different benefits and challenges, particularly in terms of speed, reliability, and user impact.
+- Deployment Mechanisms : Deployment Mechanisms have evolved significantly. From traditional release cycles to continuous deployment, each method offers different benefits and challenges, particularly in terms of speed, reliability, and user impact.
 
- - Software Updates and Patch Management : Regular updates are essential for addressing issues, improving functionality, and patching vulnerabilities. This includes regular updates, patches, performance monitoring, and responding to user feedback. The goal is to ensure the software remains functional, efficient, and secure throughout its lifecycle.
+- Software Updates and Patch Management : Regular updates are essential for addressing issues, improving functionality, and patching vulnerabilities. This includes regular updates, patches, performance monitoring, and responding to user feedback. The goal is to ensure the software remains functional, efficient, and secure throughout its lifecycle.
 
- - Maintenence and Monitoring :  Monitoring and Feedback loops are crucial for the ongoing health of the software. Real-time monitoring tools provide valuable insights into the performance and usage of the software, forming the basis for data-driven decisions and continuous improvements.
+- Maintenence and Monitoring :  Monitoring and Feedback loops are crucial for the ongoing health of the software. Real-time monitoring tools provide valuable insights into the performance and usage of the software, forming the basis for data-driven decisions and continuous improvements.
 
- 
 # Why Software Supply Chains matter

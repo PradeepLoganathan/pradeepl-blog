@@ -64,5 +64,5 @@ These orchestration tools enable us to connect multiple containers together. Thi
 
 The cattle versus pet analogy is generally attributed to [Jeffrey Snover](https://en.wikipedia.org/wiki/Jeffrey_Snover), ( Microsoft technical fellow). It generally implies that the Devops mindset should be focussed towards managing infrastructure as replaceable cattle rather than pets. Earlier, when systems were small, each server had a name. Developers and users knew exactly what software was running on each machine. Servers were treated like beloved pets. The servers had to be taken care of lovingly and diligently. If a server crashed or went down all hell broke loose. This does not scale well. In the Devops world, where you have a tens or hundreds of servers, you must start treating them like cattle. Container Orchestrators take the cattle approach to the extreme and deploy highly disposable containers across hundreds of nodes. This encourages you to think of infrastructure in the collective and not individually.
 
->   
+> 
 > Photo by [Manuel Nägeli](https://unsplash.com/photos/7CcPLtywRso?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/orchestra?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)

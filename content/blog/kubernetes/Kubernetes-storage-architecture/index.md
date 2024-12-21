@@ -30,7 +30,7 @@ images:
 
 # Kubernetes Storage concepts
 
-Applications that run on Kubernetes can be stateless or stateful. Kubernetes abstracts away persistent storage from ephemeral pods and containers. Kubernetes provides the ability to dynamically create storage resources. The Kubernetes storage architecture is based on volumes as the primary abstraction. Volumes are created and managed by Kubernetes. It is bound to pods and containers. Volumes are attached to the nodes where the pods and containers are running. Volumes are mounted to the containers and are bound to persistent storage. 
+Applications that run on Kubernetes can be stateless or stateful. Kubernetes abstracts away persistent storage from ephemeral pods and containers. Kubernetes provides the ability to dynamically create storage resources. The Kubernetes storage architecture is based on volumes as the primary abstraction. Volumes are created and managed by Kubernetes. It is bound to pods and containers. Volumes are attached to the nodes where the pods and containers are running. Volumes are mounted to the containers and are bound to persistent storage.
 
 Kubernetes provides a structured way to manage persistent storage. It provides API's to manage persistent storage. It provides the following storage API objects
 
@@ -91,7 +91,7 @@ spec:
 
 ## Storage Class
 
-Applications workloads have varying storage needs. Some workloads require fast access to storage and some others may need to retain and backup data. A storage class is a Kubernetes object that provides the ability to define different types or class of storage. The type of the storage can be based on storage attributes such as storage speed, backup/retention policy, quality of service levels( premium vs standard disk) etc.A persistent volume can select the storage class when it is created. The storage class is defined in the storage class section of the persistent volume. 
+Applications workloads have varying storage needs. Some workloads require fast access to storage and some others may need to retain and backup data. A storage class is a Kubernetes object that provides the ability to define different types or class of storage. The type of the storage can be based on storage attributes such as storage speed, backup/retention policy, quality of service levels( premium vs standard disk) etc.A persistent volume can select the storage class when it is created. The storage class is defined in the storage class section of the persistent volume.
 
 We can use the below yaml to define a storage class in aws. This storage class uses the AWS EBS gp2 storage.
 
@@ -123,7 +123,7 @@ volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 ```
 
-The ```provisioner``` assigned to the storage class takes care of provisioning the storage. The provisioner is responsible for creating the storage and assigning the PersistentVolume to the claim. Most Kubernetes providers come with a list of existing provisioners. The parameters defined in the StorageClass definition are passed to the provisioner and are specific to each provisioner plugin. The ```volumeBindingMode``` field specifies how the volume is bound to the pod. The default value is ```Immediate```. The ```WaitForFirstConsumer``` value indicates that the volume is bound to the pod when the first pod consumes the volume. The ```Immediate``` value indicates that the volume is bound to the pod when the pod is created. The ```reclaimPolicy``` indicates whether the persistent volume should be deleted or retained when the pod is deleted. The default value is ```Delete```. The ```Retain``` value indicates that the persistent volume should be retained when the pod is deleted. The ```allowVolumeExpansion``` field indicates whether the persistent volume can be expanded. 
+The ```provisioner``` assigned to the storage class takes care of provisioning the storage. The provisioner is responsible for creating the storage and assigning the PersistentVolume to the claim. Most Kubernetes providers come with a list of existing provisioners. The parameters defined in the StorageClass definition are passed to the provisioner and are specific to each provisioner plugin. The ```volumeBindingMode``` field specifies how the volume is bound to the pod. The default value is ```Immediate```. The ```WaitForFirstConsumer``` value indicates that the volume is bound to the pod when the first pod consumes the volume. The ```Immediate``` value indicates that the volume is bound to the pod when the pod is created. The ```reclaimPolicy``` indicates whether the persistent volume should be deleted or retained when the pod is deleted. The default value is ```Delete```. The ```Retain``` value indicates that the persistent volume should be retained when the pod is deleted. The ```allowVolumeExpansion``` field indicates whether the persistent volume can be expanded.
 
 ## Persistent Volumes
 
@@ -157,7 +157,7 @@ Capacity is the size of this PersistentVolume. The persistentVolumeReclaimPolicy
 
 ## Persistent Volume Claims
 
-A persistent volume claim is created by a developer and defines the storage needs of an application workload. The persistent volume claim is bound to a persistent volume by the Kubernetes control plane. The persistent volume claim is created in the namespace of the pod that is using the persistent volume. 
+A persistent volume claim is created by a developer and defines the storage needs of an application workload. The persistent volume claim is bound to a persistent volume by the Kubernetes control plane. The persistent volume claim is created in the namespace of the pod that is using the persistent volume.
 A PVC is both a request for storage and an identifier that establishes a claim on the storage once it’s granted. . A PVC requests access to a PV using one of the following access modes:
 
 * ReadWriteOnce (RWO) - Read-write access by all pods on a single node
@@ -166,7 +166,6 @@ A PVC is both a request for storage and an identifier that establishes a claim o
 * ReadWriteOncePod (RWOP) - Read-write access by a single pod only
 
 This is an example of creating a persistent volume claim.
-
 
 ```yaml
 apiVersion: v1
@@ -194,4 +193,4 @@ PVs and PVCs work together as follows:
 
 ![Kubernetes storage architecture - Whiteboard](images/Kubernetes-Storage-Architecture-whiteboard.png)
 
-When a workload in pod1 requests storage, the associated persistent volume claim created by the developer is used to bind to a Persistent Volume. The Persistent Volume is now avaialbale to the workload running in that pod. 
+When a workload in pod1 requests storage, the associated persistent volume claim created by the developer is used to bind to a Persistent Volume. The Persistent Volume is now avaialbale to the workload running in that pod.

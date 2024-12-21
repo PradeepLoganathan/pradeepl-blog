@@ -29,7 +29,6 @@ This post is part of a three post series on Azure Event Grid
 
 [Part 3 - Azure Event Grid - Creating Custom events]({{< ref "/blog/azure/azureeventgrid-createcustomevents" >}}))
 
-
 An azure eventgrid event object has the below schema. Azure also gives you an option to select an alternate schema called Cloud Schema. For now let's look at the event grid schema.
 
 ## Event Schema
@@ -140,7 +139,6 @@ public class CandidateEvents : ICandidateEvents
     }
 }
 ```
-
 
 As shown in the previous post , I have created a subscription for this topic and have used a web hook as the handler for the subscription. The web hook points to an API. Azure Event grid now will post the event to the handler. It will retry the post until it receives a 200 or a 202 response. Event Grid uses a exponential backoff retry policy i.e. it will increase the time between retries for every failed retry. We can also specify a retry policy if necessary.
 

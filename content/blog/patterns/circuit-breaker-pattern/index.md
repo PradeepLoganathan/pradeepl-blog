@@ -47,7 +47,6 @@ Circuit Breaker
 
 ![](images/circuit-breaker-diagram.png)
 
-
 * _Closed_ -  In the closed state operations that involve the dependency can happen normally. At this time, all the calls are being made successfully to the service, and we are getting proper responses. We can add a threshold number for errors before the circuit breaker gets into the open state. When requests start to fail for a dependent service within a time window, the failure count is incremented to keep count of the number of failures. If the failures are greater than the threshold, the circuit for that dependency is moved to the Open state.
 
 * _Open_ - As the name suggests, the circuit is open or we are in an error state, so none of the calls will be made to the service being called. Whenever a failure has been detected, the circuit opens, making sure that the service short-circuits requests involving the dependency and responds immediately. Periodically, after some configured amount of time, a single request is let through and the circuit moves to the Half-Open state.

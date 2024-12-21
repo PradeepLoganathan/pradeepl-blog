@@ -40,7 +40,7 @@ The subsequent evolution of ZTA has been driven by a confluence of factors. Clou
 
 # Principles of Zero Trust Architecture
 
-The core principles of Zero Trust architecture are: 
+The core principles of Zero Trust architecture are:
 
 - **Never Trust, Always Verify**: This is the bedrock of ZTA. All network traffic, users, and devices are treated with skepticism. Access is never assumed based on location; it's always earned through authentication and authorization.
 
@@ -99,7 +99,6 @@ Implementing Zero Trust Architecture requires a methodical approach, often encap
 5. **Monitor and Maintain**: Continuous monitoring and maintenance are pivotal. The zero trust architecture is not static; it evolves with the changing threat landscape and organizational needs.
 
 These principles guide the implementation of a Zero Trust strategy within organizations aiming to secure their digital environments against increasingly sophisticated cyber threats. Zero Trust is a shift from traditional security models that assumed everything inside an organization's network could be trusted. Instead, Zero Trust operates on the assumption that trust is never assumed and must always be verified, regardless of the network location of the user or device.
-
 
 # Steps to Implementing Zero Trust
 

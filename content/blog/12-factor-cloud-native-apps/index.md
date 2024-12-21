@@ -32,13 +32,12 @@ Organizations, the world over are working through application modernization prog
 
 Traditional architectures optimized for fixed, high-cost infrastructure with lower number of components. Monolithic architectures were popular, often due to the cost of physical resources and the slow velocity in which applications were developed and deployed. Cloud-native architectures take advantage of the distributed, scalable and loosely coupled nature of public, private and hybrid cloud environments. Cloud-native architecture focuses on achieving resilience and throughput through horizontal scaling, distributed processing, and automating the replacement of failed components. This architecture treats the underlying infrastructure as disposable. The infrastructure can be provisioned in minutes and resized, scaled, or destroyed on demand – via automation. The architecture favors the development of small, independent, loosely coupled services which can be delivered quickly. A loosely coupled architecture is an application design strategy in which the various parts of an application are developed, deployed and operated independently of each other.
 
-The [Cloud Native Computing Foundation - CNCF](https://www.cncf.io/) provides an [official definition](https://github.com/cncf/foundation/blob/master/charter.md) of Cloud Native - 
+The [Cloud Native Computing Foundation - CNCF](https://www.cncf.io/) provides an [official definition](https://github.com/cncf/foundation/blob/master/charter.md) of Cloud Native -
 
 > "_Cloud native technologies empower organizations to build and run scalable applications in modern, dynamic environments such as public, private, and hybrid clouds. Containers, service meshes, microservices, immutable infrastructure, and declarative APIs exemplify this approach._"
-
 > "_These techniques enable loosely coupled systems that are resilient, manageable, and observable. Combined with robust automation, they allow engineers to make high-impact changes frequently and predictably with minimal toil._"
 
-A widely accepted methodology to build cloud native applications is the 12 factor application. 
+A widely accepted methodology to build cloud native applications is the 12 factor application.
 
 ## The Twelve Factors
 
@@ -157,7 +156,7 @@ All processes and components of the application must be stateless and share-noth
 
 ![Port Binding](images/Port%20Binding.png)
 
-A twelve-factor app is fully self-contained and does not depend on any runtime such as application servers, web servers etc to be available as a service. It is self-contained and exposes its functionality via a protocol that best fits it such as HTTP, MQTT, AMQP etc. A twelve-factor app must export the service by port-binding, meaning that the application also interfaces with the world via an endpoint.The port binding can be exported and configurable using the configuration principle above. An application using HTTP as the protocol might run as http://localhost:5001 on a developer’s workstation, and in QA it might run as http://164.132.1.10:5000, and in production as http://service.company.com. An application developed with exported port binding in mind supports this environment-specific port binding without having to change any code.
+A twelve-factor app is fully self-contained and does not depend on any runtime such as application servers, web servers etc to be available as a service. It is self-contained and exposes its functionality via a protocol that best fits it such as HTTP, MQTT, AMQP etc. A twelve-factor app must export the service by port-binding, meaning that the application also interfaces with the world via an endpoint.The port binding can be exported and configurable using the configuration principle above. An application using HTTP as the protocol might run as <http://localhost:5001> on a developer’s workstation, and in QA it might run as <http://164.132.1.10:5000>, and in production as <http://service.company.com>. An application developed with exported port binding in mind supports this environment-specific port binding without having to change any code.
 
 ### Concurrency
 

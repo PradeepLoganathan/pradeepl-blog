@@ -149,7 +149,7 @@ Overfetching can be solved either by specifying the fields required in the HTTP 
 
 ## Underfetching
 
-Underfetching is when an API response does not have the necessary data. The client may have to call multiple endpoints and correlate them to get the necessary data. This also results in wasted bandwidth and performance issues due to multiple requests to the server. 
+Underfetching is when an API response does not have the necessary data. The client may have to call multiple endpoints and correlate them to get the necessary data. This also results in wasted bandwidth and performance issues due to multiple requests to the server.
 
 !["GraphQL - Underfetching"](images/graphql-underfetching.png)
 

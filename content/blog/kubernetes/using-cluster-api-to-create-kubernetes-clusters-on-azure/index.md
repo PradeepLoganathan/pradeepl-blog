@@ -189,7 +189,7 @@ kube-system                        kube-controller-manager-kind-control-plane   
 kube-system                        kube-proxy-95wg5                                                 1/1     Running  0          40m
 kube-system                        kube-scheduler-kind-control-plane                                1/1     Running  0          41m
 local-path-storage                 local-path-provisioner-547f784dff-rncr2                          1/1     Running  0          40m
-```    
+```
 
 ## Create Workload Cluster
 
@@ -207,6 +207,7 @@ export AZURE_LOCATION="eastus"
 export AZURE_CONTROL_PLANE_MACHINE_TYPE="Standard_D2s_v3"
 export AZURE_NODE_MACHINE_TYPE="Standard_D2s_v3"
 ```
+
 ### Workload template generation
 
 We use the generate cluster command specifying the cluster name, the kubernetes version and the number of control plane and worker machine counts.
@@ -214,7 +215,7 @@ We use the generate cluster command specifying the cluster name, the kubernetes 
 ```shell
 #Generate the cluster configuration
 clusterctl generate cluster pradeepl-cluster --kubernetes-version v1.22.0 --control-plane-machine-count=3 --worker-machine-count=3  > pradeep-capz-cluster.yaml
-```    
+```
 
 We can now apply the generated yaml to generate the cluster in azure as below
 
@@ -230,6 +231,7 @@ azuremachinetemplate.infrastructure.cluster.x-k8s.io/pradeepl-cluster-md-0 creat
 kubeadmconfigtemplate.bootstrap.cluster.x-k8s.io/pradeepl-cluster-md-0 created
 azureclusteridentity.infrastructure.cluster.x-k8s.io/cluster-identity created
 ```
+
 We can query using the azure cli to check if the resource group (pradeepl-cluster) and the corresponding resources have been created as below. We can see below the that “pradeepl-cluster” resource group and the necessary resources have been created. This was surprisingly fast.
 
 ```shell

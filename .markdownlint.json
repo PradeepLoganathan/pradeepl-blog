@@ -1,5 +1,5 @@
 ---
 default: true
 MD013:
-  line_length: 700    # Allow lines up to 700 characters
+  line_length: 4000    # Allow lines up to 700 characters
 MD047: false          # Disable the trailing single newline rule

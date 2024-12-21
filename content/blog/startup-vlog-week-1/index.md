@@ -11,8 +11,6 @@ No sooner did I enjoy a small sense of achievement when I again ran into a wall 
 
 In the video below, I primarily talk about the small things that took up a bulk of my time and energy as I start off. I would love to talk more about the product, building the team , community participation, the startup eco system in Bangalore and about incubation centers but that's for another day. Join in on the discussion below. I would love to hear your thoughts.
 
-https://www.youtube.com/watch?v=WZUBkIsGEY0
-
- 
+<https://www.youtube.com/watch?v=WZUBkIsGEY0>
 
 Picture Courtesy - [Braden Collum](https://unsplash.com/@bradencollum)

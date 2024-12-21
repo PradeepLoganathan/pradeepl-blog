@@ -55,7 +55,7 @@ A Service Catalog enables enterprise teams to create an organized and curated co
 
 ## Plugins
 
-The plugin library allows you to extend Backstage with third-party plugins. The plugin library is a collection of plugins that can be installed and configured to extend Backstage. 
+The plugin library allows you to extend Backstage with third-party plugins. The plugin library is a collection of plugins that can be installed and configured to extend Backstage.
 
 # Backstage technology stack
 
@@ -287,7 +287,7 @@ Creating the plugin...
 🥇  Successfully created plugin-helloworld
 ```
 
-The create-plugin command creates a new plugin under the plugins folder. It also imports the plugin into the backstage app and creates the necessary routes. The main plugin code is in the ExampleComponent.tsx file in the /plugins/helloworld/src/components/ExampleComponent folder. You can now view your plugin by running ```yarn start`` in the route directory and navigating to http://localhost:3000/helloworld. We can customize the generated react code to add the necessary functionality.
+The create-plugin command creates a new plugin under the plugins folder. It also imports the plugin into the backstage app and creates the necessary routes. The main plugin code is in the ExampleComponent.tsx file in the /plugins/helloworld/src/components/ExampleComponent folder. You can now view your plugin by running ```yarn start`` in the route directory and navigating to <http://localhost:3000/helloworld>. We can customize the generated react code to add the necessary functionality.
 
 ## Using existing plugins
 
