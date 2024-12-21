@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/hugo
-          key: ${{ runner.os }}-hugo-${{ hashFiles('**/config.toml') }}
+          key: ${{ runner.os }}-hugo-${{ hashFiles('**/config.yaml') }}
           restore-keys: |
             ${{ runner.os }}-hugo-
 
@@ -61,7 +61,7 @@ jobs:
         run: |
           export GEM_HOME=$HOME/.gem
           export PATH=$HOME/.gem/bin:$PATH
-          htmlproofer ./public --disable-external --checks script,img
+          htmlproofer ./public --disable-external --checks links,images,scripts --allow-hash-href --assume-extension --empty-alt-ignore 
         continue-on-error: true
 
       - name: Deploy to Firebase
