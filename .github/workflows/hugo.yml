@@ -47,10 +47,15 @@ jobs:
         run: hugo --minify
 
       - name: Install html-proofer
-        run: gem install html-proofer
-
-      - name: Test the site
-        run: htmlproofer ./public --disable-external --check-html --check-img-http
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby-full build-essential
+          gem install bundler
+          gem install html-proofer
+      
+      - name: Validate HTML
+        run: |
+          htmlproofer ./public --disable-external --check-html --check-img-http
 
       - name: Deploy to Firebase
         if: success()
