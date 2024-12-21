@@ -9,8 +9,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    steps:
 
+    steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v4
         with:
@@ -20,16 +20,21 @@ jobs:
       - name: Hugo setup
         uses: peaceiris/actions-hugo@v2.6.0
         with:
-          # The Hugo version to download (if necessary) and use. Example: 0.58.2
-          hugo-version: latest # optional, default is latest
-          # Download (if necessary) and use Hugo extended version. Example: true
-          extended: false # optional, default is false
+          hugo-version: v0.139.4
+          extended: false
 
       - name: Build
         run: hugo --minify
+      
+      - name: Install html-proofer
+        run: gem install html-proofer
+
+      - name: Test the site
+        run: htmlproofer ./public --disable-external
 
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+        if: success()
+        uses: w9jds/firebase-action@v1.5.0
         with:
           args: deploy --only hosting
         env:
