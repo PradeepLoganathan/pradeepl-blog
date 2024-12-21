@@ -59,6 +59,7 @@ jobs:
       
       - name: Validate HTML
         run: |
+          export GEM_HOME=$HOME/.gem
           export PATH=$HOME/.gem/bin:$PATH
           htmlproofer ./public --disable-external --check-html --check-img-http
         continue-on-error: true
