@@ -1,7 +1,8 @@
 # Pradeep Loganathan's Blog
 
 Welcome to my personal blog! 🚀  
-I write about technology, programming, cloud architecture, DevOps, and other topics that interest me. Check it out at [pradeepl.com/blog](https://pradeepl.com/blog).
+I write about technology, programming, cloud architecture, DevOps, and other topics that interest me.
+Check it out at [pradeepl.com/blog](https://pradeepl.com/blog).
 
 ---
 
@@ -32,6 +33,6 @@ Click here to explore my latest posts:
 
 This blog is powered by:
 
-- **[Hugo](https://gohugo.io/):** A fast and flexible static site generator.
-- **[Firebase Hosting](https://firebase.google.com/products/hosting):** Reliable and scalable hosting for modern web apps.
-- **GitHub Actions:** Automated CI/CD for building and deploying the blog.
+- **[Hugo](https://gohugo.io/):** A fast & flexible static site generator.
+- **[Firebase Hosting](https://firebase.google.com/products/hosting):** Reliable & scalable hosting for modern web apps.
+- **GitHub Actions:** Automated CI/CD for building & deploying the blog.
