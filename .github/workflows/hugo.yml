@@ -61,7 +61,7 @@ jobs:
         run: |
           export GEM_HOME=$HOME/.gem
           export PATH=$HOME/.gem/bin:$PATH
-          htmlproofer ./public --disable-external --check-html --check-img-http
+          htmlproofer ./public --disable-external --checks script,img
         continue-on-error: true
 
       - name: Deploy to Firebase
