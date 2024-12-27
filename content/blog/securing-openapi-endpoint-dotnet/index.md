@@ -16,7 +16,6 @@ tags:
 categories: 
   - "oas"
   - "api"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements.
 # description: OpenAPI 3.0 lets you describe how your APIs are protected using various security schemes and their security requirements.
 ShowToc: true

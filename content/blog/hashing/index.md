@@ -15,30 +15,25 @@ ShowToc: true
 TocOpen: true
 ---
 
-# Hash
+A hash is a one-way function that maps data of any arbitrary length to an output digest of fixed length, where it is computationally infeasible to find the input from the output. The values returned by a hash function are often known as Message digest, hash values, hash codes, hash sums, checksums, or simply hashes. Hash functions are keyless and provide the data integrity service. They are usually built using iterated and dedicated hash function construction techniques. A hash function compresses data to a fixed size, which could be considered a shortened reference to the original data. The hash function should be easy to compute but hard to invert. For compression, hash functions usually utilize a one-way function of number theory; hence, they are irreversible. Consequently, it is infeasible to reconstruct specific data when a hash value is known. A hash is a one-way function because it cannot be reversed. We can think of a hash as a digital fingerprint of data that is input into it. These types of hash functions are used in many ways. They can be used for authentication, indexing data into hashed tables, checksums, and digital signatures. An example of an SHA256 hash looks like this: `4UsOw2gKuwzwFpY2UH8cDnfMOqHM7Gv5XZBFxDnV4Ww`.
 
-A hash is a one-way function that maps data of any arbitrary length to an output digest of fixed length, where it is computationally infeasible to find the input from the output. The values returned by a hash function are often known as Message digest, hash values, hash codes, hash sums, checksums, or simply hashes. Hash functions are keyless and provide the data integrity service. They are usually built using iterated and dedicated hash function construction techniques. A hash function compresses data to a fixed size, which could be considered a shortened reference to the original data. The hash function should be easy to compute but hard to invert for compression, hash functions usually utilize a one-way function of number theory; hence, they are irreversible. Consequently, it is infeasible to reconstruct specific data when a hash value is known. A hash is a one-way function because it cannot be reversed. We can think of a hash as a digital fingerprint of data that is input into it. These types of hash functions are used in many ways. They can be used for authentication, indexing data into hashed tables, checksums, and digital signatures. An example of an SHA256 hash looks like this, 4UsOw2gKuwzwFpY2UH8cDnfMOqHM7Gv5XZBFxDnV4Ww.
+## Hash Functions
 
-# Hash Functions
+Two of the most used cryptographic hash functions are MD5 and SHA. Each algorithm is different in terms of one or more parameters.
 
-Two of the most used cryptographic hash functions are MD5 and SHA. Each algorithm is different from the others in terms of one or more parameters.
+### MD5
 
-## MD5
+MD5 was created in 1991 by Ronald Rivest. MD5 uses a 128-bits hash value. At first, it was considered secure, but today most experts recommend not using MD5 for authentication because of the many vulnerabilities found over the years. MD5 works by taking variable-length data and converting it into a fixed-length hash string of 128 bits.
 
-MD5 was created in 1991 by Ronald Rivest. MD5 uses a 128-bits hash value. At first it was considered secure, but today most experts recommend not using MD5 for authentication, because of the many vulnerabilities found over the years. MD5 works by taking variable length data and converting it into a fixed length hash string of 128-bits.
+### SHA
 
-## SHA
+SHA is more secure than MD5. The creators of SHA are Guido Bertoni, Joan Daemen, Michael Peeters, and Gilles Van Assche. The Secure Hash Algorithm, or SHA Hash, is published by the National Institute of Standards and Technology (NIST) as a U.S. Federal Information Processing Standard - FIPS PUB 180-3, which specifies three flavors of the SHA Algorithm:
 
-SHA is more secure than MD5. The creators of SHA are Guido Bertoni, Joan Daemen, Michael Peeters, and Gilles Van Assche.The Secure Hash Algorithm, or SHA Hash, is published by the National Institute of Standards and Technology (NIST) as a U.S. Federal Information Processing Standard - FIPS PUB 180-3, which specifies three flavors of the SHA Algorithm:
+- **SHA-0:** No longer used.
+- **SHA-1:** The most widely used version.
+- **SHA-2:** Comes in four different variants: SHA-224, SHA-256, SHA-384, and SHA-512.
 
-• **SHA-0:** No longer used.
-
-• **SHA-1:** The most widely used version
-
-• **SHA-2:** Comes in four different variants: SHA-224, SHA-256, SHA-384, and SHA-512
-
-When a message of any length less than 264 bits (SHA-1, SHA-224, and SHA-256) or less than 2128 bits (SHA-384 & SHA-512) is input to a hash algorithm, the result is an output called a _message digest_. The message digests range in length from 160 to 512 bits, depending on the algorithm.  
-The five hash algorithms specified in this standard are called secure because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest, or to find two different messages that produce the same message digest. Any change to a message will, with a high probability, result in a different message digest. This will result in a verification failure when the secure hash algorithm is used with a digital signature algorithm or a keyed-hash message authentication algorithm.
+When a message of any length less than 2^64 bits (SHA-1, SHA-224, and SHA-256) or less than 2^128 bits (SHA-384 & SHA-512) is input to a hash algorithm, the result is an output called a _message digest_. The message digests range in length from 160 to 512 bits, depending on the algorithm. The five hash algorithms specified in this standard are called secure because, for a given algorithm, it is computationally infeasible to find a message that corresponds to a given message digest, or to find two different messages that produce the same message digest. Any change to a message will, with a high probability, result in a different message digest. This will result in a verification failure when the secure hash algorithm is used with a digital signature algorithm or a keyed-hash message authentication algorithm.
 
 ### Types of SHA
 
@@ -54,19 +49,31 @@ The newest version of SHA is SHA-3. It was released in 2015.
 
 The length of the hash digest doesn't depend on the input length. Whatever the input length, the hash length will be the same. This is a matter of time and the available processing power and resources. The following table contains some of the famous hash functions with their digest length:
 
-<table><tbody><tr><td><p class="table">ALGORITHM</p></td><td><p class="tablec">MESSAGE SIZE, &nbsp;(BITS)</p></td><td><p class="tablec">BLOCK SIZE, &nbsp;(BITS)</p></td><td><p class="tablec">WORD SIZE, (BITS)</p></td><td><p class="tablec">MESSAGE DIGEST SIZE, (BITS)</p></td></tr><tr><td><p class="table">SHA-1</p></td><td><p class="tablec">&lt;2<sup>64</sup></p></td><td><p class="tablec">512</p></td><td><p class="tablec">32</p></td><td><p class="tablec">160</p></td></tr><tr><td><p class="table">SHA-224</p></td><td><p class="tablec">&lt;2<sup>64</sup></p></td><td><p class="tablec">512</p></td><td><p class="tablec">32</p></td><td><p class="tablec">224</p></td></tr><tr><td><p class="table">SHA-256</p></td><td><p class="tablec">&lt;2<sup>64</sup></p></td><td><p class="tablec">512</p></td><td><p class="tablec">32</p></td><td><p class="tablec">256</p></td></tr><tr><td><p class="table">SHA-384</p></td><td><p class="tablec">&lt;2<sup>128</sup></p></td><td><p class="tablec">1024</p></td><td><p class="tablec">64</p></td><td><p class="tablec">384</p></td></tr><tr><td><p class="table">SHA-512</p></td><td><p class="tablec">&lt;2<sup>128</sup></p></td><td><p class="tablec">1024</p></td><td><p class="tablec">64</p></td><td><p class="tablec">512</p></td></tr><tr><td><p class="table">SHA-512/224</p></td><td><p class="tablec">&lt;2<sup>128</sup></p></td><td><p class="tablec">1024</p></td><td><p class="tablec">64</p></td><td><p class="tablec">224</p></td></tr><tr><td><p class="table">SHA-512/256</p></td><td><p class="tablec">&lt;2<sup>128</sup></p></td><td><p class="tablec">1024</p></td><td><p class="tablec">64</p></td><td><p class="tablec">256</p></td></tr></tbody></table>
+### Hash Algorithms Table
 
-Hash functions and their digest length
+| Algorithm      | Message Size (Bits) | Block Size (Bits) | Word Size (Bits) | Message Digest Size (Bits) |
+|----------------|----------------------|-------------------|------------------|----------------------------|
+| SHA-1         | < 2^64             | 512               | 32               | 160                        |
+| SHA-224       | < 2^64             | 512               | 32               | 224                        |
+| SHA-256       | < 2^64             | 512               | 32               | 256                        |
+| SHA-384       | < 2^128            | 1024              | 64               | 384                        |
+| SHA-512       | < 2^128            | 1024              | 64               | 512                        |
+| SHA-512/224   | < 2^128            | 1024              | 64               | 224                        |
+| SHA-512/256   | < 2^128            | 1024              | 64               | 256                        |
 
-## HMAC
+## HMAC: Securing Message Authentication
 
-When signing messages, you should use a dedicated Message Authentication Code (MAC), such as a Hash-based MAC (HMAC), which avoids vulnerabilities in a single pass of the hashing function. HMAC can be used with any approved cryptographic hash function in combination with a shared secret key. The cryptographic strength of a HMAC depends on the properties of the underlying hash function. Basically a SHA-1 based HMAC(HMAC-SHA-1-96) is running SHA-1 on the message twice. This automatically means that your hash is better but still is not authenticated. However, in HMAC the secret key is added to the message so that the HMAC then becomes an authenticatable digest. You know that the sender of your HMAC is the actual sender because the secret key that is passed is automatically verified as authentic when you compare the digest of the HMAC. This is structured independently so that regardless of the messages you’ve encountered, and the secret keys that are passed, you will not be able to determine information for the secrets that are yet to come. This provides the extra level of assurance, as mentioned above, that your message has not been altered.
+When signing messages, you should use a dedicated Message Authentication Code (MAC), such as a Hash-based MAC (HMAC), which avoids vulnerabilities in a single pass of the hashing function. HMAC can be used with any approved cryptographic hash function in combination with a shared secret key. The cryptographic strength of a HMAC depends on the properties of the underlying hash function. Basically a SHA-1 based HMAC(HMAC-SHA-1-96) is running SHA-1 on the message twice. This automatically means that your hash is better but still is not authenticated. However, in HMAC the secret key is added to the message so that the HMAC then becomes an authenticatable digest. You know that the sender of your HMAC is the actual sender because the secret key that is passed is automatically verified as authentic when you compare the digest of the HMAC. This is structured independently so that regardless of the messages you’ve encountered, and the secret keys that are passed, you will not be able to determine information for the secrets that are yet to come. This provides the extra level of assurance, as mentioned above, that your message has not been altered.
 
-## Password hashing
+## Password Hashing: Special Considerations
 
-Password hashing is a special case and general purpose hashing algorithms are not suitable for it as they are too fast. In fact dictionary attacks are blazing fast these days, thanks to the massive parallelism that you can get from the GPU in your graphics card.Algorithms specifically designed for password hashing should be slow and adaptive. Some of the best algorithms for password hashing are Password-Based Key Derivation Function 2 (PBKDF2), [BCrypt](https://en.wikipedia.org/wiki/Bcrypt) and [SCrypt](https://en.wikipedia.org/wiki/Scrypt).
+Password hashing is a special case where general-purpose hash functions are unsuitable. In fact dictionary attacks are blazing fast these days, thanks to the massive parallelism that you can get from the GPU in your graphics card. Algorithms specifically designed for password hashing should be slow and adaptive. Examples include:
 
-## PBKDF2
+- **PBKDF2**
+- **BCrypt**
+- **SCrypt**
+
+## PBKDF2: A Stronger Hashing Mechanism
 
 [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) is the second version of Password-Based Key Derivation Function, which is part of the Password-Based Cryptographic standard. A powerful quality of PBKDF2 is that it generates hashes of hashes, thousands of times over. Iterating over the hash multiple times strengthens the encryption, exponentially increasing the number of possible outcomes resulting from an initial value to the extent that the hardware required to generate or store all possible hashes becomes infeasible.  
 The pbkdf2 method requires four components: the desired password, a salt value, the desired amount of iterations, and a specified length of the resulting hash.  
@@ -89,35 +96,66 @@ private void button1_Click(object sender, EventArgs e)
     digest = sha256.ComputeHash(Encoding.UTF8.GetBytes(textBox1.Text));
     base64digest = Convert.ToBase64String(digest, 0, digest.Length); 
     textBox2.Text = base64digest;
-
 }
 ```
-
 A complete working sample using PBKDF2 for generating salted user passwords and validating the same is available at [this github repo.](https://github.com/PradeepLoganathan/Hashing)
-
-## Rainbow tables
+## Rainbow Tables: Precomputed Hash Attacks
 
 Rainbow tables are precomputed tables used to look up passwords using stolen hashes. They are special dictionary tables that use hash values instead of standard dictionary passwords to achieve the attack.  
 There are rainbow tables that exist today that can discover almost every possible password up to fourteen characters. Rainbow tables significantly reduce the time it takes to find the hash of a password, at the cost of memory, but with terabyte hard drives and gigabytes of RAM, it’s a trade-off that is easily made.  
 Dictionary attacks are the type of attack we are trying to accomplish with these tools. A dictionary attack uses a precomputed dictionary file such as a Rainbow table to try and guess the password. Tools such as OphCrack and Rainbowcrack use rainbow tables to crack password hashes.
 
-## .NET Core hash creation
+## .NET Core Hash Creation
 
-In .NET core the System.Security.Cryptography provides the primary functionality to create hashes. It has types which can be used to create both MD5 and SHA hashes. A small sample to create both an MD5 and a SHA256 hash is below
+In .NET Core, the `System.Security.Cryptography` namespace provides functionality for creating hashes. It has types which can be used to create both MD5 and SHA hashes. A small sample to create both an MD5 and a SHA256 hash is below
 
-<script src="https://gist.github.com/PradeepLoganathan/0988ecae3a4a073ba4420fb15244fd4c.js.js"></script>
+```csharp
+private void button1_Click(object sender, EventArgs e)
+{
+    byte[] digest;
+    string base64digest;
 
-<a href="https://gist.github.com/PradeepLoganathan/0988ecae3a4a073ba4420fb15244fd4c.js">View this gist on GitHub</a>
+    MD5 md5 = new MD5CryptoServiceProvider();
+    digest = md5.ComputeHash(Encoding.UTF8.GetBytes(textBox1.Text));
+    base64digest = Convert.ToBase64String(digest, 0, digest.Length);
+    textBox3.Text = base64digest;
 
-## Hash collision
+    SHA256 sha256 = SHA256.Create();
+    digest = sha256.ComputeHash(Encoding.UTF8.GetBytes(textBox1.Text));
+    base64digest = Convert.ToBase64String(digest, 0, digest.Length); 
+    textBox2.Text = base64digest;
 
-Hash collision occurs when two different inputs create the same hash when applied to the same hash function.
+}
+```
 
-## Hashing Vs Encryption
+```csharp
+private void button1_Click(object sender, EventArgs e)
+{
+    byte[] digest;
+    string base64digest;
+
+    MD5 md5 = new MD5CryptoServiceProvider();
+    digest = md5.ComputeHash(Encoding.UTF8.GetBytes(textBox1.Text));
+    base64digest = Convert.ToBase64String(digest, 0, digest.Length);
+    textBox3.Text = base64digest;
+
+    SHA256 sha256 = SHA256.Create();
+    digest = sha256.ComputeHash(Encoding.UTF8.GetBytes(textBox1.Text));
+    base64digest = Convert.ToBase64String(digest, 0, digest.Length); 
+    textBox2.Text = base64digest;
+
+}
+```
+
+## Hash Collision: Understanding Risks
+
+Hash collisions occur when two different inputs produce the same hash. Secure hash functions minimize this risk.
+
+## Hashing vs. Encryption
 
 Most people confuse encryption with hashes. It is important to understand that hashes are digests not encryption. A digest is used by a hash to summarize a compiled stream of data. Hashes are also a one-way function. Encryption converts plaintext data into ciphertext then converts it back to plaintext when the correct keys are given. This is a two-way function unlike hashes, which cannot be reversed. This is an important distinction to make.
 
-## Hashing and Blockchain
+## Blockchain and Hashing
 
 Hashing plays a key role in the Blockchain technical ecosystem. Each block within the blockchain is identified by a hash, generated using the SHA256 cryptographic hash algorithm on the header of the block.
 

@@ -12,7 +12,7 @@ categories:
 tags: 
   - "terraform"
   - "azure"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+
 summary: Sunshine coast .Net user group meeting. Topic - Getting started with terraform on Azure. 
 ShowToc: true
 TocOpen: false

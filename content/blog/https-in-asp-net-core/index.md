@@ -12,7 +12,6 @@ tags:
 categories: 
   - "asp-net"
   - "aspnetcore"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: In asp.net core https is enabled by default. The HttpsRedirection middleware class provides the necessary functionality to enforce redirection from http to https.
 ShowToc: true
 TocOpen: false

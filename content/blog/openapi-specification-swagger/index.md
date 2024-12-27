@@ -12,7 +12,6 @@ tags:
 categories: 
   - "api"
   - "rest"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: The Open API Specification is used to define the contract between the API consumers and the API providers. The specification is based on the JSON schema and is a standard format for describing the data exchanged between the API consumers and the API providers.
 ShowToc: true
 TocOpen: true
