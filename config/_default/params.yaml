@@ -3,6 +3,7 @@ description: 'My technical notes and thoughts on software engineering, programmi
 author: Pradeep Loganathan
 Copyright: "my copyright"
 comments: true
+enableSocialMetaTags: true
 images:
   - Pradeep-Loganathan.jpeg
 DateFormat: 'January 2, 2006'
