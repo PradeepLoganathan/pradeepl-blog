@@ -12,7 +12,6 @@ tags:
 categories: 
   - "api"
   - "http"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: HTTP & HTTP/2 are both application level protocols that utilize a lower level protocol like TCP to talk on the Internet. The protocol of the Internet is TCP over IP over Ethernet.
 ShowToc: true
 TocOpen: false

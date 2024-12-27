@@ -14,7 +14,6 @@ tags:
 
 categories:
   - "dotnet"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
 summary: Adding configuration to a .Net core Console application to read configuration from a json file, or environmental variables or command line arguments.
 # description: Adding configuration to a .Net core Console application to read configuration from a json file, or environmental variables or command line arguments.
 ShowSummary: true

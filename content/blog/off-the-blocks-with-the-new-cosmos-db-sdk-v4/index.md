@@ -10,7 +10,7 @@ categories:
   - "cosmosdb"
 tags: 
   - "comosdb"
-#slug: kubernetes/introduction-to-kubernetes-admission-controllers/
+
 summary: ""
 ShowToc: true
 TocOpen: false
