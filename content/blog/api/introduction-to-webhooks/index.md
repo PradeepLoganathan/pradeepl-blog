@@ -70,7 +70,7 @@ Here's a breakdown of the typical webhook workflow:
 
 Webhooks require robust security practices to prevent unauthorized access or malicious activities. HTTPS ensures secure communication, and authentication mechanisms like signatures or tokens verify the legitimacy of requests.
 
-- **HTTPS**: Ensure that all webhook communication occurs over HTTPS to encrypt data in transit.
+- **[HTTPS]({{< ref "blog/https/" >}})**: Ensure that all webhook communication occurs over [HTTPS]({{< ref "blog/https/" >}}) to encrypt data in transit.
 - **Authentication**: Use secret tokens or API keys included in headers to verify the authenticity of incoming requests.
 - **Signature Verification**: Implement HMAC (Hash-based Message Authentication Code) or similar methods to validate that the payload hasn't been tampered with.
 - **IP Whitelisting**: Restrict incoming requests to known IP ranges associated with the publisher.
@@ -164,17 +164,17 @@ Webhooks offer a more efficient and real-time solution for event-driven communic
 Webhooks can be seamlessly integrated with various API architectures, enhancing their functionality and enabling real-time communication. Here's how webhooks complement different API styles:
 
 
-### REST APIs
+### [REST APIs]({{< ref "blog/rest/rest-api-what-is-rest/" >}})
 
-Webhooks are a valuable addition to RESTful architectures, providing a mechanism for real-time notifications . While REST APIs primarily rely on a request-response model for retrieving and modifying data, webhooks enable servers to proactively push updates to clients whenever specific events occur . This eliminates the need for clients to continuously poll the server for changes, improving efficiency and reducing latency . For example, in an e-commerce application, a webhook can notify a customer's order management system about shipment updates without requiring the system to repeatedly check the shipping provider's API.   
+Webhooks are a valuable addition to [RESTful architectures]({{< ref "/series/rest" >}}), providing a mechanism for real-time notifications . While REST APIs primarily rely on a request-response model for retrieving and modifying data, webhooks enable servers to proactively push updates to clients whenever specific events occur . This eliminates the need for clients to continuously poll the server for changes, improving efficiency and reducing latency . For example, in an e-commerce application, a webhook can notify a customer's order management system about shipment updates without requiring the system to repeatedly check the shipping provider's API.   
 
-### GraphQL
+### [GraphQL]({{< ref "blog/api/getting-started-with-graphql/" >}})
 
-Webhooks can be integrated with GraphQL to provide real-time updates to subscribed clients . When an event occurs that affects data a client is interested in, a webhook can trigger a GraphQL subscription, delivering the updated data to the client instantly . This allows for efficient and targeted real-time updates without the overhead of continuous polling. For example, in a social media application, a webhook can notify a user's newsfeed about new posts from their friends in real-time.   
+Webhooks can be integrated with [GraphQL]({{< ref "blog/api/getting-started-with-graphql/" >}}) to provide real-time updates to subscribed clients . When an event occurs that affects data a client is interested in, a webhook can trigger a [GraphQL]({{< ref "blog/api/getting-started-with-graphql/" >}}) subscription, delivering the updated data to the client instantly . This allows for efficient and targeted real-time updates without the overhead of continuous polling. For example, in a social media application, a webhook can notify a user's newsfeed about new posts from their friends in real-time.   
 
-### gRPC
+### [gRPC]({{< ref "/blog/api/grpc/" >}})
 
-While gRPC is typically used for low-latency, synchronous communication, webhooks can be used in gRPC for specific event-driven scenarios . By leveraging webhooks, gRPC services can provide asynchronous notifications without affecting their core functionality . This can be useful for events that don't require an immediate response or involve long-running processes. For example, in a financial application, a gRPC service can use a webhook to notify a user about the completion of a long-running transaction.   
+While [gRPC]({{< ref "/blog/api/grpc/" >}}) is typically used for low-latency, synchronous communication, webhooks can be used in [gRPC]({{< ref "/blog/api/grpc/" >}}) for specific event-driven scenarios . By leveraging webhooks, [gRPC]({{< ref "/blog/api/grpc/" >}}) services can provide asynchronous notifications without affecting their core functionality . This can be useful for events that don't require an immediate response or involve long-running processes. For example, in a financial application, a [gRPC]({{< ref "/blog/api/grpc/" >}}) service can use a webhook to notify a user about the completion of a long-running transaction.   
 
 In essence, webhooks act as a bridge between different API architectures, enabling real-time communication and enhancing the functionality of existing systems. By understanding how webhooks integrate with REST APIs, GraphQL, and gRPC, developers can build more efficient, responsive, and interconnected applications.
 
