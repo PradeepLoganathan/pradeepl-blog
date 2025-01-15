@@ -1,7 +1,8 @@
 baseURL: ""
 title: Pradeep Loganathan's Blog - Development
-pagination:
-  pagerSize: 10
+paginate: 10
+# pagination:
+#   pagerSize: 10
 # copyright: "&copy; 2023 Pradeep Loganathan.<br> This work is licensed under <br> a Creative Commons Attribution-ShareAlike 4.0 <br> International License."
 
 defaultContentLanguage: en
