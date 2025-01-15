@@ -18,9 +18,9 @@ summary: "This blog examines how prioritizing security from the outset transform
 ShowToc: true
 TocOpen: true
 images:
-  - images/security-first-software-design-cover.png
+  - images/security-first-software-design-cover.jpg
 cover:
-  image: "images/security-first-software-design-cover.png"
+  image: "images/security-first-software-design-cover.jpg"
   alt: "Elevating Security in Software Development"
   caption: "Elevating Security in Software Development"
   relative: true
