@@ -145,6 +145,8 @@ SSEs are another mechanism for server-to-client communication. They provide a un
 
 ### Comparison of Webhooks, Polling, and SSE
 
+Webhooks offer a more efficient and real-time solution for event-driven communication compared to traditional polling and SSEs. They are particularly well-suited for applications that require instant updates and seamless integration between different systems. By combining efficiency and real-time updates, webhooks have become the preferred method for many modern applications, complementing or replacing traditional methods in scenarios where timely event handling is critical.
+
 | Feature                | Webhooks                              | Polling                               | Server-Sent Events (SSE)            |
 |------------------------|---------------------------------------|---------------------------------------|-------------------------------------|
 | **Communication Type** | Event-driven, push-based              | Request-driven, pull-based            | Push-based                          |
@@ -154,9 +156,6 @@ SSEs are another mechanism for server-to-client communication. They provide a un
 | **Use Case**           | Asynchronous event notifications     | Periodic updates                      | Real-time streaming                 |
 | **Protocol**           | HTTP POST                            | HTTP GET                              | HTTP (persistent connection)        |
 | **State Maintenance**  | Stateless                            | Stateless                            | Stateful                            |
-
-
-Webhooks offer a more efficient and real-time solution for event-driven communication compared to traditional polling and SSEs. They are particularly well-suited for applications that require instant updates and seamless integration between different systems. By combining efficiency and real-time updates, webhooks have become the preferred method for many modern applications, complementing or replacing traditional methods in scenarios where timely event handling is critical.
 
 
 ## Webhooks and API Architectures
