@@ -8,11 +8,11 @@
         <p>{{ .Description }}</p>
 
         <h2>Where to Buy</h2>
-        <ul>
-        {{ range .Params.buy_links }}
-            <li><a href="{{ .url }}" target="_blank">{{ .name }}</a></li>
-        {{ end }}
-        </ul>
+        <div class="buy-buttons">
+            {{ range .Params.buy_links }}
+            <a class="buy-button" href="{{ .url }}" target="_blank">{{ .button_text }}</a>
+            {{ end }}
+        </div>
 
         <h2>Reviews</h2>
         <ul>
@@ -51,9 +51,27 @@
     max-width: 600px;
 }
 
-/* Ensure spacing in text sections */
-.book-info h2 {
-    margin-top: 20px;
+/* Buy Buttons */
+.buy-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.buy-button {
+    display: inline-block;
+    background: #ff9900; /* Amazon-style orange */
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.2s;
+}
+
+.buy-button:hover {
+    background: #cc7a00;
 }
 </style>
 {{ end }}
