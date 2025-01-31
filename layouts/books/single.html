@@ -27,11 +27,11 @@
 </div>
 
 <style>
-/* Main container: keeps book cover on top left and text on right */
+/* Main container: Ensures book cover and text are aligned at the top */
 .book-detail {
     display: flex;
-    gap: 40px; /* Space between book cover and text */
-    align-items: flex-start; /* Aligns content at the top */
+    gap: 40px; /* Adds space between book cover and text */
+    align-items: flex-start; /* Aligns both cover and text at the top */
 }
 
 /* Book Cover: Ensures it stays on the left */
@@ -41,13 +41,13 @@
 
 /* Book Cover Image */
 .book-cover img {
-    width: 100%; /* Makes sure the image scales properly */
+    width: 100%; /* Ensures proper scaling */
     border-radius: 8px;
 }
 
 /* Book Info (Text) */
 .book-info {
-    flex: 1; /* Takes up remaining space */
+    flex: 1; /* Takes up the remaining space */
     max-width: 600px;
 }
 

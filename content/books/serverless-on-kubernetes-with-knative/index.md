@@ -6,7 +6,8 @@ cover:
 description: "A compelling exploration of serverless computing with Knative."
 buy_links:
   - name: "Amazon"
-    url: "https://www.amazon.com/example"
+    url: "https://www.amazon.com.au/dp/B0DTYMMZ8B"
+    button_text: "Buy on Amazon"
   - name: "Barnes & Noble"
     url: "https://www.barnesandnoble.com/example"
 reviews:
