@@ -1,6 +1,8 @@
 {{ define "main" }}
 <div class="book-detail">
-    <img src="{{ .Params.cover.image | safeURL }}" alt="{{ .Params.cover.alt }}">
+    <div class="book-cover">
+        <img src="{{ .Params.cover.image | safeURL }}" alt="{{ .Params.cover.alt }}">
+    </div>
     <div class="book-info">
         <h1>{{ .Title }}</h1>
         <p>{{ .Description }}</p>
@@ -25,17 +27,33 @@
 </div>
 
 <style>
+/* Main container: keeps book cover on top left and text on right */
 .book-detail {
     display: flex;
-    gap: 20px;
-    align-items: flex-start;
+    gap: 40px; /* Space between book cover and text */
+    align-items: flex-start; /* Aligns content at the top */
 }
-.book-detail img {
-    max-width: 250px;
+
+/* Book Cover: Ensures it stays on the left */
+.book-cover {
+    flex: 0 0 250px; /* Fixed width for book cover */
+}
+
+/* Book Cover Image */
+.book-cover img {
+    width: 100%; /* Makes sure the image scales properly */
     border-radius: 8px;
 }
+
+/* Book Info (Text) */
 .book-info {
+    flex: 1; /* Takes up remaining space */
     max-width: 600px;
+}
+
+/* Ensure spacing in text sections */
+.book-info h2 {
+    margin-top: 20px;
 }
 </style>
 {{ end }}
