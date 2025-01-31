@@ -4,9 +4,12 @@ main:
     rel: external
     pre: <i class="fa fa-heart"></i>
     url: https://www.linkedin.com/in/pradeeploganathan/
-    weight: 50 
+    weight: 60 
   - name: Podcasts
     pageref: /episodes
+    weight: 50
+  - name: Books
+    pageref: /books
     weight: 40
   - name: slides
     url: https://slides.pradeepl.com/

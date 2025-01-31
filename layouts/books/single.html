@@ -1,0 +1,77 @@
+{{ define "main" }}
+<div class="book-detail">
+    <div class="book-cover">
+        <img src="{{ .Params.cover.image | safeURL }}" alt="{{ .Params.cover.alt }}">
+    </div>
+    <div class="book-info">
+        <h1>{{ .Title }}</h1>
+        <p>{{ .Description }}</p>
+
+        <h2>Where to Buy</h2>
+        <div class="buy-buttons">
+            {{ range .Params.buy_links }}
+            <a class="buy-button" href="{{ .url }}" target="_blank">{{ .button_text }}</a>
+            {{ end }}
+        </div>
+
+        <h2>Reviews</h2>
+        <ul>
+        {{ range .Params.reviews }}
+            <li><strong>{{ .name }}:</strong> {{ .text }}</li>
+        {{ end }}
+        </ul>
+
+        <h2>About This Book</h2>
+        <p>{{ .Content }}</p>
+    </div>
+</div>
+
+<style>
+/* Main container: Ensures book cover and text are aligned at the top */
+.book-detail {
+    display: flex;
+    gap: 40px; /* Adds space between book cover and text */
+    align-items: flex-start; /* Aligns both cover and text at the top */
+}
+
+/* Book Cover: Ensures it stays on the left */
+.book-cover {
+    flex: 0 0 250px; /* Fixed width for book cover */
+}
+
+/* Book Cover Image */
+.book-cover img {
+    width: 100%; /* Ensures proper scaling */
+    border-radius: 8px;
+}
+
+/* Book Info (Text) */
+.book-info {
+    flex: 1; /* Takes up the remaining space */
+    max-width: 600px;
+}
+
+/* Buy Buttons */
+.buy-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.buy-button {
+    display: inline-block;
+    background: #ff9900; /* Amazon-style orange */
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.2s;
+}
+
+.buy-button:hover {
+    background: #cc7a00;
+}
+</style>
+{{ end }}
