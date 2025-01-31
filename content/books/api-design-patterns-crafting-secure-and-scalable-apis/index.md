@@ -1,14 +1,15 @@
 ---
 title: "API Design Patterns: Crafting Secure and Scalable APIs"
+weight: 2
 cover:
-  image: "api-design-patterns.jpg"
+  image: "api-design-and-architecture.png"
   alt: "Cover of API Design Patterns"
 description: "Crafting Secure and Scalable APIs"
 buy_links:
   - name: "Amazon"
-    url: "https://www.amazon.com.au/dp/B0DTYMMZ8B"
+    url: ""
   - name: "Barnes & Noble"
-    url: "https://www.barnesandnoble.com/example"
+    url: ""
 reviews:
   - name: "John Doe, The Book Review Blog"
     text: "An insightful and well-researched book!"

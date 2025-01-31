@@ -1,5 +1,6 @@
 ---
 title: "Serverless On Kubernetes With Knative"
+weight: 1
 cover:
   image: "go-serverless-on-kubernetes-with-knative.jpg"
   alt: "Cover of Serverless On Kubernetes With Knative"

@@ -3,7 +3,7 @@
 <p>{{ .Description }}</p>
 
 <div class="books-container">
-    {{ range .Pages }}
+    {{ range .Pages.ByWeight }}
     <div class="book-card">
         {{ $cover := "" }}
 
