@@ -1,0 +1,41 @@
+{{ define "main" }}
+<div class="book-detail">
+    <img src="{{ .Params.cover.image | safeURL }}" alt="{{ .Params.cover.alt }}">
+    <div class="book-info">
+        <h1>{{ .Title }}</h1>
+        <p>{{ .Description }}</p>
+
+        <h2>Where to Buy</h2>
+        <ul>
+        {{ range .Params.buy_links }}
+            <li><a href="{{ .url }}" target="_blank">{{ .name }}</a></li>
+        {{ end }}
+        </ul>
+
+        <h2>Reviews</h2>
+        <ul>
+        {{ range .Params.reviews }}
+            <li><strong>{{ .name }}:</strong> {{ .text }}</li>
+        {{ end }}
+        </ul>
+
+        <h2>About This Book</h2>
+        <p>{{ .Content }}</p>
+    </div>
+</div>
+
+<style>
+.book-detail {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+.book-detail img {
+    max-width: 250px;
+    border-radius: 8px;
+}
+.book-info {
+    max-width: 600px;
+}
+</style>
+{{ end }}

@@ -1,0 +1,71 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+<p>{{ .Description }}</p>
+
+<div class="books-container">
+    {{ range .Pages }}
+    <div class="book-card">
+        {{ $cover := "" }}
+
+        {{ if .Resources }}
+            {{ $coverResource := .Resources.GetMatch (.Params.cover.image) }}
+            {{ if $coverResource }}
+                {{ $cover = $coverResource.RelPermalink }}
+            {{ end }}
+        {{ end }}
+
+        {{ if not $cover }}
+            {{ $cover = .Params.cover.image | safeURL }}
+        {{ end }}
+
+        <img src="{{ $cover }}" alt="{{ .Params.cover.alt }}">
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <p>{{ .Params.description }}</p>
+        <a class="book-details" href="{{ .RelPermalink }}">View Details</a>
+    </div>
+    {{ end }}
+</div>
+
+<style>
+
+/* Add space below the Books header */
+h1 {
+    margin-bottom: 30px; /* Increase spacing below Books heading */
+}
+
+.books-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Center the books */
+}
+.book-card {
+    width: 300px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-card img {
+    width: 200px; /* Ensures all book covers have the same width */
+    height: 280px; /* Set a fixed height for uniform display */
+    border-radius: 5px;
+    object-fit: contain;
+}
+
+.book-details {
+    display: inline-block;
+    margin-top: auto; /* Push to bottom */
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+</style>
+{{ end }}
