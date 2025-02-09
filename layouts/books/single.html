@@ -1,7 +1,4 @@
 {{ define "main" }}
-<!-- <p>Type: {{ .Type }}</p>
-<p>Section: {{ .Section }}</p>
-<p>Permalink: {{ .Permalink }}</p> -->
 <div class="book-detail">
     <div class="book-cover">
         <img src="{{ .Params.cover.image | safeURL }}" alt="{{ .Params.cover.alt }}">
@@ -30,27 +27,39 @@
 </div>
 
 <style>
-/* Main container: Ensures book cover and text are aligned at the top */
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+}
+
+/* Book Detail Container */
 .book-detail {
     display: flex;
-    gap: 40px; /* Adds space between book cover and text */
-    align-items: flex-start; /* Aligns both cover and text at the top */
+    flex-wrap: wrap; /* Ensures responsive behavior */
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 900px;
+    margin: auto;
 }
 
-/* Book Cover: Ensures it stays on the left */
+/* Book Cover */
 .book-cover {
-    flex: 0 0 250px; /* Fixed width for book cover */
+    flex: 0 0 250px;
+    max-width: 100%; /* Ensures it scales on smaller screens */
 }
 
-/* Book Cover Image */
 .book-cover img {
-    width: 100%; /* Ensures proper scaling */
+    width: 100%;
+    height: auto;
     border-radius: 8px;
 }
 
 /* Book Info (Text) */
 .book-info {
-    flex: 1; /* Takes up the remaining space */
+    flex: 1;
     max-width: 600px;
 }
 
@@ -64,17 +73,54 @@
 
 .buy-button {
     display: inline-block;
-    background: #ff9900; /* Amazon-style orange */
+    background: #ff9900;
     color: white;
-    padding: 10px 15px;
+    padding: 12px 18px;
     text-decoration: none;
     font-weight: bold;
     border-radius: 5px;
     transition: background 0.2s;
+    text-align: center;
+    min-width: 150px;
 }
 
 .buy-button:hover {
     background: #cc7a00;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .book-detail {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .book-cover {
+        flex: none;
+        width: 70%;
+        max-width: 300px;
+    }
+
+    .book-info {
+        width: 100%;
+        max-width: 90%;
+    }
+
+    .buy-buttons {
+        justify-content: center;
+    }
+}
+
+/* Extra Small Screens (Phones) */
+@media (max-width: 480px) {
+    .book-cover {
+        width: 90%;
+    }
+
+    .buy-button {
+        width: 100%;
+    }
 }
 </style>
 {{ end }}
