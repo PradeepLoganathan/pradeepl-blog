@@ -1,4 +1,7 @@
 {{ define "main" }}
+<p>Type: {{ .Type }}</p>
+<p>Section: {{ .Section }}</p>
+<p>Permalink: {{ .Permalink }}</p>
 <div class="book-detail">
     <div class="book-cover">
         <img src="{{ .Params.cover.image | safeURL }}" alt="{{ .Params.cover.alt }}">

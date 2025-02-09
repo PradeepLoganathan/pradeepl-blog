@@ -130,3 +130,9 @@ giscus:
   theme: preferred_color_scheme
   lang: en
   loading: lazy
+opengraph:
+   enable: true
+   type: "website"  # Change dynamically in `opengraph.html`
+   image: "/images/default-og-image.jpg"
+   twitter:
+     card: "summary_large_image"
