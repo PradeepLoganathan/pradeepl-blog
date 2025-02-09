@@ -6,7 +6,7 @@
 <meta property="og:image" content="{{ .Params.cover.image | default .Params.featured_image | default "/images/default-og-image.jpg" | absURL }}" />
 
 <!-- Detect Type: Book, Blog, or Website -->
-{{ if eq .Type "books" }}
+{{ if eq .Section "books" }}
     <meta property="og:type" content="book" />
     <meta property="book:author" content="{{ .Params.author | default "Pradeep Loganathan" }}" />
     {{ with .Params.isbn }}<meta property="book:isbn" content="{{ . }}" />{{ end }}
@@ -18,9 +18,11 @@
 {{ else if eq .Section "blogs" }}
     <meta property="og:type" content="article" />
     {{ with .Params.author }}<meta property="article:author" content="{{ . }}" />{{ end }}
-    {{ with .Date }}<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}" />{{ end }}
+    {{ with .PublishDate }}<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}" />{{ end }}
     {{ with .Lastmod }}<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}" />{{ end }}
-    {{ range .Params.tags }}<meta property="article:tag" content="{{ . }}" />{{ end }}
+    {{- range .GetTerms "tags" | first 6 }}
+        <meta property="article:tag" content="{{ .Page.Title | plainify }}">
+    {{- end }}
 
 {{ else }}
     <meta property="og:type" content="website" />
@@ -31,4 +33,4 @@
 <meta name="twitter:title" content="{{ .Title }}">
 <meta name="twitter:description" content="{{ .Description }}">
 <meta name="twitter:image" content="{{ .Params.cover.image | default .Params.featured_image | default "/images/default-og-image.jpg" | absURL }}">
-<meta name="twitter:site" content="@yourtwitterhandle">
+<meta name="twitter:site" content="@pradeepl">

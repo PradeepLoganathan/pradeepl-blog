@@ -1,4 +1,5 @@
 ---
+type: "books"
 title: "API Design Patterns: Crafting Secure and Scalable APIs"
 weight: 2
 cover:
