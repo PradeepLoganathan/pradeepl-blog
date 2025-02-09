@@ -10,12 +10,12 @@
         <h2>Where to Buy</h2>
         <div class="buy-buttons">
             {{ range .Params.buy_links }}
-            <a class="buy-button" href="{{ .url }}" target="_blank">{{ .button_text }}</a>
+            <a class="buy-button" href="{{ .url }}" target="_blank">{{ .button_text | default (printf "Buy on %s" .name) }}</a>
             {{ end }}
         </div>
 
         <h2>Reviews</h2>
-        <ul>
+        <ul class="reviews">
         {{ range .Params.reviews }}
             <li><strong>{{ .name }}:</strong> {{ .text }}</li>
         {{ end }}
@@ -27,40 +27,32 @@
 </div>
 
 <style>
-/* General Styling */
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    margin: 20px;
-}
-
-/* Book Detail Container */
+/* General styles */
 .book-detail {
     display: flex;
-    flex-wrap: wrap; /* Ensures responsive behavior */
-    gap: 60px;
+    flex-wrap: wrap; /* Allows stacking on mobile */
+    gap: 40px; /* Increases space between book cover and text */
     align-items: flex-start;
     justify-content: center;
-    max-width: 900px;
-    margin: auto;
+    padding: 20px;
 }
 
-/* Book Cover */
+/* Book cover */
 .book-cover {
-    flex: 0 0 250px;
-    max-width: 100%; /* Ensures it scales on smaller screens */
+    flex: 0 1 250px; /* Flexes properly on different screens */
+    text-align: center;
 }
-
 .book-cover img {
     width: 100%;
-    height: auto;
+    max-width: 250px; /* Prevents it from being too large */
     border-radius: 8px;
 }
 
-/* Book Info (Text) */
+/* Book info */
 .book-info {
     flex: 1;
     max-width: 600px;
+    padding: 10px;
 }
 
 /* Buy Buttons */
@@ -70,54 +62,40 @@ body {
     gap: 10px;
     margin-top: 10px;
 }
-
 .buy-button {
-    display: inline-block;
+    display: block;
+    text-align: center;
     background: #ff9900;
     color: white;
-    padding: 12px 18px;
+    padding: 12px 15px;
     text-decoration: none;
     font-weight: bold;
     border-radius: 5px;
     transition: background 0.2s;
-    text-align: center;
-    min-width: 150px;
 }
-
 .buy-button:hover {
     background: #cc7a00;
 }
 
-/* Responsive Design */
+/* Reviews */
+.reviews {
+    padding-left: 20px;
+}
+
+/* Mobile-friendly */
 @media (max-width: 768px) {
     .book-detail {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
-
-    .book-cover {
-        flex: none;
-        width: 70%;
-        max-width: 300px;
-    }
-
     .book-info {
-        width: 100%;
         max-width: 90%;
     }
-
     .buy-buttons {
-        justify-content: center;
+        flex-direction: column;
+        width: 100%;
     }
-}
-
-/* Extra Small Screens (Phones) */
-@media (max-width: 480px) {
-    .book-cover {
-        width: 90%;
-    }
-
     .buy-button {
         width: 100%;
     }
