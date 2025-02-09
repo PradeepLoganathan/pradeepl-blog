@@ -1,8 +1,14 @@
 ---
 title: "Serverless On Kubernetes With Knative"
 weight: 1
+isbn: "9781763612907"
+release_date: "2025-02-28"
+tags:
+  - "Serverless"
+  - "Kubernetes"
+  - "Knative"
 cover:
-  image: "go-serverless-on-kubernetes-with-knative.jpg"
+  image: "serverless-on-kubernetes-with-knative.jpg"
   alt: "Cover of Serverless On Kubernetes With Knative"
 description: "A compelling exploration of serverless computing with Knative."
 buy_links:
@@ -11,6 +17,7 @@ buy_links:
     button_text: "Buy on Amazon"
   - name: "Barnes & Noble"
     url: "https://www.barnesandnoble.com/example"
+    button_text: "Buy on B & N"
 reviews:
   - name: "John Doe, The Book Review Blog"
     text: "An insightful and well-researched book!"
