@@ -31,15 +31,15 @@
 .book-detail {
     display: flex;
     flex-wrap: wrap; /* Allows stacking on mobile */
-    gap: 40px; /* Increases space between book cover and text */
+    gap: 40px; /* Adds space between book cover and text */
     align-items: flex-start;
     justify-content: center;
     padding: 20px;
 }
 
-/* Book cover */
+/* Book Cover */
 .book-cover {
-    flex: 0 1 250px; /* Flexes properly on different screens */
+    flex: 0 1 250px; /* Ensures the cover has a fixed size */
     text-align: center;
 }
 .book-cover img {
@@ -48,7 +48,7 @@
     border-radius: 8px;
 }
 
-/* Book info */
+/* Book Info */
 .book-info {
     flex: 1;
     max-width: 600px;
@@ -86,18 +86,23 @@
 @media (max-width: 768px) {
     .book-detail {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
+        align-items: flex-start; /* Keeps everything left-aligned */
+        text-align: left; /* Ensures text is left-aligned */
+        padding: 15px;
     }
     .book-info {
-        max-width: 90%;
+        max-width: 100%;
+        text-align: left;
+        padding: 10px;
     }
     .buy-buttons {
         flex-direction: column;
+        align-items: flex-start;
         width: 100%;
     }
     .buy-button {
-        width: 100%;
+        width: auto;
+        text-align: left;
     }
 }
 </style>
