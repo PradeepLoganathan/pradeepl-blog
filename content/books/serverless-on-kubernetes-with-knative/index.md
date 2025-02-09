@@ -8,7 +8,7 @@ tags:
   - "Kubernetes"
   - "Knative"
 cover:
-  image: "serverless-on-kubernetes-with-knative.jpg"
+  image: "/books/serverless-on-kubernetes-with-knative/serverless-on-kubernetes-with-knative.jpg"
   alt: "Cover of Serverless On Kubernetes With Knative"
 description: "A compelling exploration of serverless computing with Knative."
 buy_links:
