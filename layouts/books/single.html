@@ -22,7 +22,9 @@
         </ul>
 
         <h2>About This Book</h2>
-        <p>{{ .Content }}</p>
+        <div class="book-content">
+            {{ .Content | markdownify }} 
+        </div>
     </div>
 </div>
 
@@ -34,7 +36,7 @@
     gap: 40px; /* Adds space between book cover and text */
     align-items: flex-start;
     justify-content: center;
-    padding: 20px;
+    padding: 40px 20px;
 }
 
 /* Book Cover */
@@ -46,49 +48,88 @@
     width: 100%;
     max-width: 250px; /* Prevents it from being too large */
     border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 /* Book Info */
 .book-info {
     flex: 1;
     max-width: 600px;
-    padding: 10px;
+    padding: 20px;
+    line-height: 1.6;
+}
+.book-info h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+.book-info h2 {
+    font-size: 22px;
+    margin-top: 25px;
+    border-bottom: 2px solid #ff9900; /* Adds a subtle section divider */
+    padding-bottom: 5px;
 }
 
 /* Buy Buttons */
 .buy-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 15px;
+    margin-top: 20px;
 }
 .buy-button {
-    display: block;
+    display: inline-block;
     text-align: center;
     background: #ff9900;
     color: white;
-    padding: 12px 15px;
+    padding: 14px 18px;
     text-decoration: none;
     font-weight: bold;
-    border-radius: 5px;
-    transition: background 0.2s;
+    font-size: 16px;
+    border-radius: 6px;
+    transition: background 0.2s, transform 0.1s;
 }
 .buy-button:hover {
     background: #cc7a00;
+    transform: scale(1.05); /* Subtle hover effect */
 }
 
 /* Reviews */
 .reviews {
     padding-left: 20px;
+    font-style: italic;
 }
+.reviews li {
+    margin-bottom: 10px;
+}
+
+/* Book Content */
+.book-content h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #ff9900; /* Matches Reviews & About This Book */
+}
+
+/* Bullet Points (Key Topics Covered) */
+.book-content ul {
+    padding-left: 25px;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+.book-content li {
+    margin-bottom: 8px;
+    list-style-type: "✔️ "; /* Replaces default bullets with checkmarks */
+}
+
 
 /* Mobile-friendly */
 @media (max-width: 768px) {
     .book-detail {
         flex-direction: column;
-        align-items: flex-start; /* Keeps everything left-aligned */
-        text-align: left; /* Ensures text is left-aligned */
-        padding: 15px;
+        align-items: flex-start;
+        padding: 20px;
     }
     .book-info {
         max-width: 100%;
@@ -101,8 +142,8 @@
         width: 100%;
     }
     .buy-button {
-        width: auto;
-        text-align: left;
+        width: 100%;
+        text-align: center;
     }
 }
 </style>
