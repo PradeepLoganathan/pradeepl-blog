@@ -19,9 +19,17 @@
 
         <h2>Reviews</h2>
         <ul class="reviews">
-        {{ range .Params.reviews }}
-            <li><strong>{{ .name }}:</strong> {{ .text }}</li>
-        {{ end }}
+            {{ range .Params.reviews }}
+            <li>
+                <strong>{{ .name }}</strong> 
+                <span class="stars">
+                    {{ range seq .rating }}
+                        ⭐
+                    {{ end }}
+                </span>
+                <p>{{ .text }}</p>
+            </li>
+            {{ end }}
         </ul>
 
         <h2>About This Book</h2>
@@ -45,6 +53,8 @@
         <div class="flip-arrow right-arrow" onclick="bookViewer.flipNext()">&#10095;</div>
     </div>
 </div>
+
+<style>
 
 /* Navigation Arrows */
 .flip-arrow {
@@ -74,8 +84,13 @@
     right: 20px;
 }
 
+/* Star Ratings */
+.stars {
+    color: #ffcc00; /* Gold color for stars */
+    font-size: 18px;
+    margin-left: 5px;
+}
 
-<style>
 /* General styles */
 .book-detail {
     display: flex;
@@ -197,6 +212,7 @@
     background-color: rgba(0, 0, 0, 0.8);
     justify-content: center;
     align-items: center;
+    overflow-y: auto; /* Allow scrolling */
 }
 .modal-content {
     background: white;
@@ -207,23 +223,50 @@
     border-radius: 10px;
     position: relative;
 }
+
+/* Ensure it becomes visible when needed */
+.modal.active {
+    display: flex;
+}
+
 .close {
     position: absolute;
+    top: 15px;
     right: 20px;
-    top: 10px;
-    font-size: 28px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #000;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 50%;
     cursor: pointer;
+    z-index: 1000; /* Ensure it's always above other elements */
+}
+
+.close:hover {
+    background: red;
+    color: white;
 }
 
 /* Flipbook */
 #book-viewer {
-    width: 500px;
-    height: 850px;
-    margin: auto;
+    width: 90vw;  /* 90% of the viewport width */
+    max-width: 600px;
+    height: auto; /* Maintain aspect ratio */
 }
 
 /* Mobile-friendly */
 @media (max-width: 768px) {
+    .modal-content {
+        width: 95%; /* Ensure modal uses most of the available screen */
+        max-width: 90vw;
+    }
+
+    #book-viewer {
+        width: 80vw;
+        height: auto; /* Maintain A4 aspect ratio */
+    }
+   
     .book-detail {
         flex-direction: column;
         align-items: flex-start;
@@ -249,53 +292,100 @@
 <!-- 📖 JavaScript for Modal and Flipbook -->
 <script src="https://cdn.jsdelivr.net/npm/page-flip@latest/dist/js/page-flip.browser.js"></script>
 <script>
-let bookViewer;  // Define the flipbook instance globally
+// Define the flipbook instance globally
+let bookViewer = null;  
 
 function openPreview() {
-    document.getElementById("preview-modal").style.display = "flex";
+    console.log("Opening preview...");
 
-    // Check if PageFlip already exists, destroy it before recreating
-    if (bookViewer) {
-        bookViewer.destroy();
+    const previewModal = document.getElementById("preview-modal");
+    let bookViewerContainer = document.getElementById("book-viewer");
+
+    // ✅ Ensure modal and container exist before proceeding
+    if (!previewModal) {
+        console.error("Error: #preview-modal not found.");
+        return;
     }
 
-    // Initialize Flipbook
-    bookViewer = new St.PageFlip(document.getElementById("book-viewer"), {
-        width: 500, 
-        height: 850, 
+    // ✅ If book-viewer does not exist, recreate it inside the modal
+    if (!bookViewerContainer) {
+        console.warn("Warning: #book-viewer was removed. Recreating...");
+        bookViewerContainer = document.createElement("div");
+        bookViewerContainer.id = "book-viewer";
+        previewModal.querySelector(".modal-content").appendChild(bookViewerContainer);
+    } else {
+        // ✅ Clear old contents without removing the container itself
+        bookViewerContainer.innerHTML = "";
+    }
+
+    // Show the modal
+    previewModal.classList.add("active");
+
+    // Destroy previous instance of PageFlip if it exists
+    if (bookViewer) {
+        console.log("Destroying previous PageFlip instance...");
+        bookViewer.destroy();
+        bookViewer = null;
+    }
+
+    const viewportWidth = window.innerWidth;
+    let bookWidth = Math.min(600, viewportWidth * 0.9); // Scale down if needed
+    let bookHeight = bookWidth * 1.414; // Maintain A4 aspect ratio
+
+    // ✅ Correctly initialize PageFlip with responsive dimensions
+    bookViewer = new St.PageFlip(bookViewerContainer, {
+        width: bookWidth,
+        height: bookHeight,
         maxShadowOpacity: 0.5,
         showCover: true,
         mobileScrollSupport: false
     });
 
+
     // Load preview images dynamically
     const images = [];
-    for (let i = 1; i <= 44; i++) {  // Adjust max number if needed
+    for (let i = 1; i <= 44; i++) {  
         images.push(`/book-previews/serverless-on-kubernetes-with-knative/Chapter1-preview${i}.png`);
     }
 
-    // Create an array of pages
-    const pages = images.map(imgSrc => {
-        const page = document.createElement("div");
-        const img = document.createElement("img");
-        img.src = imgSrc;
-        img.style.width = "100%";
-        img.style.height = "100%";
-        page.appendChild(img);
-        return page;  // Return the created page
-    });
-
-    bookViewer.loadFromHTML(pages);  // Pass an array of elements
-    bookViewer.render();
+    // ✅ Load images properly into the flipbook
+    if (bookViewer) {
+        console.log("Loading pages into flipbook...");
+        bookViewer.loadFromImages(images); // ✅ Correct function to load images
+        bookViewer.update(); // ✅ Instead of .render(), use .update()
+    } else {
+        console.error("Error: bookViewer is not initialized correctly.");
+    }
 }
 
 function closePreview() {
-    document.getElementById("preview-modal").style.display = "none";
+    console.log("Closing preview...");
+
+    const previewModal = document.getElementById("preview-modal");
+    const bookViewerContainer = document.getElementById("book-viewer");
+
+    // ✅ Ensure modal exists before proceeding
+    if (!previewModal) {
+        console.error("Error: #preview-modal not found.");
+        return;
+    }
+
+    // Hide the modal
+    previewModal.classList.remove("active");
+
+    // ✅ Properly destroy the flipbook instance before closing
     if (bookViewer) {
-        bookViewer.destroy();  // Cleanup the flipbook instance
+        console.log("Destroying PageFlip instance...");
+        bookViewer.destroy();
         bookViewer = null;
     }
+
+    // ✅ Keep #book-viewer container but clear its content
+    if (bookViewerContainer) {
+        bookViewerContainer.innerHTML = "";
+    }
 }
+   
 </script>
 
 
