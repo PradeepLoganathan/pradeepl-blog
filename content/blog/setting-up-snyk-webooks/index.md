@@ -2,7 +2,7 @@
 title: "Setting up Snyk Webhooks: A Comprehensive Guide"
 lastmod: 2025-01-16T11:06:43+10:00
 date: 2025-01-16T11:06:43+10:00
-draft: false 
+draft: true 
 Author: Pradeep Loganathan
 tags: 
   - snyk
