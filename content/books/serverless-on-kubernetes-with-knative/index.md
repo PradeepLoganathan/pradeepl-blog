@@ -17,10 +17,20 @@ buy_links:
     button_text: "Buy on Amazon"
   - name: "Barnes & Noble"
     url: "https://www.barnesandnoble.com/w/serverless-on-kubernetes-with-knative-pradeep-loganathan/1146991279"
-    button_text: "Buy on B&N"
+    button_text: "Buy on B & N"
+  - name: "Booktopia"
+    url: "https://www.booktopia.com.au/serverless-on-kubernetes-with-knative-pradeep-loganathan/book/9781763612907.html"
+    button_text: "Buy on Booktopia"
 reviews:
-  - name: "ThePlatformer - Amazon"
+  - name: "ThePlatformer, Amazon.com.au"
     text: "While there is lots of information on Knative online .. this book makes it easier to understand and get started quickly"
+    rating: 5
+  - name: "Kenliard, B&N"
+    text: "Book starts of simple and quickly ramps up to highly technical details with lots of yaml and architecture diagrams. If you are technical you will love it but if you want to just understand then be prepared to skim."
+    rating: 5
+  - name: "Sandy.Seley, B&N"
+    text: "Reading this book and its not very often that I find a book which gives high level details but also goes deep enough with code and YAML configuration. Love it."
+    rating: 5
 ---
 
 This book explores the transformative world of serverless computing and its integration with Kubernetes using Knative. Designed for developers, architects, and platform operators, this book delves into the evolution of serverless, its core principles, and practical applications.
