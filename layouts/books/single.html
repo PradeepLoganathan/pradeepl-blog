@@ -69,6 +69,7 @@
     border-radius: 50%;
     user-select: none;
     transition: 0.2s;
+    z-index: 1000; /* ✅ Ensure it stays above other elements */
 }
 
 .flip-arrow:hover {
@@ -77,12 +78,13 @@
 
 /* Position Arrows */
 .left-arrow {
-    left: 20px;
+    left: 10px; /* ✅ Adjust for visibility */
 }
 
 .right-arrow {
-    right: 20px;
+    right: 10px;
 }
+
 
 /* Star Ratings */
 .stars {
@@ -212,16 +214,22 @@
     background-color: rgba(0, 0, 0, 0.8);
     justify-content: center;
     align-items: center;
-    overflow-y: auto; /* Allow scrolling */
+    overflow: auto; /* ✅ Allow scrolling on smaller screens */
 }
+
+/* Center modal content */
 .modal-content {
     background: white;
     padding: 20px;
-    width: 80%;
-    max-width: 800px;
+    width: 90vw;
+    max-width: 700px; /* Limit max width */
     text-align: center;
     border-radius: 10px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* ✅ Ensures centering */
 }
 
 /* Ensure it becomes visible when needed */
@@ -248,11 +256,15 @@
     color: white;
 }
 
-/* Flipbook */
+/* Ensure flipbook fits within modal */
 #book-viewer {
-    width: 90vw;  /* 90% of the viewport width */
-    max-width: 600px;
-    height: auto; /* Maintain aspect ratio */
+    width: 100%;
+    max-width: 600px; /* ✅ Keeps the book from overflowing */
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
 /* Mobile-friendly */
@@ -266,7 +278,18 @@
         width: 80vw;
         height: auto; /* Maintain A4 aspect ratio */
     }
-   
+    .flip-arrow {
+        font-size: 30px;
+        padding: 8px;
+    }
+
+    .left-arrow {
+        left: 5px; /* ✅ Adjust for smaller screens */
+    }
+
+    .right-arrow {
+        right: 5px;
+    }
     .book-detail {
         flex-direction: column;
         align-items: flex-start;
@@ -331,6 +354,11 @@ function openPreview() {
     const viewportWidth = window.innerWidth;
     let bookWidth = Math.min(600, viewportWidth * 0.9); // Scale down if needed
     let bookHeight = bookWidth * 1.414; // Maintain A4 aspect ratio
+
+    // ✅ Center the book inside the modal
+    bookViewerContainer.style.width = `${bookWidth}px`;
+    bookViewerContainer.style.height = `${bookHeight}px`;
+    bookViewerContainer.style.margin = "auto";
 
     // ✅ Correctly initialize PageFlip with responsive dimensions
     bookViewer = new St.PageFlip(bookViewerContainer, {
