@@ -352,7 +352,7 @@ function openPreview() {
     }
 
     const viewportWidth = window.innerWidth;
-    let bookWidth = Math.min(600, viewportWidth * 0.9); // Scale down if needed
+    let bookWidth = Math.min(600, viewportWidth * 0.85); // Scale down if needed
     let bookHeight = bookWidth * 1.414; // Maintain A4 aspect ratio
 
     // ✅ Center the book inside the modal
@@ -366,7 +366,7 @@ function openPreview() {
         height: bookHeight,
         maxShadowOpacity: 0.5,
         showCover: true,
-        mobileScrollSupport: false
+        mobileScrollSupport: true
     });
 
 
