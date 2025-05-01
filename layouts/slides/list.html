@@ -1,0 +1,74 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+<p>{{ .Description }}</p>
+
+<div class="slides-container">
+    {{ range .Pages.ByWeight }}
+    <div class="slide-card">
+        {{ $cover := "" }}
+
+        {{ if .Resources }}
+            {{ $coverResource := .Resources.GetMatch (.Params.cover.image) }}
+            {{ if $coverResource }}
+                {{ $cover = $coverResource.RelPermalink }}
+            {{ end }}
+        {{ end }}
+
+        {{ if not $cover }}
+            {{ $cover = .Params.cover.image | safeURL }}
+        {{ end }}
+
+        <img src="{{ $cover }}" alt="{{ .Params.cover.alt }}">
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <p>{{ .Params.description }}</p>
+        <a class="slide-details" href="{{ .RelPermalink }}">View Slides</a>
+    </div>
+    {{ end }}
+</div>
+
+<style>
+h1 {
+    margin-bottom: 30px;
+}
+
+.slides-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.slide-card {
+    width: 300px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.slide-card h2 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+.slide-card p {
+    margin-bottom: 15px;
+}
+.slide-card img {
+    width: 200px;
+    height: 150px;
+    border-radius: 5px;
+    object-fit: contain;
+}
+.slide-details {
+    display: inline-block;
+    margin-top: auto;
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+</style>
+{{ end }}
