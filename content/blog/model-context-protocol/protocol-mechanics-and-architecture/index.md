@@ -56,19 +56,63 @@ As discussed above, all MCP communications are built on **structured messages** 
 
 These fields make MCP messages self-descriptive and machine-readable. Notably, there is no explicit field for "message type" -- instead, the presence or absence of certain fields defines the type. For example, a message with a `method` and no `result` or `error` is a **Request**; a message with `result` or `error` (but no `method`) is a **Response** to a prior request; and a message with a `method` but **no** `id` is treated as a one-way **Notification** (no response expected). 
 
-## Transport Layers: STDIO, HTTP+SSE, and WebSockets
+## MCP Transport Layers and Connection Flows
 
-Now we know the communication language and the structure. We can now focus on how messages are transported. MCP is transport-agnostic: **any channel that can carry JSON text can be used to send MCP messages**. In practice, the MCP specification supports several transport layers, each suited to different scenarios. The main transports are Standard I/O, HTTP with Server-Sent Events, and WebSockets:
+The Model Context Protocol (MCP) is **transport-agnostic**, meaning it can operate over any channel capable of carrying JSON text. This flexibility allows MCP to support multiple transport layers---Standard Input/Output (STDIO), HTTP with Server-Sent Events (SSE), and WebSockets---each suited to specific use cases. Below, we explore these transport mechanisms, their connection flows, message framing, and their respective strengths and limitations.
 
--   **Standard Input/Output (STDIO):** Uses the process's stdin/stdout streams for communication. Typically used when the MCP server runs as a local subprocess of the host (similar to how language servers work). This yields extremely low latency (microseconds) since no networking is involved. *Pros:* very fast, simple setup for local plugins, and inherits OS security (only the user's process can access it). *Cons:* limited to local connections (cannot easily connect to a remote server), and requires the host to manage the server process lifecycle. *Use cases:* local integrations such as an AI assistant spawning a tool-access server on the same machine (e.g. accessing local filesystem or databases securely within the user's environment).
+### Transport Layers
 
--   **HTTP + SSE (Server-Sent Events):** Uses standard HTTP requests for client-to-server communication, and a long-lived SSE connection for server-to-client streaming updates. This is suitable for remote servers and one-way streaming of data from server to client. *Pros:* works with existing web infrastructure (can be proxied via HTTP), easy to implement incremental results (server can push data in real-time), and compatible with web clients that can't initiate arbitrary sockets. *Cons:* SSE is unidirectional (server to client only), so the client must use separate HTTP POST requests to send commands. Managing two channels (HTTP + SSE) adds complexity, and long-lived SSE connections may need special handling with load balancers or proxies (they must allow keeping the HTTP response open). *Use cases:* cloud-based or remote MCP servers where the client is maybe a browser or an environment that prefers HTTP. For example, an AI assistant connecting to a cloud data source might use HTTP+SSE so the server can stream results back as they become available.
+MCP supports three primary transport layers, each designed to balance latency, infrastructure compatibility, and interactivity:
 
--   **WebSockets:** Uses a persistent full-duplex WebSocket connection for communication. This allows **bidirectional** message flow over a single connection with low latency (on the order of milliseconds). *Pros:* true real-time two-way communication, only one connection to manage, and efficient for interactive or high-frequency message exchange. *Cons:* requires WebSocket support (which may be blocked or require additional configuration in some corporate networks), and slightly more overhead in establishing the connection (handshaking a WebSocket). *Use cases:* interactive scenarios or long-running connections, such as an AI IDE continually interacting with a tool server. WebSockets shine when the client and server need to send messages arbitrarily at any time (e.g. the server sending spontaneous notifications/events and the client issuing commands) without the overhead of repeated HTTP requests.
+- **Standard Input/Output (STDIO):**\
+    STDIO leverages a process's stdin and stdout streams for communication, typically when the MCP server runs as a local subprocess of the host application (similar to Language Server Protocol implementations).
 
-MCP does not change its JSON message format based on transport -- it simply tunnels the JSON through these mechanisms. For example, a local STDIO-based server will read JSON messages from stdin (often framed with length headers, similar to the Language Server Protocol) and write JSON responses to stdout. In an HTTP+SSE setup, the client might `POST` a JSON request to the server (perhaps at a `/mcp` endpoint), and the server responds asynchronously by pushing a JSON message over the SSE stream. WebSockets naturally carry JSON text frames back and forth. The **choice of transport** depends on deployment needs: STDIO for local plugins, HTTP+SSE for web-friendly streaming, or WebSockets for full-duplex interactivity.
+    - **Pros:** Extremely low latency (microseconds) due to no network overhead, simple setup for local plugins, and inherits OS-level security (only the user's process can access it).
+    - **Cons:** Limited to local connections (cannot easily connect to remote servers), and requires the host to manage the server process lifecycle.
+    - **Use Cases:** Local integrations, such as an AI assistant spawning a tool-access server on the same machine to securely access the local filesystem or databases.
 
-> **Note:** A newer addition to MCP is *Streamable HTTP*, which aims to use a single HTTP connection that can be upgraded to a streaming mode (similar to SSE) when needed. This approach is intended to simplify the current HTTP+SSE split by using a unified mechanism. As of the 2025 spec, SSE remains the primary streaming method for HTTP transports, but the protocol is evolving towards more flexible HTTP streaming support.
+- **HTTP + Server-Sent Events (SSE):**\
+    This transport uses standard HTTP requests for client-to-server communication and a long-lived SSE connection for server-to-client streaming. It's ideal for remote servers and one-way data streaming.
+
+    - **Pros:** Compatible with existing web infrastructure (e.g., proxies), supports real-time incremental results via server push, and works with web clients that cannot initiate arbitrary sockets.
+    - **Cons:** SSE is unidirectional (server-to-client only), requiring separate HTTP POST requests for client-to-server communication. Managing dual channels (HTTP + SSE) adds complexity, and long-lived SSE connections may require special handling with load balancers or proxies.
+    - **Use Cases:** Cloud-based or remote MCP servers, such as an AI assistant connecting to a cloud data source that streams results as they become available (e.g., in a browser environment).
+    - **Note:** MCP is exploring *Streamable HTTP* to unify HTTP+SSE into a single connection with streaming capabilities. As of the 2025 spec, SSE remains the primary HTTP streaming method, but future iterations may enhance this.
+
+-   **WebSockets:**\
+    WebSockets provide a persistent, full-duplex connection for bidirectional communication with low latency (milliseconds).
+
+    - **Pros:** True real-time two-way communication, single connection management, and efficient for interactive or high-frequency message exchanges.
+    - **Cons:** Requires WebSocket support, which may be restricted in some corporate networks, and involves slight overhead during connection handshaking.
+    - **Use Cases:** Interactive scenarios or long-running connections, such as an AI-powered IDE continuously interacting with a tool server for spontaneous notifications and commands.
+
+MCP's JSON message format remains consistent across all transports, tunneled through the chosen mechanism. The choice of transport depends on deployment needs: STDIO for local plugins, HTTP+SSE for web-friendly streaming, and WebSockets for full-duplex interactivity.
+
+### Connection Flows and Message Framing
+
+Each transport defines how MCP messages are exchanged and framed (delimited) on the wire, ensuring reliable, ordered delivery of JSON-RPC messages. Below is an overview of the connection flows and framing for each transport:
+
+- **STDIO Transport:**
+
+    - **Connection Flow:** Used when the MCP client (within the host application) and server run on the same machine. The host application launches the server as a subprocess (e.g., npx -y @modelcontextprotocol/server-filesystem /path/to/root). Communication occurs over the server's stdin and stdout pipes, effectively forming the "connection."
+    - **Message Framing:** JSON-RPC messages are exchanged over stdin/stdout. Simple implementations may separate messages with newlines, but robust systems (similar to LSP) use explicit framing, prefixing each JSON message with headers like Content-Length: NNN\r\n\r\n, followed by the JSON payload. This ensures accurate message delimitation, especially for large messages.
+    - **Use Case Example:** A local tool server handling file system operations or Git commands, where the host manages the server's lifecycle.
+
+- **HTTP + SSE Transport:**
+
+    - **Connection Flow:** Supports communication between clients and servers on the same or different machines. The MCP server runs independently, exposing an HTTP endpoint (e.g., http://localhost:3000/mcp). The client initiates a standard HTTP connection, and the server uses SSE to push JSON-RPC messages asynchronously over a persistent connection.
+    - **Message Framing:** SSE uses a text-based framing protocol. Messages are sent as "events" with fields like event: message_type (optional), data: json_payload, id: (optional), and retry: (optional). Each field is a line, and events are terminated by a double newline (\n\n). MCP JSON-RPC messages are encoded as JSON strings within the data: field of an SSE event. Clients send commands via separate HTTP POST requests to the server's endpoint (e.g., /mcp).
+    - **Use Case Example:** A web-based client accessing a remote MCP server for shared services or APIs, with the server streaming results back.
+
+-   **WebSockets Transport:**
+
+    - **Connection Flow:** A single WebSocket connection is established, enabling full-duplex communication. The client connects to the server's WebSocket endpoint, and both parties can send messages at any time after the handshake.
+    - **Message Framing:** WebSockets naturally carry JSON text frames bidirectionally. Each MCP JSON-RPC message is sent as a single WebSocket frame, with no additional framing required beyond the WebSocket protocol's built-in message boundaries.
+    - **Use Case Example:** An interactive AI IDE sending commands and receiving spontaneous server notifications over a single, low-latency connection.
+
+### Transport Abstraction
+
+MCP's design ensures the higher-level protocol (JSON-RPC + capabilities) remains consistent across transports. Developers can switch transports---e.g., from STDIO during development to WebSockets in production---without altering the core logic of their MCP client or server. SDKs or transport handlers abstract away the details of framing and connection management, allowing seamless transitions between transports based on deployment requirements.
 
 ## Capabilities in MCP: Tools, Resources, and Prompts
 
@@ -288,17 +332,6 @@ If something went wrong during the invocation -- for example, the client provide
 Just like the resource example, the meaning is clear: the requested tool doesn't exist (hence no result). The client should handle this gracefully -- perhaps by informing the AI that the tool is unavailable or by attempting an alternative approach. MCP does not fix a strict list of error codes beyond recommending reusing JSON-RPC's conventions. Servers often use codes analogous to HTTP (400 for bad request, 404 for not found, etc.) or the standard JSON-RPC codes (like -32601 for "Method not found"). The **error handling** strategy is up to the implementation, but the structure is always the same. This consistency makes it easier for client libraries to handle errors uniformly, regardless of the specific cause.
 
 In addition to direct invocation results, MCP also supports **notifications and streaming** for longer-running operations. Notifications can be used for things like "resource changed" events if the protocol is extended to support subscriptions. These advanced patterns are optional, but they illustrate the flexibility of MCP's message model to handle not just simple request/response but also asynchronous event flows when needed.
-
-## Connection Flows and Message Framing Across Transports
-
-The exact sequence of bytes exchanged for MCP messages depends on the transport. Let's briefly look at how a typical flow works in each supported transport and how messages are framed (delimited) on the wire:
-
-- **STDIO Transport:** This transport is used when the MCP Client (within the Host application) and the MCP Server run as processes on the *same machine*. Typically, the Host application is responsible for launching and managing the lifecycle of the server as a subprocess. Communication occurs by exchanging JSON-RPC messages over the server process's standard input (`stdin`) and standard output (`stdout`) streams. This is common for integrating tools that need direct access to the local environment, like file system operations or Git commands.
-The Host application typically initiates the connection by starting the server process using a configured command (e.g., npx -y @modelcontextprotocol/server-filesystem /path/to/root ). The "connection" is essentially the pair of stdin/stdout pipes between the Host and the server subprocess. While simple implementations might send JSON messages separated by newlines, robust communication over stdio (similar to LSP) typically requires explicit message framing to handle messages correctly, especially large ones. This usually involves prefixing each JSON message string with headers indicating its length, such as the Content-Length: NNN\r\n\r\n header, followed by the JSON payload itself. This ensures the receiving end knows exactly how many bytes constitute a complete message.
-
-- **HTTP + SSE Transport:** This transport enables communication between clients and servers that may be running on the same machine or, more significantly, on *different machines* across a network. The MCP Server runs as an independent process (managed by the developer or user, not necessarily the Host) and exposes an HTTP endpoint. The Client establishes a standard HTTP connection to this endpoint. After the initial connection, the server uses the Server-Sent Events standard to push JSON-RPC messages asynchronously to the client over this persistent connection. This is suitable for accessing shared services, remote APIs, or web-based tools. The Client acts as an HTTP client, initiating a connection to the Server's designated SSE endpoint URL (e.g., `http://localhost:3000/mcp`). Standard HTTP connection procedures apply. The connection is kept alive to allow the server to push events. SSE itself defines a clear text-based framing protocol. Messages are sent as "events," typically structured with fields like `event: message_type` (optional), `data: json_payload`, `id:` (optional event ID), `retry:` (optional reconnection time). Each field is a line, and a complete event is terminated by a double newline (`\n\n`). Each MCP JSON-RPC message is usually encoded as a JSON string and sent within the `data:` field of an SSE event.
-
-Despite the differences, all transports aim to provide a **reliable, ordered delivery** of JSON messages. MCP's design ensures the higher-level protocol (JSON-RPC + capabilities) works the same regardless of transport. In fact, developers can often switch transports without changing the core logic of their MCP client or server -- the SDK or transport handler abstracts away the details of framing and connection management. For example, during development you might use STDIO for simplicity, and later switch to WebSocket for a production deployment; the messages your code sends (initialize, list, call, etc.) remain identical.
 
 ## Core Security Principles
 
