@@ -2,29 +2,31 @@
 title: "MCP - Protocol Mechanics and Architecture"
 lastmod: 2025-05-01T19:03:33+10:00
 date: 2025-05-01T19:03:33+10:00
-draft: true
+draft: false # Changed to false, assuming it's ready for publishing
 Author: Pradeep Loganathan
-tags: 
-  - 
-  - 
-  - 
+tags:
+  - Model Context Protocol
+  - AI Protocols
+  - JSON-RPC
+  - API Design
 categories:
-  - 
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
-description: "meta description"
-summary: "summary used in summary pages"
+  - AI Development
+#slug: kubernetes/introduction-to-open-policy-agent-opa/ # Commented out slug if not needed or incorrect
+description: "Dive deep into the technical architecture and mechanics of the Model Context Protocol (MCP), an open standard for connecting AI models to external tools and data sources using JSON-RPC 2.0." # Example description
+summary: "Part 2 of our MCP series explores the technical foundations: JSON-RPC communication, supported transports (STDIO, HTTP/SSE, WebSockets), capability discovery (tools, resources, prompts), invocation methods, and security principles." # Example summary
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - images/MCP-technical-details.png
 cover:
-    image: "images/cover.jpg"
-    alt: ""
-    caption: ""
-    relative: true # To use relative path for cover image, used in hugo Page-bundles
+  image: "images/MCP-technical-details.png" 
+  alt: "MCP - Protocol Mechanics and Architecture" 
+  caption: "MCP - Protocol Mechanics and Architecture" 
+  relative: true
 series: ["Model Context Protocol"]
-
+mermaid: true
 ---
+
 
 Welcome back to our series on the [Model Context Protocol (MCP)]({{< relref "/series/model-context-protocol/" >}})! In [Part 1]({{< relref "/blog/model-context-protocol/introduction-to-model-context-protocol/">}}), we explored the fundamental challenge MCP addresses: the complex web of custom integrations needed to connect diverse AI applications with the ever-growing universe of external tools and data sources -- the "M x N" problem. We introduced MCP as a promising solution, an open standard designed to simplify this landscape into a more manageable "M + N" scenario by providing a universal communication layer. Often described as a "USB-C port for AI," MCP aims to standardize how AI models plug into the context they need, fostering a more interoperable ecosystem.
 
@@ -35,7 +37,7 @@ This post, Part 2, shifts gears from the 'why' to the 'how'. We'll dive deep int
 
 Now that we've set the stage, let's begin our technical exploration by examining the very foundation of MCP communication: how do the different components – the Host application, the MCP Client, and the MCP Server – actually talk to each other?  To ensure consistency and interoperability across the diverse ecosystem of AI applications and tools, MCP relies on a well-established standard for structuring these conversations. This brings us to the protocol's core communication mechanism.
 
-The communication between MCP Clients and Servers is built upon the JSON-RPC 2.0 specification. This choice provides several advantages:
+The communication between MCP Clients and Servers is built upon the **JSON-RPC 2.0** specification. This choice provides several advantages:
 
 - **Standardization:** It leverages a well-defined, widely implemented, and understood remote procedure call protocol.
 - **Simplicity:** JSON-RPC 2.0 defines a relatively straightforward structure for requests, responses, and notifications.
@@ -122,6 +124,28 @@ MCP's design ensures the higher-level protocol (JSON-RPC + capabilities) remains
 
 Now that we understand the communication foundation and how messages are transmitted we can focus on how communication actually occurs. First..How does an AI client know what capabilities a server provides? MCP includes a discovery mechanism. When a connection is first established, the client and server perform a **handshake** (initialization sequence) where they exchange supported features. The client sends an `initialize` request identifying the MCP protocol version it speaks and perhaps its own capabilities or preferences. The server responds with an acknowledgment that includes its available capability types (whether it has resources, tools, and/or prompts, and possibly other info like server name/version). This exchange ensures both sides know what the other supports (for example, a server might declare it supports the "resources" and "tools" features, but not "prompts"). After this, the client sends an `initialized` notification to finalize the handshake.
 
+{{< mermaid >}}
+sequenceDiagram
+    title MCP Session Initialization
+    participant Client
+    participant Server
+
+    Note over Client,Server: MCP = Message Control Protocol
+
+    Client->Server: initialize Request<br>{"id": 1, "method": "initialize", "params": {...}}
+    activate Server
+    alt Success
+        Server-->Client: initialize Response<br>{"id": 1, "result": {"capabilities": {...}, "serverInfo": {...}}}
+    else Failure
+        Server-->Client: Error Response<br>{"id": 1, "error": {"code": -32000, "message": "Server not ready"}}
+    end
+    deactivate Server
+
+    Client->Server: initialized Notification<br>{"method": "initialized", "params": {}}
+
+    Note right of Server: MCP Session is now established
+{{< /mermaid >}}
+
 Once initialized, the client can query the server for specific capability details. MCP defines the below **standard JSON-RPC methods** for discovering and using capabilities:
 
 -   **`resources/list`:** Discovers what resources the server offers. The server returns a list of resource descriptors (each typically includes a `uri`, a human-friendly `name` or description, and maybe a MIME type or other metadata).
@@ -198,7 +222,38 @@ Establishing a connection in MCP involves both setting up the transport and perf
 
 At this point, the MCP session is live and ready for use. The next step is usually **capability discovery**: the client will call the listing methods to get available resources, tools, or prompts. This can be done immediately after initialization, or later on demand when the AI needs something. It's common for a client to do it upfront so that an AI agent can be aware of what's available in its context.
 
-Let's walk through an example of discovering a resource and then using it, to illustrate the message flow and structures:
+Let's walk through an example of discovering a resource and then using it, to illustrate the message flow and structures. The diagram below illustrates the typical flow for invoking a tool, showing both successful and failed outcomes.
+
+{{< mermaid >}}
+sequenceDiagram
+    title MCP Resource Access Sequence
+    participant MCP-Client
+    participant MCP-Server
+
+    Note over MCP-Client,MCP-Server: MCP Session already established
+
+    MCP-Client->MCP-Server: resources/list Request<br>{"id": 1, "method": "resources/list", "params": {}}
+    activate MCP-Server
+    alt Success
+        MCP-Server-->MCP-Client: resources/list Response<br>{"id": 1, "result": {"resources": ["demo://greeting.txt", "demo://info.txt"]}}
+    else Failure
+        MCP-Server-->MCP-Client: resources/list Error Response<br>{"id": 1, "error": {"code": -32600, "message": "Invalid request"}}
+    end
+    deactivate MCP-Server
+
+    Note left of MCP-Client: Client processes resource list<br>and identifies needed URI
+
+    MCP-Client->MCP-Server: resources/read Request<br>{"id": 2, "method": "resources/read", "params": {"uri":"demo://greeting.txt"}}
+    activate MCP-Server
+    alt Success
+        MCP-Server-->MCP-Client: resources/read Response<br>{"id": 2, "result": {"contents": "Hello, World!"}}
+    else Failure
+        MCP-Server-->MCP-Client: resources/read Error Response<br>{"id": 2, "error": {"code": -32602, "message": "Resource not found"}}
+    end
+    deactivate MCP-Server
+
+    Note left of MCP-Client: Client processes resource content
+{{< /mermaid >}}
 
 **Example -- Listing and Reading a Resource:** Suppose the MCP server provides access to a simple resource (say, a text file). After the handshake, the client can ask for a list of resources:
 
@@ -286,9 +341,31 @@ Through this discovery sequence, the client learned what resources are available
 
 ## Invoking Capabilities: Requests, Results, and Errors
 
-Now that we know and understand how to use resources..lets focus on tools. Once capabilities are discovered, the host can **invoke** them as needed. Invocations in MCP are simply JSON-RPC requests to the appropriate method (like `tools/call` or a specific resource action). The server will execute the request and send back a response. Let's consider how a tool invocation works to illustrate the general pattern (tools often have more interesting inputs/outputs than a static resource):
+Now that we know how to discover and use resources, let's focus on tools. Once capabilities are discovered, the host can **invoke** them as needed. Invocations in MCP are simply JSON-RPC requests to the appropriate method (like `tools/call` or a specific resource action). The server will execute the request and send back a response. The diagram below illustrates the typical flow for invoking a tool, showing both successful and failed outcomes.
 
-Suppose the server in our example also provides a simple tool named `"echo"` that just repeats back a message. The client would first have obtained this tool's info via `tools/list` (similar to resources, we won't repeat the listing here). Now, to use the tool, the client sends a request:
+{{< mermaid >}}
+sequenceDiagram
+    title Tool Invocation Sequence (MCP Protocol)
+    participant Client
+    participant Server
+
+    Note over Client,Server: MCP Session already established
+
+    Client->Server: tools/call Request<br>{"id": 3, "method": "tools/call", "params": {"name":"tool_name", "params":{...}}}
+    activate Server
+    alt Successful Invocation
+        Server-->Client: tools/call Success Response<br>{"id": 3, "result": {...}}
+        Note left of Client: Client processes tool result
+    else Invocation Failed
+        Server-->Client: tools/call Error Response<br>{"id": 3, "error": {"code": -32602, "message": "Tool not found"}}
+        Note left of Client: Client handles error
+    end
+    deactivate Server
+{{< /mermaid >}}
+
+Let's consider how a tool invocation works to illustrate the general pattern (tools often have more interesting inputs/outputs than a static resource):
+
+Suppose the server in our example also provides a simple tool named `"echo"` that just repeats back a message. The client would first have obtained this tool's info via `tools/list` (similar to resources, we won't repeat the listing here). Now, to use the tool, the client sends a request. As shown in the diagram, this `tools/call` request includes the tool's name and parameters:
 
 ```json
 // Client -> Server: invoke a tool (echo) via tools/call

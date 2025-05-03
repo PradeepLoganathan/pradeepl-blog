@@ -26,9 +26,8 @@ cover:
   caption: "Diagram showing how MCP connects AI with tools and data"
   relative: true
 mermaid: true
+series: ["Model Context Protocol"]
 ---
-
-
 
 ## What are we trying to solve for ?
 
@@ -80,31 +79,113 @@ That's where the **Model Context Protocol (MCP)** comes in.
 MCP, introduced by Anthropic, is an **open protocol** designed to standardize these interactions. It defines how language models and agent-like systems can:
 
 -   **Discover** what tools and data are available,
-
 -   **Invoke** those tools with structured arguments,
-
 -   **Receive** results in a consistent, LLM-friendly format,
-
 -   And **maintain context** across interactions.
 
 Because MCP is open and composable, it allows developers and tool vendors to build **plug-and-play connectors** that work across models and platforms. You can expose a payment API, a document store, or a CLI tool once---and use it with any assistant that speaks MCP.
 
 Rather than building a new integration every time an AI model changes, you build once, plug in anywhere. By standardizing this interface, MCP shifts the developer's focus back to what matters: **designing smart, secure, and useful AI workflows**---without reinventing the wiring for every tool or data source.
 
+## The Growing MCP Ecosystem
+
+Since its introduction by Anthropic in late 2024 , MCP has rapidly gained traction, fostering a growing ecosystem around the standard.
+
+### Specification and Standards
+
+MCP is positioned as an open standard, stewarded by Anthropic but open to community contribution. The core assets are publicly available:
+
+-   **Specification Repository:** `github.com/modelcontextprotocol/modelcontextprotocol` hosts the normative specification text and schema definitions. The specification uses formal language (RFC2119/RFC8174 keywords like MUST, SHOULD) for clarity.
+-   **Schema:** The protocol contract is defined using TypeScript types first, which are then compiled to JSON Schema for cross-language compatibility.
+-   **Documentation:** The official documentation site, `modelcontextprotocol.io`, provides guides, tutorials, and API references.
+
+### SDK Support
+
+A key factor in MCP's adoption is the availability of official Software Development Kits (SDKs) for major programming languages, facilitating the development of both clients and servers. Official or officially supported SDKs exist for:
+
+-   Python  
+-   TypeScript/JavaScript  
+-   Java (in collaboration with Spring AI)  
+-   C#/.NET (in collaboration with Microsoft)  
+-   Kotlin (in collaboration with JetBrains)  
+-   Rust  
+-   Swift (in collaboration with loopwork-ai)  
+
+This broad language support significantly lowers the barrier for developers to integrate MCP into their existing technology stacks.
+
+### Industry Adoption
+
+MCP has seen remarkably rapid adoption by major players in the AI landscape:
+
+-   **Anthropic:** Integrated MCP into its Claude models and Claude Desktop application.
+-   **OpenAI:** Announced support for MCP in its Agents SDK and ChatGPT desktop applications in early 2025.
+-   **Google:** Integrated MCP support into Vertex AI, the Agent Development Kit (ADK), and upcoming Gemini models, referring to it as a "rapidly emerging open standard".
+-   **Tool and Platform Vendors:** Numerous companies, including development tool providers (Sourcegraph, Zed, Codeium, Replit), enterprise platforms (Block, Apollo), and integration platforms (Zapier, Pipedream), have adopted or built integrations for MCP.
+
+This swift and broad uptake by leading AI companies and the wider developer community signals strong momentum. It suggests a collective recognition of the need for standardization in how AI models interact with external context and tools, moving the industry away from the fragmented M x N integration problem towards a more interoperable M + N ecosystem.
+
+### Complementary Protocols
+
+It's also worth noting that MCP exists within a broader landscape of emerging AI communication standards. Google, for instance, introduced the Agent-to-Agent (A2A) protocol, explicitly positioning it as *complementary* to MCP. While MCP focuses on standardizing how a single agent interacts with tools and data sources, A2A aims to standardize how different autonomous AI agents communicate and collaborate with *each other*. Understanding this distinction helps place MCP within the larger context of building complex, multi-agent AI systems.
+
+
 ## The MCP Architecture: Hosts, Clients, and Servers
 
 {{< mermaid >}}
-graph LR
-    App[AI enabled Application] -->|Sends Query| LLM[AI Model]
-    LLM -->|MCP Request| MCP[MCP Protocol]
-    MCP -->|Standardized Query| Ext1[API]
-    MCP -->|Standardized Query| Ext2[Database]
-    MCP -->|Standardized Query| Ext3[Tool]
-    Ext1 -->|Response| MCP
-    Ext2 -->|Response| MCP
-    Ext3 -->|Response| MCP
-    MCP -->|Normalized Response| LLM
-    LLM -->|Answer/Action| App
+graph TD;
+  subgraph MCP Host
+    App[AI-Enabled Application];
+    LLM[Large Language Model];
+    MCPClient[MCP Client]; 
+
+    
+    App --> |Uses| LLM;
+    App --> |Manages| MCPClient; 
+    LLM --> |Requests Capability| MCPClient;
+  end
+
+
+  subgraph MCP Server Layer
+    Ingress[/ HTTP Ingress / API Gateway/]
+    Router[MCP Request Router];
+    ContextStore[(Context & Schema Store)];
+    Handler[MCP Core Handler];
+    subgraph Adapters
+      APIAdapter[API Adapter];
+      DBAdapter[Database Adapter];
+      ToolAdapter[Tool Adapter];
+    end
+  end
+  subgraph External Systems
+    ExternalAPI[External API Service];
+    Database[Database];
+    Tool[Third-Party Tool];
+  end
+
+
+  MCPClient --> |MCP Request| Ingress;
+
+  
+  Ingress -->|Route| Router;
+  Router -->|Handle| Handler;
+  Handler -->|Lookup| ContextStore;
+  Handler -->|Call API| APIAdapter;
+  Handler -->|Call DB| DBAdapter;
+  Handler -->|Call Tool| ToolAdapter;
+
+
+  APIAdapter -->|Invoke| ExternalAPI;
+  DBAdapter -->|Query| Database;
+  ToolAdapter -->|Invoke| Tool;
+
+  ExternalAPI -->|Response| APIAdapter;
+  Database -->|Response| DBAdapter;
+  Tool -->|Response| ToolAdapter;
+
+
+  Handler --> |Normalized Response| MCPClient;
+  MCPClient --> |Provides Result| LLM; 
+  LLM --> |Generates Answer| App; 
 {{< /mermaid >}}
 
 ### The Client-Server Ecosystem
@@ -124,7 +205,7 @@ MCP Servers can be implemented as local processes communicating via standard I/O
 
 MCP servers expose their capabilities using three core primitives: **Tools**, **Resources**, and **Prompts**. These primitives define how AI models interact with the external world---by performing actions, accessing data, or shaping behavior---with structured metadata and human-in-the-loop safeguards.
 
-* Tools: Tools represent executable capabilities that the MCP server exposes to the AI model or agent—allowing it to perform actions or invoke external services and APIs. Examples range from executing Kubernetes command-line interface (CLI) commands (kubectl, helm, istioctl) , calling a payment processing API, interacting with a version control system like GitHub , or any other defined action. A critical aspect of MCP Tools is how they are described. Unlike traditional APIs defined for machine consumption, **MCP tool definitions are designed to be interpretable by language models**. 
+* **Tools:** Tools represent executable capabilities that the MCP server exposes to the AI model or agent—allowing it to perform actions or invoke external services and APIs. Examples range from executing Kubernetes command-line interface (CLI) commands (kubectl, helm, istioctl) , calling a payment processing API, interacting with a version control system like GitHub , or any other defined action. A critical aspect of MCP Tools is how they are described. Unlike traditional APIs defined for machine consumption, **MCP tool definitions are designed to be interpretable by language models**. 
 
   A tool definition typically includes:
   - A natural language description explaining what the tool does.
@@ -136,9 +217,9 @@ This metadata helps the LLM **understand when and how to use a tool correctly**,
 
 Tools can be unsafe (they might execute code, send emails, make purchases, etc.), so MCP enforces that the user must explicitly allow a tool invocation​. Typically the host will prompt the user “Allow AI to run tool X with these inputs?” and only call the server if confirmed. Tool results can be text or data; if a result is binary (e.g. an image or file generated), the server might return a reference (like a URI or an encoded blob) and the host can decide how to handle it (display to user, etc.). MCP also allows tool annotations – hints about tool behavior (like cost, side effects) – but these are considered untrusted unless from a trusted source​.
 
-* Resources: Resources allow an MCP server to expose structured or unstructured data to the model. This could involve querying databases, accessing specific files or directories on a local filesystem, retrieving information from cloud storage platforms, or accessing specific data streams like customer logs. The server manages the secure retrieval and potential processing of this data based on client requests. Each resource is identified by a URI (e.g. file://, db://, http://). The server acts as a content provider – the client can request the content of a URI or list available URIs. Crucially, resources are selected by the application or user, not by the model directly. This ensures human oversight—for instance, the user must choose which files or records to expose to the assistant. The server may support searching resources or filtering (for instance, a server could implement resources/search for keywords in documents). When a resource is fetched, the server returns its content, possibly with metadata like content type. Large resources might be chunked or streamed. Also, servers can support subscriptions – if a resource might change (e.g. a log file or an online data feed), the client can subscribe and the server will send notifications/resource_updated events with new content or diffs. Resource content is typically injected into the prompt as needed (often truncated or summarized if it’s too large, to fit the context window).
+* **Resources:** Resources allow an MCP server to expose structured or unstructured data to the model. This could involve querying databases, accessing specific files or directories on a local filesystem, retrieving information from cloud storage platforms, or accessing specific data streams like customer logs. The server manages the secure retrieval and potential processing of this data based on client requests. Each resource is identified by a URI (e.g. file://, db://, http://). The server acts as a content provider – the client can request the content of a URI or list available URIs. Crucially, resources are selected by the application or user, not by the model directly. This ensures human oversight—for instance, the user must choose which files or records to expose to the assistant. The server may support searching resources or filtering (for instance, a server could implement resources/search for keywords in documents). When a resource is fetched, the server returns its content, possibly with metadata like content type. Large resources might be chunked or streamed. Also, servers can support subscriptions – if a resource might change (e.g. a log file or an online data feed), the client can subscribe and the server will send notifications/resource_updated events with new content or diffs. Resource content is typically injected into the prompt as needed (often truncated or summarized if it’s too large, to fit the context window).
 
-* Prompts: These are reusable, server-managed templates designed to guide or enhance the AI model's behavior and responses in specific situations. They can be used to maintain consistency in responses, simplify complex or repeated actions, or inject specific instructions or context into the model's processing flow for certain tasks.  For example, a troubleshoot-bug prompt might return a series of messages that first instruct the assistant to ask clarifying questions, then analyze logs, etc. Prompts are user-controlled: the idea is the user chooses to insert that prompt flow (like selecting a pre-made recipe)​. In UIs, these could surface as buttons or slash-commands for the user. They help standardize complex instructions and can be shared across apps. Importantly, because prompts come from an external source, there is a risk of prompt injection if a prompt template is malicious. Implementations should only include prompt templates from trusted servers or after user review, and even then the user should know what the prompt will do. The MCP spec advises treating tool descriptions and prompt templates as untrusted by default, unless the server is fully trusted​
+* **Prompts:** These are reusable, server-managed templates designed to guide or enhance the AI model's behavior and responses in specific situations. They can be used to maintain consistency in responses, simplify complex or repeated actions, or inject specific instructions or context into the model's processing flow for certain tasks.  For example, a troubleshoot-bug prompt might return a series of messages that first instruct the assistant to ask clarifying questions, then analyze logs, etc. Prompts are user-controlled: the idea is the user chooses to insert that prompt flow (like selecting a pre-made recipe)​. In UIs, these could surface as buttons or slash-commands for the user. They help standardize complex instructions and can be shared across apps. Importantly, because prompts come from an external source, there is a risk of prompt injection if a prompt template is malicious. Implementations should only include prompt templates from trusted servers or after user review, and even then the user should know what the prompt will do. The MCP spec advises treating tool descriptions and prompt templates as untrusted by default, unless the server is fully trusted​
 
 ### Interaction Patterns and Data Flow
 
@@ -148,8 +229,8 @@ The typical interaction flow within the MCP ecosystem follows a request-response
 2. The Host communicates this need to the MCP Client.
 3. The MCP Client translates the Host's need into a standardized MCP Request message, including necessary parameters and a unique request ID, and sends it to the appropriate MCP Server.
 4. The MCP Server receives the request, validates it, and determines which Tool or Resource primitive is required.
-5. The Server executes the Tool logic (e.g., calls the order status API) or retrieves the data using the Resource primitive (e.g., queries the order database).4
-6. The Server packages the result (or any error encountered) into an MCP Response message, correlating it with the original request ID.1
+5. The Server executes the Tool logic (e.g., calls the order status API) or retrieves the data using the Resource primitive (e.g., queries the order database).
+6. The Server packages the result (or any error encountered) into an MCP Response message, correlating it with the original request ID.
 7. The Server sends the MCP Response back to the MCP Client.
 8. The MCP Client receives the response, potentially translates it back into a format the Host understands, and delivers the result to the MCP Host.
 
@@ -158,18 +239,15 @@ In addition to this synchronous flow, MCP supports asynchronous Notifications. S
 ## What's Next?
 ------------
 
-In this post, we explored the *why* and *what* of the Model Context Protocol---why it exists, how it works conceptually, and what kinds of real-world AI integrations it enables. We covered the roles of hosts, clients, and servers, as well as the core primitives (tools, resources, and prompts) that power MCP's extensibility.
+In the first post of the series on [Model Context Protocol Servers]({{< relref "/series/model-context-protocol/" >}}), we explored the *why* and *what* of the Model Context Protocol---why it exists, how it works conceptually, and what kinds of real-world AI integrations it enables. We covered the roles of hosts, clients, and servers, as well as the core primitives (tools, resources, and prompts) that power MCP's extensibility.
 
 But we've only scratched the surface.
 
 In **Part 2 of this series**, we'll go under the hood to examine how MCP works at a protocol level:
 
 -   How messages are structured using JSON-RPC 2.0
-
 -   How stateful sessions are maintained across multiple interactions
-
 -   How transports like `stdio` and `HTTP + SSE` enable flexible deployment
-
 -   What design choices make MCP secure, composable, and scalable
 
 If you're curious about how LLMs actually "talk" to real systems---or thinking about integrating MCP into your own tools---you won't want to miss it.
