@@ -22,14 +22,18 @@ cover:
     alt: ""
     caption: ""
     relative: true # To use relative path for cover image, used in hugo Page-bundles
- 
+series: ["Model Context Protocol"]
+
 ---
 
-Welcome back to our series on the Model Context Protocol (MCP)! In Part 1, we explored the fundamental challenge MCP addresses: the complex web of custom integrations needed to connect diverse AI applications with the ever-growing universe of external tools and data sources -- the "M x N" problem. We introduced MCP as a promising solution, an open standard designed to simplify this landscape into a more manageable "M + N" scenario by providing a universal communication layer. Often described as a "USB-C port for AI," MCP aims to standardize how AI models plug into the context they need, fostering a more interoperable ecosystem.
+Welcome back to our series on the [Model Context Protocol (MCP)]({{< relref "/series/model-context-protocol/" >}})! In [Part 1]({{< relref "/blog/model-context-protocol/introduction-to-model-context-protocol/">}}), we explored the fundamental challenge MCP addresses: the complex web of custom integrations needed to connect diverse AI applications with the ever-growing universe of external tools and data sources -- the "M x N" problem. We introduced MCP as a promising solution, an open standard designed to simplify this landscape into a more manageable "M + N" scenario by providing a universal communication layer. Often described as a "USB-C port for AI," MCP aims to standardize how AI models plug into the context they need, fostering a more interoperable ecosystem.
 
 This post, Part 2, shifts gears from the 'why' to the 'how'. We'll dive deep into the technical architecture that powers MCP, dissecting the protocol's mechanics piece by piece. Understanding these underlying components is crucial for developers aiming to build robust MCP servers or integrate MCP clients into their AI applications. We will examine how MCP structures its messages, the data formats and transports it uses, and how it represents capabilities like tools and resources. By the end, you'll have a detailed understanding of MCP's architecture, preparing you for the step-by-step server implementation in Part 3. 
 
+
 ## Communication Foundation: JSON-RPC 2.0
+
+Now that we've set the stage, let's begin our technical exploration by examining the very foundation of MCP communication: how do the different components – the Host application, the MCP Client, and the MCP Server – actually talk to each other?  To ensure consistency and interoperability across the diverse ecosystem of AI applications and tools, MCP relies on a well-established standard for structuring these conversations. This brings us to the protocol's core communication mechanism.
 
 The communication between MCP Clients and Servers is built upon the JSON-RPC 2.0 specification. This choice provides several advantages:
 
@@ -95,7 +99,7 @@ Each transport defines how MCP messages are exchanged and framed (delimited) on 
 - **STDIO Transport:**
 
     - **Connection Flow:** Used when the MCP client (within the host application) and server run on the same machine. The host application launches the server as a subprocess (e.g., npx -y @modelcontextprotocol/server-filesystem /path/to/root). Communication occurs over the server's stdin and stdout pipes, effectively forming the "connection."
-    - **Message Framing:** JSON-RPC messages are exchanged over stdin/stdout. Simple implementations may separate messages with newlines, but robust systems (similar to LSP) use explicit framing, prefixing each JSON message with headers like Content-Length: NNN\r\n\r\n, followed by the JSON payload. This ensures accurate message delimitation, especially for large messages.
+    - **Message Framing:** JSON-RPC messages are exchanged over stdin/stdout. Simple implementations may separate messages with newlines, but robust systems may use explicit framing, prefixing each JSON message with headers like Content-Length: NNN\r\n\r\n, followed by the JSON payload. This ensures accurate message delimitation, especially for large messages.
     - **Use Case Example:** A local tool server handling file system operations or Git commands, where the host manages the server's lifecycle.
 
 - **HTTP + SSE Transport:**
