@@ -32,6 +32,70 @@ Welcome back to our series on the [Model Context Protocol (MCP)]({{< relref "/se
 
 This post, Part 2, shifts gears from the 'why' to the 'how'. We'll dive deep into the technical architecture that powers MCP, dissecting the protocol's mechanics piece by piece. Understanding these underlying components is crucial for developers aiming to build robust MCP servers or integrate MCP clients into their AI applications. We will examine how MCP structures its messages, the data formats and transports it uses, and how it represents capabilities like tools and resources. By the end, you'll have a detailed understanding of MCP's architecture, preparing you for the step-by-step server implementation in Part 3. 
 
+Before we dive into the message formats and transport layers, let's quickly recall the high-level architecture we introduced in [Part 1]({{< relref "/blog/model-context-protocol/introduction-to-model-context-protocol/">}}). The Model Context Protocol defines a clear client-server relationship:
+
+{{< mermaid >}}
+
+graph TD;
+
+  subgraph MCP Host
+    App[AI-Enabled Application];
+    LLM[Large Language Model];
+    MCPClient[MCP Client]; 
+
+    
+    App --> |Uses| LLM;
+    App --> |Manages| MCPClient; 
+    LLM --> |Requests Capability| MCPClient;
+  end
+
+
+  subgraph MCP Server Layer
+    Ingress[/ HTTP Ingress / API Gateway/]
+    Router[MCP Request Router];
+    ContextStore[(Context & Schema Store)];
+    Handler[MCP Core Handler];
+    subgraph Adapters
+      APIAdapter[API Adapter];
+      DBAdapter[Database Adapter];
+      ToolAdapter[Tool Adapter];
+    end
+  end
+  subgraph External Systems
+    ExternalAPI[External API Service];
+    Database[Database];
+    Tool[Third-Party Tool];
+  end
+
+
+  MCPClient --> |MCP Request| Ingress;
+
+  
+  Ingress -->|Route| Router;
+  Router -->|Handle| Handler;
+  Handler -->|Lookup| ContextStore;
+  Handler -->|Call API| APIAdapter;
+  Handler -->|Call DB| DBAdapter;
+  Handler -->|Call Tool| ToolAdapter;
+
+
+  APIAdapter -->|Invoke| ExternalAPI;
+  DBAdapter -->|Query| Database;
+  ToolAdapter -->|Invoke| Tool;
+
+  ExternalAPI -->|Response| APIAdapter;
+  Database -->|Response| DBAdapter;
+  Tool -->|Response| ToolAdapter;
+
+
+  Handler --> |Normalized Response| MCPClient;
+  MCPClient --> |Provides Result| LLM; 
+  LLM --> |Generates Answer| App; 
+{{< /mermaid >}}
+
+* The **MCP Host** is the AI-enabled application or runtime (like a chatbot or IDE) that needs external context.
+* The **MCP Client** resides within the Host and acts as the intermediary, managing the connection and handling the MCP protocol specifics.
+* The **MCP Server** exposes external capabilities (Tools, Resources, Prompts) and communicates with the client over a defined transport.
 
 ## Communication Foundation: JSON-RPC 2.0
 
