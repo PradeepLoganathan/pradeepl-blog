@@ -2,7 +2,7 @@
 title: "Building a simple MCP Server"
 lastmod: 2025-05-09T14:29:22+10:00
 date: 2025-05-09T14:29:22+10:00
-draft: true
+draft: false
 Author: Pradeep Loganathan
 tags: 
   - ai
