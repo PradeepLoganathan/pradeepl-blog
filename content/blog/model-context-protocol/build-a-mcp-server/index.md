@@ -231,9 +231,12 @@ Once the server has started and discovered the tools available in this MCP serve
 1.  Open the Chat view (e.g., with GitHub Copilot).
 2.  Switch to "Agent mode" (if available and supported by the Chat extension).
 ![alt text](images/copilot-agent-mode.png)
-3.  There should be an option to select or view available tools, where "my-echo-server" and its tools (`Echo`, `ReverseEchoAsync`) would appear.
+3.  There should be an option to select or view available tools, where "simple-mcp-server" and its tools (`ReverseString`, `CountWords`) would appear.
 ![alt text](images/mcp-server-tools.png)
 4.  One could then interact with Copilot Chat, and it might choose to use these custom tools if relevant to the prompt.
+5. The below video is a simple example of using the MCP server we built with copilot chat in agent mode in Visual Studio Code.
+
+{{< youtube id="Cfh0ImwOziE" autoplay="true" color="white" modestbranding="true">}}
 
 This brief overview introduces the powerful capabilities of MCP integration with GitHub Copilot in VS Code, laying the groundwork for you to leverage custom tools in your everyday development tasks.
 
