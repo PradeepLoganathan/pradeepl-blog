@@ -1,7 +1,75 @@
-{{if .Page.Params.mermaid}}
+{{ if .Page.Params.mermaid }}
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true, theme:"dark"});</script>
-{{end}}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let mermaidConfig = {
+    theme: "default",
+    themeVariables: {
+      background: "#ffffff",
+      primaryColor: "#dbeafe",
+      primaryTextColor: "#000000",
+      nodeTextColor: "#000000",
+      textColor: "#000000",
+      lineColor: "#000000"
+    }
+  };
+
+  function getPreferredTheme() {
+    const storedTheme = localStorage.getItem("pref-theme");
+    if (storedTheme) {
+      return storedTheme;
+    }
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function updateMermaidConfig(themeName) {
+    if (themeName === "dark") {
+      mermaidConfig.theme = "dark";
+      mermaidConfig.themeVariables = {
+        background: "#1e1e1e",
+        primaryColor: "#8ecae6",
+        primaryTextColor: "#ffffff",
+        nodeTextColor: "#ffffff",
+        textColor: "#ffffff",
+        lineColor: "#ffffff"
+      };
+    } else {
+      mermaidConfig.theme = "default";
+      mermaidConfig.themeVariables = {
+        background: "#ffffff",
+        primaryColor: "#dbeafe",
+        primaryTextColor: "#000000",
+        nodeTextColor: "#000000",
+        textColor: "#000000",
+        lineColor: "#000000"
+      };
+    }
+    mermaid.initialize(mermaidConfig);
+  }
+
+  function renderAllMermaids() {
+    document.querySelectorAll(".mermaid").forEach(function (element, index) {
+      const graphDefinition = element.textContent;
+      const id = "mermaid-svg-" + index;
+      mermaid.mermaidAPI.render(id, graphDefinition.trim(), (svgCode) => {
+        element.innerHTML = svgCode;
+      });
+    });
+  }
+
+  function updateThemeAndRender() {
+    const theme = getPreferredTheme();
+    updateMermaidConfig(theme);
+    renderAllMermaids();
+  }
+
+  updateThemeAndRender();
+
+  const observer = new MutationObserver(updateThemeAndRender);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+});
+</script>
+{{ end }}
 <div class="mermaid">
-{{.Inner}}
+{{ .Inner }}
 </div>

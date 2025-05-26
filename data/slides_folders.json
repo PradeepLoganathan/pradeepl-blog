@@ -1,0 +1,38 @@
+[
+  {
+    "folder": "APRA-An-introduction",
+    "title": "APRA An Introduction",
+    "description": "An overview of APRA and its regulatory framework.",
+    "icon": "/slides/APRA-An-introduction/images/APRA.png"
+  },
+  {
+    "folder": "Model-Context-Protocol-MCP",
+    "title": "Model Context Protocol MCP",
+    "description": "Exploring the Model Context Protocol in detail.",
+    "icon": "/slides/Model-Context-Protocol-MCP/images/mcp-simplified.png"
+  },
+  {
+    "folder": "Snyk-developer-security",
+    "title": "Snyk Developer Security",
+    "description": "Best practices and tools for developer security with Snyk.",
+    "icon": "/slides/Snyk-developer-security/images/Slide1.png"
+  },
+  {
+    "folder": "datamesh-cns-nz",
+    "title": "Datamesh CNS NZ",
+    "description": "Data mesh concepts and implementations in CNS New Zealand.",
+    "icon": "/slides/datamesh-cns-nz/images/Slide1.png"
+  },
+  {
+    "folder": "gitops-techgig-seminar",
+    "title": "GitOps Techgig Seminar",
+    "description": "Seminar on GitOps practices and tools.",
+    "icon": "/slides/gitops-techgig-seminar/images/Slide1.png"
+  },
+  {
+    "folder": "policy-as-code",
+    "title": "Policy as Code",
+    "description": "Introduction to Policy as Code methodology.",
+    "icon": "/slides/policy-as-code/images/what-is-pac.jpg"
+  }
+]

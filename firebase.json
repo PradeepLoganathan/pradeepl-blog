@@ -45,11 +45,6 @@
       "source": "/blog/what-is-https",
       "destination": "/blog/https",
       "type": 301
-    },
-    {
-      "source": "/slides",
-      "destination": "https://slides.pradeepl.com",
-      "type": 301
     }]
   }
 }

@@ -1,74 +1,71 @@
 {{ define "main" }}
-<h1>{{ .Title }}</h1>
-<p>{{ .Description }}</p>
 
-<div class="slides-container">
-    {{ range .Pages.ByWeight }}
-    <div class="slide-card">
-        {{ $cover := "" }}
+<h1>Available Slide Decks</h1>
 
-        {{ if .Resources }}
-            {{ $coverResource := .Resources.GetMatch (.Params.cover.image) }}
-            {{ if $coverResource }}
-                {{ $cover = $coverResource.RelPermalink }}
-            {{ end }}
-        {{ end }}
+{{ $slides := site.Data.slides_folders }}
 
-        {{ if not $cover }}
-            {{ $cover = .Params.cover.image | safeURL }}
-        {{ end }}
-
-        <img src="{{ $cover }}" alt="{{ .Params.cover.alt }}">
-        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-        <p>{{ .Params.description }}</p>
-        <a class="slide-details" href="{{ .RelPermalink }}">View Slides</a>
+<div class="slides-list-vertical">
+  {{ range $slides }}
+    <div class="slide-list-item">
+      <a href="/slides/{{ .folder }}/index.html" class="slide-link">
+        <img src="{{ .icon }}" alt="{{ .title }} icon" class="slide-icon" />
+        <div class="slide-info">
+          <h3>{{ .title }}</h3>
+          <p>{{ .description }}</p>
+        </div>
+      </a>
     </div>
-    {{ end }}
+  {{ end }}
 </div>
 
 <style>
-h1 {
-    margin-bottom: 30px;
+.slides-list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 700px; /* Optional: limit width */
 }
 
-.slides-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+.slide-list-item {
+  border: 1px solid #e1e1e1;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 0.05);
+  transition: box-shadow 0.3s ease;
 }
-.slide-card {
-    width: 300px;
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+
+.slide-list-item:hover {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
 }
-.slide-card h2 {
-    margin-top: 15px;
-    margin-bottom: 10px;
+
+.slide-link {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  align-items: center;
+  gap: 1rem;
 }
-.slide-card p {
-    margin-bottom: 15px;
+
+.slide-icon {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  flex-shrink: 0;
 }
-.slide-card img {
-    width: 200px;
-    height: 150px;
-    border-radius: 5px;
-    object-fit: contain;
+
+.slide-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  font-size: 1.2rem;
 }
-.slide-details {
-    display: inline-block;
-    margin-top: auto;
-    padding: 8px 12px;
-    background: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
+
+.slide-info p {
+  margin: 0;
+  color: #6b6b6b;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 </style>
+
 {{ end }}
