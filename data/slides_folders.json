@@ -34,5 +34,11 @@
     "title": "Policy as Code",
     "description": "Introduction to Policy as Code methodology.",
     "icon": "/slides/policy-as-code/images/what-is-pac.jpg"
+  },
+    {
+    "folder": "Agentic-AI-Actor-Model",
+    "title": "Agentic AI & Actor Model",
+    "description": "Exploring the Agentic AI and Actor Model in software development.",
+    "icon": "/slides/Agentic-AI-Actor-Model/images/agentic-ai-arch.png"    
   }
 ]

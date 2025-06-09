@@ -1,0 +1,645 @@
+/*
+ * @theme pradeepl-slides-theme
+ * @description A custom Marp theme for slides with a clean, modern look.
+ * @author Pradeep Loganathan
+ * @auto-scaling true
+ * @size 16:9
+ */
+
+@import 'default';
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* CSS Custom Properties for consistent theming */
+:root {
+  /* Gradients */
+  --primary-gradient: linear-gradient(to right, #0D7377, #14A085, #00B4D8, #0077BE, #5A189A, #7209B7);
+  --diagonal-gradient: linear-gradient(135deg, #0D7377 0%, #14A085 20%, #00B4D8 40%, #0077BE 60%, #5A189A 80%, #7209B7 100%);
+  
+  /* Colors */
+  --title-color: #1a3a6e;
+  --subtitle-color: #3a3a3a;
+  --text-color: #2d3748;
+  --light-text: #4a5568;
+  --lighter-text: #718096;
+  --code-bg: #f8fafc;
+  --code-border: #e2e8f0;
+  --border-highlight: #e2e8f0;
+  --border-width: 6px;
+  --slide-padding: 40px;
+  --content-start: 220px;
+}
+
+/* Base font settings */
+section {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-color);
+}
+
+/* Default styles for regular slides */
+section {
+  padding: var(--slide-padding);
+  position: relative;
+  border-top: var(--border-width) solid transparent;
+  border-bottom: var(--border-width) solid transparent;
+  border-image: var(--primary-gradient) 1;
+  counter-increment: slide-number;
+}
+
+/* Custom pagination display */
+section::before {
+  content: counter(slide-number);
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 0.7em;
+  color: #999;
+  opacity: 0.7;
+  font-family: 'JetBrains Mono', monospace;
+  z-index: 10;
+}
+
+/* Footer styling for copyright */
+footer {
+  position: absolute;
+  bottom: 10px;
+  left: var(--slide-padding);
+  font-size: 0.6em;
+  color: var(--light-text);
+  opacity: 0.7;
+  font-family: 'Inter', sans-serif;
+  z-index: 10;
+}
+
+/* Adjust pagination position when footer is present */
+section::before {
+  right: var(--slide-padding);
+}
+
+/* Improved header positioning and styling */
+h1 {
+  position: absolute;
+  top: calc(var(--border-width) + 20px);
+  left: var(--slide-padding);
+  right: var(--slide-padding);
+  font-size: clamp(1.5em, 4vw, 1.8em);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  max-height: 60px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+h2 {
+  position: absolute;
+  top: calc(var(--border-width) + 90px);
+  left: var(--slide-padding);
+  right: var(--slide-padding);
+  font-size: clamp(1.1em, 3vw, 1.3em);
+  font-weight: 400;
+  margin: 0;
+  color: var(--light-text);
+  font-family: 'Inter', sans-serif;
+  max-height: 75px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Content area improvements */
+section > *:not(h1):not(h2):not(::before):not(::after) {
+  margin-top: var(--content-start);
+}
+
+section > *:not(h1):not(h2):not(::before):not(::after):first-of-type {
+  margin-top: var(--content-start);
+}
+
+/* Enhanced list styling */
+li {
+  font-size: 0.9em;
+  line-height: 1.4;
+  margin-bottom: 0.3em;
+}
+
+ul, ol {
+  margin: 0 0 1em 0;
+  padding-left: 1.5em;
+}
+
+ul ul, ol ol, ul ol, ol ul {
+  margin: 0.3em 0;
+  padding-left: 1.5em;
+}
+
+/* Code styling improvements */
+code {
+  font-family: 'JetBrains Mono', monospace;
+  background: #f5f5f5;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+pre {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 1em;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8em;
+  line-height: 1.4;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+/* Table styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+  font-size: 0.9em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  border: 1px solid var(--code-border);
+  padding: 0.75em 1em;
+  text-align: left;
+  line-height: 1.5;
+}
+
+th {
+  background: var(--code-bg);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.5px;
+  color: var(--light-text);
+}
+
+tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Quote slide */
+section.quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 2em;
+}
+
+section.quote blockquote {
+  font-size: 1.5em;
+  font-style: italic;
+  color: var(--title-color);
+  border-left: 4px solid var(--code-border);
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+section.quote footer {
+  margin-top: 1em;
+  font-size: 0.8em;
+  color: var(--light-text);
+  font-style: normal;
+}
+
+/* Two-column layout */
+.two-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2em;
+  align-items: start;
+}
+
+/* Image slide */
+section.image-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2em;
+}
+
+section.image-slide img {
+  max-width: 100%;
+  max-height: 60vh;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin: 1em 0;
+}
+
+/* Code block improvements */
+pre {
+  background: #1e1e1e;
+  border: none;
+  border-radius: 8px;
+  padding: 1.25em;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  line-height: 1.5;
+  color: #d4d4d4;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+pre code {
+  color: inherit;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Enhanced title slide with diagonal gradient */
+section.title-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px 60px 120px 60px; /* Increased padding for better spacing */
+  position: relative;
+  min-height: 100vh; /* Ensure it takes full viewport height */
+  background: linear-gradient(135deg, #0D7377 0%, #14A085 20%, #00B4D8 40%, #0077BE 60%, #5A189A 80%, #7209B7 100%); /* Apply gradient directly */
+}
+
+/* Make footer on title slide match other slides */
+section.title-slide footer {
+  position: absolute;
+  bottom: 10px;
+  left: var(--slide-padding);
+  font-size: 0.6em;
+  color: rgba(255, 255, 255, 0.7); /* Lighter color for better contrast on gradient */
+  opacity: 0.7;
+  font-family: 'Inter', sans-serif;
+  z-index: 10;
+  width: calc(100% - 2 * var(--slide-padding));
+  text-align: left;
+}
+
+/* section.title-slide::before {
+  content: '';
+  position: absolute;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--diagonal-gradient);
+  transform: rotate(-15deg);
+  z-index: -1;
+  opacity: 0.9;
+} */
+
+section.title-slide > * {
+  position: relative;
+  z-index: 1; /* Ensure all content is above the gradient */
+}
+
+section.title-slide h1 {
+  position: static;
+  font-size: clamp(2em, 6vw, 3em);
+  font-weight: 800;
+  margin: 0 0 15px 0;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  letter-spacing: -0.5px;
+  font-family: 'Inter', sans-serif;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  max-height: none;
+  overflow: visible;
+  display: block;
+}
+
+section.title-slide h2 {
+  position: static;
+  font-size: clamp(1.2em, 3.5vw, 1.6em);
+  font-weight: 400;
+  margin: 0 0 30px 0;
+  color: #f8f9fa; /* Light gray for subtitle */
+  font-family: 'Inter', sans-serif;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  max-height: none;
+  overflow: visible;
+  display: block;
+}
+
+section.title-slide p {
+  font-size: 1.1em;
+  margin: 0;
+  color: #e9ecef; /* Light gray for byline */
+  position: relative;
+  z-index: 1;
+}
+
+/* Section slide improvements */
+section.section-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--slide-padding);
+  text-align: center;
+  background: linear-gradient(135deg, rgba(13,115,119,0.1) 0%, rgba(20,160,133,0.1) 50%, rgba(90,24,154,0.1) 100%);
+}
+
+section.section-slide h1 {
+  position: static;
+  font-size: clamp(1.6em, 4.5vw, 2.2em);
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: var(--title-color);
+  max-height: none;
+  overflow: visible;
+  display: block;
+}
+
+section.section-slide h2 {
+  display: none;
+}
+
+section.section-slide .content {
+  display: none;
+}
+
+/* Enhanced image slide */
+section.image-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: center;
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 100%;
+  max-height: none !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+section.image-slide img, 
+section.image-slide figure {
+  max-width: 100% !important;
+  max-height: calc(100vh - 2 * var(--border-width)) !important;
+  object-fit: contain !important;
+  width: auto !important;
+  height: auto !important;
+  position: relative !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+section.image-slide h1 {
+  position: absolute;
+  top: calc(var(--border-width) + 20px);
+  left: var(--slide-padding);
+  right: var(--slide-padding);
+  font-size: clamp(1.5em, 4vw, 1.8em);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+  max-height: 60px;
+  overflow: hidden;
+  text-align: left;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}
+
+section.image-slide h2 {
+  position: absolute;
+  top: calc(var(--border-width) + 90px);
+  left: var(--slide-padding);
+  right: var(--slide-padding);
+  font-size: 1.2em;
+  font-weight: 500;
+  color: var(--subtitle-color);
+  margin: 0;
+  text-align: left;
+}
+
+/* Enhanced quote slide */
+section.quote-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--slide-padding) !important;
+  text-align: center;
+  overflow: visible !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  background: linear-gradient(135deg, rgba(13,115,119,0.05) 0%, rgba(90,24,154,0.05) 100%);
+}
+
+section.quote-slide blockquote {
+  font-size: clamp(1.2em, 3vw, 1.6em);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-color);
+  line-height: 1.5;
+  margin: 0 !important;
+  padding: 0 20px;
+  max-width: 85%;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+
+section.quote-slide blockquote::before {
+  content: '"';
+  font-size: 3em;
+  color: #0D7377;
+  position: absolute;
+  top: -0.3em;
+  left: -0.3em;
+  font-family: serif;
+  opacity: 0.3;
+}
+
+section.quote-slide cite {
+  display: block;
+  margin-top: 1.5em;
+  font-size: 1em;
+  font-style: normal;
+  color: var(--light-text);
+  font-weight: 300;
+}
+
+section.quote-slide h1,
+section.quote-slide h2,
+section.quote-slide::before {
+  display: none !important;
+}
+
+/* Questions slide style */
+section.questions-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px;
+  background: linear-gradient(135deg, rgba(13,115,119,0.05) 0%, rgba(20,160,133,0.05) 50%, rgba(90,24,154,0.05) 100%);
+  position: relative;
+}
+
+section.questions-slide h1 {
+  position: static;
+  font-size: clamp(2em, 5vw, 2.5em);
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: var(--title-color);
+  text-align: center;
+  max-height: none;
+  overflow: visible;
+  display: block;
+}
+
+section.questions-slide h2 {
+  position: static;
+  font-size: clamp(1.2em, 3vw, 1.4em);
+  font-weight: 400;
+  margin: 0 0 40px 0;
+  color: var(--light-text);
+  text-align: center;
+  max-height: none;
+  overflow: visible;
+  display: block;
+}
+
+section.questions-slide p {
+  font-size: 1.1em;
+  color: var(--text-color);
+  margin: 0;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+section.questions-slide::before {
+  content: '?';
+  position: absolute;
+  font-size: 15em;
+  font-weight: 700;
+  color: rgba(13,115,119,0.03);
+  z-index: 0;
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+}
+
+section.questions-slide > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Two-column layout utility */
+section.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  align-items: start;
+}
+
+section.two-columns > *:not(h1):not(h2) {
+  margin-top: 0;
+}
+
+section.two-columns h1,
+section.two-columns h2 {
+  grid-column: 1 / -1;
+}
+
+/* Highlight box utility */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(13,115,119,0.1) 0%, rgba(20,160,133,0.1) 100%);
+  border-left: 4px solid #14A085;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Call-to-action styling */
+.cta {
+  background: var(--primary-gradient);
+  color: white;
+  padding: 0.8em 1.5em;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: white;
+}
+
+/* Hide pagination and default elements */
+section[data-marpit-pagination]::after,
+section > footer,
+.marp-slide > div:last-child,
+section::after[content*="attr"] {
+  display: none !important;
+}
+
+section > div:last-child,
+section > span:last-child {
+  display: none !important;
+}
+
+section *[class*="pagination"],
+section *[data-pagination] {
+  display: none !important;
+}
+
+section.title-slide::before,
+section.section-slide::before,
+section.image-slide::before,
+section.quote-slide::before {
+  display: none;
+}
+
+/* Responsive improvements */
+@media (max-width: 1024px) {
+  :root {
+    --slide-padding: 30px;
+    --content-start: 200px;
+  }
+  
+  section.two-columns {
+    grid-template-columns: 1fr;
+    gap: 1em;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --slide-padding: 20px;
+    --content-start: 180px;
+  }
+}
