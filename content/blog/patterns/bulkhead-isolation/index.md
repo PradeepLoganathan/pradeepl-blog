@@ -15,12 +15,13 @@ summary: "The Bulkhead pattern is a critical resilience strategy that prevents f
 ShowToc: true
 TocOpen: true
 images:
+  - "images/bulkhead-isolation-pattern.png"
   - "images/Bulkhead-pattern-implementation.png"
   - "images/service-failure.png"
   - "images/ship-bulkhead.jpg"
 
 cover:
-  image: "images/ship-bulkhead.jpg"
+  image: "images/bulkhead-isolation-pattern.png"
   alt: "A cross-section of a ship's hull showing partitioned bulkheads."
   caption: "Inspired by naval architecture, the Bulkhead pattern partitions systems to contain failure."
   relative: true
