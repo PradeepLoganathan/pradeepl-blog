@@ -40,7 +40,13 @@ This post marks the beginning of a new chapter in our AI exploration series, whe
 
 ## What Makes AI "Agentic"?
 
+The AI systems we've explored so far in our journey, from the [fraud detection models]({{< ref "/blog/building-a-fraud-detection-model/">}} "Fraud detection model") we built to the [inference servers]({{< ref "/blog/ai-model-inference-explained/">}}) that deploy them, represent what we might call "reactive intelligence." These systems excel at responding to inputs: give them a transaction, and they'll classify it as fraudulent or legitimate; provide them with an image, and they'll identify what's in it; feed them text, and they'll generate a response. But they fundamentally wait for us to provide the input, define the task, and interpret the results.
+
+Agentic AI represents a fundamental shift from this reactive paradigm to proactive, goal-directed systems that can initiate actions, plan sequences of activities, and adapt their approach based on changing circumstances. Where traditional AI systems are like sophisticated calculators waiting for problems to solve, agentic AI systems are more like autonomous colleagues capable of understanding objectives and figuring out how to achieve them.
+
 ### Core Characteristics of Agentic AI
+
+Building on our previous exploration of [how AI models connect to external systems through MCP]({{< ref "/series/model-context-protocol/">}} "MCP Server Series"), agentic AI systems exhibit several key characteristics that distinguish them from the reactive models we've worked with:
 
 Agentic AI systems are distinguished by several key characteristics that set them apart from traditional AI:
 
