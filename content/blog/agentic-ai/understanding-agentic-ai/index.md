@@ -42,38 +42,41 @@ This post marks the beginning of a new chapter in our AI exploration series, whe
 
 The AI systems we've explored so far in our journey, from the [fraud detection models]({{< ref "/blog/building-a-fraud-detection-model/">}} "Fraud detection model") we built to the [inference servers]({{< ref "/blog/ai-model-inference-explained/">}}) that deploy them, represent what we might call "reactive intelligence." These systems excel at responding to inputs: give them a transaction, and they'll classify it as fraudulent or legitimate; provide them with an image, and they'll identify what's in it; feed them text, and they'll generate a response. But they fundamentally wait for us to provide the input, define the task, and interpret the results.
 
-Agentic AI represents a fundamental shift from this reactive paradigm to proactive, goal-directed systems that can initiate actions, plan sequences of activities, and adapt their approach based on changing circumstances. Where traditional AI systems are like sophisticated calculators waiting for problems to solve, agentic AI systems are more like autonomous colleagues capable of understanding objectives and figuring out how to achieve them.
+Agentic AI represents a fundamental shift from this reactive design to proactive, goal-directed systems that can initiate actions, plan sequences of activities, and adapt their approach based on changing circumstances. Where traditional AI systems are like sophisticated calculators waiting for problems to solve, agentic AI systems are more like autonomous colleagues capable of understanding objectives and figuring out how to achieve them.
 
 ### Core Characteristics of Agentic AI
 
-Building on our previous exploration of [how AI models connect to external systems through MCP]({{< ref "/series/model-context-protocol/">}} "MCP Server Series"), agentic AI systems exhibit several key characteristics that distinguish them from the reactive models we've worked with:
+Agentic AI systems are distinguished by several key characteristics that set them apart
 
-Agentic AI systems are distinguished by several key characteristics that set them apart from traditional AI:
+**1. Autonomy and Proactivity** : Unlike reactive systems that simply wait for and respond to inputs, agentic AI takes the initiative. These systems are designed to identify opportunities and take iniative. They are designed to act without explicit, step-by-step instructions from a human. They demonstrate a clear goal-directed behavior, striving to achieve defined objectives with minimal human oversight, effectively taking the reins in complex scenarios.
+Think about the [fraud detection model]({{< ref "/blog/building-a-fraud-detection-model/">}}) we built. We had to feed it specific transaction data to get a score back. An agentic fraud detection system, on the other hand, would be given a broader goal like: "Proactively monitor our systems and reduce fraudulent transactions by 5% this quarter." It would then act on its own: monitoring data streams, identifying new suspicious patterns, and even suggesting or implementing new security rules without being asked. It owns the objective.
 
-**1. Autonomy and Proactivity**
-- Unlike reactive systems that respond to inputs, agentic AI takes initiative
-- Can identify opportunities and act without explicit instructions
-- Demonstrates goal-directed behavior with minimal human oversight
+**2. Multi-step Reasoning and Planning** : An agent is a strategist. It can break down a complex objective into a sequence of smaller, manageable steps. It then executes this multi-step plan to achieve objectives. It can also adapt & change plans when circumstances change.
+If you gave an agent the goal, "Prepare a market analysis report on our top competitor," it wouldn't just search for one document. It would create a plan:
 
-**2. Multi-step Reasoning and Planning**
-- Breaks down complex problems into manageable steps
-- Creates and executes multi-step plans to achieve objectives
-- Can adapt plans when circumstances change
+- Step 1: Search the web for their latest financial reports and news articles.
+- Step 2: Access our internal sales database to compare customer overlap.
+- Step 3: Analyze social media sentiment using a sentiment analysis tool.
+- Step 4: Synthesize all this information into a structured report.
 
-**3. Tool Use and Integration**
-- Can utilize various tools, APIs, and systems
-- Integrates with external data sources and services
-- Orchestrates multiple capabilities to solve problems
+This ability to decompose a problem and create a multi-step plan is what separates it from simple, single-shot generative models.
 
-**4. Continuous Learning and Adaptation**
-- Learns from experiences and outcomes
-- Improves performance over time
-- Adapts strategies based on feedback and results
+**3. Tool Use and Integration** : Agents aren't limited to their own knowledge; they can interact with the outside world using tools. This is precisely why our exploration of the [Model Context Protocol (MCP)]({{< ref "/series/model-context-protocol/">}}) is so relevant. An agent's "toolbox" can include:
 
-**5. Context Awareness**
-- Maintains awareness of current state and environment
-- Remembers previous interactions and decisions
-- Uses context to make informed choices
+- Calling APIs (like a weather API or a stock market database).
+- Searching the internet.
+- Accessing a private database.
+- Sending emails or Slack messages.
+- Writing and executing its own code.
+
+Agentic AI takes this concept further by not just using tools individually, but by intelligently combining them. It understands which tools are available (building on MCP's capability discovery), can select the right tool for each subtask, and can chain tools together in sophisticated ways.
+
+**4. Continuous Learning and Adaptation** :Unlike traditional stateless inference systems, agentic AI is designed to maintain contextual awareness across interactions. It doesn't just respond, it evolves. By remembering past decisions, analyzing outcomes, and integrating feedback, agentic AI continuously refines its behavior and decision-making strategies. 
+- Learns from experiences and outcomes : Tracks decisions and their consequences to build a richer understanding over time
+- Improves performance over time : Uses accumulated knowledge to enhance accuracy, efficiency, and effectiveness.
+- Adapts strategies based on feedback and results : Modifies its approach based on feedback, changing goals, or evolving environments.
+
+**5. Context Awareness** : Unlike the stateless nature of many inference systems we've discussed, agentic AI maintains awareness of context across interactions. It remembers previous decisions, learns from outcomes, and adapts its strategies accordingly. This allows it to handle complex, multi-step tasks that require understanding of both the current situation and past actions. 
 
 ### The Agentic AI Architecture
 
