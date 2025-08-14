@@ -71,84 +71,18 @@ This ability to decompose a problem and create a multi-step plan is what separat
 
 Agentic AI takes this concept further by not just using tools individually, but by intelligently combining them. It understands which tools are available (building on MCP's capability discovery), can select the right tool for each subtask, and can chain tools together in sophisticated ways.
 
-**4. Continuous Learning and Adaptation** :Unlike traditional stateless inference systems, agentic AI is designed to maintain contextual awareness across interactions. It doesn't just respond, it evolves. By remembering past decisions, analyzing outcomes, and integrating feedback, agentic AI continuously refines its behavior and decision-making strategies. 
+**4. Context Awareness** : Unlike the stateless nature of many inference systems we've discussed, agentic AI maintains awareness of context across interactions. It remembers previous decisions, learns from outcomes, and adapts its strategies accordingly. This allows it to handle complex, multi-step tasks that require understanding of both the current situation and past actions.
+
+**5. Continuous Learning and Adaptation** :Unlike traditional stateless inference systems, agentic AI is designed to maintain contextual awareness across interactions. It doesn't just respond, it evolves. By remembering past decisions, analyzing outcomes, and integrating feedback, agentic AI continuously refines its behavior and decision-making strategies. 
 - Learns from experiences and outcomes : Tracks decisions and their consequences to build a richer understanding over time
 - Improves performance over time : Uses accumulated knowledge to enhance accuracy, efficiency, and effectiveness.
 - Adapts strategies based on feedback and results : Modifies its approach based on feedback, changing goals, or evolving environments.
 
-**5. Context Awareness** : Unlike the stateless nature of many inference systems we've discussed, agentic AI maintains awareness of context across interactions. It remembers previous decisions, learns from outcomes, and adapts its strategies accordingly. This allows it to handle complex, multi-step tasks that require understanding of both the current situation and past actions. 
+## The Agentic AI Architecture
 
-### The Agentic AI Architecture
+![alt text](images/agentic-ai-architecture.png)
 
-{{< mermaid >}}
-graph TB
-    subgraph "Agentic AI System"
-        A[Perception Layer] --> B[Reasoning Engine]
-        B --> C[Planning Module]
-        C --> D[Execution Engine]
-        D --> E[Learning Module]
-        
-        A --> A1[Data Input]
-        A --> A2[Context Analysis]
-        A --> A3[Goal Recognition]
-        
-        B --> B1[Problem Decomposition]
-        B --> B2[Constraint Analysis]
-        B --> B3[Solution Generation]
-        
-        C --> C1[Task Breakdown]
-        C --> C2[Resource Allocation]
-        C --> C3[Timeline Planning]
-        
-        D --> D1[Action Execution]
-        D --> D2[Tool Integration]
-        D --> D3[Progress Monitoring]
-        
-        E --> E1[Outcome Analysis]
-        E --> E2[Strategy Refinement]
-        E --> E3[Knowledge Update]
-    end
-    
-    F[External Environment] <--> A
-    D <--> F
-{{< /mermaid >}}
-
-## Evolution from Generative to Agentic AI
-
-### The Generative AI Foundation
-
-Generative AI laid the groundwork for agentic capabilities by demonstrating:
-
-- **Language Understanding**: Advanced comprehension of human language and context
-- **Content Creation**: Ability to generate text, images, code, and other content
-- **Pattern Recognition**: Identifying complex patterns in data
-- **Context Awareness**: Understanding and maintaining conversation context
-
-### The Agentic Leap
-
-Agentic AI builds upon these foundations by adding:
-
-**1. Goal-Oriented Behavior**
-- Sets and pursues specific objectives
-- Measures progress toward goals
-- Adjusts strategies based on outcomes
-
-**2. Autonomous Decision Making**
-- Evaluates options and selects optimal actions
-- Balances multiple objectives and constraints
-- Makes trade-offs between different approaches
-
-**3. Tool Integration and Execution**
-- Uses APIs, databases, and external services
-- Orchestrates multiple tools to achieve goals
-- Handles errors and exceptions gracefully
-
-**4. Iterative Problem Solving**
-- Breaks complex problems into manageable steps
-- Iterates on solutions based on feedback
-- Learns from failures and successes
-
-## Key Components of Agentic AI Systems
+The key components of an Agentic AI system are 
 
 ### 1. Reasoning Engine
 
@@ -185,6 +119,8 @@ The learning module enables continuous improvement:
 - **Pattern Recognition**: Identifying what works and what doesn't
 - **Strategy Refinement**: Updating approaches based on experience
 - **Knowledge Accumulation**: Building expertise over time
+
+We will go into the details of this architecture in a future blog post.
 
 ## Real-World Applications of Agentic AI
 
