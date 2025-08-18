@@ -64,7 +64,7 @@ The main considerations for choosing Event-Driven architecture are:
 
 The key challenges in implementing EDA are Guaranteed delivery, Processing events in order or exactly once and managing consistency across service boundaries.
 
-{{< tweet user="mathiasverraes" id="632260618599403520" >}}
+{{< x user="mathiasverraes" id="632260618599403520" >}}
 
 - **Atmost once** - The producer sends a message, and the consumer application may / may not receive it.  
 

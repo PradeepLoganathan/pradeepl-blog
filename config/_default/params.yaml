@@ -4,7 +4,6 @@ author: Pradeep Loganathan
 Copyright: "my copyright"
 comments: true
 enableSocialMetaTags: true
-paginate: 10
 images:
   - Pradeep-Loganathan.jpeg
 DateFormat: 'January 2, 2006'

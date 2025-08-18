@@ -104,7 +104,7 @@ Some of the well-known wasm runtimes are [Wasmer](https://wasmer.io/), [Wasmtime
 
 Containers are an ideal tool to host workloads in a safe and secure environment. Container runtimes restrict workloads from abusing sensitive kernel calls. However, a lot of effort is needed to lockdown a container environment and it also needs to be constantly patched as new CVE's are reported. Containers are also not small enough to run in environments with constrained resources ( CPU, memory etc) such as edge environments. Edge environments also operate in low network bandwidth environments where patching containers is not effective.  WASM provides an ideal alternative runtime environment for such workloads. WASM has low resource overheads and fast startup times. WASM's sandboxed environment and secure by default runtime model is ideal for such environments. WASI unlocks the ability to use WASM in these environments. Solomon Hykes, the founder of docker also tweeted about this potential some time back.
 
-{{< tweet user="solomonstre" id="1111004913222324225" >}}
+{{< x user="solomonstre" id="1111004913222324225" >}}
 
 [Krustlet](https://krustlet.dev/) is a tool to run WebAssembly workloads natively on Kubernetes. Krustlet implements the Kubelet API. It acts as a node in the cluster. When the user schedules a pod with specific node tolerations , the Kubernetes API will schedule that pod to the Krustlet node. This node will fetch the module and run it.  
 
