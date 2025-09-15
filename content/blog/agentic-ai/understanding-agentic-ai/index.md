@@ -1,8 +1,8 @@
 ---
-title: "Understanding Agentic AI: The Next Evolution of Artificial Intelligence"
-lastmod: 2025-08-10T11:21:00+10:00
-date: 2025-08-10T11:21:00+10:00
-draft: true
+title: "Agentic AI: From Copilots to Agents"
+lastmod: 2025-09-14T11:21:00+10:00
+date: 2025-09-14T11:21:00+10:00
+draft: false
 Author: Pradeep Loganathan
 tags: 
   - artificialintelligence
@@ -19,8 +19,8 @@ TocOpen: true
 images:
   - 
 cover:
-    image: "images/agentic-ai-cover.jpg"
-    alt: "Agentic AI - Autonomous AI Systems"
+    image: "images/agentic-ai-architecture.png"
+    alt: "Agentic AI: From Copilots to Agents"
     caption: "The evolution of AI from reactive to proactive systems"
     relative: true
 mermaid: true
@@ -40,11 +40,43 @@ This post marks the beginning of a new chapter in our AI exploration series, whe
 
 ## What Makes AI "Agentic"?
 
+The AI revolution, for many, is a story of ever-smarter assistants. First came the chatbots, then the generative models, and most recently, the "copilots"—powerful, single-turn tools that augment human creativity and productivity. But a fundamental shift is underway. We are moving beyond passive, human-prompted models to **autonomous, goal-oriented systems**—what we call **AI agents**.
+
 The AI systems we've explored so far in our journey, from the [fraud detection models]({{< ref "/blog/building-a-fraud-detection-model/">}} "Fraud detection model") we built to the [inference servers]({{< ref "/blog/ai-model-inference-explained/">}}) that deploy them, represent what we might call "reactive intelligence." These systems excel at responding to inputs: give them a transaction, and they'll classify it as fraudulent or legitimate; provide them with an image, and they'll identify what's in it; feed them text, and they'll generate a response. But they fundamentally wait for us to provide the input, define the task, and interpret the results.
 
-Agentic AI represents a fundamental shift from this reactive design to proactive, goal-directed systems that can initiate actions, plan sequences of activities, and adapt their approach based on changing circumstances. Where traditional AI systems are like sophisticated calculators waiting for problems to solve, agentic AI systems are more like autonomous colleagues capable of understanding objectives and figuring out how to achieve them.
+Agentic AI represents a fundamental shift from this reactive design to proactive, goal-directed systems that can initiate actions, plan sequences of activities, and adapt their approach based on changing circumstances. Where traditional AI systems are like sophisticated calculators waiting for problems to solve, agentic AI systems are more like autonomous colleagues capable of understanding objectives and figuring out how to achieve them. A copilot, no matter how powerful, is a reactive tool; it waits for a human prompt and provides a single, final output. An agent, on the other hand, is proactive. It has a goal, formulates a plan, takes action, and iterates until the goal is achieved. 
 
-### Core Characteristics of Agentic AI
+## **The LLM as the Brain: A Conceptual Leap**
+
+At the heart of this shift lies the concept of using a Large Language Model (LLM) not just as a text generator, but as the **reasoning engine** or "brain" of a more complex system. Instead of simply asking an LLM to "write a poem," we task it with a goal like "research and summarize the latest advancements in quantum computing."
+
+The difference is subtle but profound. In the first case, the LLM provides a single-turn completion. In the second, the LLM must:
+
+1. **Deconstruct** the goal into smaller, manageable sub-tasks (e.g., "find recent papers," "extract key findings," "synthesize into a summary").  
+2. **Act** on each sub-task, often by using external tools (like a search engine or an API).  
+3. **Evaluate** the results of its actions.  
+4. **Iterate** on the process, correcting course as needed, until the final summary is produced.
+
+This multi-step reasoning is the core difference between a passive copilot and an active agent. While a simple prompt might ask an LLM to "generate an outline for a blog post," an agent is given the goal "write a blog post about LLM agents." The latter requires a continuous loop of planning, execution, and reflection.
+
+## **The Agentic Loop: Observe, Think, Act**
+
+
+![Agentic Loop](images/agentic-loop.png)
+
+
+The behavior of an AI agent can be modeled by a continuous feedback loop. While different frameworks use varying terminology, the core cycle remains the same:
+
+1. **Perception (Observe):** The agent takes in new information from its environment. This can be a user's prompt, the output of a tool, a file's content, or a sensor reading. In our simple case, it's the output of the LLM itself after it has "thought" about the problem.  
+2. **Planning (Think):** The agent processes the perceived information, formulates a plan, and decides on the next course of action. This is the **LLM-as-a-brain** part, where it reasons about the problem, the available tools, and the current state.  
+3. **Action (Act):** The agent executes the planned action. This could be a tool call (e.g., using a search API), writing to a file, or generating a final response to the user.  
+4. **Memory:** A crucial but often overlooked component. Memory stores the history of the agent's actions, observations, and thoughts. This allows the agent to maintain context, learn from past mistakes, and avoid repeating work. Formally, memory can be represented as a history of states and transitions, often represented as a sequence of tuples:  
+   M=⟨(s0​,a0​,o0​),(s1​,a1​,o1​),…⟩  
+   where st​ is the state at time t, at​ is the action taken, and ot​ is the observation received.
+
+This continuous cycle is often referred to as the **Agentic Loop**—a fundamental concept introduced in seminal papers like ReAct (Reasoning and Acting) and subsequent work on multi-step reasoning. These frameworks highlighted that letting an LLM generate its own internal "thoughts" before choosing an action drastically improved its ability to solve complex tasks.
+
+## Core Characteristics of Agentic AI
 
 Agentic AI systems are distinguished by several key characteristics that set them apart
 
@@ -78,224 +110,111 @@ Agentic AI takes this concept further by not just using tools individually, but 
 - Improves performance over time : Uses accumulated knowledge to enhance accuracy, efficiency, and effectiveness.
 - Adapts strategies based on feedback and results : Modifies its approach based on feedback, changing goals, or evolving environments.
 
-## The Agentic AI Architecture
+## Core Implementation Walkthrough
 
-![alt text](images/agentic-ai-architecture.png)
+Let’s ground these ideas in code, using the simplest possible framework-agnostic example to illustrate the conceptual leap from passive LLM calls to agent-like behavior.
 
-The key components of an Agentic AI system are 
+### Step 1: Standard Copilot—Single-Turn LLM Call
 
-### 1. Reasoning Engine
+First, let’s see what a “copilot” call looks like: a passive response model.
 
-The reasoning engine is the "brain" of an agentic AI system, responsible for:
+```python
+import openai
 
-- **Problem Analysis**: Understanding the nature and scope of problems
-- **Solution Generation**: Creating potential approaches to solve problems
-- **Decision Making**: Evaluating options and selecting the best course of action
-- **Constraint Handling**: Working within limitations and requirements
+def copilot_query(prompt, model="gpt-4"):
+    # Direct call to the LLM with no memory or ongoing state
+    response = openai.ChatCompletion.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response["choices"]["message"]["content"]
 
-### 2. Planning Module
+output = copilot_query("Summarize the plot of 'Inception' in two sentences.")
+print(output)
+```
+The function 'copilot_query' sends the input prompt to the LLM. The OpenAI API is called with a single user message. The LLM responds once, with no persistent state or memory. Each call is stateless: past prompts are not recalled, nor do they influence the next turn. This structure cannot learn, plan, or autonomously continue—a purely reactive system.
 
-The planning module creates and manages execution strategies:
+### Step 2: Minimal Agent—Single-Agentic Step Loop
 
-- **Task Decomposition**: Breaking complex goals into actionable steps
-- **Resource Planning**: Allocating time, tools, and capabilities
-- **Timeline Management**: Scheduling and coordinating activities
-- **Contingency Planning**: Preparing for potential obstacles
+Now, let’s wrap an LLM call in a basic agentic loop. This will:
 
-### 3. Execution Engine
+- Use a **system message** to define the agent’s persona/rules.
+- Track **memory** (conversation history).
+- Decide, each step, what to do next based on both the last observation and the evolving memory.
 
-The execution engine carries out planned actions:
+```python
+import openai
+import time
 
-- **Tool Integration**: Using APIs, databases, and external services
-- **Action Monitoring**: Tracking progress and outcomes
-- **Error Handling**: Managing failures and exceptions
-- **State Management**: Maintaining awareness of current situation
+def agentic_chat(initial_goal, model="gpt-4", max_steps=5):
+    # Initialize the system prompt: defines the agent's identity and rules
+    system_message = {
+        "role": "system",
+        "content": (
+            "You are an autonomous research assistant. "
+            "Your goal is to gather and report five key facts about the user's initial query. "
+            "After each fact, decide whether you have reached five or should continue."
+            "NEVER finish until you clearly state 'Agent Task Complete.'"
+        ),
+    }
 
-### 4. Learning Module
+    # Start with a conversation history including the system message and initial user goal
+    conversation = [system_message, {"role": "user", "content": initial_goal}]
+    facts = []
+    for step in range(max_steps):
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=conversation
+        )
+        message = response["choices"]["message"]["content"]
+        conversation.append({"role": "assistant", "content": message})
+        print(f"Step {step+1}: {message}")
+        facts.append(message)
+        # Check for explicit end-of-task phrase (defined in system message)
+        if "Agent Task Complete" in message:
+            break
+        # Optionally wait before next cycle (could be for real-world polling)
+        time.sleep(1)
+    return facts
 
-The learning module enables continuous improvement:
+# Example run
+facts = agentic_chat("Tell me five facts about honey bees.")
+```
 
-- **Outcome Analysis**: Evaluating the success of actions
-- **Pattern Recognition**: Identifying what works and what doesn't
-- **Strategy Refinement**: Updating approaches based on experience
-- **Knowledge Accumulation**: Building expertise over time
+#### How It Works
 
-We will go into the details of this architecture in a future blog post.
+1. **Initialization**: The process starts with a 'system_message'. This is a critical instruction that tells the AI its **role** ("autonomous research assistant"), its **goal** (gather five key facts), and a strict **rule** (it must say "Agent Task Complete" to finish). The user's request ('initial_goal') is then added to the conversation history.
 
-## Real-World Applications of Agentic AI
+2. **The Loop**: The code then enters a loop for a maximum of 'max_steps'. In each step of the loop:
+    - **Think**: It sends the *entire* conversation history to the AI model. This is key because the AI can see its previous responses and track its own progress.
+    - **Act**: The AI generates a response (e.g., it writes out the next fact).
+    - **Review**: The code adds the AI's new response back into the conversation history. For the *next* loop, the AI will see this new information and know what it has already accomplished.
+    - The loop demonstrates **perception** (receiving feedback), **planning/action** (deciding next message), and **memory** (tracking all facts gathered so far).
 
-### 1. Autonomous Software Development
+3. **Memory as Conversation History:**  The `conversation_history` list is our agent's **short-term memory**. By passing the *entire* history back to the LLM in each loop, we provide it with the full context of its previous actions. This naive approach is inefficient. As the history grows, API calls become expensive and may exceed the model's context window. This is a fundamental challenge in agent design that more advanced systems solve with summarization techniques or external vector stores.
 
-Agentic AI can revolutionize software development by:
+4. **Termination Condition**: The loop continues until the AI includes the phrase "Agent Task Complete" in its response. This is a simple but effective way to make the AI decide when its job is done, based on the initial rule it was given. The loop will also stop if it hits the 'max_steps' limit, which acts as a safety measure.
 
-- **Code Generation**: Creating complete applications from specifications
-- **Bug Detection**: Identifying and fixing issues automatically
-- **Testing**: Generating and running comprehensive test suites
-- **Deployment**: Managing the entire software lifecycle
+The "agentic" part comes from a few key characteristics:
 
-### 2. Intelligent Business Process Automation
+- **Autonomy**: The AI isn't waiting for a new user prompt at each step. It operates on its own, using the initial goal and its own previous outputs to decide what to do next.
+- **Statefulness**: The `conversation` list acts as the agent's memory. By feeding the whole history back to the model each time, the agent "remembers" what it has done, allowing it to count the facts it has found and know when it has reached its goal of five.
+- **Goal-Oriented**: The entire process is driven by the initial goal. Each step is an attempt to get closer to fulfilling the task defined in the `system_message`.
 
-Agentic AI excels at automating complex business processes:
+Notice the absence of external “tools” here—all “actions” are text completions. In more capable architectures, agents use “tools” (APIs, code execution, database hooks) to interface with the world, but at its core, the agentic loop is about control flow and autonomy, not just the tools used.
 
-- **Workflow Orchestration**: Managing multi-step business processes
-- **Decision Support**: Providing recommendations based on data analysis
-- **Customer Service**: Handling complex customer inquiries autonomously
-- **Resource Optimization**: Allocating resources efficiently
+#### Core Takeaways from the Implementation
 
-### 3. Research and Analysis
+Our minimal agent is a powerful illustration, but it's important to understand its limitations.
 
-Agentic AI can accelerate research and analysis tasks:
-
-- **Data Collection**: Gathering information from multiple sources
-- **Pattern Analysis**: Identifying trends and insights in data
-- **Report Generation**: Creating comprehensive analysis reports
-- **Hypothesis Testing**: Exploring different research directions
-
-### 4. Personal Productivity Assistants
-
-Agentic AI can serve as intelligent personal assistants:
-
-- **Task Management**: Planning and organizing daily activities
-- **Information Synthesis**: Summarizing and organizing information
-- **Communication**: Drafting emails and messages
-- **Learning Support**: Creating personalized learning plans
-
-## Challenges and Considerations
-
-### Technical Challenges
-
-**1. Reliability and Safety**
-- Ensuring consistent and predictable behavior
-- Preventing harmful or unintended actions
-- Managing edge cases and unexpected situations
-
-**2. Scalability**
-- Handling complex, multi-agent environments
-- Managing resource constraints and performance
-- Coordinating multiple agentic systems
-
-**3. Integration Complexity**
-- Connecting with diverse tools and systems
-- Managing authentication and security
-- Handling API limitations and rate limits
-
-### Ethical and Social Considerations
-
-**1. Accountability and Transparency**
-- Understanding how decisions are made
-- Attributing responsibility for actions
-- Providing explanations for behavior
-
-**2. Bias and Fairness**
-- Ensuring equitable treatment across different groups
-- Identifying and mitigating algorithmic bias
-- Promoting inclusive and accessible systems
-
-**3. Privacy and Security**
-- Protecting sensitive information
-- Managing data access and usage
-- Preventing unauthorized actions
-
-**4. Human-AI Collaboration**
-- Defining appropriate roles and responsibilities
-- Maintaining human oversight and control
-- Ensuring beneficial human-AI partnerships
-
-## The Future of Agentic AI
-
-### Emerging Trends
-
-**1. Multi-Agent Systems**
-- Coordination between multiple agentic AI systems
-- Emergent behaviors and collective intelligence
-- Specialized agents for different domains
-
-**2. Enhanced Reasoning Capabilities**
-- More sophisticated problem-solving approaches
-- Better handling of uncertainty and ambiguity
-- Improved causal reasoning and explanation
-
-**3. Improved Learning and Adaptation**
-- Faster learning from limited data
-- Better transfer learning across domains
-- More efficient knowledge accumulation
-
-**4. Human-AI Partnership Models**
-- Collaborative problem-solving approaches
-- Augmented human capabilities
-- Seamless human-AI interaction
-
-### Potential Impact
-
-Agentic AI has the potential to transform numerous industries and aspects of society:
-
-- **Productivity**: Automating complex, knowledge-intensive tasks
-- **Innovation**: Accelerating research and development processes
-- **Accessibility**: Making advanced capabilities available to more people
-- **Problem Solving**: Addressing complex societal challenges
-
-## Getting Started with Agentic AI
-
-### For Developers
-
-**1. Understanding the Fundamentals**
-- Study agentic AI concepts and architectures
-- Learn about reasoning, planning, and execution
-- Explore existing frameworks and tools
-
-**2. Building Simple Agents**
-- Start with basic autonomous systems
-- Implement core agentic capabilities
-- Practice with well-defined problems
-
-**3. Integration and Deployment**
-- Connect agents with external tools and APIs
-- Implement monitoring and safety measures
-- Deploy and iterate on agentic systems
-
-### For Organizations
-
-**1. Identifying Opportunities**
-- Assess current processes for automation potential
-- Identify areas where agentic AI could add value
-- Evaluate readiness for agentic AI adoption
-
-**2. Building Capabilities**
-- Develop internal expertise in agentic AI
-- Establish partnerships with AI providers
-- Create pilot programs and proof of concepts
-
-**3. Managing Implementation**
-- Establish governance and oversight frameworks
-- Implement safety and security measures
-- Plan for human-AI collaboration
+-   **Naive Memory:** The “memory” is naïvely concatenated messages—it doesn’t scale to large contexts, nor can it manage long-term knowledge efficiently. As mentioned, appending to a list is not a scalable memory solution. Production-grade agents use techniques like sliding window memory, summarization, or offload context to vector databases for long-term recall.
+-   **No External Grounding:** The agent cannot interact with the outside world. Without external grounding (like APIs or sensors), the agent is still at the mercy of the LLM’s statistical patterns; errors can propagate unchecked. True agency requires the ability to act upon and perceive a real environment.
+-   **Error Handling:** What if a tool fails? Or the LLM returns a malformed response? A robust agent needs sophisticated error handling, retry mechanisms, and the ability to self-correct its plan when things go wrong.
 
 ## Conclusion
 
-Agentic AI represents a significant evolution in artificial intelligence, moving beyond reactive content generation to proactive, goal-driven autonomous systems. These systems combine reasoning, planning, execution, and learning capabilities to tackle complex problems with minimal human intervention.
+We've taken the first crucial step in our journey, moving from passive, single-turn copilots to proactive, autonomous agents. The paradigm shift is not in the LLM itself, but in the architecture we build around it. By wrapping the LLM in an **agentic loop** of **Perception, Planning, Action, and Memory**, we unlock a new class of applications capable of tackling complex, multi-step goals. Our simple Python implementation, while basic, reveals the core principles: the power of the **system prompt** to define an agent's purpose, the necessity of **memory** for stateful reasoning, and the **loop** as the engine of autonomy. This foundation sets the stage for the rest of our series, where we will explore adding tools, building robust memory systems, and designing multi-agent architectures.
 
-As agentic AI continues to develop, it will create new opportunities for automation, innovation, and human-AI collaboration. However, realizing this potential requires careful attention to technical challenges, ethical considerations, and responsible implementation practices.
+As we come to a close, let me leave you with something to consider:
 
-The future of AI is not just about generating better content - it's about creating intelligent agents that can understand, plan, act, and learn autonomously. Agentic AI is the next step in this evolution, bringing us closer to truly intelligent systems that can work alongside humans to solve complex problems and create value.
-
-## Further Reading
-
-### Foundational AI Series
-- [Introduction to Artificial Intelligence](/blog/introduction-to-artificial-intelligence/) - Core AI concepts and fundamentals
-- [Machine Learning Fundamentals](/blog/suportvectormachines/) - Understanding ML algorithms and techniques
-- [AI Model Inference Explained](/blog/ai-model-inference-explained/) - How AI models process and generate responses
-- [Building AI Systems with Modern Architectures](/blog/ai-model-inference-with-triton-inference-server/) - Deploying AI models at scale
-
-### Practical AI Applications
-- [Building a Fraud Detection Model](/blog/building-a-fraud-detection-model/) - Real-world AI implementation
-- [Model Context Protocol: Introduction](/blog/model-context-protocol/introduction-to-model-context-protocol/) - Modern AI architecture patterns
-
-### Upcoming in the Agentic AI Series
-- *Agentic AI Implementation Patterns* - Practical frameworks and architectures
-- *Building Autonomous AI Agents* - Step-by-step development guide
-- *Agentic AI in Production* - Deployment and monitoring strategies
-- *Multi-Agent Systems* - Coordination and collaboration between AI agents
-
----
-
-*This post serves as the cornerstone of our Agentic AI series, building upon our foundational AI knowledge and practical implementation experience. Stay tuned for detailed explorations of agentic AI implementation patterns, real-world applications, and advanced autonomous system architectures.* 
+> **If an agent's autonomy is defined by its ability to execute a plan, what is the minimum number of steps required for a system to be considered truly "agentic"?**
