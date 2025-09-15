@@ -215,6 +215,13 @@ Our minimal agent is a powerful illustration, but it's important to understand i
 
 We've taken the first crucial step in our journey, moving from passive, single-turn copilots to proactive, autonomous agents. The paradigm shift is not in the LLM itself, but in the architecture we build around it. By wrapping the LLM in an **agentic loop** of **Perception, Planning, Action, and Memory**, we unlock a new class of applications capable of tackling complex, multi-step goals. Our simple Python implementation, while basic, reveals the core principles: the power of the **system prompt** to define an agent's purpose, the necessity of **memory** for stateful reasoning, and the **loop** as the engine of autonomy. This foundation sets the stage for the rest of our series, where we will explore adding tools, building robust memory systems, and designing multi-agent architectures.
 
+### What's Next?
+
+Now that we understand what makes AI agents unique -- their ability to plan, act, and learn independently---the next big question is: how do we build them in a way that's reliable and scalable? That's where the Akka Actor Model comes in. It offers a fresh approach to handling concurrency and state, which is key for building resilient agents that can work together without stepping on each other's toes.
+
+In the next post, we'll explore why actors -- not traditional threads or shared memory -- are a perfect fit for agentic AI. Plus, I'll walk you through a simple Akka SDK example so you can see these ideas in action.
+
+Ready to see how the foundation of concurrent agents is built? Stay tuned!
 As we come to a close, let me leave you with something to consider:
 
 > **If an agent's autonomy is defined by its ability to execute a plan, what is the minimum number of steps required for a system to be considered truly "agentic"?**
