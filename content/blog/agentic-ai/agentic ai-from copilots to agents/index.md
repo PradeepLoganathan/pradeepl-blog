@@ -24,6 +24,7 @@ cover:
     caption: "The evolution of AI from reactive to proactive systems"
     relative: true
 mermaid: true
+series: ["Agentic AI"]
 ---
 
 The artificial intelligence landscape has undergone a remarkable transformation over the past few years, and our exploration of this field has mirrored that evolution. We started with first principles , designed and implemented data architectures, built models, inferred them, and then wired those models into real systems. This post is the natural next step moving onto Agentic AI, where models mature into goal-seeking workers that can plan, use tools, act, and learn inside your environment.
