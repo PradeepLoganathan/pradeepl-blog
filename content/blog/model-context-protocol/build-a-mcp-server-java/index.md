@@ -2,7 +2,7 @@
 title: "Building an MCP Server in Java"
 lastmod: 2025-01-14T14:29:22+10:00
 date: 2025-01-14T14:29:22+10:00
-draft: false
+draft: true
 Author: Pradeep Loganathan
 tags: 
   - ai

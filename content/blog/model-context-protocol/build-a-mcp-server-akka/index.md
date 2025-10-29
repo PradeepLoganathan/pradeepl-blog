@@ -47,15 +47,94 @@ Unlike the traditional MCP SDK implementations we've seen, Akka's approach offer
 
 ## What You'll Build
 
-We'll create an evidence gathering MCP server for an agentic AI triage system that provides:
+### The Bigger Picture: Agentic AI Triage System
 
-- **Tools**: `fetch_logs`, `query_metrics`, and `correlate_evidence` for incident analysis
-- **Resources**: Service runbooks accessible via URI templates (`kb://runbooks/{serviceName}`)
-- **HTTP Endpoint**: Automatic JSON-RPC 2.0 endpoint at `/mcp`
-- **Service Discovery**: Integration with Akka's dev-mode and production service discovery
-- **Client Support**: Compatible with Claude Desktop, VS Code, and Akka agents
+Imagine you're running a production microservices platform with dozens of services. When an incident occurs - payment gateway timeouts, database connection failures, authentication errors - you need rapid, intelligent triage. This is where our **Agentic AI Triage System** comes in.
 
-**Repository:** The code for this tutorial is available at [akka-spovs/agenticai-triage-mcp-tools](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agenticai-triage-mcp-tools)
+The complete triage system (available at [agentic-triage-system](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agentic-triage-system)) is a production-ready multi-agent incident response platform that orchestrates six specialized AI agents:
+
+1. **ClassifierAgent**: Classifies incidents by service, severity, and domain with confidence scores
+2. **EvidenceAgent**: Gathers evidence from logs, metrics, and observability tools
+3. **TriageAgent**: Performs systematic diagnosis using 5 Whys methodology and pattern analysis
+4. **KnowledgeBaseAgent**: Searches runbooks and historical incident reports
+5. **RemediationAgent**: Proposes staged remediation plans with rollback strategies
+6. **SummaryAgent**: Generates multi-audience summaries (executive, technical, customer support)
+
+The workflow orchestrates these agents in a systematic pipeline: **classify → gather_evidence → triage → query_knowledge_base → remediate → summarize → finalize**.
+
+### Where MCP Tools Fit In
+
+Here's the critical insight: **The EvidenceAgent needs access to real-world observability data** - logs from services, metrics from monitoring systems, correlation analysis across data sources. But we don't want to hardcode integrations with Datadog, Elasticsearch, Splunk, or other tools directly into our agent logic.
+
+This is where the **Model Context Protocol** shines. By exposing evidence gathering capabilities as MCP tools, we create a clean separation:
+
+- **The Agent**: Focuses on intelligent evidence collection strategy and analysis
+- **The MCP Server**: Handles the mechanics of fetching data from various sources
+
+The EvidenceAgent connects to our MCP server using Akka's native integration:
+
+```java
+@Component(id = "evidence-agent")
+public class EvidenceAgent extends Agent {
+    public Effect<String> gather(Request req) {
+        return effects()
+            .model(ModelProvider.openAi().withModelName("gpt-4o-mini"))
+            .mcpTools(
+                RemoteMcpTools.fromService("evidence-tools")
+                    .withAllowedToolNames("fetch_logs", "query_metrics", "correlate_evidence")
+            )
+            .systemMessage("You are an expert evidence collection agent...")
+            .userMessage("Gather evidence for incident in " + req.service())
+            .thenReply();
+    }
+}
+```
+
+When the AI model needs evidence, it can call these tools through the MCP protocol - completely abstracted from whether the data comes from local files, Datadog APIs, Elasticsearch queries, or SIEM systems.
+
+### What This Tutorial Builds
+
+In this tutorial, we'll build the **Evidence Tools MCP Server** that provides:
+
+**MCP Tools (Callable Functions):**
+- `fetch_logs`: Retrieve service logs with automatic error analysis and anomaly detection
+- `query_metrics`: Query performance metrics (error rates, latency, throughput, resource utilization)
+- `correlate_evidence`: Analyze relationships between logs and metrics to identify patterns
+
+**MCP Resources (URI-based Data Access):**
+- `kb://runbooks/{serviceName}`: Access troubleshooting runbooks and operational documentation
+
+**Infrastructure:**
+- HTTP endpoint at `/mcp` with JSON-RPC 2.0 protocol
+- Akka service discovery integration for seamless agent connection
+- Support for external MCP clients (Claude Desktop, VS Code)
+
+### From Sample to Production
+
+**In this sample**, we use file-based data sources (JSON files in `src/main/resources/`) to demonstrate the pattern. This makes the tutorial self-contained and easy to run locally without external dependencies.
+
+**In production**, you would replace these file-based implementations with secure API integrations:
+
+- **Datadog Integration**: Replace `fetch_logs` with Datadog Logs API calls using API keys
+- **Elasticsearch/OpenSearch**: Query logs and traces using the Elasticsearch REST API
+- **Prometheus/Grafana**: Fetch metrics using PromQL queries
+- **SIEM Systems**: Integrate with Splunk, Sumo Logic, or Azure Sentinel for security events
+- **APM Tools**: Connect to New Relic, Dynatrace, or AppDynamics for application performance data
+- **Cloud Provider APIs**: AWS CloudWatch, Azure Monitor, GCP Cloud Logging
+
+The beauty of the MCP architecture is that **agents don't need to change** when you swap implementations. The tools maintain the same interface - same names, same parameters, same response structure - whether reading from files or calling production APIs.
+
+**Why Build These as MCP Servers?**
+
+1. **Reusability**: These tools can be used by any MCP client - not just our triage system
+2. **Isolation**: Evidence gathering runs in its own service, with independent scaling and deployment
+3. **Security**: Centralized access control to sensitive observability data and API credentials
+4. **Flexibility**: Swap implementations (mock → staging → production) without changing agent code
+5. **Multi-Client**: The same MCP server serves both Akka agents and external tools like Claude Desktop
+
+**Repositories:**
+- **This Tutorial**: [agenticai-triage-mcp-tools](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agenticai-triage-mcp-tools) - MCP server for evidence gathering
+- **Triage System**: [agentic-triage-system](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agentic-triage-system) - Complete multi-agent incident response platform
 
 ## Prerequisites
 
@@ -170,9 +249,15 @@ Key configuration points:
 - `http-port`: The port where the MCP endpoint will be available
 - Timeouts are important for long-running tool calls
 
-## Step 2: Implementing the MCP Endpoint
+## Step 2: Building the MCP Endpoint
 
-Create `src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java`:
+Let's build the MCP endpoint incrementally, starting with the basic structure and adding tools one by one. This approach will help you understand each component clearly.
+
+> **Note:** The complete implementation is available on [GitHub](https://github.com/PradeepLoganathan/akka-kata/blob/main/akka-spovs/agenticai-triage-mcp-tools/src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java). Here we'll walk through the key parts step by step.
+
+### Step 2.1: Create the Basic MCP Endpoint Class
+
+First, create the file `src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java` with the basic endpoint structure:
 
 ```java
 package com.pradeepl.evidence;
@@ -180,28 +265,14 @@ package com.pradeepl.evidence;
 import akka.javasdk.annotations.Acl;
 import akka.javasdk.annotations.Description;
 import akka.javasdk.annotations.mcp.McpEndpoint;
-import akka.javasdk.annotations.mcp.McpResource;
 import akka.javasdk.annotations.mcp.McpTool;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
- * MCP Endpoint for Agentic AI Triage System - Evidence Gathering Tools
- */
 @Acl(allow = @Acl.Matcher(principal = Acl.Principal.ALL))
 @McpEndpoint(serverName = "evidence-tools", serverVersion = "1.0.0")
 public class EvidenceToolsEndpoint {
@@ -209,327 +280,197 @@ public class EvidenceToolsEndpoint {
     private static final Logger logger = LoggerFactory.getLogger(EvidenceToolsEndpoint.class);
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    @McpTool(
-        name = "fetch_logs",
-        description = "Fetch logs from the agentic AI triage system services (payment-service, checkout-service, auth-service, etc.). Returns recent log lines with automatic error analysis and anomaly detection."
-    )
-    public String fetchLogs(
-            @Description("Service name to fetch logs from (e.g., payment-service, checkout-service)")
-            String service,
-            @Description("Number of log lines to fetch (default: 200)")
-            int lines
-    ) {
-        logger.info("📝 MCP Tool: fetch_logs called - Service: {}, Lines: {}", service, lines);
+    // Tools will be added here
+}
+```
 
-        try {
-            String fileName = String.format("logs/%s.log", service);
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+**Understanding the Annotations:**
 
-            if (inputStream == null) {
-                ObjectNode errorResponse = mapper.createObjectNode();
-                errorResponse.put("error", String.format("No log file found for service: %s", service));
-                errorResponse.put("service", service);
-                return mapper.writeValueAsString(errorResponse);
-            }
+- **`@McpEndpoint(serverName = "evidence-tools", serverVersion = "1.0.0")`**
+  - Declares this class as an MCP server endpoint
+  - `serverName`: Identifier used by clients and service discovery (must match the `service-name` in `application.conf`)
+  - `serverVersion`: Version information exposed to clients via the MCP protocol
+  - Akka automatically creates an HTTP endpoint at `/mcp` that implements JSON-RPC 2.0
 
-            String fullLogs = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            String[] allLines = fullLogs.split("\n");
+- **`@Acl(allow = @Acl.Matcher(principal = Acl.Principal.ALL))`**
+  - Access Control List that allows all clients to access this endpoint
+  - In production, you'd restrict this to authenticated principals
+  - Example: `@Acl(allow = @Acl.Matcher(principal = Acl.Principal.INTERNET))` for internet-facing endpoints
 
-            // Return last N lines (most recent logs)
-            int startIndex = Math.max(0, allLines.length - lines);
-            int actualLines = Math.min(lines, allLines.length);
+### Step 2.2: Add Your First MCP Tool - fetch_logs
 
-            StringBuilder recentLogs = new StringBuilder();
-            for (int i = startIndex; i < allLines.length; i++) {
-                recentLogs.append(allLines[i]).append("\n");
-            }
+> **Understanding MCP Tools vs Resources**: If you're new to MCP concepts, review the fundamentals in our [.NET MCP post]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}}) which explains tools (executable functions) and resources (data access). The key difference: **Tools** are functions that AI agents can invoke to perform actions or computations, while **Resources** provide URI-based access to data or documents.
 
-            // Analyze logs for errors and patterns
-            LogAnalysis analysis = analyzeLogs(recentLogs.toString());
+Now let's add our first tool. Add this method to the `EvidenceToolsEndpoint` class:
 
-            // Build structured JSON response
-            ObjectNode response = mapper.createObjectNode();
-            response.put("logs", recentLogs.toString());
-            response.put("source", "classpath");
-            response.put("service", service);
-            response.put("linesReturned", actualLines);
-            response.put("linesRequested", lines);
+```java
+@McpTool(
+    name = "fetch_logs",
+    description = "Fetch logs from the agentic AI triage system services. Returns recent log lines with automatic error analysis and anomaly detection."
+)
+public String fetchLogs(
+        @Description("Service name to fetch logs from (e.g., payment-service, checkout-service)")
+        String service,
+        @Description("Number of log lines to fetch (default: 200)")
+        int lines
+) {
+    logger.info("📝 MCP Tool: fetch_logs called - Service: {}, Lines: {}", service, lines);
 
-            // Add analysis
-            ObjectNode analysisNode = mapper.createObjectNode();
-            analysisNode.put("errorCount", analysis.errorCount);
-            analysisNode.set("errorPatterns", mapper.valueToTree(analysis.errorPatterns));
-            analysisNode.set("httpStatusCounts", mapper.valueToTree(analysis.statusCodeCounts));
-            analysisNode.set("anomalies", mapper.valueToTree(analysis.anomalies));
-            analysisNode.set("sampleErrorLines", mapper.valueToTree(analysis.sampleErrorLines));
-            response.set("analysis", analysisNode);
+    try {
+        // Read log file from classpath resources
+        String fileName = String.format("logs/%s.log", service);
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
 
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-
-        } catch (Exception e) {
-            logger.error("📝 Error in fetch_logs", e);
-            try {
-                ObjectNode errorResponse = mapper.createObjectNode();
-                errorResponse.put("error", "Failed to fetch logs: " + e.getMessage());
-                errorResponse.put("service", service);
-                return mapper.writeValueAsString(errorResponse);
-            } catch (Exception jsonError) {
-                return String.format("{\"error\":\"Failed to fetch logs: %s\"}", e.getMessage());
-            }
+        if (inputStream == null) {
+            ObjectNode errorResponse = mapper.createObjectNode();
+            errorResponse.put("error", String.format("No log file found for service: %s", service));
+            errorResponse.put("service", service);
+            return mapper.writeValueAsString(errorResponse);
         }
-    }
 
-    @McpTool(
-        name = "query_metrics",
-        description = "Query performance metrics for the agentic AI triage system services. Returns parsed metrics with insights and alerts."
-    )
-    public String queryMetrics(
-            @Description("Metrics expression to query (e.g., error_rate, latency, cpu_usage)")
-            String expr,
-            @Description("Time range for the query (e.g., 1h, 30m, 5m)")
-            String range
-    ) {
-        logger.info("📊 MCP Tool: query_metrics called - Expr: {}, Range: {}", expr, range);
+        String fullLogs = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        String[] allLines = fullLogs.split("\n");
 
-        try {
-            String fileName = determineMetricsFile(expr);
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+        // Return last N lines (most recent logs)
+        int startIndex = Math.max(0, allLines.length - lines);
+        int actualLines = Math.min(lines, allLines.length);
 
-            if (inputStream == null) {
-                ObjectNode errorResponse = mapper.createObjectNode();
-                errorResponse.put("error", String.format("No metrics file found for query: %s", expr));
-                errorResponse.put("expr", expr);
-                errorResponse.put("range", range);
-                return mapper.writeValueAsString(errorResponse);
-            }
-
-            String metricsJson = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            JsonNode metricsData = mapper.readTree(metricsJson);
-
-            // Parse and format metrics
-            String formattedMetrics = formatMetricsOutput(metricsData, expr, range);
-            List<String> insights = analyzeMetrics(metricsJson, expr);
-
-            // Build structured response
-            ObjectNode response = mapper.createObjectNode();
-            response.put("raw", metricsJson);
-            response.put("formatted", formattedMetrics);
-            response.put("source", "classpath");
-            response.put("expr", expr);
-            response.put("range", range);
-            response.set("insights", mapper.valueToTree(insights));
-
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-
-        } catch (Exception e) {
-            logger.error("📊 Error in query_metrics", e);
-            try {
-                ObjectNode errorResponse = mapper.createObjectNode();
-                errorResponse.put("error", "Failed to query metrics: " + e.getMessage());
-                errorResponse.put("expr", expr);
-                errorResponse.put("range", range);
-                return mapper.writeValueAsString(errorResponse);
-            } catch (Exception jsonError) {
-                return String.format("{\"error\":\"Failed to query metrics: %s\"}", e.getMessage());
-            }
+        StringBuilder recentLogs = new StringBuilder();
+        for (int i = startIndex; i < allLines.length; i++) {
+            recentLogs.append(allLines[i]).append("\n");
         }
-    }
 
-    @McpTool(
-        name = "correlate_evidence",
-        description = "Correlate findings from logs and metrics to identify patterns, timeline alignment, and root causes."
-    )
-    public String correlateEvidence(
-            @Description("Description of log findings") String logFindings,
-            @Description("Description of metric findings") String metricFindings
-    ) {
-        logger.info("🔗 MCP Tool: correlate_evidence called");
+        // Build structured JSON response
+        ObjectNode response = mapper.createObjectNode();
+        response.put("logs", recentLogs.toString());
+        response.put("service", service);
+        response.put("linesReturned", actualLines);
+        response.put("linesRequested", lines);
 
-        try {
-            ObjectNode response = mapper.createObjectNode();
-            response.put("logFindings", logFindings);
-            response.put("metricFindings", metricFindings);
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
 
-            // Build correlation analysis
-            ObjectNode correlation = mapper.createObjectNode();
-            correlation.put("timelineAlignment",
-                "Analyze temporal alignment between error spikes and performance degradation");
-            correlation.put("dependencyFailures",
-                "Check if service dependency failures coincide with error increases");
-            correlation.put("resourceExhaustion",
-                "Correlate resource exhaustion patterns with error patterns");
-
-            ObjectNode confidence = mapper.createObjectNode();
-            confidence.put("level", "Medium");
-            confidence.put("reasoning",
-                "Confidence is HIGH if patterns align temporally, MEDIUM if partial alignment, LOW if no clear correlation");
-
-            response.set("potentialCorrelations", correlation);
-            response.set("confidence", confidence);
-
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-
-        } catch (Exception e) {
-            logger.error("🔗 Error in correlate_evidence", e);
-            return String.format("{\"error\":\"Failed to correlate evidence: %s\"}", e.getMessage());
-        }
-    }
-
-    @McpResource(
-        uriTemplate = "kb://runbooks/{serviceName}",
-        name = "Service Runbook",
-        description = "Get troubleshooting runbook for a specific service",
-        mimeType = "text/markdown"
-    )
-    public String getRunbook(String serviceName) {
-        logger.info("📚 MCP Resource: getRunbook called - Service: {}", serviceName);
-
-        try {
-            String path = String.format("knowledge_base/%s-runbook.md", serviceName);
-            InputStream in = getClass().getClassLoader().getResourceAsStream(path);
-
-            if (in == null) {
-                return String.format("# Runbook Not Found\n\nNo runbook available for service: %s", serviceName);
-            }
-
-            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
-
-        } catch (Exception e) {
-            logger.error("📚 Error in getRunbook", e);
-            return String.format("# Error\n\nFailed to load runbook: %s", e.getMessage());
-        }
-    }
-
-    // Helper record for log analysis
-    private record LogAnalysis(
-        int errorCount,
-        List<String> errorPatterns,
-        Map<String, Integer> statusCodeCounts,
-        List<String> anomalies,
-        List<String> sampleErrorLines
-    ) {}
-
-    // Helper methods for log analysis, metrics parsing, etc.
-    // (Implementation details omitted for brevity - see full code in repository)
-
-    private LogAnalysis analyzeLogs(String logs) {
-        // Analysis implementation...
-        return new LogAnalysis(0, List.of(), Map.of(), List.of(), List.of());
-    }
-
-    private String determineMetricsFile(String expr) {
-        // Route to appropriate metrics file based on expression
-        return "metrics/payment-service-errors.json";
-    }
-
-    private String formatMetricsOutput(JsonNode metricsData, String expr, String range) {
-        // Format metrics for display
-        return "Metrics summary...";
-    }
-
-    private List<String> analyzeMetrics(String metrics, String expr) {
-        // Extract insights from metrics
-        return List.of("Analysis insights...");
+    } catch (Exception e) {
+        logger.error("📝 Error in fetch_logs", e);
+        return String.format("{\"error\":\"Failed to fetch logs: %s\"}", e.getMessage());
     }
 }
 ```
 
-### Understanding the Annotations
+**Understanding `@McpTool`:**
 
-Let's break down the key annotations that make this an MCP endpoint:
+- **`@McpTool`** marks a method as an MCP tool that clients can invoke
+- **`name`**: The identifier clients use to call this tool (e.g., `"fetch_logs"`)
+- **`description`**: Critical for AI models - describes what the tool does and when to use it
+- **Method parameters** automatically become tool arguments in the MCP protocol
+- **`@Description`** on parameters helps AI understand what each argument is for
+- **Return value** becomes the tool's response to the client (typically JSON string)
 
-**`@McpEndpoint(serverName = "evidence-tools", serverVersion = "1.0.0")`**
-- Declares this class as an MCP server endpoint
-- `serverName`: Identifier used by clients and service discovery
-- `serverVersion`: Version information exposed to clients
-- Automatically creates an HTTP endpoint at `/mcp`
+This tool fetches service logs from the classpath, returns the most recent N lines, and wraps them in a structured JSON response.
 
-**`@Acl(allow = @Acl.Matcher(principal = Acl.Principal.ALL))`**
-- Access Control List allowing all clients to access this endpoint
-- In production, you'd restrict this to authenticated principals
+### Step 2.3: Add Two More Tools
 
-**`@McpTool(name = "...", description = "...")`**
-- Marks a method as an MCP tool
-- `name`: Tool identifier used by clients
-- `description`: Helps AI models understand when to use this tool
-- Method parameters become tool arguments
-- Return value becomes tool response
+Following the same pattern, add two additional tools to the endpoint class:
 
-**`@Description("...")`**
-- Documents individual parameters
-- Critical for AI models to understand argument purpose
-- Similar to JSON schema descriptions in other MCP implementations
+**`query_metrics`** - Queries performance metrics (error rates, latency, CPU usage, etc.) based on a metrics expression and time range. It reads from pre-configured metrics JSON files and returns parsed data with insights.
 
-**`@McpResource(uriTemplate = "...", ...)`**
-- Exposes data through URI-based access
-- `uriTemplate`: Path pattern with variables (e.g., `kb://runbooks/{serviceName}`)
-- `mimeType`: Content type of the resource
-- Method parameters are extracted from URI template variables
-
-## Step 3: Creating Sample Data
-
-Create directory structure for sample logs and metrics:
-
-```bash
-mkdir -p src/main/resources/logs
-mkdir -p src/main/resources/metrics
-mkdir -p src/main/resources/knowledge_base
-```
-
-Create `src/main/resources/logs/payment-service.log`:
-
-```
-2025-01-15 14:28:45.123 INFO  [payment-service] Processing payment request
-2025-01-15 14:28:45.234 ERROR [payment-service] Payment gateway timeout
-2025-01-15 14:28:50.567 ERROR [payment-service] Payment gateway timeout
-2025-01-15 14:29:15.789 ERROR [payment-service] Database connection refused
-```
-
-Create `src/main/resources/metrics/payment-service-errors.json`:
-
-```json
-{
-  "query": "errors:rate5m",
-  "time_range": "1h",
-  "timestamp": "2025-01-15T14:30:00Z",
-  "metrics": {
-    "error_rate": {
-      "current": 15.3,
-      "previous_hour": 2.1,
-      "threshold": 5.0,
-      "status": "elevated"
-    },
-    "error_count": {
-      "total": 342,
-      "by_type": {
-        "connection_timeout": 156,
-        "database_error": 89,
-        "payment_gateway_error": 67
-      }
-    }
-  }
+```java
+@McpTool(name = "query_metrics", description = "Query performance metrics...")
+public String queryMetrics(
+    @Description("Metrics expression") String expr,
+    @Description("Time range") String range
+) {
+    // Implementation: reads metrics JSON files, formats output
+    // See full code on GitHub
 }
 ```
 
-Create `src/main/resources/knowledge_base/payment-runbook.md`:
+**`correlate_evidence`** - Analyzes relationships between log findings and metric findings to identify temporal patterns, dependency failures, and resource exhaustion correlations. This demonstrates a tool that combines data from multiple sources.
 
-```markdown
-# Payment Service Runbook
-
-## Common Issues
-
-### Gateway Timeouts
-- Check gateway health endpoint
-- Review connection pool settings
-- Verify network connectivity
-
-### Database Connection Errors
-- Check connection pool capacity
-- Review active connections
-- Verify database health
+```java
+@McpTool(name = "correlate_evidence", description = "Correlate findings from logs and metrics...")
+public String correlateEvidence(
+    @Description("Description of log findings") String logFindings,
+    @Description("Description of metric findings") String metricFindings
+) {
+    // Implementation: analyzes correlations, timeline alignment
+    // See full code on GitHub
+}
 ```
 
-## Step 4: Running the MCP Server
+**Key Points:**
+
+- Multiple tools can coexist in the same endpoint class
+- Each tool is independent with its own name, description, and parameters
+- Helper methods don't need annotations - they're just regular Java methods
+- The complete implementation with error handling is in the [GitHub repository](https://github.com/PradeepLoganathan/akka-kata/blob/main/akka-spovs/agenticai-triage-mcp-tools/src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java)
+
+### Step 2.4: Add an MCP Resource - Service Runbooks
+
+**MCP Resources vs Tools**: As explained in our [earlier posts]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}}), MCP defines two distinct concepts:
+
+- **Tools**: Executable functions that perform actions or computations (like `fetch_logs`, `query_metrics`)
+- **Resources**: URI-based access to data, documents, or content (like runbooks, configuration files, documentation)
+
+Resources are ideal for providing static or semi-static information that agents can reference. Let's add a resource for service runbooks:
+
+```java
+import akka.javasdk.annotations.mcp.McpResource;
+
+@McpResource(
+    uriTemplate = "kb://runbooks/{serviceName}",
+    name = "Service Runbook",
+    description = "Get troubleshooting runbook for a specific service",
+    mimeType = "text/markdown"
+)
+public String getRunbook(String serviceName) {
+    logger.info("📚 MCP Resource: getRunbook called - Service: {}", serviceName);
+
+    try {
+        String path = String.format("knowledge_base/%s-runbook.md", serviceName);
+        InputStream in = getClass().getClassLoader().getResourceAsStream(path);
+
+        if (in == null) {
+            return String.format("# Runbook Not Found\n\nNo runbook available for service: %s", serviceName);
+        }
+
+        return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+
+    } catch (Exception e) {
+        logger.error("📚 Error in getRunbook", e);
+        return String.format("# Error\n\nFailed to load runbook: %s", e.getMessage());
+    }
+}
+```
+
+**Understanding `@McpResource`:**
+
+- **`@McpResource`** exposes data through URI-based access (different from executable tools)
+- **`uriTemplate`**: URI pattern with variables (e.g., `kb://runbooks/{serviceName}`)
+  - Clients can access: `kb://runbooks/payment`, `kb://runbooks/checkout`, etc.
+- **`mimeType`**: Content type of the resource (e.g., `text/markdown`, `application/json`)
+- **Method parameters** are extracted from the URI template variables
+- Resources are ideal for providing documentation, configuration, or reference data
+
+### Step 2 Complete: What We've Built
+
+We've now created a complete MCP endpoint with multiple tools and resources. The full implementation with helper methods, error handling, log analysis, and metrics parsing is available in the [GitHub repository](https://github.com/PradeepLoganathan/akka-kata/blob/main/akka-spovs/agenticai-triage-mcp-tools/src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java).
+
+**Summary of components:**
+
+- ✅ **MCP Endpoint** with `@McpEndpoint` annotation and service discovery integration
+- ✅ **Three MCP Tools** (executable functions):
+  - `fetch_logs` - Retrieves service logs with error analysis (shown in detail)
+  - `query_metrics` - Queries performance metrics and alerts
+  - `correlate_evidence` - Analyzes relationships between logs and metrics
+- ✅ **One MCP Resource** (URI-based data access):
+  - `kb://runbooks/{serviceName}` - Access service troubleshooting runbooks
+- ✅ **HTTP Endpoint** automatically exposed at `/mcp` with JSON-RPC 2.0
+- ✅ **Structured JSON responses** for all tools
+- ✅ **Error handling** and comprehensive logging
+
+The pattern is clear: define the endpoint class, add `@McpTool` methods for executable functions, and add `@McpResource` methods for data access. Akka handles the rest - HTTP server, JSON-RPC protocol, service discovery, and client integration.
+
+## Step 3: Running the MCP Server
 
 ### Build and Run
 
@@ -571,14 +512,15 @@ curl -s http://localhost:9200/mcp \
   }' | jq
 ```
 
-## Step 5: Integration with MCP Clients
+## Step 4: Integration with MCP Clients
 
-### Claude Desktop Integration
+Now that our MCP server is running, let's integrate it with various MCP clients. The beauty of MCP is that the same server can be consumed by different clients - Claude CLI, Claude Desktop, VS Code, and even other Akka agents.
 
-Create or edit `claude_desktop_config.json`:
+### Using Claude CLI
 
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows:** `%APPDATA%/Claude/claude_desktop_config.json`
+The simplest way to test your MCP server is with the Claude CLI tool. First, create an MCP configuration file in your project directory.
+
+Create `claude-mcp-config.json` in your project root:
 
 ```json
 {
@@ -595,29 +537,72 @@ Create or edit `claude_desktop_config.json`:
 }
 ```
 
-This configuration uses a Node.js one-liner to bridge STDIO (which Claude Desktop uses) to our HTTP endpoint.
+This configuration uses a Node.js one-liner to bridge STDIO (which Claude CLI uses) to our HTTP endpoint at `http://localhost:9200/mcp`.
 
-Restart Claude Desktop and test with prompts like:
-- "Fetch logs for the payment service and analyze errors"
-- "Query error rate metrics for the last hour"
-- "Correlate the log and metric findings"
+Now you can use Claude CLI with your MCP tools:
 
-### VS Code Integration
+```bash
+# Make sure your MCP server is running (mvn compile exec:java)
 
-Create `.vscode/mcp.json`:
+# Start Claude CLI with your MCP configuration
+claude --mcp-config claude-mcp-config.json
 
-```json
-{
-  "servers": {
-    "evidence-tools": {
-      "type": "http",
-      "url": "http://localhost:9200/mcp"
-    }
-  }
-}
+# In the Claude session, you can now use the tools:
+# "Fetch logs for payment-service and analyze the errors"
+# "Query error_rate metrics for the last 1 hour"
+# "Correlate the evidence from logs and metrics to identify the root cause"
 ```
 
-Or use the Node.js bridge approach similar to Claude Desktop:
+**What happens:**
+1. Claude CLI loads your MCP configuration
+2. It discovers the `fetch_logs`, `query_metrics`, and `correlate_evidence` tools
+3. When you ask questions, Claude can intelligently decide to use these tools
+4. The tools call your Akka MCP server via HTTP
+5. Results are returned to Claude for analysis
+
+**Example Session:**
+
+```
+You: Investigate the payment service issues
+
+Claude: I'll help you investigate the payment service. Let me start by fetching
+the recent logs and checking the error metrics.
+
+[Uses fetch_logs tool with service="payment-service", lines=200]
+[Uses query_metrics tool with expr="error_rate", range="1h"]
+
+Based on the evidence gathered:
+
+1. **Log Analysis**: Found 8 errors in recent logs, including:
+   - Payment gateway timeouts (3 occurrences)
+   - Database connection refused errors (3 occurrences)
+
+2. **Metrics Analysis**:
+   - Error rate: 15.3% (elevated, threshold: 5.0%)
+   - 342 total errors in the last hour
+   - Primary issues: connection timeouts (156), database errors (89)
+
+Let me correlate these findings...
+
+[Uses correlate_evidence tool with findings from logs and metrics]
+
+**Root Cause Assessment**: The timeline shows payment gateway timeouts started
+at 14:28:45, followed by database connection failures at 14:29:15. This suggests
+a cascading failure pattern where gateway issues exhausted the connection pool...
+```
+
+### Claude Desktop Integration
+
+For persistent integration with Claude Desktop, create or edit the configuration file:
+
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%/Claude/claude_desktop_config.json`
+
+Use the same configuration as `claude-mcp-config.json` above. Restart Claude Desktop after editing the file.
+
+### VS Code / GitHub Copilot Integration
+
+Create `.vscode/mcp.json` in your project:
 
 ```json
 {
@@ -634,9 +619,9 @@ Or use the Node.js bridge approach similar to Claude Desktop:
 }
 ```
 
-Reload VS Code, open Copilot Chat in Agent mode, and the evidence tools should be available.
+Reload VS Code, open Copilot Chat in Agent mode, and the evidence tools will be available.
 
-## Step 6: Integration with Akka Agents
+## Step 5: Integration with Akka Agents
 
 One of Akka's unique features is seamless integration with its agent system. Here's how another Akka service can consume these MCP tools:
 
