@@ -851,6 +851,5 @@ In the next post, we'll explore building a complete agentic workflow that orches
 
 - [Akka Java SDK Documentation](https://doc.akka.io/java/)
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-- [Previous: Building MCP Server in Java]({{< relref "/blog/model-context-protocol/build-a-mcp-server-java/" >}})
 - [Previous: Building MCP Server in .NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}})
 - [GitHub Repository: agenticai-triage-mcp-tools](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agenticai-triage-mcp-tools)
