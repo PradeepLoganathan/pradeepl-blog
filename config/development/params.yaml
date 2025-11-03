@@ -20,7 +20,7 @@ dateTimeFormat: 'MMMM Do, YYYY h:mm a'
 language: en-us
 languageCode: en-us
 mainSections:
-  - posts
+  - blog
   - episodes
 podcast:
   description: Software engineering podcast - description
@@ -63,6 +63,11 @@ ShowCodeCopyButtons: true
 hideFooter: true
 ShowRssButtonInSectionTermList: true
 UseHugoToc: true
+ShowRelatedPosts: true
+ShowToc: true
+ShowWordCount: true
+defaultTheme: "auto"
+disableThemeToggle: false
 
 taxonomies:
   category: categories
@@ -102,7 +107,7 @@ fuseOpts:
   shouldSort: true
   location: 0
   distance: 1000
-  threshold: 0.4
+  threshold: 0.3
   minMatchCharLength: 0
   keys: ["title", "permalink", "summary", "content"]
 
@@ -125,7 +130,7 @@ giscus:
   repoID: R_kgDOGrc4sA
   category: BlogPosts
   categoryID: DIC_kwDOGrc4sM4CRM5A
-  mapping: og:title
+  mapping: pathname
   reactionsEnabled: '1'
   emitMetadata: '0'
   inputPosition: bottom
@@ -135,6 +140,6 @@ giscus:
 opengraph:
    enable: true
    type: "website"  # Change dynamically in `opengraph.html`
-   image: "/images/default-og-image.jpg"
+   image: "/Pradeep-Loganathan.jpeg"
    twitter:
      card: "summary_large_image"

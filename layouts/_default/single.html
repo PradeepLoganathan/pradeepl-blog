@@ -33,6 +33,9 @@
 
     <footer class="post-footer">
         {{ partial "post_nav_links.html" . }}
+        {{ if (.Param "ShowRelatedPosts") }}
+        {{ partial "related.html" . }}
+        {{ end }}
         {{ partial "comments.html" . }}
     </footer>
 </div>

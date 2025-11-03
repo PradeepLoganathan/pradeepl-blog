@@ -12,6 +12,7 @@ tags:
   - autonomoussystems
 categories:
   - artificialintelligence
+  - featured
 description: "Explore the revolutionary world of Agentic AI - autonomous systems that can plan, reason, and execute complex tasks with minimal human intervention. Learn how this technology is reshaping the future of AI."
 summary: "A comprehensive guide to Agentic AI, exploring how autonomous AI systems are evolving beyond traditional generative AI to become proactive, goal-driven agents capable of complex problem-solving."
 ShowToc: true

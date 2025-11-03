@@ -23,18 +23,7 @@ if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
   })(window, document, "clarity", "script", "kfuenmndko");
 </script>
 
-<footer class="footer">
-  {{- if .Site.Copyright }}
-  <span>{{ .Site.Copyright | markdownify }}</span>
-  {{- else }}
-  <span>&copy; {{ now.Year }} <a href="{{ "" | absLangURL }}">{{ .Site.Title }}</a></span>
-  {{- end }}
-  <!-- <span>
-      Powered by
-      <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-      <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
-  </span> -->
-</footer>
+{{/* Footer is rendered by PaperMod; avoid duplicating here. */}}
 
 
 <!-- https://ionic.io/ionicons -->
