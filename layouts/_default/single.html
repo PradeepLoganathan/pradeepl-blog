@@ -36,6 +36,9 @@
         {{ if (.Param "ShowRelatedPosts") }}
         {{ partial "related.html" . }}
         {{ end }}
+        {{ if (.Param "ShowShareButtons") }}
+        {{ partial "share-buttons.html" . }}
+        {{ end }}
         {{ partial "comments.html" . }}
     </footer>
 </div>
