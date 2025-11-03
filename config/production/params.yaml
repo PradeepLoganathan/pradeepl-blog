@@ -63,6 +63,8 @@ ShowCodeCopyButtons: true
 hideFooter: true
 ShowRssButtonInSectionTermList: true
 ShowFullTextinRSS: true
+UseHugoToc: true
+
 
 taxonomies:
   category: categories

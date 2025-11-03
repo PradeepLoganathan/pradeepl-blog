@@ -1,19 +1,22 @@
 ---
-title: "Mastering REST: The Role of HATEOAS in API Design"
-lastmod: 2024-01-30T14:51:18+10:00
+title: "HATEOAS: Building Self-Documenting REST APIs That Scale (2025 Guide)"
+lastmod: 2025-01-03T14:00:00+10:00
 date: 2024-01-30T14:51:18+10:00
 draft: false
 Author: Pradeep Loganathan
-tags: 
+tags:
   - REST
   - API
   - HATEOAS
   - Hypermedia
+  - API Design
+  - Spring HATEOAS
+  - OpenAPI
 categories:
   - REST
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
-summary: "HATEOAS is a key aspect of building Restful web services. It is a key aspect of REST principles"
-# description: "HATEOAS is a key aspect of building Restful web services. It is a key aspect of REST principles"
+  - API Design
+summary: "Master HATEOAS to build truly RESTful APIs that are self-documenting, evolvable, and loosely coupled. Includes practical examples with Spring Boot, common mistakes to avoid, and modern implementation patterns."
+description: "Complete guide to HATEOAS in REST API design: practical implementation with Spring Boot, HAL+JSON, common pitfalls, and real-world examples. Build scalable, self-documenting APIs."
 ShowToc: true
 TocOpen: true
 images:
@@ -28,9 +31,36 @@ cover:
 
 # Introduction
 
-HATEOAS, or Hypermedia as the Engine of Application State is  a [pivotal aspect of REST]({{< ref "/blog/rest/REST-API-what-is-rest" >}}) that is fundamental to its architecture. It is a principle that guides the interaction between clients and servers in a RESTful environment. By adhering to HATEOAS, a server provides information dynamically to clients, enabling them to navigate the available actions and resources without hard-coded knowledge of the API's structure. This level of abstraction not only decouples the client from the server, leading to a more flexible and adaptable interaction but also encapsulates the true essence of what it means to be RESTful.
+Ever wondered why most "REST APIs" aren't actually RESTful? The missing piece is HATEOAS (Hypermedia as the Engine of Application State) - the most misunderstood and underutilized REST constraint.
 
-REST, conceptualized by Roy Fielding in his doctoral dissertation, outlines [a set of constraints]({{< ref "/blog/rest/rest-architectural-constraints">}}) that, when followed, lead to a scalable, stateless, and navigable web service. One of these constraints, and perhaps the most overlooked, is HATEOAS, an acronym for Hypermedia as the Engine of Application State.
+HATEOAS transforms your API from a collection of endpoints into a self-documenting, discoverable system where clients navigate through hypermedia links rather than hardcoded URLs. Think of it like browsing the web: you don't need to memorize URLs - you click links. HATEOAS brings this same principle to APIs.
+
+**What you'll learn:**
+- What HATEOAS actually means and why it matters
+- Practical implementation with Spring Boot and HAL+JSON
+- Real-world examples you can copy and adapt
+- Common mistakes developers make (and how to avoid them)
+- Modern tools and standards (OpenAPI, Spring HATEOAS)
+- When to use HATEOAS and when to skip it
+
+**What you'll achieve:**
+- APIs that evolve without breaking clients
+- Self-documenting services that reduce documentation burden
+- Looser coupling between client and server
+- Better developer experience for API consumers
+
+**Who this is for:**
+- Backend developers building REST APIs
+- API architects designing scalable services
+- Teams struggling with API versioning
+- Anyone wanting to build truly RESTful services
+
+**Prerequisites:**
+- Understanding of REST principles
+- Familiarity with JSON
+- Basic knowledge of HTTP methods (GET, POST, PUT, DELETE)
+
+HATEOAS is a [pivotal aspect of REST]({{< ref "/blog/rest/REST-API-what-is-rest" >}}), as defined by Roy Fielding in his doctoral dissertation. Among the [REST architectural constraints]({{< ref "/blog/rest/rest-architectural-constraints">}}), HATEOAS is perhaps the most overlooked, yet it's what truly distinguishes RESTful APIs from simple HTTP-based APIs.
 
 # What is Hypermedia
 
@@ -145,3 +175,875 @@ Implementing HATEOAS in your RESTful APIs can significantly enhance the flexibil
 - Testing HATEOAS Aspects : Ensure that your automated tests cover the dynamic aspects of your HATEOAS implementation. Test that your links appear as expected in different states and that they correctly reflect the possible actions and transitions.
 
 Implementing these best practices will help ensure that your HATEOAS-driven API is not just compliant with REST principles but is also practical, intuitive, and resilient to changes. In the next section, we will explore some real-world examples and case studies to understand how HATEOAS is implemented in practice and the benefits it brings.
+
+# Practical Implementation with Spring Boot
+
+Let's implement a real-world HATEOAS API using Spring Boot and Spring HATEOAS framework. We'll build a simple blog API that demonstrates key HATEOAS concepts.
+
+## Setting Up Dependencies
+
+First, add Spring HATEOAS to your `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-hateoas</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+## Domain Model
+
+```java
+@Entity
+public class BlogPost {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String title;
+    private String content;
+    private String author;
+
+    @Enumerated(EnumType.STRING)
+    private PostStatus status; // DRAFT, PUBLISHED, ARCHIVED
+
+    private LocalDateTime createdAt;
+    private LocalDateTime publishedAt;
+
+    // Getters and setters omitted for brevity
+}
+
+public enum PostStatus {
+    DRAFT, PUBLISHED, ARCHIVED
+}
+```
+
+## Resource Representation Model
+
+Spring HATEOAS uses `RepresentationModel` to add hypermedia links:
+
+```java
+public class BlogPostModel extends RepresentationModel<BlogPostModel> {
+    private Long id;
+    private String title;
+    private String content;
+    private String author;
+    private PostStatus status;
+    private LocalDateTime createdAt;
+    private LocalDateTime publishedAt;
+
+    // Constructors, getters, and setters
+}
+```
+
+## Model Assembler
+
+The assembler converts entities to HATEOAS models with links:
+
+```java
+@Component
+public class BlogPostModelAssembler
+    implements RepresentationModelAssembler<BlogPost, BlogPostModel> {
+
+    @Override
+    public BlogPostModel toModel(BlogPost post) {
+        BlogPostModel model = new BlogPostModel();
+        // Copy properties from entity
+        model.setId(post.getId());
+        model.setTitle(post.getTitle());
+        model.setContent(post.getContent());
+        model.setAuthor(post.getAuthor());
+        model.setStatus(post.getStatus());
+        model.setCreatedAt(post.getCreatedAt());
+        model.setPublishedAt(post.getPublishedAt());
+
+        // Add self link
+        model.add(linkTo(methodOn(BlogPostController.class)
+            .getPost(post.getId()))
+            .withSelfRel());
+
+        // Add conditional links based on state
+        if (post.getStatus() == PostStatus.DRAFT) {
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .publishPost(post.getId()))
+                .withRel("publish"));
+
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .updatePost(post.getId(), null))
+                .withRel("update"));
+
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .deletePost(post.getId()))
+                .withRel("delete"));
+        }
+
+        if (post.getStatus() == PostStatus.PUBLISHED) {
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .archivePost(post.getId()))
+                .withRel("archive"));
+
+            // Published posts can only be updated, not deleted
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .updatePost(post.getId(), null))
+                .withRel("update"));
+        }
+
+        if (post.getStatus() == PostStatus.ARCHIVED) {
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .republishPost(post.getId()))
+                .withRel("republish"));
+        }
+
+        // Add link to author
+        model.add(linkTo(methodOn(AuthorController.class)
+            .getAuthor(post.getAuthor()))
+            .withRel("author"));
+
+        // Add link to comments
+        model.add(linkTo(methodOn(CommentController.class)
+            .getComments(post.getId()))
+            .withRel("comments"));
+
+        return model;
+    }
+}
+```
+
+## REST Controller
+
+```java
+@RestController
+@RequestMapping("/api/posts")
+public class BlogPostController {
+
+    @Autowired
+    private BlogPostService postService;
+
+    @Autowired
+    private BlogPostModelAssembler assembler;
+
+    @GetMapping("/{id}")
+    public EntityModel<BlogPostModel> getPost(@PathVariable Long id) {
+        BlogPost post = postService.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
+
+        return EntityModel.of(assembler.toModel(post));
+    }
+
+    @GetMapping
+    public CollectionModel<BlogPostModel> getAllPosts(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+
+        Page<BlogPost> postsPage = postService.findAll(
+            PageRequest.of(page, size));
+
+        List<BlogPostModel> posts = postsPage.getContent().stream()
+            .map(assembler::toModel)
+            .collect(Collectors.toList());
+
+        CollectionModel<BlogPostModel> collection =
+            CollectionModel.of(posts);
+
+        // Add pagination links
+        collection.add(linkTo(methodOn(BlogPostController.class)
+            .getAllPosts(page, size))
+            .withSelfRel());
+
+        if (page > 0) {
+            collection.add(linkTo(methodOn(BlogPostController.class)
+                .getAllPosts(page - 1, size))
+                .withRel("prev"));
+        }
+
+        if (page < postsPage.getTotalPages() - 1) {
+            collection.add(linkTo(methodOn(BlogPostController.class)
+                .getAllPosts(page + 1, size))
+                .withRel("next"));
+        }
+
+        collection.add(linkTo(methodOn(BlogPostController.class)
+            .getAllPosts(0, size))
+            .withRel("first"));
+
+        collection.add(linkTo(methodOn(BlogPostController.class)
+            .getAllPosts(postsPage.getTotalPages() - 1, size))
+            .withRel("last"));
+
+        return collection;
+    }
+
+    @PostMapping
+    public ResponseEntity<BlogPostModel> createPost(
+        @RequestBody BlogPostRequest request) {
+
+        BlogPost post = postService.create(request);
+        BlogPostModel model = assembler.toModel(post);
+
+        return ResponseEntity
+            .created(model.getRequiredLink("self").toUri())
+            .body(model);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BlogPostModel> updatePost(
+        @PathVariable Long id,
+        @RequestBody BlogPostRequest request) {
+
+        BlogPost post = postService.update(id, request);
+        BlogPostModel model = assembler.toModel(post);
+
+        return ResponseEntity.ok(model);
+    }
+
+    @PostMapping("/{id}/publish")
+    public ResponseEntity<BlogPostModel> publishPost(@PathVariable Long id) {
+        BlogPost post = postService.publish(id);
+        BlogPostModel model = assembler.toModel(post);
+
+        return ResponseEntity.ok(model);
+    }
+
+    @PostMapping("/{id}/archive")
+    public ResponseEntity<BlogPostModel> archivePost(@PathVariable Long id) {
+        BlogPost post = postService.archive(id);
+        BlogPostModel model = assembler.toModel(post);
+
+        return ResponseEntity.ok(model);
+    }
+
+    @PostMapping("/{id}/republish")
+    public ResponseEntity<BlogPostModel> republishPost(@PathVariable Long id) {
+        BlogPost post = postService.republish(id);
+        BlogPostModel model = assembler.toModel(post);
+
+        return ResponseEntity.ok(model);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+        postService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+```
+
+## HAL+JSON Response Examples
+
+When you request a **draft post** (`GET /api/posts/1`):
+
+```json
+{
+  "id": 1,
+  "title": "Getting Started with HATEOAS",
+  "content": "HATEOAS is a constraint of REST...",
+  "author": "john.doe",
+  "status": "DRAFT",
+  "createdAt": "2025-01-01T10:00:00",
+  "publishedAt": null,
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/api/posts/1"
+    },
+    "publish": {
+      "href": "http://localhost:8080/api/posts/1/publish"
+    },
+    "update": {
+      "href": "http://localhost:8080/api/posts/1"
+    },
+    "delete": {
+      "href": "http://localhost:8080/api/posts/1"
+    },
+    "author": {
+      "href": "http://localhost:8080/api/authors/john.doe"
+    },
+    "comments": {
+      "href": "http://localhost:8080/api/posts/1/comments"
+    }
+  }
+}
+```
+
+Notice how the response includes links for `publish`, `update`, and `delete` - these are the actions available for a draft post.
+
+When you request a **published post** (`GET /api/posts/2`):
+
+```json
+{
+  "id": 2,
+  "title": "Advanced HATEOAS Patterns",
+  "content": "Let's explore advanced patterns...",
+  "author": "jane.smith",
+  "status": "PUBLISHED",
+  "createdAt": "2024-12-15T09:30:00",
+  "publishedAt": "2024-12-16T14:00:00",
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/api/posts/2"
+    },
+    "archive": {
+      "href": "http://localhost:8080/api/posts/2/archive"
+    },
+    "update": {
+      "href": "http://localhost:8080/api/posts/2"
+    },
+    "author": {
+      "href": "http://localhost:8080/api/authors/jane.smith"
+    },
+    "comments": {
+      "href": "http://localhost:8080/api/posts/2/comments"
+    }
+  }
+}
+```
+
+Notice the **differences**: Published posts have `archive` and `update` links, but **no `delete` or `publish` links** - because those actions aren't valid for a published post.
+
+A **collection response** with pagination (`GET /api/posts?page=1&size=10`):
+
+```json
+{
+  "_embedded": {
+    "blogPostModelList": [
+      {
+        "id": 11,
+        "title": "Post Title 11",
+        "status": "PUBLISHED",
+        "_links": {
+          "self": {"href": "http://localhost:8080/api/posts/11"},
+          "archive": {"href": "http://localhost:8080/api/posts/11/archive"}
+        }
+      },
+      {
+        "id": 12,
+        "title": "Post Title 12",
+        "status": "DRAFT",
+        "_links": {
+          "self": {"href": "http://localhost:8080/api/posts/12"},
+          "publish": {"href": "http://localhost:8080/api/posts/12/publish"}
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/api/posts?page=1&size=10"
+    },
+    "first": {
+      "href": "http://localhost:8080/api/posts?page=0&size=10"
+    },
+    "prev": {
+      "href": "http://localhost:8080/api/posts?page=0&size=10"
+    },
+    "next": {
+      "href": "http://localhost:8080/api/posts?page=2&size=10"
+    },
+    "last": {
+      "href": "http://localhost:8080/api/posts?page=5&size=10"
+    }
+  },
+  "page": {
+    "size": 10,
+    "totalElements": 57,
+    "totalPages": 6,
+    "number": 1
+  }
+}
+```
+
+## Client Implementation Example
+
+Here's how a client would consume this HATEOAS API:
+
+```java
+public class BlogClient {
+    private final RestTemplate restTemplate;
+    private final String baseUrl;
+
+    public void publishDraftPosts() {
+        // Start from the root - no hardcoded URLs needed
+        String postsUrl = baseUrl + "/api/posts";
+
+        // Get all posts
+        CollectionModel<BlogPostModel> posts =
+            restTemplate.getForObject(postsUrl,
+                new ParameterizedTypeReference<CollectionModel<BlogPostModel>>() {});
+
+        // Process each post
+        for (BlogPostModel post : posts.getContent()) {
+            // Check if the post CAN be published by looking for the "publish" link
+            Link publishLink = post.getLink("publish");
+
+            if (publishLink.isPresent()) {
+                // The link exists, so publishing is allowed
+                restTemplate.postForObject(
+                    publishLink.get().getHref(),
+                    null,
+                    BlogPostModel.class);
+
+                System.out.println("Published post: " + post.getTitle());
+            } else {
+                // No publish link means this action isn't available
+                System.out.println("Cannot publish post: " + post.getTitle()
+                    + " (status: " + post.getStatus() + ")");
+            }
+        }
+    }
+}
+```
+
+**Key point**: The client doesn't hardcode business logic like "only draft posts can be published". Instead, it discovers available actions through hypermedia links. If the server's business rules change, the client continues to work without modifications.
+
+## Adding Custom Link Relations
+
+For domain-specific actions, define custom link relations:
+
+```java
+public class CustomLinkRelations {
+    public static final String APPROVE = "approve";
+    public static final String REJECT = "reject";
+    public static final String REQUEST_REVIEW = "request-review";
+}
+
+// In your assembler
+if (post.getStatus() == PostStatus.PENDING_REVIEW) {
+    model.add(linkTo(methodOn(BlogPostController.class)
+        .approvePost(post.getId()))
+        .withRel(CustomLinkRelations.APPROVE));
+
+    model.add(linkTo(methodOn(BlogPostController.class)
+        .rejectPost(post.getId()))
+        .withRel(CustomLinkRelations.REJECT));
+}
+```
+
+## Integration with OpenAPI/Swagger
+
+You can document your HATEOAS API with OpenAPI:
+
+```java
+@Configuration
+public class OpenAPIConfig {
+
+    @Bean
+    public OpenAPI blogApiOpenAPI() {
+        return new OpenAPI()
+            .info(new Info()
+                .title("Blog API with HATEOAS")
+                .version("v1.0")
+                .description("RESTful blog API implementing HATEOAS constraints")
+                .contact(new Contact()
+                    .name("API Support")
+                    .email("support@example.com")))
+            .servers(List.of(
+                new Server().url("http://localhost:8080")
+                    .description("Development server")))
+            .components(new Components()
+                .schemas(Map.of(
+                    "BlogPost", new Schema<>()
+                        .description("Blog post with hypermedia links")
+                        .addProperty("_links", new Schema<>()
+                            .description("Hypermedia links showing available actions"))
+                )));
+    }
+}
+```
+
+This Spring Boot example demonstrates:
+- **State-driven links**: Links change based on resource state (draft vs. published)
+- **Self-documentation**: Clients discover actions through `_links`
+- **Loose coupling**: Clients don't hardcode URLs or business rules
+- **HAL+JSON format**: Industry-standard hypermedia format
+- **Pagination**: Proper navigation through collections
+- **OpenAPI integration**: Documentation that coexists with HATEOAS
+
+# Common Mistakes When Implementing HATEOAS
+
+Even experienced developers make mistakes when implementing HATEOAS. Here are the most common pitfalls and how to avoid them:
+
+## 1. Including Links That Don't Reflect Current State
+
+**The Mistake:**
+
+```json
+{
+  "id": 123,
+  "status": "PUBLISHED",
+  "_links": {
+    "self": {"href": "/posts/123"},
+    "publish": {"href": "/posts/123/publish"},  // WRONG: Already published!
+    "delete": {"href": "/posts/123"}            // WRONG: Can't delete published posts
+  }
+}
+```
+
+**Why It's Wrong:** The response includes `publish` and `delete` links even though the post is already published. This violates the HATEOAS principle - links should only represent **currently available** actions.
+
+**The Fix:**
+
+```java
+// In your model assembler
+public BlogPostModel toModel(BlogPost post) {
+    BlogPostModel model = new BlogPostModel();
+    // ... copy properties ...
+
+    // Add self link (always present)
+    model.add(linkTo(methodOn(BlogPostController.class)
+        .getPost(post.getId())).withSelfRel());
+
+    // Add state-specific links
+    switch (post.getStatus()) {
+        case DRAFT:
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .publishPost(post.getId())).withRel("publish"));
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .deletePost(post.getId())).withRel("delete"));
+            break;
+
+        case PUBLISHED:
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .archivePost(post.getId())).withRel("archive"));
+            // No delete link for published posts
+            break;
+
+        case ARCHIVED:
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .republishPost(post.getId())).withRel("republish"));
+            break;
+    }
+
+    return model;
+}
+```
+
+**Result:** Links accurately reflect what the client can actually do right now.
+
+## 2. Hardcoding URLs in Client Code
+
+**The Mistake:**
+
+```java
+// BAD: Client hardcodes URL structure
+public class BlogClient {
+    public void publishPost(Long postId) {
+        String url = "http://api.example.com/api/posts/" + postId + "/publish";
+        restTemplate.postForObject(url, null, BlogPostModel.class);
+    }
+}
+```
+
+**Why It's Wrong:** This defeats the entire purpose of HATEOAS. The client is tightly coupled to the server's URL structure. If the server changes from `/posts/{id}/publish` to `/posts/{id}/actions/publish`, the client breaks.
+
+**The Fix:**
+
+```java
+// GOOD: Client follows hypermedia links
+public class BlogClient {
+    public void publishPost(BlogPostModel post) {
+        Link publishLink = post.getLink("publish")
+            .orElseThrow(() -> new IllegalStateException(
+                "Cannot publish post - action not available"));
+
+        restTemplate.postForObject(
+            publishLink.getHref(),
+            null,
+            BlogPostModel.class);
+    }
+}
+```
+
+**Result:** The client discovers the URL dynamically. Server can change URL structure without breaking clients.
+
+## 3. Using Generic Link Relations Instead of Semantic Ones
+
+**The Mistake:**
+
+```json
+{
+  "_links": {
+    "action1": {"href": "/posts/123/publish"},
+    "action2": {"href": "/posts/123/archive"},
+    "related": {"href": "/authors/jane"}
+  }
+}
+```
+
+**Why It's Wrong:** Generic relation names like `action1`, `action2`, `related` provide no semantic meaning. Clients have no idea what these links do without external documentation.
+
+**The Fix:**
+
+```json
+{
+  "_links": {
+    "publish": {"href": "/posts/123/publish"},
+    "archive": {"href": "/posts/123/archive"},
+    "author": {"href": "/authors/jane"},
+    "comments": {"href": "/posts/123/comments"}
+  }
+}
+```
+
+Use standard IANA link relations where applicable:
+- `self` - The current resource
+- `next`/`prev` - Pagination
+- `first`/`last` - Collection boundaries
+- `edit` - Where to update the resource
+- `related` - Related resources
+
+For custom relations, use descriptive names that convey intent: `publish`, `archive`, `approve`, `reject`.
+
+## 4. Returning Different Link Structures for the Same Resource
+
+**The Mistake:**
+
+```java
+// Endpoint 1 returns links like this:
+{
+  "_links": {
+    "author": "/authors/123"
+  }
+}
+
+// Endpoint 2 returns links like this:
+{
+  "links": [
+    {"rel": "author", "href": "/authors/123"}
+  ]
+}
+```
+
+**Why It's Wrong:** Inconsistent link formats confuse clients and make parsing difficult. Each client request might return a different structure.
+
+**The Fix:** Choose a standard media type and stick with it consistently:
+
+```java
+// Always use HAL+JSON format across all endpoints
+@GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+public EntityModel<BlogPostModel> getPost(@PathVariable Long id) {
+    // Returns consistent HAL+JSON structure
+}
+
+@GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+public CollectionModel<BlogPostModel> getAllPosts() {
+    // Also returns HAL+JSON
+}
+```
+
+**Result:** Every response uses the same hypermedia format, making client code simpler and more reliable.
+
+## 5. Forgetting to Handle Link Absence
+
+**The Mistake:**
+
+```java
+// Client assumes link always exists
+public void archivePost(BlogPostModel post) {
+    Link archiveLink = post.getLink("archive").get(); // Throws if missing!
+    restTemplate.postForObject(archiveLink.getHref(), null, Void.class);
+}
+```
+
+**Why It's Wrong:** Links may not exist based on resource state. This code crashes when the `archive` link is missing (e.g., for draft posts).
+
+**The Fix:**
+
+```java
+// Option 1: Check presence first
+public boolean archivePost(BlogPostModel post) {
+    Optional<Link> archiveLink = post.getLink("archive");
+
+    if (archiveLink.isPresent()) {
+        restTemplate.postForObject(
+            archiveLink.get().getHref(),
+            null,
+            Void.class);
+        return true;
+    } else {
+        log.warn("Cannot archive post {} - action not available", post.getId());
+        return false;
+    }
+}
+
+// Option 2: Use orElseThrow with meaningful message
+public void archivePost(BlogPostModel post) {
+    Link archiveLink = post.getLink("archive")
+        .orElseThrow(() -> new IllegalStateException(
+            "Post cannot be archived in its current state: " + post.getStatus()));
+
+    restTemplate.postForObject(archiveLink.getHref(), null, Void.class);
+}
+```
+
+**Result:** Graceful handling of missing links with clear error messages.
+
+## 6. Overloading Responses with Too Many Links
+
+**The Mistake:**
+
+```json
+{
+  "id": 123,
+  "title": "My Post",
+  "_links": {
+    "self": {"href": "/posts/123"},
+    "update": {"href": "/posts/123"},
+    "delete": {"href": "/posts/123"},
+    "publish": {"href": "/posts/123/publish"},
+    "author": {"href": "/authors/jane"},
+    "author-profile": {"href": "/authors/jane/profile"},
+    "author-posts": {"href": "/authors/jane/posts"},
+    "comments": {"href": "/posts/123/comments"},
+    "comment-count": {"href": "/posts/123/comments/count"},
+    "latest-comment": {"href": "/posts/123/comments/latest"},
+    "tags": {"href": "/posts/123/tags"},
+    "category": {"href": "/categories/tech"},
+    "related-posts": {"href": "/posts/123/related"},
+    "statistics": {"href": "/posts/123/stats"}
+    // ... 20 more links ...
+  }
+}
+```
+
+**Why It's Wrong:** Too many links bloat the response, confuse clients, and impact performance. Many of these links aren't immediately useful.
+
+**The Fix:** Include only **essential** and **actionable** links:
+
+```json
+{
+  "id": 123,
+  "title": "My Post",
+  "_links": {
+    "self": {"href": "/posts/123"},
+    "publish": {"href": "/posts/123/publish"},
+    "update": {"href": "/posts/123"},
+    "delete": {"href": "/posts/123"},
+    "author": {"href": "/authors/jane"},
+    "comments": {"href": "/posts/123/comments"}
+  }
+}
+```
+
+For related resources that aren't immediately needed, let clients discover them by following the initial links. For example, clients can get `author-posts` by first following the `author` link.
+
+## 7. Not Documenting Custom Link Relations
+
+**The Mistake:** Creating custom link relations like `x-approve`, `x-submit-review` without documenting what they mean or how to use them.
+
+**The Fix:**
+
+```java
+// 1. Create a link relations registry
+public class LinkRelations {
+    public static final String APPROVE = "approve";
+    public static final String REJECT = "reject";
+
+    // Document each relation
+    /**
+     * Link relation: approve
+     * Method: POST
+     * Description: Approves a pending blog post for publication
+     * Preconditions: Post must be in PENDING_REVIEW status
+     * Effect: Changes post status to APPROVED
+     */
+    public static final LinkRelation APPROVE_REL =
+        LinkRelation.of(APPROVE);
+}
+
+// 2. Use OpenAPI to document relations
+@Operation(
+    summary = "Approve post",
+    description = "Approves a blog post that is pending review"
+)
+@ApiResponse(responseCode = "200", description = "Post approved")
+@ApiResponse(responseCode = "409", description = "Post not in reviewable state")
+@PostMapping("/{id}/approve")
+public ResponseEntity<BlogPostModel> approvePost(@PathVariable Long id) {
+    // Implementation
+}
+```
+
+**Result:** Developers consuming your API understand what each link relation means and how to use it.
+
+## 8. Mixing Business Logic into Link Generation
+
+**The Mistake:**
+
+```java
+// Controller doing too much
+@GetMapping("/{id}")
+public EntityModel<BlogPostModel> getPost(@PathVariable Long id) {
+    BlogPost post = postService.findById(id);
+    BlogPostModel model = new BlogPostModel(post);
+
+    // Business logic scattered in controller
+    if (post.getStatus() == PostStatus.DRAFT) {
+        model.add(Link.of("/posts/" + id + "/publish", "publish"));
+    }
+    if (securityService.hasRole("ADMIN")) {
+        model.add(Link.of("/posts/" + id + "/delete", "delete"));
+    }
+    // More conditions...
+
+    return EntityModel.of(model);
+}
+```
+
+**Why It's Wrong:** Business logic is scattered, hard to test, and violates single responsibility principle.
+
+**The Fix:** Centralize link generation in model assemblers:
+
+```java
+@Component
+public class BlogPostModelAssembler
+    implements RepresentationModelAssembler<BlogPost, BlogPostModel> {
+
+    @Autowired
+    private SecurityService securityService;
+
+    @Override
+    public BlogPostModel toModel(BlogPost post) {
+        BlogPostModel model = createModel(post);
+        addSelfLink(model, post);
+        addStateTransitionLinks(model, post);
+        addSecurityBasedLinks(model, post);
+        addRelatedResourceLinks(model, post);
+        return model;
+    }
+
+    private void addStateTransitionLinks(BlogPostModel model, BlogPost post) {
+        if (post.getStatus() == PostStatus.DRAFT) {
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .publishPost(post.getId())).withRel("publish"));
+        }
+        // More state-based logic...
+    }
+
+    private void addSecurityBasedLinks(BlogPostModel model, BlogPost post) {
+        if (securityService.canDelete(post)) {
+            model.add(linkTo(methodOn(BlogPostController.class)
+                .deletePost(post.getId())).withRel("delete"));
+        }
+    }
+}
+```
+
+**Result:** Clean separation of concerns, easier testing, and maintainable code.
+
+## Quick Checklist: Avoiding HATEOAS Mistakes
+
+Before deploying your HATEOAS API, verify:
+
+- ✅ Links reflect current resource state (no impossible actions)
+- ✅ Clients follow links, not hardcoded URLs
+- ✅ Link relations are semantic and documented
+- ✅ Consistent hypermedia format across all endpoints
+- ✅ Client code handles missing links gracefully
+- ✅ Response payload isn't bloated with unnecessary links
+- ✅ Custom link relations are documented
+- ✅ Link generation is centralized in assemblers/builders
+- ✅ Tests verify links appear/disappear based on state
+- ✅ OpenAPI/Swagger documents hypermedia aspects

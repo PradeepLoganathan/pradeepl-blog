@@ -1,0 +1,19 @@
+{{/*
+    The "x" shortcode for Hugo.
+    This shortcode embeds a tweet from X (formerly Twitter) using the
+    official X embed script.
+
+    Usage: {{< x user="username" id="tweet_id" >}}
+*/}}
+<blockquote class="twitter-tweet">
+    <p lang="en" dir="ltr"></p>
+    — {{ .Get "user" | default "user" }} (@{{ .Get "user" | default "user" }})
+    <a href="https://x.com/{{ .Get "user" }}/status/{{ .Get "id" }}">
+        {{ if .Get "date" }}
+            {{ .Get "date" }}
+        {{ else }}
+            {{ now.Format "Jan 2, 2006" }}
+        {{ end }}
+    </a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
