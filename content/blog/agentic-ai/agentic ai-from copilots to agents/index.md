@@ -18,7 +18,7 @@ summary: "A comprehensive guide to Agentic AI, exploring how autonomous AI syste
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "/blog/agentic-ai/agentic-ai-from-copilots-to-agents/images/agentic-ai-architecture.png"
 cover:
     image: "/blog/agentic-ai/agentic-ai-from-copilots-to-agents/images/agentic-ai-architecture.png"
     alt: "Agentic AI: From Copilots to Agents"

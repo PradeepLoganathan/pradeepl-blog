@@ -1,7 +1,7 @@
 <!-- General Open Graph Metadata -->
 {{/* Resolve best image for OG: params.images[0] > cover.image > site fallback; handle page-bundle relative paths */}}
 {{ $img := "" }}
-{{ with .Params.images }}{{ if gt (len .) 0 }}{{ $img = index . 0 }}{{ end }}{{ end }}
+{{ with .Params.images }}{{ if gt (len .) 0 }}{{ $first := index . 0 }}{{ if ne $first "" }}{{ $img = $first }}{{ end }}{{ end }}{{ end }}
 {{ if and (eq $img "") .Params.cover.image }}{{ $img = .Params.cover.image }}{{ end }}
 {{ if and (eq $img "") (site.Params.opengraph.image) }}{{ $img = site.Params.opengraph.image }}{{ end }}
 {{ $og := "" }}
@@ -30,14 +30,14 @@
 <meta property="og:title" content="{{ .Title }}" />
 <meta property="og:description" content="{{ .Description | default .Summary }}" />
 <meta property="og:image" content="{{ $og }}" />
-<meta property="og:image:secure_url" content="{{ $og }}" />
+<meta property="og:image:secure_url" content="{{ $og | replaceRE "^http:" "https:" }}" />
 {{ $alt := (or .Params.cover.alt .Title) }}
 <meta property="og:image:alt" content="{{ $alt }}" />
 
 <!-- Detect Type: Book, Blog, or Website -->
 {{ if eq .Section "books" }}
     <meta property="og:type" content="book" />
-    <meta property="book:author" content="{{ .Params.author | default `"Pradeep Loganathan"` }}">
+    <meta property="book:author" content="{{ .Params.author | default "Pradeep Loganathan" }}">
     {{ with .Params.isbn }}<meta property="book:isbn" content="{{ . }}" />{{ end }}
     {{ with .Params.release_date }}<meta property="book:release_date" content="{{ . }}" />{{ end }}
     {{ range .Params.tags }}
@@ -60,7 +60,7 @@
 <!-- Twitter Card Metadata -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ .Title }}">
-<meta name="twitter:description" content="{{ .Description }}">
+<meta name="twitter:description" content="{{ .Description | default .Summary }}">
 <meta name="twitter:image" content="{{ $og }}">
 <meta name="twitter:image:src" content="{{ $og }}">
 <meta name="twitter:image:alt" content="{{ $alt }}">
