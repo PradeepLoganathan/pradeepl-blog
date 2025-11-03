@@ -4,6 +4,23 @@
   {{ partial "helpers/mathjax.html" . }}
 {{ end }}
 
+{{/* JSON-LD: Breadcrumbs for better navigation context */}}
+{{ $isList := or .IsHome (or .IsSection (or (eq .Kind "taxonomy") (eq .Kind "term"))) }}
+{{ if or .IsPage $isList }}
+  {{ $crumbs := slice (dict "name" "Home" "item" (absURL "/")) }}
+  {{ if .Section }}
+    {{ $crumbs = $crumbs | append (dict "name" (.Section | humanize | title) "item" (absURL (printf "/%s/" .Section))) }}
+  {{ end }}
+  {{ $currentName := .Title }}
+  {{ $currentURL := .Permalink }}
+  {{ $crumbs = $crumbs | append (dict "name" $currentName "item" $currentURL) }}
+  {{ $list := slice }}
+  {{ range $i, $c := $crumbs }}
+    {{ $list = $list | append (dict "@type" "ListItem" "position" (add $i 1) "name" ($c.name) "item" ($c.item)) }}
+  {{ end }}
+  {{ $bc := dict "@context" "https://schema.org" "@type" "BreadcrumbList" "itemListElement" $list }}
+  <script type="application/ld+json">{{ $bc | jsonify | safeJS }}</script>
+{{ end }}
 {{/* JSON-LD: Article/BlogPosting schema for posts */}}
 {{ if and .IsPage (not .IsHome) }}
   {{ $images := slice }}
