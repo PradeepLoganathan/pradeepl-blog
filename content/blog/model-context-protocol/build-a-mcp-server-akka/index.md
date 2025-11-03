@@ -30,7 +30,7 @@ series: ["Model Context Protocol"]
 
 ## Introduction
 
-In previous posts of this [series]({{< relref "/series/model-context-protocol/" >}}), we explored building MCP servers using [.NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}}) and [Java]({{< relref "/blog/model-context-protocol/build-a-mcp-server-java/" >}}). Now, let's explore a more enterprise-focused approach using the Akka Java SDK, which brings distributed systems capabilities and production-grade features to MCP server development.
+In previous posts of this [series]({{< relref "/series/model-context-protocol/" >}}), we explored building MCP servers using [.NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}}). Now, let's explore a more enterprise-focused approach using the Akka Java SDK, which brings distributed systems capabilities and production-grade features to MCP server development.
 
 Akka's MCP implementation stands out with its declarative annotation-based approach, built-in service discovery, and seamless integration with Akka's agent system. This makes it particularly well-suited for building MCP servers that need to scale, integrate with existing microservices, or serve as tools for AI-powered agent workflows.
 
@@ -851,6 +851,5 @@ In the next post, we'll explore building a complete agentic workflow that orches
 
 - [Akka Java SDK Documentation](https://doc.akka.io/java/)
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
-- [Previous: Building MCP Server in Java]({{< relref "/blog/model-context-protocol/build-a-mcp-server-java/" >}})
 - [Previous: Building MCP Server in .NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}})
 - [GitHub Repository: agenticai-triage-mcp-tools](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agenticai-triage-mcp-tools)
