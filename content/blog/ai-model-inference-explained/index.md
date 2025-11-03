@@ -20,6 +20,7 @@ categories:
   - Data Science
   - Technology
   - Software Development
+  - featured
 description: "A detailed exploration of model inference, its importance in machine learning, and best practices for optimization."
 summary: "Explore the power of model inference, its importance in machine learning, and best practices for getting the most out of your models."
 ShowToc: true

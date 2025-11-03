@@ -23,6 +23,49 @@ if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
   })(window, document, "clarity", "script", "kfuenmndko");
 </script>
 
+<script>
+// Render a Featured section on the home page by scraping the Featured category page
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const isHome = location.pathname === '/' || location.pathname === '';
+    if (!isHome) return;
+
+    const res = await fetch('/blog/categories/featured/');
+    if (!res.ok) return;
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const items = Array.from(doc.querySelectorAll('article.post-entry')).slice(0, 4);
+    if (items.length === 0) return;
+
+    const featured = document.createElement('section');
+    featured.className = 'featured-home';
+    featured.innerHTML = `<header class="page-header"><h1>Featured</h1><a href="/blog/categories/featured/" title="See all">See all</a></header>`;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'post-list';
+
+    for (const el of items) {
+      const title = el.querySelector('.entry-header h2')?.textContent?.trim() || '';
+      const href = el.querySelector('a.entry-link')?.getAttribute('href') || '#';
+      const summary = el.querySelector('.entry-content')?.textContent?.trim() || '';
+      const card = document.createElement('article');
+      card.className = 'post-entry';
+      card.innerHTML = `
+        <header class="entry-header"><h2>${title}</h2></header>
+        <div class="entry-content">${summary}</div>
+        <a class="entry-link" href="${href}"></a>
+      `;
+      wrap.appendChild(card);
+    }
+
+    featured.appendChild(wrap);
+    const main = document.querySelector('.main') || document.body;
+    const firstEntry = document.querySelector('.post-entry');
+    main.insertBefore(featured, firstEntry || main.firstChild);
+  } catch { /* noop */ }
+});
+</script>
+
 {{/* Footer is rendered by PaperMod; avoid duplicating here. */}}
 
 

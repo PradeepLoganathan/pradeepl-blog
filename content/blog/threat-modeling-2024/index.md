@@ -6,6 +6,7 @@ draft: false
 Author: Pradeep Loganathan
 categories: 
   - "Security"
+  - featured
 tags:
   - "Threat Modeling"
   - "DevSecOps"
