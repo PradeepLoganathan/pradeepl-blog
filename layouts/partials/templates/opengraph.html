@@ -30,6 +30,9 @@
 <meta property="og:title" content="{{ .Title }}" />
 <meta property="og:description" content="{{ .Description | default .Summary }}" />
 <meta property="og:image" content="{{ $og }}" />
+<meta property="og:image:secure_url" content="{{ $og }}" />
+{{ $alt := (or .Params.cover.alt .Title) }}
+<meta property="og:image:alt" content="{{ $alt }}" />
 
 <!-- Detect Type: Book, Blog, or Website -->
 {{ if eq .Section "books" }}
@@ -59,4 +62,11 @@
 <meta name="twitter:title" content="{{ .Title }}">
 <meta name="twitter:description" content="{{ .Description }}">
 <meta name="twitter:image" content="{{ $og }}">
+<meta name="twitter:image:src" content="{{ $og }}">
+<meta name="twitter:image:alt" content="{{ $alt }}">
+
+{{/* Optional: Facebook App ID if provided */}}
+{{ with site.Params.facebookAppID }}
+<meta property="fb:app_id" content="{{ . }}">
+{{ end }}
 <meta name="twitter:site" content="@pradeepl">
