@@ -98,7 +98,9 @@ private void button1_Click(object sender, EventArgs e)
     textBox2.Text = base64digest;
 }
 ```
+
 A complete working sample using PBKDF2 for generating salted user passwords and validating the same is available at [this github repo.](https://github.com/PradeepLoganathan/Hashing)
+
 ## Rainbow Tables: Precomputed Hash Attacks
 
 Rainbow tables are precomputed tables used to look up passwords using stolen hashes. They are special dictionary tables that use hash values instead of standard dictionary passwords to achieve the attack.  

@@ -103,6 +103,7 @@ Agentic AI takes this concept further by not just using tools individually, but 
 **4. Context Awareness** : Unlike the stateless nature of many inference systems we've discussed, agentic AI maintains awareness of context across interactions. It remembers previous decisions, learns from outcomes, and adapts its strategies accordingly. This allows it to handle complex, multi-step tasks that require understanding of both the current situation and past actions.
 
 **5. Continuous Learning and Adaptation** :Unlike traditional stateless inference systems, agentic AI is designed to maintain contextual awareness across interactions. It doesn't just respond, it evolves. By remembering past decisions, analyzing outcomes, and integrating feedback, agentic AI continuously refines its behavior and decision-making strategies. 
+
 - Learns from experiences and outcomes : Tracks decisions and their consequences to build a richer understanding over time
 - Improves performance over time : Uses accumulated knowledge to enhance accuracy, efficiency, and effectiveness.
 - Adapts strategies based on feedback and results : Modifies its approach based on feedback, changing goals, or evolving environments.
@@ -150,6 +151,7 @@ public class DirectChatDemo {
     }
 }
 ```
+
 The function 'askLlm' sends the input prompt to the LLM. The OpenAI API is called with a single user message. The LLM responds once, with no persistent state or memory. Each call is stateless: past prompts are not recalled, nor do they influence the next turn. This structure cannot learn, plan, or autonomously continue—a purely reactive system.
 
 ### Minimal Agent—Single-Agentic Step Loop

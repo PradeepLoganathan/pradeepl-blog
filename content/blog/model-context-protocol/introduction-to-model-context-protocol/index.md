@@ -70,6 +70,7 @@ Integrating LLMs with external systems remains complex without standardization. 
 MCP (Model Context Protocol), introduced by Anthropic, was designed specifically to solve this fragmentation. It provides a standardized, open interface for LLMs to interact with external tools and data sources—securely, modularly, and with minimal custom engineering. Think of it as a “USB-C” for AI tools: plug in a new capability, and it just works.
 
 ## Why MCP? 
+
 After the previous experience of building brittle, custom integrations between AI models and external systems, developers needed something better. Each new use case---whether checking order status, scanning code for vulnerabilities, or fetching live metrics---meant repeating the same boilerplate: define a custom API contract, build tooling to adapt the model's output, and carefully manage authentication, serialization, and errors.
 
 This fragmentation slowed innovation and made AI assistants hard to scale, test, or secure. What the ecosystem lacked was **a standard way** for models to interact with external tools and data---something as universal as HTTP for web services or USB for hardware.
@@ -237,6 +238,7 @@ The typical interaction flow within the MCP ecosystem follows a request-response
 In addition to this synchronous flow, MCP supports asynchronous Notifications. Servers can proactively send these messages to clients without a preceding request, typically to inform them about relevant state changes, such as the availability of a new tool or updates to a resource the client might be interested in. This allows for more dynamic interactions and keeps clients informed about the capabilities available through the server. Overall, MCP provides a structured protocol enabling AI agents to effectively plan sequences of actions, execute those steps by interacting with real systems via tools and resources, and adapt based on the information received.
 
 ## What's Next?
+
 ------------
 
 In the first post of the series on [Model Context Protocol Servers]({{< relref "/series/model-context-protocol/" >}}), we explored the *why* and *what* of the Model Context Protocol---why it exists, how it works conceptually, and what kinds of real-world AI integrations it enables. We covered the roles of hosts, clients, and servers, as well as the core primitives (tools, resources, and prompts) that power MCP's extensibility.

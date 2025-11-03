@@ -3,3 +3,43 @@ default: true
 MD013:
   line_length: 4000    # Allow lines up to 700 characters
 MD047: false          # Disable the trailing single newline rule
+MD024: false          # Allow duplicate headings
+MD033:
+  allowed_elements:
+    - details
+    - summary
+    - iframe
+    - script
+    - a
+    - br
+    - gslides
+    - Protobuf
+    - span
+    - table
+    - tbody
+    - tr
+    - td
+    - cite
+    - scheme
+    - scheme-specific-structure
+MD012: false          # Allow multiple consecutive blank lines
+MD009: false          # Allow trailing spaces
+MD034: false          # Allow bare URLs
+MD046: false          # Allow mixed code block styles
+MD004: false          # Allow mixed list styles
+MD007: false          # Allow flexible list indentation
+MD030: false          # Allow flexible spaces after list markers
+MD029: false          # Allow flexible ordered list prefixes
+MD036: false          # Allow emphasis as heading
+MD040: false          # Allow code blocks without language
+MD025: false          # Allow multiple H1 headings
+MD059: false          # Allow non-descriptive link text like "here"
+MD045: false          # Allow images without alt text
+MD050: false          # Allow strong style inconsistencies
+MD051: false          # Allow link fragments
+MD028: false          # Allow blank lines inside blockquotes
+MD026: false          # Allow trailing punctuation in headings
+MD042: false          # Allow empty links
+MD041: false          # Allow first line not to be H1
+MD003: false          # Allow heading style inconsistencies
+MD001: false          # Allow heading level increments

@@ -36,6 +36,7 @@ We'll create a log aggregation MCP server that provides tools to fetch logs from
 ## What You'll Build
 
 Our Java MCP server will provide:
+
 - A `get_logs` tool that can fetch logs from multiple sources (Datadog, Elasticsearch, local files)
 - Support for both STDIO and HTTP/SSE transports
 - Mock implementations for external log sources
@@ -47,6 +48,7 @@ Our Java MCP server will provide:
 ## Prerequisites
 
 Before starting, ensure you have:
+
 - **JDK 17+** (Java 21 recommended for optimal performance)
 - **Maven 3.8+** for dependency management
 - **VS Code** with GitHub Copilot Chat extension
@@ -365,17 +367,20 @@ public final class HttpMain {
 ### Building and Running
 
 Build your server:
+
 ```bash
 mvn clean package
 ```
 
 Run the STDIO version:
+
 ```bash
 export LOGS_FILE_PATH=/path/to/your/logfile.log
 java -jar target/spov-mcp-logs-server-1.0.0.jar
 ```
 
 Run the HTTP version:
+
 ```bash
 PORT=8080 LOGS_FILE_PATH=/path/to/your/logfile.log java -cp target/spov-mcp-logs-server-1.0.0.jar com.spov.mcp.logs.sdk.HttpMain
 ```
@@ -404,6 +409,7 @@ Create (or open) your user MCP config via **Command Palette → "MCP: Open User 
 Reload VS Code → open **Copilot Chat** → switch to **Agent mode**.
 
 Try prompts like:
+
 - "Run `get_logs` with `source=file` and summarize errors."
 - "Call `get_logs` with `source=datadog` and extract WARN/ERROR counts."
 
@@ -468,6 +474,7 @@ Your Java MCP server is now ready for integration with MCP clients. Consider the
 Building MCP servers in Java provides excellent performance and enterprise-grade capabilities. The official Java SDK offers flexibility in transport options and integrates well with existing Java ecosystems. Whether you choose STDIO for local development or HTTP for production deployments, Java's robust platform makes it an excellent choice for building scalable MCP servers.
 
 Key takeaways from this implementation:
+
 - Java MCP servers require more explicit configuration compared to .NET
 - The SDK supports multiple transport protocols for different deployment scenarios
 - Integration with development tools like VS Code and Claude Desktop is straightforward
