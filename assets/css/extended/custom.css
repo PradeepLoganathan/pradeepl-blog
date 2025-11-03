@@ -49,3 +49,41 @@ the browser support for :has is not widespread yet.
 .post-content figcaption {
   text-align: center;
 }
+
+/* Featured section on Home */
+.featured-home {
+    margin: 2rem auto 3rem auto;
+    max-width: calc(var(--main-width) + var(--gap) * 6);
+    padding: 0 var(--gap);
+}
+.featured-home .page-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.featured-home .page-header h1 {
+    font-size: 1.25rem;
+    margin: 0;
+}
+.featured-home .page-header a {
+    font-size: 0.95rem;
+    text-decoration: none;
+    opacity: 0.8;
+}
+.featured-home .page-header a:hover { opacity: 1; }
+
+.featured-home .post-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+.featured-home .post-entry {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+}
+.featured-home .post-entry .entry-header h2 {
+    font-size: 1.05rem;
+}
