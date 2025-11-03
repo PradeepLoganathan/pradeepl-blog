@@ -1,0 +1,19 @@
+<div class="share-buttons">
+  {{ $u := .Permalink | urlquery }}
+  {{ $t := .Title | urlquery }}
+  <span>Share:</span>
+  <a class="share-btn" href="https://twitter.com/intent/tweet?url={{ $u }}&text={{ $t }}" target="_blank" rel="noopener" title="Share on X/Twitter" aria-label="Share on Twitter">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 16 3c-2.5 0-4.5 2-4.5 4.5v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+  </a>
+  <a class="share-btn" href="https://www.linkedin.com/shareArticle?mini=true&url={{ $u }}&title={{ $t }}" target="_blank" rel="noopener" title="Share on LinkedIn" aria-label="Share on LinkedIn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.1c.5-1 1.8-2.2 3.7-2.2 4 0 4.7 2.6 4.7 6V24h-4v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V24h-4V8z"/></svg>
+  </a>
+  <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u={{ $u }}" target="_blank" rel="noopener" title="Share on Facebook" aria-label="Share on Facebook">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.1 1.8.1v2h-1c-1 0-1.3.6-1.3 1.2V12h2.2l-.3 3h-1.9v7A10 10 0 0 0 22 12"/></svg>
+  </a>
+  <a class="share-btn" href="https://news.ycombinator.com/submitlink?u={{ $u }}&t={{ $t }}" target="_blank" rel="noopener" title="Share on Hacker News" aria-label="Share on Hacker News">HN</a>
+  <a class="share-btn" href="https://www.reddit.com/submit?url={{ $u }}&title={{ $t }}" target="_blank" rel="noopener" title="Share on Reddit" aria-label="Share on Reddit">R</a>
+  <a class="share-btn" href="https://t.me/share/url?url={{ $u }}&text={{ $t }}" target="_blank" rel="noopener" title="Share on Telegram" aria-label="Share on Telegram">TG</a>
+  <a class="share-btn" href="https://api.whatsapp.com/send?text={{ $t }}%20{{ $u }}" target="_blank" rel="noopener" title="Share on WhatsApp" aria-label="Share on WhatsApp">WA</a>
+  <a class="share-btn" href="mailto:?subject={{ $t }}&body={{ $u }}" title="Share via Email" aria-label="Share via Email">@</a>
+</div>
