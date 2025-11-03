@@ -20,10 +20,10 @@ TocOpen: true
 images:
   - 
 cover:
-    image: "images/agentic-ai-architecture.png"
+    image: "/blog/agentic-ai/agentic-ai-from-copilots-to-agents/images/agentic-ai-architecture.png"
     alt: "Agentic AI: From Copilots to Agents"
     caption: "The evolution of AI from reactive to proactive systems"
-    relative: true
+    relative: false
 mermaid: true
 series: ["Agentic AI"]
 ---
