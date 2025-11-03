@@ -1,0 +1,36 @@
+{{/* Responsive image figure shortcode
+Usage: {{< figure src="images/pic.jpg" alt="..." caption="..." class="..." >}}
+If src is a page resource, generates WebP + srcset. Otherwise, emits a lazy <img>.
+*/}}
+{{ $src := .Get "src" }}
+{{ $alt := (.Get "alt") | default "" }}
+{{ $caption := .Get "caption" }}
+{{ $class := .Get "class" }}
+{{ $img := .Page.Resources.GetMatch $src }}
+
+<figure class="{{ with $class }}{{ . }}{{ end }}">
+{{ if $img }}
+  {{ if hugo.IsExtended }}
+    {{ $w480  := $img.Resize "480x" }}
+    {{ $w960  := $img.Resize "960x" }}
+    {{ $w1200 := $img.Resize "1200x" }}
+    {{ $w480w  := $img.Resize "480x webp" }}
+    {{ $w960w  := $img.Resize "960x webp" }}
+    {{ $w1200w := $img.Resize "1200x webp" }}
+    <picture>
+      <source type="image/webp" srcset="{{ $w480w.RelPermalink }} 480w, {{ $w960w.RelPermalink }} 960w, {{ $w1200w.RelPermalink }} 1200w">
+      <img
+        src="{{ $w960.RelPermalink }}"
+        srcset="{{ $w480.RelPermalink }} 480w, {{ $w960.RelPermalink }} 960w, {{ $w1200.RelPermalink }} 1200w"
+        sizes="(max-width: 680px) 100vw, 680px"
+        width="{{ $w960.Width }}" height="{{ $w960.Height }}"
+        alt="{{ $alt }}" loading="lazy" decoding="async">
+    </picture>
+  {{ else }}
+    <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+  {{ end }}
+{{ else }}
+  <img src="{{ $src | absURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+{{ end }}
+{{ with $caption }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+</figure>

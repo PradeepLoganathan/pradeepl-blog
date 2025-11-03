@@ -34,7 +34,7 @@ The reasons were multifaceted: inadequate vulnerability management processes, po
 
 To comprehend the full extent of the damage, Equifax enlisted cybersecurity firm Mandiant[^9]. Their investigation revealed a devastating truth: hackers had exploited the unpatched vulnerability for three to four months, siphoning off sensitive data—including names, Social Security numbers, birth dates, and addresses—without detection[^10][^11]. The fallout was swift and severe. Public outrage erupted as news of the breach spread, leading to lawsuits and regulatory investigations[^12]. Equifax faced immense pressure to compensate affected individuals and overhaul its security infrastructure. The company's reputation was irreparably tarnished, and its growth trajectory faltered[^13].This chain of events underscores how prioritizing security only after a breach occurs is a fundamentally flawed approach.
 
-![Consequences of the breach](images/equifax-stock-price.png)
+{{< figure src="images/equifax-stock-price.png" alt="Equifax stock price impact after breach" caption="Consequences of the breach reflected in stock price" >}}
 
 The Equifax breach wasn't just a technological failure—it was a failure of priorities. When security is sidelined, even minor oversights can cascade into catastrophic breaches. This was a glaring indictment of how even industry giants can falter by not prioritizing security at the foundational level of development. It prompts me to ask: **Are we building our software on the right foundation? Are we focusing on the right pinnacle in our application design/architecture and development processes?**
 
