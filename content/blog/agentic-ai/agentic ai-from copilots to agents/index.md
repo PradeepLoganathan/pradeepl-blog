@@ -64,7 +64,7 @@ This multi-step reasoning is the core difference between a passive copilot and a
 ## **The Agentic Loop: Observe, Think, Act**
 
 
-![Agentic Loop](images/agentic-loop.png)
+{{< figure src="images/agentic-loop.png" alt="Agentic Loop" caption="Agentic Loop" >}}
 
 
 The behavior of an AI agent can be modeled by a continuous feedback loop. While different frameworks use varying terminology, the core cycle remains the same:

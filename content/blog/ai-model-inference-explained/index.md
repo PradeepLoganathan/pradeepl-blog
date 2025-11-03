@@ -142,7 +142,7 @@ These challenges underscore the need for robust, scalable, and efficient model i
 
 Now that we've established what is model inference and its significance, let's dive deeper into the mechanics behind it. Think of the inference pipeline as a well-orchestrated sequence of steps that transform raw input data into insightful predictions or classifications.
 
-![Inference Pipeline](images/Inference-Pipeline.png "Inference Pipeline")
+{{< figure src="images/Inference-Pipeline.png" alt="Inference Pipeline" caption="Inference Pipeline" >}}
 
 Here's a breakdown of this journey:
 
@@ -158,7 +158,7 @@ Here's a breakdown of this journey:
 4. **Postprocessing:**
    * **Refining the Output:** In some cases, the model's output might require further refinement or interpretation. Postprocessing steps can include formatting the results, applying thresholds, or translating numerical values into meaningful labels. This final step ensures that the output is in a usable form for decision-making or further analysis.
 
-![ML Pipeline](images/simple-ml-pipeline.png "ML Pipeline")
+{{< figure src="images/simple-ml-pipeline.png" alt="ML Pipeline" caption="ML Pipeline" >}}
 
 By understanding these steps, we gain insight into how raw data is transformed into actionable intelligence through model inference. Each step is critical in ensuring that the inference process is efficient, accurate, and scalable, allowing machine learning models to make a tangible impact in real-world applications.
 

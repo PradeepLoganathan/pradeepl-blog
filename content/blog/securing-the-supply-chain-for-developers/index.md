@@ -57,7 +57,7 @@ By the end of this postm you will have a clear understanding of how to take owne
 
 The adage "prevention is better than cure" rings especially true in software security. Addressing potential vulnerabilities earlier in the development process is easier and cost-effective than fixing them later. This proactive approach, often referred to as "shifting left," focuses on identifying and addressing security risks at the earliest stages, rather than waiting until the software is complete. By integrating security into the design, coding, and development environments, developers can minimize the attack surface and reduce the cost of remediations. Lets explore the key aspects of shifting security left.
 
-![Secure Development Loop](images/secure-development-loop.png)
+{{< figure src="images/secure-development-loop.png" alt="Secure Development Loop" caption="Secure Development Loop" >}}
 
 ### 1. Secure Design: Start with Security in Mind
 
@@ -105,7 +105,7 @@ The environment in which you develop your software plays a crucial role in its o
 
 Ensuring the security of your software extends beyond writing secure code. A truly secure software supply chain demands vigilance at every stage, from build to deployment. As developers, integrating security into these processes is vital for maintaining the integrity of your applications.  Let's explore how to fortify these crucial stages.
 
-![Secure Supply Chain](images/secure-supply-chain.png "Secure Supply Chain")
+{{< figure src="images/secure-supply-chain.png" alt="Secure Supply Chain" caption="Secure Supply Chain" >}}
 
 ### 1. Secure Build Processes
 
