@@ -14,6 +14,9 @@ main:
   - name: Blog
     pageref: /blog
     weight: 20
+  - name: Featured
+    pageref: /blog/categories/featured/
+    weight: 18
   - name: Archives
     pageref: /archives
     weight: 15
