@@ -1,0 +1,39 @@
+{{ define "main" }}
+<div class="post-single">
+    <header class="post-header">
+        {{ partial "post_meta.html" . }}
+        <h1 class="post-title">
+            {{ .Title }}
+
+        </h1>
+        {{ if .Description }}
+        <div class="post-description">
+            {{ .Description }}
+        </div>
+        {{ end }}
+                {{- if .Params.tags -}}
+        <ul class="post-tags">
+            {{- range .Params.tags }}
+            <li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
+            {{- end }}
+        </ul>
+        {{- end -}}
+    </header>
+        {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false -}}
+    {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) -}}
+    {{ if (.Param "ShowToc") }}
+        {{ partial "toc.html" . }}
+    {{ end }}
+
+    <div class="post-content">
+        {{ .Content }}
+    </div>
+
+    {{- partial "connect.html" . -}}
+
+    <footer class="post-footer">
+        {{ partial "post_nav_links.html" . }}
+        {{ partial "comments.html" . }}
+    </footer>
+</div>
+{{ end }}

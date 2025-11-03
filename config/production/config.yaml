@@ -15,6 +15,9 @@ enableGitInfo: true
 googleAnalytics: G-LB9Q9F622G
 
 markup:
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3
   goldmark:
     renderer:
       unsafe: true
@@ -25,6 +28,7 @@ markup:
     lineNos: false
     noClasses: false
     style: monokai
+
 
 minify:
   minifyOutput: true

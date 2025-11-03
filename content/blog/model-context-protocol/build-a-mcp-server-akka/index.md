@@ -30,7 +30,7 @@ series: ["Model Context Protocol"]
 
 ## Introduction
 
-In previous posts of this [series]({{< relref "/series/model-context-protocol/" >}}), we explored building MCP servers using [.NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}}). Now, let's explore a more enterprise-focused approach using the Akka Java SDK, which brings distributed systems capabilities and production-grade features to MCP server development.
+In previous posts of this [series]({{< relref "/series/model-context-protocol/" >}}), we explored the Model Context Protocol and also built an MCP server using [.NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}}). Now, let's explore a more enterprise-focused approach to building MCP servers using the Akka Java SDK, which brings distributed systems capabilities and production-grade features to MCP server development.
 
 Akka's MCP implementation stands out with its declarative annotation-based approach, built-in service discovery, and seamless integration with Akka's agent system. This makes it particularly well-suited for building MCP servers that need to scale, integrate with existing microservices, or serve as tools for AI-powered agent workflows.
 
