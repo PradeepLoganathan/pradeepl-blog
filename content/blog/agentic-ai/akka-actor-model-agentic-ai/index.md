@@ -350,6 +350,7 @@ akka services scale akka-agent-sdk-demo --replicas 3 --env prod
 ```
 
 Notes:
+
 - The CLI builds, containers, and deploys for you—no Dockerfiles or raw manifests needed.
 - The CLI prints the public address/URL for the deployed service.
 

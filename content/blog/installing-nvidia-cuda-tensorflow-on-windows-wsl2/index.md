@@ -36,6 +36,7 @@ GPU acceleration can transform your machine learning workflow from painfully slo
 Setting up NVIDIA GPU support for TensorFlow on Windows Subsystem for Linux 2 (WSL2) isn't straightforward. I recently configured my Dell laptop with an NVIDIA T1200 GPU for ML work and encountered numerous issues that the official documentation glossed over. This guide documents the complete process that worked, including all the gotchas and solutions.
 
 **What you'll learn:**
+
 - Complete WSL2 and NVIDIA driver setup process
 - Installing CUDA Toolkit 12.x and cuDNN for optimal performance
 - Configuring TensorFlow to recognize and use your GPU
@@ -44,6 +45,7 @@ Setting up NVIDIA GPU support for TensorFlow on Windows Subsystem for Linux 2 (W
 - Performance optimization tips
 
 **What you'll achieve:**
+
 - 10-100x faster model training compared to CPU
 - Ability to work with larger models and datasets
 - Professional ML development environment on Windows
@@ -52,6 +54,7 @@ Setting up NVIDIA GPU support for TensorFlow on Windows Subsystem for Linux 2 (W
 **Prerequisites:**
 
 Before starting, ensure you have:
+
 - Windows 10 (version 21H2+) or Windows 11
 - NVIDIA GPU (GeForce, RTX, Quadro, or Tesla series)
   - Check compatibility: RTX 20/30/40 series, GTX 16/10 series, or professional GPUs
@@ -63,6 +66,7 @@ Before starting, ensure you have:
 **Time to complete:** 45-60 minutes (including downloads)
 
 **Why WSL2 vs. Native Windows?**
+
 - Better Linux compatibility with ML libraries
 - Faster I/O performance
 - Native Docker integration
@@ -238,6 +242,7 @@ Even following these steps carefully, you may encounter issues. Here are solutio
 ### Issue 1: GPU Not Detected by TensorFlow
 
 **Symptom:**
+
 ```python
 Num GPUs Available:  0
 ```
@@ -245,6 +250,7 @@ Num GPUs Available:  0
 **Causes & Solutions:**
 
 **1. CUDA/cuDNN Version Mismatch**
+
 ```bash
 # Check TensorFlow's CUDA requirements
 python -c "import tensorflow as tf; print(tf.sysconfig.get_build_info())"
@@ -257,6 +263,7 @@ python -c "import tensorflow as tf; print(tf.sysconfig.get_build_info())"
 Ensure your installed CUDA version matches TensorFlow's requirements. TensorFlow 2.15+ requires CUDA 12.x.
 
 **2. Missing LD_LIBRARY_PATH**
+
 ```bash
 # Check if CUDA libraries are in path
 echo $LD_LIBRARY_PATH
@@ -267,6 +274,7 @@ source ~/.bashrc
 ```
 
 **3. Verify NVIDIA Driver in WSL2**
+
 ```bash
 nvidia-smi
 
@@ -277,11 +285,13 @@ nvidia-smi
 ### Issue 2: "Could not load dynamic library 'libcudnn.so.8'"
 
 **Symptom:**
+
 ```
 Could not load dynamic library 'libcudnn.so.8'; dlerror: libcudnn.so.8: cannot open shared object file
 ```
 
 **Solution:**
+
 ```bash
 # Check if cuDNN files exist
 ls /usr/local/cuda/lib64/libcudnn*
@@ -302,17 +312,20 @@ sudo ln -s libcudnn.so.8.9.7 libcudnn.so.8
 ### Issue 3: "Failed to create session"
 
 **Symptom:**
+
 ```
 tensorflow.python.framework.errors_impl.InternalError: Failed to create session
 ```
 
 **Causes:**
+
 1. **Insufficient GPU memory**
 2. **Another process using the GPU**
 
 **Solutions:**
 
 **Check GPU memory usage:**
+
 ```bash
 nvidia-smi
 
@@ -321,6 +334,7 @@ nvidia-smi
 ```
 
 **Configure TensorFlow to use less memory:**
+
 ```python
 import tensorflow as tf
 
@@ -345,11 +359,13 @@ if gpus:
 ### Issue 4: "XLA service compilation failure"
 
 **Symptom:**
+
 ```
 XLA service 0x... failed to compile
 ```
 
 **Solution:**
+
 ```python
 # Disable XLA compilation
 import os
@@ -361,6 +377,7 @@ import tensorflow as tf
 ### Issue 5: WSL2 Can't See NVIDIA Driver
 
 **Symptom:**
+
 ```bash
 nvidia-smi
 # Returns: command not found or "Failed to initialize NVML"
@@ -369,6 +386,7 @@ nvidia-smi
 **Solutions:**
 
 **1. Update WSL2 Kernel**
+
 ```powershell
 # In PowerShell as Administrator
 wsl --update
@@ -377,12 +395,14 @@ wsl --shutdown
 ```
 
 **2. Reinstall NVIDIA Driver on Windows**
+
 - Uninstall current NVIDIA driver
 - Download latest Game Ready or Studio driver
 - Install with "Clean Installation" option checked
 - Restart Windows
 
 **3. Check WSL2 Version**
+
 ```bash
 wsl --list --verbose
 
@@ -394,6 +414,7 @@ wsl --set-version Ubuntu-22.04 2
 ### Issue 6: Slow Performance Despite GPU
 
 **Possible causes:**
+
 1. **Data transfer bottleneck** (CPU → GPU)
 2. **Small batch sizes**
 3. **Mixed precision not enabled**
@@ -401,6 +422,7 @@ wsl --set-version Ubuntu-22.04 2
 **Solutions:**
 
 **Enable mixed precision:**
+
 ```python
 from tensorflow.keras import mixed_precision
 mixed_precision.set_global_policy('mixed_float16')
@@ -409,6 +431,7 @@ mixed_precision.set_global_policy('mixed_float16')
 ```
 
 **Use tf.data for efficient data loading:**
+
 ```python
 dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
 dataset = dataset.cache()
@@ -418,6 +441,7 @@ dataset = dataset.prefetch(tf.data.AUTOTUNE)
 ```
 
 **Increase batch size:**
+
 ```python
 # Larger batches = better GPU utilization
 # Start with 32, increase to 64, 128, 256 if memory allows
@@ -430,6 +454,7 @@ model.fit(x_train, y_train, batch_size=128)
 Multiple CUDA versions installed causing conflicts
 
 **Solution:**
+
 ```bash
 # Remove all CUDA packages
 sudo apt-get --purge remove "*cublas*" "*cufft*" "*curand*" "*cusolver*" "*cusparse*" "*npp*" "*nvjpeg*" "cuda*" "nsight*"
@@ -533,6 +558,7 @@ model.fit(...)  # Automatically uses all GPUs
 ### Do I need an expensive GPU for deep learning?
 
 Not necessarily. While high-end GPUs like RTX 4090 or A100 are ideal, you can get started with:
+
 - **Budget**: GTX 1660 (6GB VRAM) - $200-300 - Good for learning and small models
 - **Mid-range**: RTX 3060 (12GB VRAM) - $300-400 - Handles most projects
 - **Professional**: RTX 4070 Ti+ or A-series - $800+ - For serious ML work
@@ -567,12 +593,14 @@ docker run --gpus all -it tensorflow/tensorflow:latest-gpu python
 ### How much faster is GPU vs CPU for training?
 
 Speed improvements vary by model architecture:
+
 - **CNNs (Image models)**: 10-50x faster
 - **Transformers (NLP)**: 20-100x faster
 - **Simple neural networks**: 2-10x faster
 - **Data preprocessing**: Minimal improvement (CPU-bound)
 
 Example: Training ResNet-50 on ImageNet:
+
 - CPU: ~7 days
 - Single RTX 3080: ~8 hours
 - That's 20x speedup!
@@ -648,7 +676,9 @@ with strategy.scope():
 Now that you have GPU-accelerated TensorFlow running, here's how to level up:
 
 **Immediate Next Steps:**
+
 1. **Test your setup** with a real model:
+
    ```bash
    # Clone TensorFlow examples
    git clone https://github.com/tensorflow/models.git
@@ -659,6 +689,7 @@ Now that you have GPU-accelerated TensorFlow running, here's how to level up:
    ```
 
 2. **Set up Jupyter** for interactive development
+
    ```bash
    pip install jupyter ipykernel
    jupyter notebook
@@ -670,12 +701,14 @@ Now that you have GPU-accelerated TensorFlow running, here's how to level up:
    - [TensorFlow GPU Guide](https://www.tensorflow.org/install/gpu)
 
 **Continue Learning:**
+
 - Explore TensorFlow tutorials at [tensorflow.org/tutorials](https://www.tensorflow.org/tutorials)
 - Learn performance optimization techniques
 - Experiment with transfer learning using pre-trained models
 - Try PyTorch for comparison: similar setup process
 
 **Join the Community:**
+
 - TensorFlow Forum: [discuss.tensorflow.org](https://discuss.tensorflow.org)
 - Reddit: r/MachineLearning, r/tensorflow
 - Stack Overflow: Tag `tensorflow` + `gpu`
@@ -690,6 +723,7 @@ You now have a professional-grade machine learning development environment that 
 - Save hundreds of dollars monthly vs. cloud GPUs
 
 **Pro tip**: Keep your environment maintained:
+
 - Update NVIDIA drivers quarterly
 - Update TensorFlow when new versions release
 - Monitor CUDA/cuDNN compatibility

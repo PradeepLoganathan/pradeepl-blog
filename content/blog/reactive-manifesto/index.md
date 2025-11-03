@@ -38,6 +38,7 @@ Cloud native applications also need to be designed to take advantage of the func
 At their core, Reactive Systems are distributed systems characterized by their ability to be Responsive, Resilient, Elastic, and Message-Driven. Imagine a system that doesn't just work, but excels even under immense pressure or in the face of unexpected failures. That's the promise of Reactive Systems.
 
 Reactive Systems take a fundamental shift in mindset:
+
 - **Don't assume the world is stable** — assume it will change at any moment.
 - **Don't assume failures are rare** — assume they will happen and plan for them.
 - **Design with asynchronicity as the baseline** — and embrace eventual consistency as a reality.
@@ -54,6 +55,7 @@ These systems are designed to be reliable, flexible, and loosely coupled, making
 To address the complexities of modern distributed systems, a collective of industry experts distilled their knowledge into **The Reactive Manifesto**. This pivotal document outlines the fundamental tenets for building highly reliable and scalable applications.
 
 First published on September 16, 2014, The Reactive Manifesto is currently at version 2.0. It serves as a living document, evolving with best practices in distributed systems design, and is publicly available on GitHub [here](https://github.com/reactivemanifesto/reactivemanifesto).
+
 ## Tenets of Reactive Manifesto
 
 The Reactive Manifesto identifies four core design characteristics that define a Reactive System:

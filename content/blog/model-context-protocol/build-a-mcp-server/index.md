@@ -228,6 +228,7 @@ After creating the `.vscode/mcp.json` file and restarting or reloading VS Code i
 ![alt text](images/mcp.json.png)
 
 Once the server has started and discovered the tools available in this MCP server.. you can follow the steps below.
+
 1.  Open the Chat view (e.g., with GitHub Copilot).
 2.  Switch to "Agent mode" (if available and supported by the Chat extension).
 ![alt text](images/copilot-agent-mode.png)

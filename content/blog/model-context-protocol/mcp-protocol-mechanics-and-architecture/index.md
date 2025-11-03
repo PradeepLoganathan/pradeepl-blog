@@ -330,6 +330,7 @@ sequenceDiagram
   "params": {}
 }
 ```
+
 This is a request for the server's resource inventory. The `params` are empty here because no additional data is needed to list everything. The server would reply with a JSON-RPC response containing a list of resources:
 
 ```json

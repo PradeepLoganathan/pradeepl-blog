@@ -97,14 +97,17 @@ When the AI model needs evidence, it can call these tools through the MCP protoc
 In this tutorial, we'll build the **Evidence Tools MCP Server** that provides:
 
 **MCP Tools (Callable Functions):**
+
 - `fetch_logs`: Retrieve service logs with automatic error analysis and anomaly detection
 - `query_metrics`: Query performance metrics (error rates, latency, throughput, resource utilization)
 - `correlate_evidence`: Analyze relationships between logs and metrics to identify patterns
 
 **MCP Resources (URI-based Data Access):**
+
 - `kb://runbooks/{serviceName}`: Access troubleshooting runbooks and operational documentation
 
 **Infrastructure:**
+
 - HTTP endpoint at `/mcp` with JSON-RPC 2.0 protocol
 - Akka service discovery integration for seamless agent connection
 - Support for external MCP clients (Claude Desktop, VS Code)
@@ -133,6 +136,7 @@ The beauty of the MCP architecture is that **agents don't need to change** when 
 5. **Multi-Client**: The same MCP server serves both Akka agents and external tools like Claude Desktop
 
 **Repositories:**
+
 - **This Tutorial**: [agenticai-triage-mcp-tools](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agenticai-triage-mcp-tools) - MCP server for evidence gathering
 - **Triage System**: [agentic-triage-system](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agentic-triage-system) - Complete multi-agent incident response platform
 
@@ -215,6 +219,7 @@ Create a new Maven project with the Akka Java SDK parent:
 ```
 
 The `akka-javasdk-parent` POM provides all necessary dependencies including:
+
 - Akka HTTP server
 - MCP protocol support
 - JSON serialization (Jackson)
@@ -245,6 +250,7 @@ akka.http.server {
 ```
 
 Key configuration points:
+
 - `service-name`: Used by service discovery to locate this MCP server
 - `http-port`: The port where the MCP endpoint will be available
 - Timeouts are important for long-running tool calls
@@ -554,6 +560,7 @@ claude --mcp-config claude-mcp-config.json
 ```
 
 **What happens:**
+
 1. Claude CLI loads your MCP configuration
 2. It discovers the `fetch_logs`, `query_metrics`, and `correlate_evidence` tools
 3. When you ask questions, Claude can intelligently decide to use these tools
@@ -658,6 +665,7 @@ Compared to the .NET and Java SDK implementations from previous posts, Akka's ap
 ### 1. Declarative vs. Imperative
 
 **Traditional MCP SDK (Java):**
+
 ```java
 var getLogsTool = new McpServerFeatures.SyncToolSpecification(
     new McpSchema.Tool("get_logs", "Return logs", schemaJson),
@@ -669,6 +677,7 @@ server.tools(getLogsTool);
 ```
 
 **Akka MCP:**
+
 ```java
 @McpTool(name = "fetch_logs", description = "Fetch logs from services")
 public String fetchLogs(String service, int lines) {
@@ -725,12 +734,14 @@ Services discover each other via `localhost` and configured ports.
 ### Production Deployment
 
 1. **Containerize** the service:
+
 ```bash
 mvn clean package
 docker build -t evidence-tools:1.0.0 .
 ```
 
 2. **Deploy to Kubernetes** with service discovery:
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -746,6 +757,7 @@ spec:
 ```
 
 3. **Configure service discovery**:
+
 ```hocon
 akka.javasdk.production {
   service-discovery {
@@ -774,10 +786,12 @@ Requests are load-balanced automatically across instances.
 **Issue:** Akka agent can't find MCP service
 
 **Solution:**
+
 1. Verify `service-name` in `application.conf` matches `RemoteMcpTools.fromService("...")`
 2. Check both services are running
 3. Ensure both are in dev-mode or both in production mode
 4. Check logs for service registration:
+
    ```
    INFO akka.runtime.DiscoveryManager - Service 'evidence-tools' registered
    ```
@@ -787,6 +801,7 @@ Requests are load-balanced automatically across instances.
 **Issue:** MCP clients don't see tools
 
 **Solution:**
+
 1. Verify `@McpEndpoint` annotation is present
 2. Check `@McpTool` methods are public
 3. Ensure server started successfully (check `/mcp` endpoint)
@@ -797,6 +812,7 @@ Requests are load-balanced automatically across instances.
 **Issue:** Client can't connect to MCP endpoint
 
 **Solution:**
+
 1. Verify port is not blocked by firewall
 2. Check service is listening: `netstat -an | grep 9200`
 3. Verify HTTP endpoint: `curl http://localhost:9200/mcp`
@@ -840,6 +856,7 @@ Akka's MCP implementation brings enterprise-grade capabilities to MCP server dev
 | Production Features | ASP.NET Core | Spring/Jakarta EE | Akka Platform |
 
 Akka's approach is particularly well-suited for:
+
 - **Microservices architectures** with distributed MCP tools
 - **AI agent systems** needing tool orchestration
 - **Enterprise applications** requiring production-grade features

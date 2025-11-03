@@ -36,6 +36,7 @@ Ever wondered why most "REST APIs" aren't actually RESTful? The missing piece is
 HATEOAS transforms your API from a collection of endpoints into a self-documenting, discoverable system where clients navigate through hypermedia links rather than hardcoded URLs. Think of it like browsing the web: you don't need to memorize URLs - you click links. HATEOAS brings this same principle to APIs.
 
 **What you'll learn:**
+
 - What HATEOAS actually means and why it matters
 - Practical implementation with Spring Boot and HAL+JSON
 - Real-world examples you can copy and adapt
@@ -44,18 +45,21 @@ HATEOAS transforms your API from a collection of endpoints into a self-documenti
 - When to use HATEOAS and when to skip it
 
 **What you'll achieve:**
+
 - APIs that evolve without breaking clients
 - Self-documenting services that reduce documentation burden
 - Looser coupling between client and server
 - Better developer experience for API consumers
 
 **Who this is for:**
+
 - Backend developers building REST APIs
 - API architects designing scalable services
 - Teams struggling with API versioning
 - Anyone wanting to build truly RESTful services
 
 **Prerequisites:**
+
 - Understanding of REST principles
 - Familiarity with JSON
 - Basic knowledge of HTTP methods (GET, POST, PUT, DELETE)
@@ -654,6 +658,7 @@ public class OpenAPIConfig {
 ```
 
 This Spring Boot example demonstrates:
+
 - **State-driven links**: Links change based on resource state (draft vs. published)
 - **Self-documentation**: Clients discover actions through `_links`
 - **Loose coupling**: Clients don't hardcode URLs or business rules
@@ -788,6 +793,7 @@ public class BlogClient {
 ```
 
 Use standard IANA link relations where applicable:
+
 - `self` - The current resource
 - `next`/`prev` - Pagination
 - `first`/`last` - Collection boundaries

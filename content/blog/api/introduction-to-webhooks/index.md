@@ -53,6 +53,7 @@ Here's a breakdown of the typical webhook workflow:
 
 * **Payload**: The data sent by the publisher to the webhook URL, typically in JSON format. It contains details about the event, such as the type of event and relevant metadata.
    - Example Payload:
+
      ```json
      {
        "event": "payment_success",

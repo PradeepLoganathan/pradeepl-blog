@@ -38,6 +38,7 @@ If you're considering a move from Microsoft SQL Server to PostgreSQL (often refe
 We'll explore the reasons behind this shift, the key differences between the two databases, and a step-by-step approach to ensure a smooth transition.
 
 **What you'll learn:**
+
 - Why organizations migrate from SQL Server to PostgreSQL
 - Three proven migration methods and when to use each
 - Step-by-step migration process from planning to optimization
@@ -46,6 +47,7 @@ We'll explore the reasons behind this shift, the key differences between the two
 - Real-world troubleshooting solutions
 
 **Who this guide is for:**
+
 - Database administrators planning a migration
 - DevOps engineers managing database infrastructure
 - Technical leads evaluating PostgreSQL
@@ -528,6 +530,7 @@ There are three primary methods for data migration:
 The dump and restore method involves creating a logical backup (dump) of your SQL Server database and then restoring it into your PostgreSQL environment. This method is relatively straightforward and is best suited for smaller databases or scenarios where some downtime is acceptable.
 
 **Best for:**
+
 - Databases under 100GB
 - Acceptable downtime window (hours to days)
 - One-time migrations
@@ -559,17 +562,20 @@ pgloader mysql://user:pass@sqlserver/CustomerDB postgresql://user:pass@pgserver/
 ```
 
 **Pros:**
+
 - Simple and straightforward
 - No complex setup required
 - Works for most migration scenarios
 - Easy to troubleshoot
 
 **Cons:**
+
 - Requires downtime during migration
 - Slower for large databases
 - Manual data verification needed
 
 **Estimated Time:**
+
 - Small DB (<10GB): 2-4 hours
 - Medium DB (10-100GB): 1-2 days
 - Large DB (>100GB): Consider other methods
@@ -579,6 +585,7 @@ pgloader mysql://user:pass@sqlserver/CustomerDB postgresql://user:pass@pgserver/
 Logical replication uses PostgreSQL's built-in capabilities to stream data changes from the SQL Server database to the PostgreSQL database in real-time. This method minimizes downtime and is suitable for larger databases or applications that require continuous availability.
 
 **Best for:**
+
 - Databases requiring minimal downtime
 - Gradual migration approach
 - Continuous synchronization during testing
@@ -667,18 +674,21 @@ aws dms describe-replication-tasks --filters Name=replication-task-arn,Values=<t
    - Start application
 
 **Pros:**
+
 - Minimal downtime (minutes vs hours/days)
 - Continuous data synchronization
 - Ability to test before cutover
 - Gradual migration approach
 
 **Cons:**
+
 - More complex setup
 - Requires CDC or similar mechanism
 - Additional cost for replication tools
 - Monitoring overhead
 
 **Estimated Time:**
+
 - Setup: 1-2 days
 - Initial sync: Hours to days (depending on size)
 - Cutover window: 15-30 minutes
@@ -690,6 +700,7 @@ Physical replication involves creating a low-level, byte-for-byte copy of the SQ
 **Important Note:** True physical replication between SQL Server and PostgreSQL is not possible due to fundamental differences in storage engines. However, you can achieve similar results using storage-level snapshots combined with conversion tools.
 
 **Best for:**
+
 - Very large databases (>1TB)
 - Minimal downtime requirements
 - Cloud migrations with snapshot capabilities
@@ -735,18 +746,21 @@ pgloader --with "batch rows = 10000" \
 ```
 
 **Pros:**
+
 - Fastest for very large databases
 - Snapshot provides point-in-time consistency
 - Minimal impact on production during snapshot
 - Can be tested multiple times
 
 **Cons:**
+
 - Most complex approach
 - Requires significant storage for snapshots
 - Still requires conversion step
 - Higher cost for storage and compute
 
 **Estimated Time:**
+
 - Snapshot creation: 30 minutes - 2 hours
 - Transfer and conversion: Hours to days
 - Total downtime: 1-4 hours (for cutover only)
@@ -763,6 +777,7 @@ pgloader --with "batch rows = 10000" \
 | **Best Use Case** | Dev/Test, small prod | Production systems | Very large databases |
 
 **Pro Tip:** For production migrations, consider a hybrid approach:
+
 1. Use dump & restore for initial bulk load to staging
 2. Test thoroughly in staging
 3. Use logical replication for final cutover with minimal downtime
@@ -962,6 +977,7 @@ Create a benchmark suite comparing SQL Server vs PostgreSQL:
 **Documentation:**
 
 Create a test results document tracking:
+
 - Test cases executed
 - Pass/fail status
 - Performance metrics
@@ -1370,6 +1386,7 @@ END;
 ### When to Seek Expert Help
 
 Consider professional migration services if you encounter:
+
 - Data corruption or significant data loss
 - Performance degradation > 50% after optimization
 - Critical business logic failing in PostgreSQL
@@ -1436,11 +1453,13 @@ This approach typically results in 15-30 minutes of downtime instead of hours or
 It depends on your application architecture:
 
 **Minimal Changes Needed:**
+
 - Applications using ORMs (Entity Framework, Hibernate) - mostly connection string changes
 - Standard SQL queries without vendor-specific features
 - REST APIs with data access layers
 
 **Significant Changes Needed:**
+
 - Heavy use of SQL Server-specific features (T-SQL procedures, SQLCLR)
 - Direct SQL queries with vendor-specific syntax
 - Applications tightly coupled to SQL Server features
@@ -1452,11 +1471,13 @@ Plan for 20-40% of development time for code changes in database-heavy applicati
 Cost savings vary by organization, but typical scenarios:
 
 **Example: Medium Enterprise (50-core SQL Server Enterprise)**
+
 - **SQL Server costs**: $220,000+ (license) + $50,000/year (maintenance) = $270,000+ annually
 - **PostgreSQL costs**: $0 (license) + $30,000-60,000/year (optional commercial support)
 - **Net savings**: $210,000-240,000 annually
 
 **Cloud-hosted comparison (500GB database):**
+
 - **Azure SQL Database**: $3,000-5,000/month
 - **Azure Database for PostgreSQL**: $1,500-2,500/month
 - **Savings**: 40-50% monthly
@@ -1468,6 +1489,7 @@ ROI typically achieved within 6-12 months even including migration costs.
 PostgreSQL often matches or exceeds SQL Server performance:
 
 **Where PostgreSQL Excels:**
+
 - Complex queries with multiple joins
 - JSON/JSONB data operations
 - Full-text search
@@ -1475,6 +1497,7 @@ PostgreSQL often matches or exceeds SQL Server performance:
 - Large dataset analytics
 
 **Where SQL Server May Have Edge:**
+
 - Certain proprietary optimizations
 - Deep Windows ecosystem integration
 - Specific workloads optimized for SQL Server
@@ -1484,11 +1507,13 @@ In practice, with proper tuning, most organizations see comparable or better per
 ### What happens to my existing backups?
 
 Your SQL Server backups remain usable for:
+
 - Regulatory compliance and retention requirements
 - Historical data access
 - Rollback scenarios during migration
 
 **Post-migration backup strategy:**
+
 1. Keep SQL Server backups for retention period (typically 7 years for compliance)
 2. Establish new PostgreSQL backup procedures immediately
 3. Test PostgreSQL restore procedures before decommissioning SQL Server
@@ -1499,16 +1524,19 @@ Your SQL Server backups remain usable for:
 Yes, with proper planning:
 
 **During Migration (Parallel Run):**
+
 - Keep SQL Server running alongside PostgreSQL
 - Use replication to sync data
 - Switch back to SQL Server instantly if issues arise
 
 **After Cutover:**
+
 - Maintain SQL Server for 30-90 days as safety net
 - Keep recent backup before final decommissioning
 - Document rollback procedures and practice them
 
 **Rollback becomes difficult after:**
+
 - SQL Server license expires or is decommissioned
 - Schema changes made only in PostgreSQL
 - Significant new data only in PostgreSQL
@@ -1520,11 +1548,13 @@ Best practice: Run parallel for 30-60 days before full decommissioning.
 Not necessarily, but it helps:
 
 **SQL Server DBAs can transition to PostgreSQL:**
+
 - Core concepts are similar (databases, tables, indexes, queries)
 - Different syntax and tools but same principles
 - Training period: 2-4 weeks for proficiency
 
 **Options for PostgreSQL expertise:**
+
 1. **Train existing team**: Online courses, certifications (2-3 months)
 2. **Hire PostgreSQL DBA**: Supplement team with specialist
 3. **Managed services**: Use cloud-managed PostgreSQL (AWS RDS, Azure Database)
@@ -1572,16 +1602,19 @@ Let's recap the essential points for a successful SQL Server to PostgreSQL migra
 Now that you understand the migration process, here are your next steps:
 
 **For Those Evaluating PostgreSQL:**
+
 1. **Set up a proof of concept**: Migrate a small, non-critical database to evaluate the process
 2. **Review your database inventory**: Identify candidates for migration based on complexity and business impact
 3. **Estimate costs and timeline**: Use this guide to create a project plan and budget
 
 **For Those Ready to Migrate:**
+
 1. **Start with assessment**: Document your current environment using the checklists in Step 1
 2. **Choose your migration strategy**: Review the comparison table and select the approach that fits your needs
 3. **Build your test environment**: Set up a staging PostgreSQL instance that mirrors your production requirements
 
 **For Further Learning:**
+
 - [PostgreSQL Official Documentation](https://www.postgresql.org/docs/)
 - [Database migration best practices](#) - Coming soon
 - [PostgreSQL performance tuning guide](#) - Coming soon
@@ -1600,6 +1633,7 @@ Want to learn more about database migrations and PostgreSQL? Check out these rel
 Migrating from SQL Server to PostgreSQL is a significant undertaking, but with proper planning, the right tools, and systematic execution, it can deliver substantial benefits in cost savings, performance, and flexibility.
 
 The key to success lies in:
+
 - **Thorough upfront planning** that accounts for your specific environment and requirements
 - **Choosing the right migration method** based on your database size, downtime tolerance, and complexity
 - **Comprehensive testing** that validates data integrity, application functionality, and performance
