@@ -4,7 +4,7 @@ title: Pradeep Loganathan's Blog - Development
 #   pagerSize: 10
 # copyright: "&copy; 2023 Pradeep Loganathan.<br> This work is licensed under <br> a Creative Commons Attribution-ShareAlike 4.0 <br> International License."
 
-defaultContentLanguage: en
+defaultContentLanguage: en-us
 enableInlineShortcodes: true
 enableRobotsTXT: false
 buildDrafts: true
@@ -97,3 +97,15 @@ taxonomies:
   tag: "tags"
   category: "categories"
   series: "series"
+
+related:
+  includeNewer: true
+  threshold: 80
+  toLower: false
+  indices:
+    - name: categories
+      weight: 100
+    - name: tags
+      weight: 80
+    - name: date
+      weight: 10

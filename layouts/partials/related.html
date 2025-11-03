@@ -1,0 +1,13 @@
+{{/* Simple related posts section using Hugo's related content */}}
+{{ $related := site.RegularPages.Related . | first 5 }}
+{{ if gt (len $related) 0 }}
+<aside class="related-posts">
+  <h3>Related</h3>
+  <ul>
+    {{ range $related }}
+      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+  </ul>
+  </aside>
+{{ end }}
+

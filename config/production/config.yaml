@@ -3,7 +3,7 @@ languageCode: en-us
 title: Pradeep Loganathan's Blog
 copyright: "&copy; 2023 Pradeep Loganathan.<br> This work is licensed under <br> a Creative Commons Attribution-ShareAlike 4.0 <br> International License."
 
-defaultContentLanguage: en
+defaultContentLanguage: en-us
 enableInlineShortcodes: true
 enableRobotsTXT: true
 buildDrafts: false
@@ -102,3 +102,15 @@ sitemap:
   changefreq: weekly
   filename: sitemap.xml
   priority: 0.5
+
+related:
+  includeNewer: true
+  threshold: 80
+  toLower: false
+  indices:
+    - name: categories
+      weight: 100
+    - name: tags
+      weight: 80
+    - name: date
+      weight: 10

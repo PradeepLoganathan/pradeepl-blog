@@ -13,6 +13,7 @@ categories:
   - Security
   - DevOps
   - Cloud
+  - featured
 description: "A comprehensive guide on generating SSL wildcard certificates using ACME challenges, Let's Encrypt, and Certbot."
 summary: "This blog post guides you through the process of generating SSL wildcard certificates using ACME challenges and Certbot, helping secure your domains with Let's Encrypt."
 ShowToc: true

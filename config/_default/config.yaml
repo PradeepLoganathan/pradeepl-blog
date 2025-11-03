@@ -8,4 +8,7 @@ module:
   imports:
     - path: github.com/adityatelange/hugo-PaperMod
 
-
+languages:
+  en-us:
+    languageName: English
+    weight: 1

@@ -3,3 +3,46 @@
 {{ else if (eq $.Page.Params.math "mathjax") }}
   {{ partial "helpers/mathjax.html" . }}
 {{ end }}
+
+{{/* JSON-LD: Article/BlogPosting schema for posts */}}
+{{ if and .IsPage (not .IsHome) }}
+  {{ $images := slice }}
+  {{ with .Params.images }}
+    {{ range . }}
+      {{ if . }}
+        {{ $images = $images | append (absURL .) }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  {{ if and (eq (len $images) 0) .Params.cover.image }}
+    {{ $img := .Params.cover.image }}
+    {{ if .Params.cover.relative }}
+      {{ $img = printf "%s%s" .Permalink (strings.TrimPrefix "/" $img) }}
+    {{ else }}
+      {{ $img = absURL $img }}
+    {{ end }}
+    {{ $images = (slice $img) }}
+  {{ end }}
+  {{ if and (eq (len $images) 0) (site.Params.opengraph.image) }}
+    {{ $images = (slice (absURL site.Params.opengraph.image)) }}
+  {{ end }}
+  {{ $author := or .Params.author (or site.Params.author site.Author.name) }}
+  {{ $logo := "/favicon-32x32.png" | absURL }}
+  {{ with site.Params.label.icon }}{{ $logo = . | absURL }}{{ end }}
+  {{ $desc := cond (ne .Description "") .Description (.Summary | plainify | truncate 200) }}
+  {{ $ld := dict
+      "@context" "https://schema.org"
+      "@type" "BlogPosting"
+      "headline" .Title
+      "description" $desc
+      "url" .Permalink
+      "datePublished" (.Date | time.Format "2006-01-02T15:04:05Z07:00")
+      "dateModified" (.Lastmod | time.Format "2006-01-02T15:04:05Z07:00")
+      "author" (dict "@type" "Person" "name" $author)
+      "publisher" (dict "@type" "Organization" "name" site.Title "logo" (dict "@type" "ImageObject" "url" $logo))
+  }}
+  {{ if gt (len $images) 0 }}
+    {{ $ld = merge $ld (dict "image" $images) }}
+  {{ end }}
+  <script type="application/ld+json">{{ $ld | jsonify | safeJS }}</script>
+{{ end }}
