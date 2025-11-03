@@ -85,7 +85,7 @@ I am using Azure DNS for this but you can use and other DNS such as AWS Route53,
 
 The complete process of using certbot, letsencrypt and azure dns to generate the wildcard ssl certificate is below. There are many ways of doing it and i am using the simple DNS challenge of updating txt records to validate domain ownership.
 
-![alt text](images/generate-wildcard-ssl-certbot-letsencrypt.png)
+{{< figure src="images/generate-wildcard-ssl-certbot-letsencrypt.png" alt="ACME DNS challenge with Certbot and Azure DNS" caption="ACME DNS challenge flow using Certbot and Azure DNS" >}}
 
 ## Step-by-Step Guide to Getting Wildcard SSL Certificates
 
@@ -110,13 +110,13 @@ sudo certbot certonly --manual --preferred-challenges=dns --email <<email@yourem
 
 Certbot will ask you for the domain names that which need to be validated to issue certificates. For each domain specified, Certbot will give you a TXT record to create in your Azure DNS zone.
 
-![alt text](images/intiate-request.png)
+{{< figure src="images/intiate-request.png" alt="Initiating Certbot DNS challenge" caption="Initiating Certbot DNS challenge" >}}
 
 2. **Create TXT Record in Azure DNS:** Go to your Azure Portal, navigate to your DNS zone, and add a new TXT record using the details from Certbot.
 
 3. **Verify the Challenge:** After the DNS record propagates, return to Certbot and confirm. Certbot will check your DNS for the TXT record.
 
-![alt text](images/verify-challenge.png)
+{{< figure src="images/verify-challenge.png" alt="Verifying ACME DNS challenge in Certbot" caption="Verifying ACME DNS challenge in Certbot" >}}
 
 4. **Certificate Installation:** Now that we have successfully generated the certificate files, you Configure your web server to use these certificates.
 
