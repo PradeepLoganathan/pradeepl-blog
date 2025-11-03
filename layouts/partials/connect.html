@@ -1,0 +1,78 @@
+{{- with .Site.Params }}
+<div class="connect-cta">
+    <div class="connect-cta-author">
+        {{- with .profileMode.imageUrl }}
+        <img src="{{ . | absURL }}" alt="{{ $.Site.Params.author }}" width="80" height="80">
+        {{- end }}
+        <div class="connect-cta-author-info">
+            <h4>About {{ .author }}</h4>
+            <p>{{ .description }}</p>
+        </div>
+    </div>
+    <div class="connect-cta-social">
+        <h5>Connect with me</h5>
+        <ul>
+            {{- range .socialIcons }}
+            <li>
+                <a href="{{ .url }}" target="_blank" rel="noopener noreferrer me">
+                    {{ .name | humanize }}
+                </a>
+            </li>
+            {{- end }}
+        </ul>
+    </div>
+</div>
+{{- end }}
+
+<style>
+.connect-cta {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.connect-cta-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.connect-cta-author img {
+    border-radius: 50%;
+}
+
+.connect-cta-author-info h4 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.connect-cta-author-info p {
+    margin: 0;
+    color: var(--secondary);
+}
+
+.connect-cta-social h5 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: var(--secondary);
+}
+
+.connect-cta-social ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.connect-cta-social a {
+    text-decoration: none;
+    font-weight: 500;
+}
+</style>

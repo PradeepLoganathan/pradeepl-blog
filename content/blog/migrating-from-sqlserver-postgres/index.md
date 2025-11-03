@@ -115,7 +115,7 @@ Having assessed how your application interacts with the database, it is crucial 
   * Query Adaptation: Adjust application queries and data access code to the new database's syntax.
   * Performance Tuning: Optimize queries and database configuration for the new system.
 
-Understanding how your application utilizes the database is paramount for a successful migration. By carefully analyzing the extent of database-centric logic and planning your migration strategy accordingly, you can minimize risks, reduce downtime, and ensure a smooth transition to your new PostgreSQL database. Remember, a well-prepared migration sets the stage for reaping the full benefits of PostgreSQL's power, flexibility, and cost-effectiveness.
+Understanding how your application utilizes the database is key for a successful migration. By carefully analyzing the extent of database-centric logic and planning your migration strategy accordingly, you can minimize risks, reduce downtime, and ensure a smooth transition to your new PostgreSQL database. Remember, a well-prepared migration sets the stage for reaping the full benefits of PostgreSQL's power, flexibility, and cost-effectiveness.
 
 Now lets work through the general steps to plan and execute a database migration from SQL Server to Postgresql.
 

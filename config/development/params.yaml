@@ -62,6 +62,7 @@ ShowPostNavLinks: true
 ShowCodeCopyButtons: true
 hideFooter: true
 ShowRssButtonInSectionTermList: true
+UseHugoToc: true
 
 taxonomies:
   category: categories

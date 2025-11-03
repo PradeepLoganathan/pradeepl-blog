@@ -1,0 +1,12 @@
+/* Import the Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+/* Apply the new font and readability improvements to the main content area */
+.post-content {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.7; /* Increased line height for better readability */
+}
+
+.post-content p {
+    margin-bottom: 1.5rem; /* Increased space between paragraphs */
+}
