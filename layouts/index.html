@@ -1,0 +1,87 @@
+{{- define "main" }}
+
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- $featured := where $pages "Params.categories" "intersect" (slice "featured") }}
+
+{{- if gt (len $featured) 0 }}
+<section class="featured-home">
+    <header class="page-header">
+        <h2>Featured</h2>
+        <a href="/blog/categories/featured/" title="See all featured posts">See all</a>
+    </header>
+    <div class="post-list">
+        {{- range first 6 $featured }}
+        <article class="post-entry">
+            <header class="entry-header">
+                <h3>
+                    {{- .Title }}
+                    {{- if .Draft }}<sup><span class="entry-isdraft">&nbsp;&nbsp;[draft]</span></sup>{{- end }}
+                </h3>
+            </header>
+            {{- if (.Params.summary) }}
+            <div class="entry-content">
+                <p>{{ .Summary | plainify | htmlUnescape | truncate 120 }}</p>
+            </div>
+            {{- end }}
+            <footer class="entry-footer">
+                <span class="entry-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                {{- if site.Params.ShowReadingTime }}
+                <span class="entry-separator">•</span>
+                <span class="entry-reading-time">{{ .ReadingTime }} min read</span>
+                {{- end }}
+            </footer>
+            <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+        </article>
+        {{- end }}
+    </div>
+</section>
+{{- end }}{{/* end featured */}}
+
+{{- $recentPages := slice }}
+{{- range $pages }}
+    {{- $isFeatured := false }}
+    {{- if .Params.categories }}
+        {{- if in .Params.categories "featured" }}
+            {{- $isFeatured = true }}
+        {{- end }}
+    {{- end }}
+    {{- if not $isFeatured }}
+        {{- $recentPages = $recentPages | append . }}
+    {{- end }}
+{{- end }}
+
+{{- if gt (len $recentPages) 0 }}
+<section class="recent-posts-home">
+    <header class="page-header">
+        <h2>Recent Posts</h2>
+        <a href="/blog/" title="See all posts">See all</a>
+    </header>
+    <div class="post-list">
+        {{- range first 8 $recentPages }}
+        <article class="post-entry">
+            <header class="entry-header">
+                <h3>
+                    {{- .Title }}
+                    {{- if .Draft }}<sup><span class="entry-isdraft">&nbsp;&nbsp;[draft]</span></sup>{{- end }}
+                </h3>
+            </header>
+            {{- if (.Params.summary) }}
+            <div class="entry-content">
+                <p>{{ .Summary | plainify | htmlUnescape | truncate 120 }}</p>
+            </div>
+            {{- end }}
+            <footer class="entry-footer">
+                <span class="entry-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                {{- if site.Params.ShowReadingTime }}
+                <span class="entry-separator">•</span>
+                <span class="entry-reading-time">{{ .ReadingTime }} min read</span>
+                {{- end }}
+            </footer>
+            <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+        </article>
+        {{- end }}
+    </div>
+</section>
+{{- end }}{{/* end recent posts */}}
+
+{{- end }}{{/* end main */}}

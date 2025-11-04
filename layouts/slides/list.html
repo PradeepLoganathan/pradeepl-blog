@@ -1,71 +1,28 @@
 {{ define "main" }}
 
-<h1>Slide Decks</h1>
+<div class="slides-page">
+  <header class="page-header">
+    <h1>Slide Decks</h1>
+    <p class="page-subtitle">Presentations and talks on software engineering, architecture, and cloud-native technologies</p>
+  </header>
 
-{{ $slides := site.Data.slides_folders }}
+  {{ $slides := site.Data.slides_folders }}
 
-<div class="slides-list-vertical">
-  {{ range $slides }}
-    <div class="slide-list-item">
-      <a href="/slides/{{ .folder }}/index.html" class="slide-link">
-        <img src="{{ .icon }}" alt="{{ .title }} icon" class="slide-icon" />
-        <div class="slide-info">
-          <h3>{{ .title }}</h3>
-          <p>{{ .description }}</p>
-        </div>
-      </a>
-    </div>
-  {{ end }}
+  <div class="slides-grid">
+    {{ range $slides }}
+      <article class="slide-card">
+        <a href="/slides/{{ .folder }}/index.html" class="slide-card-link">
+          <div class="slide-thumbnail">
+            <img src="{{ .icon }}" alt="{{ .title }}" loading="lazy" />
+          </div>
+          <div class="slide-content">
+            <h3 class="slide-title">{{ .title }}</h3>
+            <p class="slide-description">{{ .description }}</p>
+          </div>
+        </a>
+      </article>
+    {{ end }}
+  </div>
 </div>
-
-<style>
-.slides-list-vertical {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 700px; /* Optional: limit width */
-}
-
-.slide-list-item {
-  border: 1px solid #e1e1e1;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  box-shadow: 0 1px 5px rgb(0 0 0 / 0.05);
-  transition: box-shadow 0.3s ease;
-}
-
-.slide-list-item:hover {
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-}
-
-.slide-link {
-  display: flex;
-  text-decoration: none;
-  color: inherit;
-  align-items: center;
-  gap: 1rem;
-}
-
-.slide-icon {
-  width: 72px;
-  height: 72px;
-  object-fit: contain;
-  border-radius: 0.25rem;
-  flex-shrink: 0;
-}
-
-.slide-info h3 {
-  margin: 0 0 0.25rem 0;
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
-.slide-info p {
-  margin: 0;
-  color: #6b6b6b;
-  font-size: 1rem;
-  line-height: 1.4;
-}
-</style>
 
 {{ end }}

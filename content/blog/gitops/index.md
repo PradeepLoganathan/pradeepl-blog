@@ -13,6 +13,7 @@ tags:
 
 categories:
   - platformengineering
+  - featured
 
 summary: GitOps is a methodology for continuous deployment using a Git repository as the single source of truth. The repository contains the YAML manifests or Helm charts for the Kubernetes resources to be created. The Git repo is used to store, track and version control changes to these YAML files.
 

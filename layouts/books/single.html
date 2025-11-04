@@ -1,316 +1,76 @@
 {{ define "main" }}
-<div class="book-detail">
-    <div class="book-cover">
-        <img src="{{ .Params.cover.image | safeURL }}" alt="{{ .Params.cover.alt }}">
-    </div>
-    <div class="book-info">
-        <h1>{{ .Title }}</h1>
-        <p>{{ .Description }}</p>
+<article class="book-single">
+    <div class="book-single-container">
+        <aside class="book-single-cover">
+            <div class="book-cover-wrapper">
+                <img src="{{ .Params.cover.image | safeURL }}" alt="{{ .Params.cover.alt | default .Title }}" loading="eager">
+            </div>
 
-        <h2>Where to Buy</h2>
-        <div class="buy-buttons">
-            {{ range .Params.buy_links }}
-            <a class="buy-button" href="{{ .url }}" target="_blank">{{ .button_text | default (printf "Buy on %s" .name) }}</a>
-            {{ end }}
-        </div>
-
-        <h2>Preview the Book</h2>
-        <button class="preview-button" onclick="openPreview()">📖 Preview First Chapter</button>
-
-        <h2>Reviews</h2>
-        <ul class="reviews">
-            {{ range .Params.reviews }}
-            <li>
-                <strong>{{ .name }}</strong> 
-                <span class="stars">
-                    {{ range seq .rating }}
-                        ⭐
+            {{- if .Params.buy_links }}
+            <div class="book-buy-section">
+                <h3>Get Your Copy</h3>
+                <div class="buy-buttons">
+                    {{ range .Params.buy_links }}
+                    <a class="buy-button" href="{{ .url }}" target="_blank" rel="noopener">
+                        {{ .button_text | default (printf "Buy on %s" .name) }}
+                    </a>
                     {{ end }}
-                </span>
-                <p>{{ .text }}</p>
-            </li>
-            {{ end }}
-        </ul>
+                </div>
+            </div>
+            {{- end }}
 
-        <h2>About This Book</h2>
-        <div class="book-content">
-            {{ .Content | markdownify }} 
+            <button class="preview-button" onclick="openPreview()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                Preview First Chapter
+            </button>
+        </aside>
+
+        <div class="book-single-content">
+            <header class="book-header">
+                <h1>{{ .Title }}</h1>
+                {{- if .Description }}
+                <p class="book-subtitle">{{ .Description }}</p>
+                {{- end }}
+            </header>
+
+            {{- if .Params.reviews }}
+            <section class="book-reviews">
+                <h2>Reviews</h2>
+                <div class="reviews-list">
+                    {{ range .Params.reviews }}
+                    <div class="review-item">
+                        <div class="review-header">
+                            <strong class="review-author">{{ .name }}</strong>
+                            <span class="review-stars">
+                                {{ range seq .rating }}⭐{{ end }}
+                            </span>
+                        </div>
+                        <p class="review-text">{{ .text }}</p>
+                    </div>
+                    {{ end }}
+                </div>
+            </section>
+            {{- end }}
+
+            <section class="book-about">
+                <h2>About This Book</h2>
+                <div class="book-description">
+                    {{ .Content }}
+                </div>
+            </section>
         </div>
     </div>
-</div>
+</article>
 
 <!-- 📖 Book Preview Modal -->
-<div id="preview-modal" class="modal">
+<div id="preview-modal" class="book-preview-modal">
     <div class="modal-content">
-        <span class="close" onclick="closePreview()">&times;</span>
-
-        <!-- Left Arrow -->
-        <div class="flip-arrow left-arrow" onclick="bookViewer.flipPrev()">&#10094;</div>
-        
-        <div id="book-viewer"></div> <!-- Flipbook Container -->
-
-        <!-- Right Arrow -->
-        <div class="flip-arrow right-arrow" onclick="bookViewer.flipNext()">&#10095;</div>
+        <button class="modal-close" onclick="closePreview()" aria-label="Close preview">&times;</button>
+        <button class="flip-arrow left-arrow" onclick="bookViewer.flipPrev()" aria-label="Previous page">&#10094;</button>
+        <div id="book-viewer"></div>
+        <button class="flip-arrow right-arrow" onclick="bookViewer.flipNext()" aria-label="Next page">&#10095;</button>
     </div>
 </div>
-
-<style>
-
-/* Navigation Arrows */
-.flip-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 40px;
-    color: rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    user-select: none;
-    transition: 0.2s;
-    z-index: 1000; /* ✅ Ensure it stays above other elements */
-}
-
-.flip-arrow:hover {
-    background: rgba(255, 255, 255, 1);
-}
-
-/* Position Arrows */
-.left-arrow {
-    left: 10px; /* ✅ Adjust for visibility */
-}
-
-.right-arrow {
-    right: 10px;
-}
-
-
-/* Star Ratings */
-.stars {
-    color: #ffcc00; /* Gold color for stars */
-    font-size: 18px;
-    margin-left: 5px;
-}
-
-/* General styles */
-.book-detail {
-    display: flex;
-    flex-wrap: wrap; /* Allows stacking on mobile */
-    gap: 40px; /* Adds space between book cover and text */
-    align-items: flex-start;
-    justify-content: center;
-    padding: 40px 20px;
-}
-
-/* Book Cover */
-.book-cover {
-    flex: 0 1 250px; /* Ensures the cover has a fixed size */
-    text-align: center;
-}
-.book-cover img {
-    width: 100%;
-    max-width: 250px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
-
-/* Book Info */
-.book-info {
-    flex: 1;
-    max-width: 600px;
-    padding: 20px;
-    line-height: 1.6;
-}
-.book-info h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-.book-info h2 {
-    font-size: 22px;
-    margin-top: 25px;
-    border-bottom: 2px solid #ff9900; /* Adds a subtle section divider */
-    padding-bottom: 5px;
-}
-
-/* Buy Buttons */
-.buy-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 20px;
-}
-.buy-button {
-    display: inline-block;
-    text-align: center;
-    background: #ff9900;
-    color: white;
-    padding: 14px 18px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 6px;
-    transition: background 0.2s, transform 0.1s;
-}
-.buy-button:hover {
-    background: #cc7a00;
-    transform: scale(1.05);
-}
-
-/* Preview Button */
-.preview-button {
-    display: inline-block;
-    background: #0073e6;
-    color: white;
-    padding: 12px 18px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-.preview-button:hover {
-    background: #005bb5;
-}
-
-/* Reviews */
-.reviews {
-    padding-left: 20px;
-    font-style: italic;
-}
-.reviews li {
-    margin-bottom: 10px;
-}
-
-/* Book Content */
-.book-content h3 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    border-bottom: 2px solid #ff9900; /* Matches Reviews & About This Book */
-}
-
-/* Bullet Points (Key Topics Covered) */
-.book-content ul {
-    padding-left: 25px;
-    margin-top: 10px;
-    line-height: 1.6;
-}
-.book-content li {
-    margin-bottom: 8px;
-    list-style-type: "✔️ ";
-}
-
-/* 📖 Book Preview Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    overflow: auto; /* ✅ Allow scrolling on smaller screens */
-}
-
-/* Center modal content */
-.modal-content {
-    background: white;
-    padding: 20px;
-    width: 90vw;
-    max-width: 700px; /* Limit max width */
-    text-align: center;
-    border-radius: 10px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* ✅ Ensures centering */
-}
-
-/* Ensure it becomes visible when needed */
-.modal.active {
-    display: flex;
-}
-
-.close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 30px;
-    font-weight: bold;
-    color: #000;
-    background: white;
-    padding: 5px 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 1000; /* Ensure it's always above other elements */
-}
-
-.close:hover {
-    background: red;
-    color: white;
-}
-
-/* Ensure flipbook fits within modal */
-#book-viewer {
-    width: 100%;
-    max-width: 600px; /* ✅ Keeps the book from overflowing */
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-/* Mobile-friendly */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 95%; /* Ensure modal uses most of the available screen */
-        max-width: 90vw;
-    }
-
-    #book-viewer {
-        width: 80vw;
-        height: auto; /* Maintain A4 aspect ratio */
-    }
-    .flip-arrow {
-        font-size: 30px;
-        padding: 8px;
-    }
-
-    .left-arrow {
-        left: 5px; /* ✅ Adjust for smaller screens */
-    }
-
-    .right-arrow {
-        right: 5px;
-    }
-    .book-detail {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 20px;
-    }
-    .book-info {
-        max-width: 100%;
-        text-align: left;
-        padding: 10px;
-    }
-    .buy-buttons {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-    }
-    .buy-button {
-        width: 100%;
-        text-align: center;
-    }
-}
-</style>
 
 <!-- 📖 JavaScript for Modal and Flipbook -->
 <script src="https://cdn.jsdelivr.net/npm/page-flip@latest/dist/js/page-flip.browser.js"></script>
