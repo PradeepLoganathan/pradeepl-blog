@@ -10,6 +10,7 @@ tags:
   - cloudformation
 categories:
   - IaC
+  - featured
 #slug: kubernetes/introduction-to-open-policy-agent-opa/
 summary: "Infrastructure as code (IaC) is the process of provisioning and managing your infrastructure resources through definition files or code."
 ShowToc: true

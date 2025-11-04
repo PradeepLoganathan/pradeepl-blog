@@ -4,9 +4,10 @@ lastmod: 2020-10-11T15:55:13+10:00
 date: 2020-10-11T15:55:13+10:00
 draft: false
 Author: Pradeep Loganathan
-categories: 
+categories:
   - "architecture"
   - "cloud"
+  - "featured"
 tags: 
   - "cloud"
   - "infrastructure as code"

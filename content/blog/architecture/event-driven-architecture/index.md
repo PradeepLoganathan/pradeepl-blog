@@ -11,6 +11,7 @@ tags:
   - "Eventsourcing"
 categories:
   - Architecture
+  - featured
 # # description: Event driven architecture (EDA) is an architectural paradigm where behavior is composed by reacting to events. In this paradigm events imply a significant change in state.
 summary: Event driven architecture (EDA) is an architectural paradigm where behavior is composed by reacting to events. In this paradigm events imply a significant change in state.
 ShowToc: true

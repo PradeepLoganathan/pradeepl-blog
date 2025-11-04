@@ -16,6 +16,7 @@ tags:
 categories:
   - "architecture"
   - "cloud"
+  - "featured"
 description: "Master the 12 Factor App methodology with practical examples, implementation checklist, and modern tools. Build scalable, resilient cloud-native applications."
 summary: "Comprehensive guide to the 12 Factor App methodology: practical implementation examples with Docker/Kubernetes, common mistakes to avoid, and a complete checklist for building production-ready cloud-native applications."
 ShowToc: true
