@@ -1195,3 +1195,343 @@ the browser support for :has is not widespread yet.
         display: flex !important;
     }
 }
+
+/* ============================================
+   About Page Styling
+   ============================================ */
+
+.about-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Hero Section */
+.about-hero {
+    text-align: center;
+    padding: 3rem 0 4rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+}
+
+.about-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.about-tagline {
+    font-size: 1.25rem;
+    color: var(--secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.about-intro {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--content);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* About Sections */
+.about-section {
+    margin-bottom: 4rem;
+}
+
+.about-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.section-intro {
+    font-size: 1.1rem;
+    color: var(--secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.about-content {
+    line-height: 1.8;
+}
+
+.about-content p {
+    margin-bottom: 1rem;
+}
+
+.linkedin-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.linkedin-link:hover {
+    border-bottom-color: var(--primary);
+}
+
+/* Books Grid */
+.about-books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.about-book-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: var(--entry);
+}
+
+.about-book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.about-book-cover {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: var(--code-bg);
+}
+
+.about-book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-book-info {
+    padding: 1.5rem;
+}
+
+.about-book-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--content);
+}
+
+.about-book-info p {
+    font-size: 0.95rem;
+    color: var(--secondary);
+    line-height: 1.5;
+}
+
+/* Slides Grid */
+.about-slides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.about-slide-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: var(--entry);
+    padding: 1.5rem;
+}
+
+.about-slide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.about-slide-icon {
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    background: var(--code-bg);
+}
+
+.about-slide-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-slide-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--content);
+}
+
+.about-slide-info p {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    line-height: 1.5;
+}
+
+/* Interests Grid */
+.about-interests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.interest-card {
+    text-align: center;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--entry);
+    transition: all 0.3s ease;
+}
+
+.interest-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.interest-icon {
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.interest-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    color: var(--content);
+}
+
+.interest-card p {
+    font-size: 0.95rem;
+    color: var(--secondary);
+    line-height: 1.6;
+}
+
+/* Social Links */
+.about-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--content);
+    background: var(--entry);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.social-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.social-link svg {
+    width: 24px;
+    height: 24px;
+}
+
+.social-linkedin:hover {
+    border-color: #0077b5;
+    color: #0077b5;
+}
+
+.social-github:hover {
+    border-color: #333;
+    color: #333;
+}
+
+.social-twitter:hover {
+    border-color: #1da1f2;
+    color: #1da1f2;
+}
+
+/* Dark mode adjustments for social links */
+.dark .social-github:hover {
+    border-color: #fff;
+    color: #fff;
+}
+
+/* CTA Buttons */
+.section-cta {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    background: var(--primary);
+    color: var(--theme);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid var(--primary);
+}
+
+.cta-button:hover {
+    background: var(--tertiary);
+    border-color: var(--tertiary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Podcast Section */
+.about-podcast {
+    text-align: center;
+    padding: 2rem;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .about-hero h1 {
+        font-size: 2rem;
+    }
+
+    .about-tagline {
+        font-size: 1.1rem;
+    }
+
+    .about-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .about-books-grid,
+    .about-slides-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-social-links {
+        flex-direction: column;
+    }
+
+    .social-link {
+        width: 100%;
+        justify-content: center;
+    }
+}
