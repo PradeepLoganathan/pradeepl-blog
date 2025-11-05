@@ -2,7 +2,7 @@
 title: "The Akka Actor Model: A Foundation for Concurrent AI Agents"
 lastmod: 2025-09-16T16:31:35+10:00
 date: 2025-09-16T16:31:35+10:00
-draft: true
+draft: false
 Author: Pradeep Loganathan
 tags:
   - akka
@@ -31,9 +31,11 @@ mermaid: true
 series: ["Agentic AI"]
 ---
 
-In [Part 1]({{< ref "/blog/agentic-ai/agentic-ai-from-copilots-to-agents/" >}}), we explored the shift from simple, stateless copilots to more sophisticated, stateful agents. We defined an agent as an autonomous entity with a persistent internal state, a planning loop, and the ability to use external tools. This internal state encompassing memory, goals, and conversation history is what gives an agent its personality and purpose. Building one agent in isolation is simple. Building a system that can reliably manage thousands of them, each with its own unique state and long-running tasks, is a monumental challenge. This is where most conventional architectures begin to break down. So, how do we build a system that can reliably and concurrently manage not one, but thousands of these stateful, independent agents? 
+In [Part 1]({{< ref "/blog/agentic-ai/agentic-ai-from-copilots-to-agents/" >}}), we explored the shift from simple, stateless copilots to more sophisticated, stateful agents. We demonstrated how an LLM can act as an autonomous planner, generating multi-step execution plans using the Observe-Think-Act pattern. We also explored how agents can integrate with real-world tools through the Model Context Protocol, transforming conceptual plans into actual actions. We defined an agent as an autonomous entity with a persistent internal state, a planning loop, and the ability to use external tools. This internal state encompassing memory, goals, and conversation history is what gives an agent its personality and purpose. Building one agent in isolation is simple. Building a system that can reliably manage thousands of them, each with its own unique state and long-running tasks, is a monumental challenge. This is where most conventional architectures begin to break down. So, how do we build a system that can reliably and concurrently manage not one, but thousands of these stateful, independent agents? 
 
 The answer does not include locks or complex threading logic, but a powerful architectural pattern: the Actor Model.
+
+In Part 1, we demonstrated the `MinimalAgent`—a simple implementation where the LLM generates a complete execution plan in a single call. While this illustrated the core concept of autonomous planning, real-world agents need more: persistent state across multiple interactions, the ability to remember facts, and actual tool execution capabilities. In this post, we'll evolve from that conceptual foundation to build `SimpleAgent`, a production-ready implementation that handles concurrent sessions, maintains memory, and integrates real tools. This is where the complexity of managing thousands of concurrent, stateful agents becomes apparent, and why we need a robust runtime foundation like Akka.
 
 ## The Concurrency Crisis in an Agentic World
 
@@ -207,7 +209,9 @@ https://github.com/PradeepLoganathan/akka-agent-sdk-demo/blob/main/src/main/java
 
 2.  **Single Message Handler:** `public Effect<String> interact(Interact req)` is the only entry point. The runtime processes one message at a time, so you don’t need locks for internal state.
 
-3.  **Short‑Term Session Memory:** Keep a per‑session `Map<String,String>` for small facts referenced during the conversation. It’s simple, fast, and ephemeral—perfect for a first agent.
+3.  **Short‑Term Session Memory:** Keep a per‑session `Map<String,String>` for small facts referenced during the conversation. It's simple, fast, and ephemeral—perfect for a first agent.
+
+    **Evolution from MinimalAgent:** In Part 1, we defined an `AgentState` class to demonstrate the structure needed for stateful agents (goal, memory list, step tracking, completion flags). Here in `SimpleAgent`, we've evolved that concept into a practical implementation using a `Map<String,String>` for session-based memory. This simpler approach is ideal for our example and demonstrates the actor's ability to maintain state, while production systems might combine the structured `AgentState` pattern with persistence mechanisms like Akka Persistence for durable state management.
 
 4.  **Declarative Orchestration with `effects()`:** Instead of managing threads and futures, declare your intent (model + memory + tools + messages). The SDK performs non‑blocking calls and delivers the result to your mailbox, allowing the agent to remain responsive.
 
@@ -229,6 +233,8 @@ https://github.com/PradeepLoganathan/akka-agent-sdk-demo/blob/main/src/main/java
       return text == null ? "" : text.toUpperCase();
     }
     ```
+
+    This simple annotation-based approach is ideal for lightweight, inline tools. For more complex integrations—such as querying databases, accessing knowledge bases, or orchestrating external APIs—you can leverage the [Model Context Protocol (MCP) with Akka]({{< ref "/blog/model-context-protocol/build-a-mcp-server-akka/">}}), which we introduced in Part 1. MCP provides a standardized way to expose rich tool capabilities that your agents can discover and use dynamically, transforming the conceptual tools from our `MinimalAgent` planning example into real, executable actions.
 
 Optionally, you can enhance the system prompt with a simple, deterministic summary of known facts (from the session map) to guide the model without overstuffing context.
 
