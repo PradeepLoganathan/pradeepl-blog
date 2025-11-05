@@ -48,7 +48,7 @@ The AI systems we've built so far in our journey, from the [fraud detection mod
 
 Agentic AI represents a fundamental shift from this reactive design to proactive, goal-directed systems that can initiate actions, plan sequences of activities, and adapt their approach based on changing circumstances. Where traditional AI systems are like sophisticated calculators waiting for problems to solve, agentic AI systems are more like semi-autonomous colleagues capable of understanding objectives and figuring out how to achieve them. A copilot, no matter how powerful, is a reactive tool; it waits for a human prompt and provides a single, final output. An agent, on the other hand, is proactive. It has a goal, formulates a plan, takes action, and iterates until the goal is achieved. 
 
-## **The LLM as the Brain: A Conceptual Leap**
+## The LLM as the Brain: A Conceptual Leap
 
 At the heart of this shift is using a Large Language Model (LLM) not just as a text generator, but as the **reasoning engine** or "brain" of a more complex system. Instead of simply asking an LLM to "write a poem," we task it with a goal like "research and summarize the latest advancements in quantum computing."
 
@@ -61,7 +61,7 @@ The difference is subtle but profound. In the first case, the LLM provides a sin
 
 This multi-step reasoning is the core difference between a passive copilot and an active agent. While a simple prompt might ask an LLM to "generate an outline for a blog post," an agent is given the goal "write a blog post about LLM agents." The latter requires a continuous loop of planning, execution, and reflection.
 
-## **The Agentic Loop: Observe, Think, Act**
+## The Agentic Loop: Observe, Think, Act
 
 
 {{< figure src="images/agentic-loop.png" alt="Agentic Loop" caption="Agentic Loop" >}}
@@ -111,44 +111,68 @@ Agentic AI takes this concept further by not just using tools individually, but 
 
 ## Core Implementation Walkthrough
 
-Let’s ground these ideas in code, using the simplest possible framework-agnostic example to illustrate the conceptual leap from passive LLM calls to agent-like behavior.
+Let's ground these ideas in code by building two implementations side-by-side. We'll start with a traditional reactive copilot, then evolve it into an autonomous agent. This comparison will make the architectural differences concrete and highlight the fundamental shift in how these systems operate.
 
-### Standard Copilot—Single-Turn LLM Call
+The table below summarizes the key differences we'll explore:
 
-First, let's see what a "copilot" call looks like: a passive response model using Akka SDK.
+| Aspect | Reactive Copilot | Autonomous Agent |
+|--------|-----------------|------------------|
+| **Control Flow** | Request → Response | Goal → Loop until complete |
+| **Interaction** | Waits for each prompt | Self-directed iterations |
+| **State** | Stateless (no memory) | Stateful (maintains context) |
+| **Execution** | Single-turn processing | Multi-step reasoning |
+| **Autonomy** | Passive, user-driven | Proactive, goal-driven |
+
+### Pattern 1: The Reactive Copilot
+
+First, let's see what a "copilot" call looks like: a passive response model using Akka SDK. The code for this sample is available on [github here.](https://github.com/PradeepLoganathan/simple-copilot)
 
 ```java
-import akka.javasdk.annotations.ComponentId;
-import akka.javasdk.client.ComponentClient;
+package com.pradeepl.agentic.copilot;
+
+import akka.javasdk.agent.Agent;
+import akka.javasdk.annotations.Component;
+
+@Component(id="simple-copilot")
+public class SimpleCopilot extends Agent {
+
+  public Effect<String> ask(String prompt) {
+    return effects()
+      .systemMessage("You are a helpful AI assistant.")
+      .userMessage(prompt)
+      .thenReply();
+  }
+}
+```
+
+This copilot is exposed via an HTTP endpoint:
+
+```java
+package com.pradeepl.agentic.copilot;
+
+import akka.javasdk.annotations.Acl;
 import akka.javasdk.annotations.http.HttpEndpoint;
 import akka.javasdk.annotations.http.Post;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.CompletableFuture;
-import java.util.List;
+import akka.javasdk.client.ComponentClient;
 
-@ComponentId("copilot")
+@Acl(allow = @Acl.Matcher(principal = Acl.Principal.INTERNET))
 @HttpEndpoint("/copilot")
 public class CopilotEndpoint {
-  private final ComponentClient client;
-  private final LLMService llmService;
 
-  public CopilotEndpoint(ComponentClient client, LLMService llmService) {
+  public record AskRequest(String prompt) {}
+
+  private final ComponentClient client;
+
+  public CopilotEndpoint(ComponentClient client) {
     this.client = client;
-    this.llmService = llmService;
   }
 
   @Post("/ask")
-  public CompletionStage<String> ask(String prompt) {
-    return llmService.complete(prompt);
-  }
-}
-
-class LLMService {
-  CompletionStage<String> complete(String prompt) {
-    return CompletableFuture.supplyAsync(() -> {
-      var request = new ChatRequest(List.of(new Message("user", prompt)));
-      return callLLM(request).content();
-    });
+  public String ask(AskRequest req) {
+    return client.forAgent()
+      .inSession("default-session")
+      .method(SimpleCopilot::ask)
+      .invoke(req.prompt());
   }
 }
 ```
@@ -160,132 +184,219 @@ This copilot implementation demonstrates the reactive pattern:
 - **Passive**: Waits for explicit user input; cannot initiate actions
 - **No Context**: Cannot build on previous conversations or learn from outcomes
 
-While Akka SDK provides the infrastructure for scalability and resilience, this copilot pattern doesn't leverage the actor model's state management capabilities. It's a simple request-response service—powerful for specific tasks, but fundamentally limited in autonomy.
-The function 'askLlm' sends the input prompt to the LLM. The OpenAI API is called with a single user message. The LLM responds once, with no persistent state or memory. Each call is stateless: past prompts are not recalled, nor do they influence the next turn. This structure cannot learn, plan, or autonomously continue—a purely reactive system.
+While Akka SDK provides the infrastructure for scalability and resilience, this copilot pattern doesn't leverage the actor model's state management capabilities. It's a simple request-response service—powerful for specific tasks, but fundamentally limited in autonomy. The `SimpleCopilot.ask()` method sends the user prompt to the LLM with a system message, receives a single response, and returns it. Each call is stateless: past prompts are not recalled, nor do they influence the next turn. This structure cannot learn, plan, or autonomously continue—a purely reactive system.
 
-### Minimal Agent—Single-Agentic Step Loop
+#### Model Provider Configuration
 
-Now, let’s wrap an LLM call in a basic agentic loop. This will:
+One powerful feature of Akka SDK is its ability to work with multiple foundational models through simple configuration changes. The copilot doesn't hardcode a specific LLM provider—instead, it uses the `application.conf` file to determine which model to use:
 
-- Use a **system message** to define the agent’s persona/rules.
-- Track **memory** (conversation history).
-- Decide, each step, what to do next based on both the last observation and the evolving memory.
+```hocon
+akka.javasdk {
+  service-name = "agentic-copilot"
 
-```java
-// Agent-style: Akka Typed loop with step budget + simple state
-import akka.actor.typed.*;
-import akka.actor.typed.javadsl.*;
+  agent {
+    model-provider = openai
 
-public class MinimalAgent extends AbstractBehavior<MinimalAgent.Msg> {
-  interface Msg {}
-  public record Start(String goal) implements Msg {}
-  public record Observe(String signal) implements Msg {}
-  public record Think() implements Msg {}
-  public record Act() implements Msg {}
-
-  private final StringBuilder memory = new StringBuilder();
-  private final int maxSteps = 5;  // step budget
-  private int step = 0;
-  private String goal = "";
-
-  public static Behavior<Msg> create() { return Behaviors.setup(MinimalAgent::new); }
-  private MinimalAgent(ActorContext<Msg> ctx) { super(ctx); }
-
-  @Override public Receive<Msg> createReceive() {
-    return newReceiveBuilder()
-      .onMessage(Start.class, this::onStart)
-      .onMessage(Observe.class, this::onObserve)
-      .onMessage(Think.class, this::onThink)
-      .onMessage(Act.class, this::onAct)
-      .build();
-  }
-
-  private Behavior<Msg> onStart(Start m) {
-    this.goal = m.goal;
-    getContext().getLog().info("Goal: {}", goal);
-    return onObserve(new Observe("init"));
-  }
-
-  private Behavior<Msg> onObserve(Observe m) {
-    memory.append("OBSERVE: ").append(m.signal).append("\n");
-    getContext().getSelf().tell(new Think());
-    return this;
-  }
-
-  private Behavior<Msg> onThink(Think m) {
-    step++;
-    // Here you'd call your LLM with (goal + memory) to decide an action.
-    String plannedAction = "collect_fact_" + step;
-    memory.append("THINK: plan=").append(plannedAction).append("\n");
-    getContext().getSelf().tell(new Act());
-    return this;
-  }
-
-  private Behavior<Msg> onAct(Act m) {
-    // Execute the action (tool call); here we just append a fact.
-    memory.append("ACT: fact ").append(step).append("\n");
-    if (step >= maxSteps /* or goalSatisfied(memory) */) {
-      getContext().getLog().info("Agent Task Complete.\n{}", memory);
-      return Behaviors.stopped();
+    openai {
+      model-name = "gpt-4o-mini"
+      api-key = ${?OPENAI_API_KEY}
     }
-    // Loop: observe new signal (could be tool output)
-    return onObserve(new Observe("next"));
-  }
-
-  public static void main(String[] args) {
-    ActorSystem<Msg> system = ActorSystem.create(MinimalAgent.create(), "agent");
-    system.tell(new Start("Find five key facts about honey bees"));
   }
 }
 ```
 
-This code implements an agentic AI pattern using Akka Typed actors. It creates a minimal autonomous agent that follows a classic AI agent loop: Observe → Think → Act → Observe.
+This configuration approach provides several advantages:
+
+- **Provider Flexibility**: Switch between OpenAI, Anthropic Claude, Google Gemini, Azure OpenAI, or even local models (Ollama, LocalAI) without changing code
+- **Model Selection**: Choose specific models within a provider (e.g., `gpt-4o`, `claude-3-5-sonnet`, `gemini-2.0-flash`)
+- **Environment-based Configuration**: Use environment variables for API keys and different settings per environment (dev, staging, production)
+- **Fine-tuning Parameters**: Configure temperature, top-p, max tokens, and other model-specific parameters
+
+For example, switching to Anthropic's Claude is as simple as changing the configuration:
+
+```hocon
+akka.javasdk {
+  agent {
+    model-provider = anthropic
+
+    anthropic {
+      model-name = "claude-3-5-sonnet-20241022"
+      api-key = ${?ANTHROPIC_API_KEY}
+      temperature = 0.7
+      max-tokens = 2048
+    }
+  }
+}
+```
+
+Or to use Google's Gemini:
+
+```hocon
+akka.javasdk {
+  agent {
+    model-provider = googleai-gemini
+
+    googleai-gemini {
+      model-name = "gemini-2.0-flash"
+      api-key = ${?GOOGLE_AI_GEMINI_API_KEY}
+    }
+  }
+}
+```
+
+This configuration-driven approach means your copilot code remains clean and focused on business logic, while infrastructure concerns like model selection, API authentication, and performance tuning are managed declaratively through configuration.
+
+### Pattern 2: The Autonomous Agent
+
+Now that we've seen how a reactive copilot works—waiting for prompts and returning single responses—let's transform this into an autonomous agent. The key difference isn't just adding more features; it's fundamentally changing the control flow from reactive to proactive.
+
+While the copilot waits passively for each request, an agent receives a goal once and then uses the LLM to autonomously plan and execute toward achieving it. The crucial insight: **the LLM itself becomes the reasoning engine** that plans the multi-step execution.
+
+Let's build a minimal autonomous agent using the same Akka SDK Agent abstraction. The code for this sample is available on [github here.](https://github.com/PradeepLoganathan/minimal-agent)
+
+```java
+package com.pradeepl.agentic.agent;
+
+import akka.javasdk.agent.Agent;
+import akka.javasdk.annotations.Component;
+
+/**
+ * Minimal Autonomous Agent using Akka SDK Agent abstraction.
+ *
+ * Key Difference: The LLM acts as the "brain" to create a complete
+ * autonomous execution plan using the Observe-Think-Act pattern.
+ */
+@Component(id = "minimal-agent")
+public class MinimalAgent extends Agent {
+
+  /**
+   * Initialize the agent with a goal.
+   * The LLM is instructed to act as an autonomous agent planner.
+   */
+  public Effect<String> executeGoal(String goal) {
+    // Build system message that instructs the LLM to plan autonomously
+    String systemPrompt = """
+      You are an autonomous AI agent planner. You will receive a GOAL and must
+      create a detailed 5-step plan to achieve it using the Observe-Think-Act pattern.
+
+      For each of the 5 steps, provide:
+      1. OBSERVE: What you observe/know at this step
+      2. THINK: Your reasoning and which tool to use (search, knowledge_base,
+         verify, synthesize, or finalize)
+      3. ACT: The specific action to take
+
+      Format your response as:
+      Step 1:
+      OBSERVE: [observation]
+      THINK: [reasoning and tool selection]
+      ACT: [specific action]
+
+      Step 2:
+      OBSERVE: [observation]
+      THINK: [reasoning and tool selection]
+      ACT: [specific action]
+
+      ... (continue for all 5 steps)
+
+      Be specific and make each step build on the previous ones.
+      """;
+
+    String userPrompt = "GOAL: " + goal +
+      "\n\nCreate a detailed 5-step autonomous execution plan to achieve this goal.";
+
+    // Call LLM to generate the complete autonomous execution plan
+    return effects()
+      .systemMessage(systemPrompt)
+      .userMessage(userPrompt)
+      .thenReply();
+  }
+}
+```
+
+This autonomous agent uses the same Akka SDK Agent abstraction as the copilot, but with a fundamentally different approach: **the LLM itself becomes the autonomous planner**.
 
 #### How It Works
 
-1. **Initialization** - The Agent Receives Its Mission
+The autonomous agent implementation demonstrates a fundamental architectural shift: **using the LLM itself as the autonomous planner**. Rather than implementing an iterative loop in code, we leverage the LLM's reasoning capabilities to generate a complete multi-step execution plan in a single call.
 
-The process starts with a `Start` message containing the agent's goal ("Find five key facts about honey bees"). This critical message establishes the agent's role (autonomous research assistant), its objective (gather five key facts), and the termination rule (stop after 5 steps or when goal satisfied). The actor's internal state is initialized with an empty memory buffer and step counter set to zero.
+**1. Single-Call Autonomous Planning**
 
-2. **The Agent Loop: Observe → Think → Act → Observe**:
+When you call `executeGoal("Research the latest advancements in quantum computing")`, the agent doesn't enter an iterative loop. Instead, it:
 
-The code implements a self-messaging pattern where the actor continuously sends messages to itself to maintain an autonomous loop. In each cycle:
+- Constructs a specialized system prompt that instructs the LLM to act as an "autonomous AI agent planner"
+- Embeds the Observe-Think-Act pattern directly in the prompt structure
+- Requests a complete 5-step execution plan in a single LLM call
+- Returns the fully formed plan as the response
 
-- Observe: The actor processes environmental signals through `Observe` messages, appending observations to its memory buffer. This represents the agent's perception capability.
+This is fundamentally different from traditional prompt-response patterns. The LLM isn't just answering a question—it's generating a strategic execution plan that demonstrates autonomous reasoning.
 
-- Think: The actor enters a planning phase where it would integrate with an LLM, passing the current goal and accumulated memory to decide the next action. This is where reasoning and decision-making occurs.
+**2. The System Prompt: Programming Agent Behavior**
 
-- Act: The actor executes the planned action (currently simulated as collecting facts), appending the results to memory. This represents action execution in the real world.
+The key to autonomous behavior lies in the system prompt design. The prompt explicitly instructs the LLM to:
 
-- Loop Back: After each action, the actor automatically triggers another `Observe` message to continue the cycle.
+```
+You are an autonomous AI agent planner. You will receive a GOAL and must create
+a detailed 5-step plan to achieve it using the Observe-Think-Act pattern.
 
+For each of the 5 steps, provide:
+1. OBSERVE: What you observe/know at this step
+2. THINK: Your reasoning and which tool to use (search, knowledge_base, verify, synthesize, finalize)
+3. ACT: The specific action to take
+```
 
-3. **Memory as Actor State** - Accumulating Agent Experience :
+This prompt structure does several critical things:
 
-The `StringBuilder memory` serves as the agent's working memory. Unlike conversation history approaches that pass entire context to external services, this Akka Typed implementation maintains state as actor instance variables. Each observation, thought, and action is appended to this memory buffer, providing the agent with :
+- **Sets the Agent Identity**: Establishes the LLM's role as an autonomous planner, not just a question-answerer
+- **Defines the Execution Pattern**: Embeds the Observe-Think-Act loop as a structured output format
+- **Specifies Tool Awareness**: Lists available conceptual tools (search, knowledge_base, etc.) that the agent should consider
+- **Enforces Structure**: Requires formatted output that represents a complete execution strategy
 
-- Persistence: Memory survives across message processing cycles
-- Efficiency: No need to serialize/deserialize entire conversation history
-- Type Safety: Memory access is controlled through Akka Typed's message protocol.
-- Concurrency Safety: Actor model ensures single-threaded access to memory without locks.
+**3. AgentState: Foundation for Future Statefulness**
 
-This approach is more efficient than conversation history patterns because the memory stays local to the actor rather than being passed to external services repeatedly.
+The implementation includes an `AgentState` class with fields for goal, memory, current step, and completion status:
 
-4. **Termination Condition** - Built-in Step Budget and Goal Satisfaction: 
+```java
+public static class AgentState {
+    public String goal;
+    public List<String> memory;
+    public int currentStep;
+    public int maxSteps;
+    public boolean completed;
+}
+```
 
-The loop continues with two termination conditions:
+While this state structure isn't actively used in the current single-call implementation, it establishes the foundation for evolving toward true stateful agents. This design anticipates future enhancements where:
 
-- Step Budget: The agent stops after `maxSteps` (5) iterations to prevent infinite loops, acting as a safety mechanism.
-- Goal Satisfaction: The code includes a placeholder `goalSatisfied(memory)` check where you'd implement logic to determine if the objective is complete
-- Graceful Shutdown: When termination conditions are met, the actor returns `Behaviors.stopped()`, cleanly shutting down and logging the complete memory contents.
+- Memory would accumulate observations and results across actual execution steps
+- Step tracking would monitor progress through the plan
+- Completion flags would signal when goals are achieved
 
-The "agentic" part comes from a few key characteristics:
+**4. Why This Pattern Demonstrates Agency**
 
-- **Autonomy**: The AI isn't waiting for a new user prompt at each step. It operates on its own, using the initial goal and its own previous outputs to decide what to do next.
-- **Statefulness**: The `conversation` list acts as the agent's memory. By feeding the whole history back to the model each time, the agent "remembers" what it has done, allowing it to count the facts it has found and know when it has reached its goal of five.
-- **Goal-Oriented**: The entire process is driven by the initial goal. Each step is an attempt to get closer to fulfilling the task defined in the `system_message`.
+Despite its simplicity, this implementation captures the essence of agentic behavior:
 
-Notice the absence of external “tools” here—all “actions” are text completions. In more capable architectures, agents use “tools” (APIs, code execution, database hooks) to interface with the world, but at its core, the agentic loop is about control flow and autonomy, not just the tools used.
+- **Goal-Directed**: The entire system is oriented around achieving a specific objective
+- **Autonomous Planning**: The LLM independently determines what steps are needed, in what order
+- **Multi-Step Reasoning**: The plan demonstrates forward-thinking across multiple stages
+- **Tool Awareness**: The agent considers which tools to use at each step (even if conceptually)
+- **Structured Thinking**: The Observe-Think-Act pattern ensures systematic reasoning
+
+The "agentic" quality emerges not from complex iteration machinery, but from how we've instructed the LLM to think. By framing the prompt as an autonomous planning task rather than a simple question, we've shifted the LLM's output from reactive answers to proactive strategies.
+
+**5. From Conceptual to Real Tools: Integrating with Model Context Protocol**
+
+While our current implementation mentions tools conceptually in the prompt (`search`, `knowledge_base`, `verify`, `synthesize`, `finalize`), the real power of agentic AI emerges when these become actual, executable tools. This is where the [Model Context Protocol (MCP)]({{< ref "/blog/model-context-protocol/build-a-mcp-server-akka/">}}) becomes essential.
+
+Through MCP, agents can evolve from planning systems into action-taking systems by connecting to real-world capabilities:
+
+- **Research Local Knowledge Bases**: Query vector databases, document stores, or enterprise knowledge repositories to gather information specific to your domain
+- **Query Databases**: Execute SQL queries, access NoSQL databases, or retrieve data from data warehouses to inform decision-making with real-time information
+- **Perform Actions**: Trigger workflows, send notifications, update records, or orchestrate complex business processes across multiple systems
+- **Access External APIs**: Integrate with third-party services, weather APIs, stock market data, or any HTTP-accessible service
+
+By [building MCP servers with Akka]({{< ref "/blog/model-context-protocol/build-a-mcp-server-akka/">}}), you can expose these capabilities as standardized tools that your agent can discover and use dynamically. The agent's planning capabilities—demonstrated in our `MinimalAgent` implementation—combined with MCP's tool execution framework creates a complete autonomous system capable of both reasoning and action.
+
+This integration transforms the conceptual tools in our prompt from placeholders into functional capabilities, bridging the gap between autonomous planning and real-world execution.
 
 #### Core Takeaways from the Implementation
 
@@ -303,9 +414,9 @@ We've taken the first crucial step in our journey, moving from passive, single-t
 
 Now that we understand what makes AI agents unique - their ability to plan, act, and learn independently - the next big question is: how do we build them in a way that's reliable and scalable? That's where the Akka Actor Model comes in. It offers a fresh approach to handling concurrency and state, which is key for building resilient agents that can work together without stepping on each other's toes.
 
-In the next post, we'll explore why actors -- not traditional threads or shared memory -- are a perfect fit for agentic AI. Plus, I'll walk you through a simple Akka SDK example so you can see these ideas in action.
+In [Part 2: The Akka Actor Model - A Foundation for Concurrent AI Agents]({{< ref "/blog/agentic-ai/akka-actor-model-agentic-ai/">}}), we'll explore why actors -- not traditional threads or shared memory -- are a perfect fit for agentic AI. We'll evolve our `MinimalAgent` into a production-ready `SimpleAgent` that handles thousands of concurrent sessions, maintains persistent memory, and integrates real tools. Plus, I'll walk you through a complete Akka SDK implementation with deployment and operationalization strategies.
 
-Ready to see how the foundation of concurrent agents is built? Stay tuned!
+Ready to see how the foundation of concurrent agents is built? [Continue to Part 2 →]({{< ref "/blog/agentic-ai/akka-actor-model-agentic-ai/">}})
 As we come to a close, let me leave you with something to consider:
 
 > **If an agent's autonomy is defined by its ability to execute a plan, what is the minimum number of steps required for a system to be considered truly "agentic"?**
