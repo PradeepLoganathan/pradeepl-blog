@@ -21,7 +21,7 @@ summary: OpenAPI 3.0 lets you describe how your APIs are protected using various
 ShowToc: true
 TocOpen: false
 images:
-  - JWT-token-Swagger.jpg
+  - JWT-token-Swagger.png
 cover:
     image: "neonbrand-3BfDXcn9sqM-unsplash.jpg"
     alt: "Securing the  OAS/Swagger endpoint in dotnet using swashbuckle"
