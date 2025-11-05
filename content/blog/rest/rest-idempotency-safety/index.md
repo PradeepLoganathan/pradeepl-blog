@@ -22,6 +22,7 @@ cover:
     image: "images/rest-idempotency-safety.png"
     alt: "Rest - Idempotency and Safety"
     caption: "Rest - Idempotency and Safety"
+    relative: true
  
 ---
 

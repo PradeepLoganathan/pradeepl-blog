@@ -19,7 +19,7 @@ summary: "As applications and infrastructures become more complex and distribute
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/pawel-czerwinski-OfwiURcZwYw-unsplash.jpg"
 cover:
     image: "images/pawel-czerwinski-OfwiURcZwYw-unsplash.jpg"
     alt: ""

@@ -19,7 +19,7 @@ summary: "This blog post guides you through the process of generating SSL wildca
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/certbot-letsecnrypt.jpeg"
 cover:
     image: "images/certbot-letsecnrypt.jpeg"
     alt: "SSL Wildcard Certificates"

@@ -14,7 +14,7 @@ summary: ""
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/cover.jpg"
 cover:
     image: "images/cover.jpg"
     alt: ""

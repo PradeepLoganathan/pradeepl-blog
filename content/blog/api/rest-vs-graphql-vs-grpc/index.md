@@ -19,7 +19,7 @@ summary: "Three technologies stand out as primary choices for developing API's R
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/graphql-rest-grpc.png"
 cover:
     image: "images/graphql-rest-grpc.png"
     alt: ""

@@ -21,7 +21,7 @@ summary: "Use Akka’s actor model to run thousands of concurrent, stateful AI a
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/cover.jpg"
 cover:
     image: "images/cover.jpg"
     alt: "Akka actor model for agentic AI"

@@ -26,7 +26,7 @@ summary: "Explore the power of model inference, its importance in machine learni
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/model-inference-cover.webp"
 cover:
     image: "images/model-inference-cover.webp"
     alt: "Model inference server"

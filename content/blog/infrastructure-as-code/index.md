@@ -16,7 +16,7 @@ summary: "Infrastructure as code (IaC) is the process of provisioning and managi
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/IaC.png"
 cover:
     image: "images/IaC.png"
     alt: ""

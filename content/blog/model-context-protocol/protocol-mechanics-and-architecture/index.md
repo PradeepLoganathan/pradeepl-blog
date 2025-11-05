@@ -16,7 +16,7 @@ summary: "summary used in summary pages"
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/cover.jpg"
 cover:
     image: "images/cover.jpg"
     alt: ""

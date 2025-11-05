@@ -18,7 +18,7 @@ summary: "Learn the fundamentals of AI and data science in this non-technical gu
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/AI-MachineLearning.png"
 cover:
     image: "images/AI-MachineLearning.png"
     alt: ""

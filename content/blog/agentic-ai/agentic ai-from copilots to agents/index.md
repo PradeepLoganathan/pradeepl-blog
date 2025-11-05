@@ -18,12 +18,12 @@ summary: "A comprehensive guide to Agentic AI, exploring how autonomous AI syste
 ShowToc: true
 TocOpen: true
 images:
-  - "/blog/agentic-ai/agentic-ai-from-copilots-to-agents/images/agentic-ai-architecture.png"
+  - "images/agentic-ai-architecture.png"
 cover:
-    image: "/blog/agentic-ai/agentic-ai-from-copilots-to-agents/images/agentic-ai-architecture.png"
+    image: "images/agentic-ai-architecture.png"
     alt: "Agentic AI: From Copilots to Agents"
     caption: "The evolution of AI from reactive to proactive systems"
-    relative: false
+    relative: true
 mermaid: true
 series: ["Agentic AI"]
 ---
@@ -115,44 +115,52 @@ Let’s ground these ideas in code, using the simplest possible framework-agnost
 
 ### Standard Copilot—Single-Turn LLM Call
 
-First, let’s see what a “copilot” call looks like: a passive response model.
+First, let's see what a "copilot" call looks like: a passive response model using Akka SDK.
 
 ```java
-import java.net.http.*;
-import java.net.*;
+import akka.javasdk.annotations.ComponentId;
+import akka.javasdk.client.ComponentClient;
+import akka.javasdk.annotations.http.HttpEndpoint;
+import akka.javasdk.annotations.http.Post;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
-public class DirectChatDemo {
-    public static String askLlm(String userPrompt) throws Exception {
-        String url = System.getenv("LLM_URL"); // e.g., your model endpoint
-        String apiKey = System.getenv("LLM_API_KEY");
+@ComponentId("copilot")
+@HttpEndpoint("/copilot")
+public class CopilotEndpoint {
+  private final ComponentClient client;
+  private final LLMService llmService;
 
+  public CopilotEndpoint(ComponentClient client, LLMService llmService) {
+    this.client = client;
+    this.llmService = llmService;
+  }
 
-        String body = "{" +
-        "\"messages\":[{" +
-        "\"role\":\"user\",\"content\":\"" + userPrompt.replace("\"", "\\\"") + "\"}]}";
+  @Post("/ask")
+  public CompletionStage<String> ask(String prompt) {
+    return llmService.complete(prompt);
+  }
+}
 
-
-        HttpRequest req = HttpRequest.newBuilder(URI.create(url))
-        .header("Authorization", "Bearer " + apiKey)
-        .header("Content-Type", "application/json")
-        .POST(HttpRequest.BodyPublishers.ofString(body))
-        .build();
-
-
-        HttpResponse<String> res = HttpClient.newHttpClient()
-        .send(req, HttpResponse.BodyHandlers.ofString());
-
-
-        return res.body();
-    }
-
-
-    public static void main(String[] args) throws Exception {
-        System.out.println(askLlm("Explain the honey bee waggle dance in 2 sentences."));
-    }
+class LLMService {
+  CompletionStage<String> complete(String prompt) {
+    return CompletableFuture.supplyAsync(() -> {
+      var request = new ChatRequest(List.of(new Message("user", prompt)));
+      return callLLM(request).content();
+    });
+  }
 }
 ```
 
+This copilot implementation demonstrates the reactive pattern:
+
+- **Stateless**: Each request is independent with no memory of previous interactions
+- **Single-turn**: One prompt in, one response out—no planning or iteration
+- **Passive**: Waits for explicit user input; cannot initiate actions
+- **No Context**: Cannot build on previous conversations or learn from outcomes
+
+While Akka SDK provides the infrastructure for scalability and resilience, this copilot pattern doesn't leverage the actor model's state management capabilities. It's a simple request-response service—powerful for specific tasks, but fundamentally limited in autonomy.
 The function 'askLlm' sends the input prompt to the LLM. The OpenAI API is called with a single user message. The LLM responds once, with no persistent state or memory. Each call is stateless: past prompts are not recalled, nor do they influence the next turn. This structure cannot learn, plan, or autonomously continue—a purely reactive system.
 
 ### Minimal Agent—Single-Agentic Step Loop
