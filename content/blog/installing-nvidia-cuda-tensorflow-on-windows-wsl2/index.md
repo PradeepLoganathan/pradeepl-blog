@@ -20,7 +20,7 @@ summary: "Step-by-step guide to configure NVIDIA GPU acceleration for TensorFlow
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/tensorflow-cuda-cover.webp"
 cover:
     image: "images/tensorflow-cuda-cover.webp"
     alt: "NVIDIA GPU TensorFlow Setup on WSL2 showing terminal with successful CUDA and GPU detection"

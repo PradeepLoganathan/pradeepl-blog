@@ -24,7 +24,7 @@ cover:
   relative: true
 
 images:
-  - 
+  - "idempotent-consumer-pattern.jpg"
 categories:
   - patterns
 tags:

@@ -21,7 +21,7 @@ cover:
   relative: true
 
 images:
-  - 
+  - "Tekton-Cover.png"
 categories:
   - Kubernetes
 tags:

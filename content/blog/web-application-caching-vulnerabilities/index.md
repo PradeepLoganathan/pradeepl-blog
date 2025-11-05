@@ -15,7 +15,7 @@ summary: "Discover strategies to prevent caching vulnerabilities in web applicat
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/cover.jpg"
 cover:
     image: "images/cover.jpg"
     alt: ""
