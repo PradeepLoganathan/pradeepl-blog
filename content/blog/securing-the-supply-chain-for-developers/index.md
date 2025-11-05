@@ -1,36 +1,25 @@
 ---
 title: "Securing the Software Supply Chain: A Developer's Guide"
-
 lastmod: 2024-09-05T07:05:37+10:00
-
 date: 2024-09-05T07:05:37+10:00
-
 draft: false
-
 author: Pradeep Loganathan
-
 tags: 
   - software security
   - DevSecOps
   - supply chain security
-
 categories:
   - Development
   - Security
   - CI/CD
-
 description: "A comprehensive guide for developers on securing the software supply chain, from design to deployment, with practical tips and tools."
-
 summary: "Learn how to secure the software supply chain by embracing best practices such as secure coding, CI/CD integration, SBOMs, and proactive monitoring."
-
 ShowToc: true
 TocOpen: true
-
 images:
-  - "images/secure-software-supply-chain.jpg"
+  - "images/secure-software-supply-chain.png"
   - "images/secure-development-loop.png"
   - "images/secure-supply-chain.png"
-
 cover:
   image: "images/supply-chain-security.png"
   alt: "Securing the software supply chain"

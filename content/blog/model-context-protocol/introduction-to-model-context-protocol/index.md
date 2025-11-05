@@ -20,7 +20,7 @@ summary: "LLMs are powerful—but without access to live tools, data, and system
 ShowToc: true
 TocOpen: true
 images:
-  - images/MCP-cover.png
+  - images/mcp-cover.png
 cover:
   image: "images/mcp-cover.png"
   alt: "Model Context Protocol Overview Diagram"

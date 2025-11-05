@@ -16,7 +16,7 @@ summary: "ZTA operates on a fundamental principle - never trust, always verify. 
 ShowToc: true
 TocOpen: true
 images:
-  - 
+  - "images/zero-trust-architecture.png"
 cover:
     image: "images/zero-trust-architecture.png"
     alt: "Zero Trust Architecture"
