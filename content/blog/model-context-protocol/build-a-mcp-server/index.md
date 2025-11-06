@@ -29,13 +29,16 @@ cover:
     caption: ""
     relative: true # To use relative path for cover image, used in hugo Page-bundles
 series: ["Model Context Protocol"]
+weight: 3
 ---
+
+{{< series-toc >}}
 
 ## Introduction
 
 In parts [one](https://pradeepl.com/blog/model-context-protocol/introduction-to-model-context-protocol/) and [two](https://pradeepl.com/blog/model-context-protocol/mcp-protocol-mechanics-and-architecture/) of this [series]({{< relref "/series/model-context-protocol/" >}}), we explored what Model Context Protocol (MCP) is, why it matters, and how it works under the hood. Now it's time to get practical: in this post, we'll walk through building a simple MCP server step-by-step, from scratch.
 
-We'll use a straightforward example that provides text manipulation tools, such as reversing strings, counting words, checking palindromes, and more. The code for this MCP server is available [here](https://github.com/PradeepLoganathan/simple-mcp-server)
+We'll use a straightforward example that provides text manipulation tools, such as reversing strings, counting words, checking palindromes, and more. The code for this MCP server is available [here](https://github.com/PradeepLoganathan/simple-mcp-server).
 
 ## What You'll Build
 
@@ -52,7 +55,7 @@ Before we start, ensure you have:
 
 ## Step 1: Setting up your MCP Project
 
-To get started lets Create a new directory for your MCP server and initialize it as a .NET consoleproject:
+To get started, create a new directory for your MCP server and initialize it as a .NET console project:
 
 ```bash
 dotnet new console -o simple-mcp-server
@@ -66,12 +69,12 @@ dotnet add package ModelContextProtocol --prerelease
 dotnet add package Microsoft.Extensions.Hosting
 ```
 
-The package `ModelContextProtocol` provides the core MCP libraries, types, and classes needed to build an MCP server in .NET. It includes the attributes and server infrastructure (`McpServerToolType`, `McpServerTool`, etc.) that help your C# methods become discoverable tools for MCP clients, such as LLMs or developer tools. We use the `Microsoft.Extensions.Hosting` nuget package to provide a lightweight hosting framework for your MCP server. It simplifies running background services, configuring dependency injection, and managing the server lifecycle.
+The package `ModelContextProtocol` provides the core MCP libraries, types, and classes needed to build an MCP server in .NET. It includes the attributes and server infrastructure (`McpServerToolType`, `McpServerTool`, etc.) that help your C# methods become discoverable tools for MCP clients, such as LLMs or developer tools. We use the `Microsoft.Extensions.Hosting` NuGet package to provide a lightweight hosting framework for your MCP server. It simplifies running background services, configuring dependency injection, and managing the server lifecycle.
 
 ## Step 2: Implementing Your Tools
 
 
-Create a new file `MyTools.cs` in your project directory and paste the provided tools implementation. I am creating a bunch os string manipulation tools that can be used by the LLM.
+Create a new file `MyTools.cs` in your project directory and paste the provided tools implementation. We'll create a bunch of string manipulation tools that can be used by the LLM.
 
 ```csharp
 using System.ComponentModel;
@@ -203,20 +206,22 @@ Here's an example of a minimal `.vscode/mcp.json` file configured for the MCP se
             "args": [
                 "run",
                 "--project",
-                "${workspaceFolder}/simple-mcp-server.csproj"
+                "${workspaceFolder}/simple-mcp-server/simple-mcp-server.csproj"
             ]
         }
     }
 }
 ```
 
-Key fields in this configuration include :
+Key fields in this configuration include:
 
 -   **`"type": "stdio"`**: Specifies the transport protocol. (standard input/output)
 -   **`"command": "dotnet"`**: The executable to run the server.
 -   **`"args": [...]`**: Arguments to pass to the command. Here, it tells `dotnet` to run the project. 
 
 This standardizes how MCP servers are integrated within VS Code, making it language-agnostic and easy to manage. This `mcp.json` configuration standardizes how different MCP servers, regardless of their implementation language (C#, Python, Node.js, etc.), are declared and launched by client applications like VS Code. The IDE doesn't need to know the specifics of how each server is built; it just needs this configuration to manage and communicate with them.
+
+Note: GitHub Copilot Chat “Agent mode” and MCP integration may be feature-gated or require preview builds. If you don’t see Agent mode or tools UI, ensure extensions are up to date and the feature is enabled in settings/insiders builds.
 
 ### B. Benefits of VS Code Integration
 
