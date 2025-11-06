@@ -1,0 +1,5 @@
+tableOfContents:
+  startLevel: 2   # include from H2
+  endLevel: 3     # include up to H3
+  ordered: false  # unordered list
+

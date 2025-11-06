@@ -26,13 +26,18 @@ cover:
     caption: "Building MCP Server with Akka"
     relative: true
 series: ["Model Context Protocol"]
+weight: 4
 ---
+
+{{< series-toc >}}
 
 ## Introduction
 
 In previous posts of this [series]({{< relref "/series/model-context-protocol/" >}}), we explored the Model Context Protocol and also built an MCP server using [.NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}}). Now, let's explore a more enterprise-focused approach to building MCP servers using the Akka Java SDK, which brings distributed systems capabilities and production-grade features to MCP server development.
 
 Akka's MCP implementation stands out with its declarative annotation-based approach, built-in service discovery, and seamless integration with Akka's agent system. This makes it particularly well-suited for building MCP servers that need to scale, integrate with existing microservices, or serve as tools for AI-powered agent workflows.
+
+Note: The MCP annotations and HTTP endpoint used in this post are provided by an Akka Java SDK extension in the accompanying repositories. They are not part of the upstream Anthropic MCP reference SDKs. The endpoint implements JSON-RPC 2.0 semantics compatible with MCP clients.
 
 ## What Makes Akka's MCP Implementation Different?
 
@@ -543,7 +548,7 @@ Create `claude-mcp-config.json` in your project root:
 }
 ```
 
-This configuration uses a Node.js one-liner to bridge STDIO (which Claude CLI uses) to our HTTP endpoint at `http://localhost:9200/mcp`.
+This configuration uses a Node.js one-liner to bridge STDIO (which Claude CLI uses) to our HTTP endpoint at `http://localhost:9200/mcp`. This is a simple demo bridge; for production scenarios, prefer native transports supported by your SDK (e.g., SSE or WebSockets) or a hardened proxy.
 
 Now you can use Claude CLI with your MCP tools:
 

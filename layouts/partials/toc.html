@@ -1,0 +1,160 @@
+{{/* Post TOC with scrollspy highlighting for current section */}}
+{{ $toc := .TableOfContents }}
+{{ if $toc }}
+{{ $open := true }}
+{{ $explicit := false }}
+{{ if (isset .Page.Params "TocOpen") }}
+  {{ $open = .Page.Params.TocOpen }}
+  {{ $explicit = true }}
+{{ else }}
+  {{ with .Site.Params.TocOpen }}{{ $open = . }}{{ end }}
+{{ end }}
+
+<div class="toc">
+  <div class="inner">
+    <button class="post-toc-toggle" id="post-toc-toggle" data-explicit="{{ if $explicit }}true{{ else }}false{{ end }}" aria-controls="post-toc" aria-expanded="{{ if $open }}true{{ else }}false{{ end }}" style="all:unset; display:flex; align-items:center; gap:0.4rem; font-weight:700; cursor:pointer; margin:0 0 0.5rem 0;">
+      <span>On this page</span>
+      <span class="chev" aria-hidden="true" style="transform: rotate({{ if $open }}90deg{{ else }}0deg{{ end }}); transition: transform 0.15s ease;">›</span>
+    </button>
+    <nav class="post-toc{{ if not $open }} is-collapsed{{ end }}" id="post-toc" data-explicit="{{ if $explicit }}true{{ else }}false{{ end }}">
+      {{ $toc }}
+    </nav>
+  </div>
+</div>
+
+<script>
+(function(){
+  function initTOC(){
+    try {
+      // Handle mobile default collapse when not explicitly set in front matter
+      var toggle = document.getElementById('post-toc-toggle');
+      var nav = document.getElementById('post-toc');
+      if (toggle && nav) {
+        // Ensure base transition is applied
+        nav.style.overflow = 'hidden';
+        var chev = toggle.querySelector('.chev');
+
+        function setExpandedState(expanded, immediate){
+          if (expanded) {
+            // expand: set to current height for smooth transition
+            nav.classList.remove('is-collapsed');
+            var target = nav.scrollHeight;
+            if (immediate) {
+              nav.style.maxHeight = target + 'px';
+            } else {
+              // start from current 0 -> target
+              requestAnimationFrame(function(){ nav.style.maxHeight = target + 'px'; });
+            }
+            toggle.setAttribute('aria-expanded', 'true');
+            if (chev) chev.style.transform = 'rotate(90deg)';
+          } else {
+            // collapse: set maxHeight to current, then to 0 to animate
+            var current = nav.scrollHeight;
+            nav.style.maxHeight = current + 'px';
+            requestAnimationFrame(function(){
+              nav.classList.add('is-collapsed');
+              nav.style.maxHeight = '0px';
+            });
+            toggle.setAttribute('aria-expanded', 'false');
+            if (chev) chev.style.transform = 'rotate(0deg)';
+          }
+        }
+
+        // After transition ends and expanded, clear inline maxHeight to allow growth
+        nav.addEventListener('transitionend', function(e){
+          if (e.propertyName === 'max-height' && !nav.classList.contains('is-collapsed')) {
+            nav.style.maxHeight = nav.scrollHeight + 'px';
+          }
+        });
+
+        var isExplicit = toggle.getAttribute('data-explicit') === 'true';
+        if (!isExplicit) {
+          var isMobile = window.matchMedia('(max-width: 991px)').matches;
+          if (isMobile) {
+            setExpandedState(false, true);
+          } else {
+            // ensure expanded height is set
+            setExpandedState(true, true);
+          }
+        } else {
+          // respect initial state from server-rendered class/aria
+          var expanded = toggle.getAttribute('aria-expanded') === 'true';
+          setExpandedState(expanded, true);
+        }
+
+        // Click toggle behavior
+        toggle.addEventListener('click', function(){
+          var expanded = toggle.getAttribute('aria-expanded') === 'true';
+          setExpandedState(!expanded, false);
+        });
+      }
+
+      var tocRoot = document.querySelector('#post-toc #TableOfContents');
+      if (!tocRoot) return;
+      var links = tocRoot.querySelectorAll('a[href^="#"]');
+      if (!links || links.length === 0) return;
+
+    // Map href -> link element
+    var linkMap = {};
+    links.forEach(function(a){ linkMap[a.getAttribute('href')] = a; });
+
+    // Build list of target headings
+    var targets = [];
+    Object.keys(linkMap).forEach(function(href){
+      var el = document.querySelector(href);
+      if (el) targets.push(el);
+    });
+    if (targets.length === 0) return;
+
+    var activeHref = null;
+    function setActive(href){
+      if (activeHref === href) return;
+      // clear
+      links.forEach(function(a){ a.classList.remove('is-active'); });
+      // set
+      var link = linkMap[href];
+      if (link) link.classList.add('is-active');
+      activeHref = href;
+    }
+
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            setActive('#' + entry.target.id);
+          }
+        });
+      }, { rootMargin: '0px 0px -70% 0px', threshold: [0, 1.0] });
+
+      targets.forEach(function(t){ if (t.id) observer.observe(t); });
+    } else {
+      // Fallback: update on scroll
+      var lastTop = -1;
+      window.addEventListener('scroll', function(){
+        var best = null; var bestTop = Infinity;
+        targets.forEach(function(t){
+          var rect = t.getBoundingClientRect();
+          if (rect.top >= 0 && rect.top < bestTop) { best = t; bestTop = rect.top; }
+        });
+        if (best && best.id) setActive('#' + best.id);
+      }, { passive: true });
+    }
+  } catch (e) { /* no-op */ }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOC);
+  } else {
+    initTOC();
+  }
+})();
+</script>
+
+<style>
+/* Minimal TOC styles; keep specific to avoid theme conflicts */
+#post-toc { transition: max-height 0.2s ease, opacity 0.2s ease; opacity: 1; }
+.post-toc.is-collapsed { max-height: 0 !important; opacity: 0; }
+#post-toc #TableOfContents a.is-active { font-weight: 700; color: var(--primary, inherit); }
+.post-toc-toggle:hover { text-decoration: underline; }
+.post-toc-toggle .chev { display:inline-block; }
+</style>
+{{ end }}

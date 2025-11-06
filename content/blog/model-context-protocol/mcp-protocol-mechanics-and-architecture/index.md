@@ -2,7 +2,7 @@
 title: "MCP - Protocol Mechanics and Architecture"
 lastmod: 2025-05-01T19:03:33+10:00
 date: 2025-05-01T19:03:33+10:00
-draft: false # Changed to false, assuming it's ready for publishing
+draft: false # Ready for publishing
 Author: Pradeep Loganathan
 tags:
   - Model Context Protocol
@@ -25,7 +25,12 @@ cover:
   relative: true
 series: ["Model Context Protocol"]
 mermaid: true
+weight: 2
+aliases:
+  - "/blog/model-context-protocol/protocol-mechanics-and-architecture/"
 ---
+
+{{< series-toc >}}
 
 
 Welcome back to our series on the [Model Context Protocol (MCP)]({{< relref "/series/model-context-protocol/" >}})! In [Part 1]({{< relref "/blog/model-context-protocol/introduction-to-model-context-protocol/">}}), we explored the fundamental challenge MCP addresses: the complex web of custom integrations needed to connect diverse AI applications with the ever-growing universe of external tools and data sources -- the "M x N" problem. We introduced MCP as a promising solution, an open standard designed to simplify this landscape into a more manageable "M + N" scenario by providing a universal communication layer. Often described as a "USB-C port for AI," MCP aims to standardize how AI models plug into the context they need, fostering a more interoperable ecosystem.
@@ -194,7 +199,7 @@ sequenceDiagram
     participant Client
     participant Server
 
-    Note over Client,Server: MCP = Message Control Protocol
+    Note over Client,Server: MCP = Model Context Protocol
 
     Client->Server: initialize Request<br>{"id": 1, "method": "initialize", "params": {...}}
     activate Server
@@ -228,24 +233,27 @@ Using these standardized methods, an MCP client can systematically explore what 
 
 Establishing a connection in MCP involves both setting up the transport and performing a protocol handshake. At the transport level, this means connecting via STDIO, HTTP+SSE, or WebSocket as discussed earlier (e.g. launching a subprocess for STDIO, or opening an HTTP connection for SSE events). Once the low-level connection is open, the **MCP handshake** occurs at the JSON-RPC level:
 
-1.  **Client Initialization:** The client (host application) sends an `initialize` JSON-RPC **request** to the server. This message typically includes parameters such as the MCP protocol version and the client's own supported features or preferences. For example, the client might send the version and indicate it's ready to handle certain server capabilities. It may also specify a list of "roots" or a scope for resources (to limit what the server should have access to, e.g., only a certain directory). The `initialize` request carries an `id` since the client expects the server to reply. A sample initialization request is below
+1.  **Client Initialization:** The client (host application) sends an `initialize` JSON-RPC **request** to the server. This message includes the MCP protocol version, client identification, the client's supported capability categories, and optionally a set of allowed resource roots. The `initialize` request carries an `id` since the client expects the server to reply. A sample initialization request is below
 
 ```json
 {
   "jsonrpc": "2.0",
-  "id": 1,
+  "id": "1",
   "method": "initialize",
   "params": {
-    "processId": null,
+    "protocolVersion": "1.0",
     "clientInfo": {
       "name": "ExampleHostApp",
       "version": "1.2.0"
     },
     "capabilities": {
-     },
-    "trace": "off",
-    "rootUri": null,
-    "workspaceFolders": null
+      "tools": {},
+      "resources": {},
+      "prompts": {}
+    },
+    "roots": [
+      { "uri": "file:///workspace", "name": "workspace" }
+    ]
   }
 }
 ```
@@ -256,23 +264,18 @@ Establishing a connection in MCP involves both setting up the transport and perf
     -   **`serverName` and `serverVersion`:** Identification of the server (helpful for logging or UI).
     -   Optionally, any other info or negotiated settings (for example, some servers might send a `sessionId` or accepted protocol version if negotiation was needed).
 
-    The server's response confirms the protocol version (usually it will mirror what the client requested if compatible) and lists what features it can offer. This capability negotiation allows the client to adjust its behavior if needed and is designed for backwards-compatibility as MCP evolves. A sample initialization response is below.
+    The server's response confirms the protocol version (usually mirroring the client's if compatible) and lists what features it can offer. This capability negotiation allows the client to adjust its behavior if needed and is designed for backwards-compatibility as MCP evolves. A sample initialization response is below.
 
     ```json
     {
       "jsonrpc": "2.0",
-      "id": 1,
+      "id": "1",
       "result": {
+        "protocolVersion": "1.0",
         "capabilities": {
-          "tools": {
-            "supported": true
-          },
-          "resources": {
-            "supported": true
-          },
-          "prompts": {
-            "supported": false
-          }
+          "tools": {},
+          "resources": {},
+          "prompts": {}
         },
         "serverInfo": {
           "name": "SampleMCPServer",
@@ -416,7 +419,7 @@ sequenceDiagram
 
     Note over Client,Server: MCP Session already established
 
-    Client->Server: tools/call Request<br>{"id": 3, "method": "tools/call", "params": {"name":"tool_name", "params":{...}}}
+    Client->Server: tools/call Request<br>{"id": 3, "method": "tools/call", "params": {"name":"tool_name", "arguments":{...}}}
     activate Server
     alt Successful Invocation
         Server-->Client: tools/call Success Response<br>{"id": 3, "result": {...}}
@@ -440,12 +443,12 @@ Suppose the server in our example also provides a simple tool named `"echo"` tha
   "method": "tools/call",
   "params": {
     "name": "echo",
-    "params": { "message": "Testing 123" }
+    "arguments": { "message": "Testing 123" }
   }
 }
 ```
 
-Here, the `params` for `tools/call` include the tool's name (`"echo"`) and a nested object of arguments (`"message": "Testing 123"`). The server will look up the `"echo"` tool and execute it. In this case, the tool simply returns the string it was given. The server's response might look like:
+Here, the `params` for `tools/call` include the tool's name (`"echo"`) and a nested `arguments` object containing the input payload (e.g., `"message": "Testing 123"`). The server will look up the `"echo"` tool and execute it. In this case, the tool simply returns the string it was given. The server's response might look like:
 
 ```json
 // Server -> Client: result of the echo tool
@@ -497,6 +500,15 @@ MCP does not mandate specific authentication or authorization mechanisms at the 
 - **User Consent and Prompts:** The host (client side) also plays a role in authorization. A well-designed MCP integration will ask the user for permission before, say, executing a destructive tool or accessing a sensitive resource. This isn't enforced by MCP itself, but is a recommended practice (as noted in the MCP spec's security principles) to keep the human in control of what the AI is allowed to do. Essentially, even if the server is willing to perform an action, the client UI might gate that behind a confirmation dialog to the end-user.
 
 It is crucial to understand that MCP standardizes the communication channel but deliberately leaves the implementation of robust consent flows, specific authentication methods, and fine-grained authorization logic to the applications using the protocol. This provides necessary flexibility but places a significant responsibility on developers to implement security measures appropriate for their specific use case and the sensitivity of the data and tools involved. 
+
+## Implementation Guidance (Best Practices)
+
+- Design for idempotency: make tool calls repeatable without harmful side effects.
+- Declare precise input schemas: prefer required fields and validation over free-form inputs.
+- Set timeouts and budgets: bound tool latency and cancel appropriately using `$/cancelRequest`.
+- Minimize data exposure: scope resource roots narrowly and redact sensitive fields.
+- Log with intent: log tool invocations and outcomes for auditability, not raw user data.
+- Version deliberately: advertise `protocolVersion` and evolve capabilities compatibly.
 
 
 ## Looking Ahead to Part 3: Implementing an MCP Server

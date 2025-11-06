@@ -28,7 +28,10 @@ cover:
   relative: true
 mermaid: true
 series: ["Model Context Protocol"]
+weight: 1
 ---
+
+{{< series-toc >}}
 
 ## What are we trying to solve for ?
 
@@ -256,4 +259,3 @@ In **Part 2 of this series**, we'll go under the hood to examine how MCP works a
 If you're curious about how LLMs actually "talk" to real systems---or thinking about integrating MCP into your own tools---you won't want to miss it.
 
 👉 **Stay tuned for Part 2: *Inside the Model Context Protocol -- Protocol Mechanics and Architecture***
-
