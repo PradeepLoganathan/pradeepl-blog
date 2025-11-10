@@ -4,6 +4,10 @@ lastmod: 2025-09-14T11:21:00+10:00
 date: 2025-09-14T11:21:00+10:00
 draft: false
 Author: Pradeep Loganathan
+slug: agentic-ai-from-copilots-to-agents
+aliases:
+  - "/blog/agentic-ai/agentic%20ai-from-copilots-to-agents/"
+  - "/blog/agentic-ai/agentic ai-from-copilots-to-agents/"
 tags: 
   - artificialintelligence
   - agenticai
@@ -33,7 +37,7 @@ The artificial intelligence landscape has undergone a remarkable transformation 
 We began by laying data foundations for real-world AI by understanding [Lambda]({{< ref "/blog/lambda-architecture/">}} "What is Artificial Intelligence") and [Kappa architectures]({{< ref "/blog/kappa-architecture/">}}) for batch/stream processing, and then focussing on [Data Mesh]({{< ref "/blog/data-mesh-architecture/">}}) as a means of scaling data ownership and discovery. As our understanding deepened, we looked under the hood at some of the infrastructure that powers modern AI. We investigated specialized databases optimized for [AI workloads with Greenplum]({{< ref "/blog/install-greenplum-windows-wsl/">}}) and learned how to harness GPU acceleration for [TensorFlow on WSL2]({{< ref "/blog/installing-nvidia-cuda-tensorflow-on-windows-wsl2/">}}), understanding that the hardware and data architecture beneath our models are just as crucial as the algorithms themselves.
 From those early concepts, we firmed up the conceptual base in the blog post on [Demystifying AI ]({{< ref "/blog/introduction-to-artificial-intelligence">}} "What is Artificial Intelligence"), defining AI and Data Science and surveying core subfields. We then examined how AI models process information and generate responses through [Model Inference]({{< ref "/blog/ai-model-inference-explained/">}}), discovering the critical bridge between trained models and real-world applications. This wasn't just theoretical, We built something tangible, a [fraud-detection model]({{< ref "/blog/building-a-fraud-detection-model/">}} "Fraud detection model") demonstrating how machine learning algorithms can solve tangible business problems through careful data preparation, model training, and deployment.
 
-Most recently, we've witnessed the emergence of a new protocol for AI integration. Through our exploration of the [Model Context Protocol (MCP)]({{< ref "/series/model-context-protocol/">}} "MCP Server Series") we discovered how modern AI systems are breaking free from isolation, connecting to real-world tools, APIs, and data sources. We even [built our own MCP server]({{< ref "/blog/model-context-protocol/build-a-mcp-server/">}} "MCP server"), experiencing firsthand how AI can interact with external systems in standardized, secure ways.
+Most recently, we've witnessed the emergence of a new protocol for AI integration. Through our exploration of the [Model Context Protocol (MCP)]({{< ref "/series/model-context-protocol/">}} "MCP Server Series") we discovered how modern AI systems are breaking free from isolation, connecting to real-world tools, APIs, and data sources. We even [built our own MCP server]({{< ref "/blog/model-context-protocol/build-a-mcp-server-dotnet/">}} "MCP server"), experiencing firsthand how AI can interact with external systems in standardized, secure ways.
 
 This progression, from understanding AI's core concepts, to implementing practical models, to exploring the infrastructure that supports them, to finally connecting AI systems with the broader digital ecosystem has brought us to an inflection point. We're now ready to explore Agentic AI: the next evolutionary leap where AI systems don't just respond to queries or process data, but actively plan, reason, and execute complex multi-step tasks with minimal human intervention.
 
@@ -385,7 +389,7 @@ The "agentic" quality emerges not from complex iteration machinery, but from how
 
 **5. From Conceptual to Real Tools: Integrating with Model Context Protocol**
 
-While our current implementation mentions tools conceptually in the prompt (`search`, `knowledge_base`, `verify`, `synthesize`, `finalize`), the real power of agentic AI emerges when these become actual, executable tools. This is where the [Model Context Protocol (MCP)]({{< ref "/blog/model-context-protocol/build-a-mcp-server-akka/">}}) becomes essential.
+While our current implementation mentions tools conceptually in the prompt (`search`, `knowledge_base`, `verify`, `synthesize`, `finalize`), the real power of agentic AI emerges when these become actual, executable tools. This is where the [Model Context Protocol (MCP)]({{< ref "/blog/model-context-protocol/build-a-mcp-server-dotnet/">}}) becomes essential.
 
 Through MCP, agents can evolve from planning systems into action-taking systems by connecting to real-world capabilities:
 
@@ -394,7 +398,7 @@ Through MCP, agents can evolve from planning systems into action-taking systems 
 - **Perform Actions**: Trigger workflows, send notifications, update records, or orchestrate complex business processes across multiple systems
 - **Access External APIs**: Integrate with third-party services, weather APIs, stock market data, or any HTTP-accessible service
 
-By [building MCP servers with Akka]({{< ref "/blog/model-context-protocol/build-a-mcp-server-akka/">}}), you can expose these capabilities as standardized tools that your agent can discover and use dynamically. The agent's planning capabilities—demonstrated in our `MinimalAgent` implementation—combined with MCP's tool execution framework creates a complete autonomous system capable of both reasoning and action.
+By [building MCP servers with Akka]({{< ref "/blog/model-context-protocol/build-a-mcp-server/">}}), you can expose these capabilities as standardized tools that your agent can discover and use dynamically. The agent's planning capabilities—demonstrated in our `MinimalAgent` implementation—combined with MCP's tool execution framework creates a complete autonomous system capable of both reasoning and action.
 
 This integration transforms the conceptual tools in our prompt from placeholders into functional capabilities, bridging the gap between autonomous planning and real-world execution.
 

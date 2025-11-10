@@ -234,7 +234,7 @@ https://github.com/PradeepLoganathan/akka-agent-sdk-demo/blob/main/src/main/java
     }
     ```
 
-    This simple annotation-based approach is ideal for lightweight, inline tools. For more complex integrations—such as querying databases, accessing knowledge bases, or orchestrating external APIs—you can leverage the [Model Context Protocol (MCP) with Akka]({{< ref "/blog/model-context-protocol/build-a-mcp-server-akka/">}}), which we introduced in Part 1. MCP provides a standardized way to expose rich tool capabilities that your agents can discover and use dynamically, transforming the conceptual tools from our `MinimalAgent` planning example into real, executable actions.
+    This simple annotation-based approach is ideal for lightweight, inline tools. For more complex integrations—such as querying databases, accessing knowledge bases, or orchestrating external APIs—you can leverage the [Model Context Protocol (MCP) with Akka]({{< ref "/blog/model-context-protocol/build-a-mcp-server/">}}), which we introduced in Part 1. MCP provides a standardized way to expose rich tool capabilities that your agents can discover and use dynamically, transforming the conceptual tools from our `MinimalAgent` planning example into real, executable actions.
 
 Optionally, you can enhance the system prompt with a simple, deterministic summary of known facts (from the session map) to guide the model without overstuffing context.
 
