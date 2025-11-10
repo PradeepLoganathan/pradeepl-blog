@@ -29,7 +29,7 @@ series: ["Model Context Protocol"]
 
 ## Introduction
 
-In the [previous post]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}}) of this [series]({{< relref "/series/model-context-protocol/" >}}), we looked at the basics of the Model context protocol and also built an MCP server using C# (.NET) with string manipulation tools. Now let's explore how to build an MCP server using Java and the official MCP Java SDK.
+In the [previous post]({{< relref "/blog/model-context-protocol/build-a-mcp-server-dotnet/" >}}) of this [series]({{< relref "/series/model-context-protocol/" >}}), we looked at the basics of the Model context protocol and also built an MCP server using C# (.NET) with string manipulation tools. Now let's explore how to build an MCP server using Java and the official MCP Java SDK.
 
 We'll create a log aggregation MCP server that provides tools to fetch logs from different sources like Datadog, Elasticsearch, or local files. This server will demonstrate both STDIO and HTTP transport options, making it versatile for different deployment scenarios.
 
@@ -484,7 +484,7 @@ In future posts, we'll explore advanced MCP concepts like resources and prompts,
 
 ## Resources
 
-- [Previous post: Building a simple MCP Server (.NET)]({{< relref "/blog/model-context-protocol/build-a-mcp-server/" >}})
+- [Previous post: Building a simple MCP Server (.NET)]({{< relref "/blog/model-context-protocol/build-a-mcp-server-dotnet/" >}})
 - [GitHub Repository: spov-mcp-logs-server](https://github.com/PradeepLoganathan/spov-mcp-logs-server)
 - [Model Context Protocol Documentation](https://modelcontextprotocol.io/)
 - [Java MCP SDK Documentation](https://github.com/modelcontextprotocol/java-sdk)

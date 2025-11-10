@@ -117,30 +117,47 @@ By adopting JSON-RPC, MCP avoids reinventing fundamental RPC mechanisms. This st
 
 ## Structured JSON Messages in MCP
 
-As discussed above, all MCP communications are built on **structured messages** following the JSON-RPC 2.0 standard. Every message is a JSON object containing specific fields that convey its intent and allow the recipient to understand how to process it. Key fields include:
+As discussed above, all MCP communications are built on structured messages following the JSON-RPC 2.0 standard. Let's look at a compact example, followed by an explanation of each field.
 
--   **`jsonrpc` (version):** Specifies the protocol version (always `"2.0"` for JSON-RPC 2.0). This field ensures both sides interpret the message format the same way.
--   **`id` (identifier):** A unique ID for pairing requests with responses. The sender assigns an `id` to each request, and the receiver uses the same `id` in the corresponding response. This can be a number or string; it's used only for matching responses and is not needed for one-way messages (notifications).
--   **`method`:** A String indicating the name of the method to be invoked or the notification type. Examples include `initialize`, `tools/list`, `tools/call`, `$/progress`, or `$/cancelRequest`. This field is **REQUIRED** for both Requests and Notifications.
--   **`params` (or `payload`/`data`):** An object (or array) containing data needed to perform the method. This could be inputs to a tool, a resource identifier, or other context. It may be omitted if a method doesn't require additional data.
--   **`result`:** Included in Response messages upon successful method execution. This field contains the value returned by the invoked method. It is **REQUIRED** on success and **MUST NOT** exist if the `error` field is present.
--   **`error`:** Included in Response messages when a method invocation fails. This field **MUST** be an Object containing:
-    -   **`code`:** An Integer indicating the error type that occurred (using standard JSON-RPC error codes or potentially custom codes).
-    -   **`message`:** A String providing a short description of the error.
-    -   **`data` (optional):** A primitive or structured value containing additional information about the error. The `error` field is **REQUIRED** on failure and **MUST NOT** exist if the `result` field is present.
+Example: JSON-RPC Request (tools/call)
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 123,
+  "method": "tools/call",
+  "params": {
+    "name": "search_web",
+    "arguments": {
+      "query": "latest AI news"
+    }
+  }
+}
+```
 
-These fields make MCP messages self-descriptive and machine-readable. Notably, there is no explicit field for "message type" -- instead, the presence or absence of certain fields defines the type. For example, a message with a `method` and no `result` or `error` is a **Request**; a message with `result` or `error` (but no `method`) is a **Response** to a prior request; and a message with a `method` but **no** `id` is treated as a one-way **Notification** (no response expected). 
+The above example is an MCP call for a tool called search_web with the parameter "latest AI news". Let us look at the key fields.
+
+- **`jsonrpc` (version):** Specifies the protocol version (always "2.0" for JSON-RPC 2.0). This ensures both sides interpret the message format the same way.
+- **`id` (identifier):** A unique ID for pairing requests with responses. It can be a number or string and is omitted for one‑way notifications.
+- **`method`:** Name of the method or notification. Examples: `initialize`, `tools/list`, `tools/call`, `$/progress`, `$/cancelRequest`. Required for Requests and Notifications.
+- **`params` (or `payload`/`data`):** Inputs needed to perform the method (object or array). Optional if not needed.
+- **`result`:** Present on a successful Response; must not appear with `error`.
+- **`error`:** Present on a failed Response; must not appear with `result`. Contains:
+  - **`code`** (Integer): error type (standard JSON‑RPC codes or custom).
+  - **`message`** (String): short description of the error.
+  - **`data`** (optional): extra details.
+
+These fields make MCP messages self-descriptive. The presence or absence of fields determines the message type: a message with `method` and `id` is a Request; a message with `result` or `error` and an `id` is a Response; a message with `method` but no `id` is a Notification.
 
 ## MCP Transport Layers and Connection Flows
 
-The Model Context Protocol (MCP) is **transport-agnostic**, meaning it can operate over any channel capable of carrying JSON text. This flexibility allows MCP to support multiple transport layers---Standard Input/Output (STDIO), HTTP with Server-Sent Events (SSE), and WebSockets---each suited to specific use cases. Below, we explore these transport mechanisms, their connection flows, message framing, and their respective strengths and limitations.
+The Model Context Protocol (MCP) is **transport-agnostic**, meaning it can operate over any channel capable of carrying JSON text. This flexibility allows MCP to support multiple transport layers. It supports Standard Input/Output (STDIO), HTTP with Server-Sent Events (SSE), and WebSockets. Let's now look at these transport mechanisms, their connection flows, message framing, and their strengths and limitations.
 
 ### Transport Layers
 
 MCP supports three primary transport layers, each designed to balance latency, infrastructure compatibility, and interactivity:
 
 - **Standard Input/Output (STDIO):**\
-    STDIO leverages a process's stdin and stdout streams for communication, typically when the MCP server runs as a local subprocess of the host application (similar to Language Server Protocol implementations).
+    STDIO leverages a process's stdin and stdout streams for communication, typically when the MCP server runs as a local subprocess of the host application.
 
     - **Pros:** Extremely low latency (microseconds) due to no network overhead, simple setup for local plugins, and inherits OS-level security (only the user's process can access it).
     - **Cons:** Limited to local connections (cannot easily connect to remote servers), and requires the host to manage the server process lifecycle.
@@ -169,7 +186,7 @@ Each transport defines how MCP messages are exchanged and framed (delimited) on 
 
 - **STDIO Transport:**
 
-    - **Connection Flow:** Used when the MCP client (within the host application) and server run on the same machine. The host application launches the server as a subprocess (e.g., npx -y @modelcontextprotocol/server-filesystem /path/to/root). Communication occurs over the server's stdin and stdout pipes, effectively forming the "connection."
+    - **Connection Flow:** Used when the MCP client (within the host application) and server run on the same machine. The host application launches the server as a subprocess and wires its stdin/stdout streams to the MCP client. Communication occurs entirely over these pipes, effectively forming the connection.
     - **Message Framing:** JSON-RPC messages are exchanged over stdin/stdout. Simple implementations may separate messages with newlines, but robust systems may use explicit framing, prefixing each JSON message with headers like Content-Length: NNN\r\n\r\n, followed by the JSON payload. This ensures accurate message delimitation, especially for large messages.
     - **Use Case Example:** A local tool server handling file system operations or Git commands, where the host manages the server's lifecycle.
 
@@ -187,7 +204,7 @@ Each transport defines how MCP messages are exchanged and framed (delimited) on 
 
 ### Transport Abstraction
 
-MCP's design ensures the higher-level protocol (JSON-RPC + capabilities) remains consistent across transports. Developers can switch transports---e.g., from STDIO during development to WebSockets in production---without altering the core logic of their MCP client or server. SDKs or transport handlers abstract away the details of framing and connection management, allowing seamless transitions between transports based on deployment requirements.
+MCP's design ensures the higher-level protocol (JSON-RPC + capabilities) remains consistent across transports. Developers can switch transports as an example, from STDIO during development to WebSockets in production without altering the core logic of their MCP client or server. SDKs or transport handlers abstract away the details of framing and connection management, allowing seamless transitions between transports based on deployment requirements.
 
 ## Capabilities in MCP: Tools, Resources, and Prompts
 
@@ -196,6 +213,8 @@ Now that we understand the communication foundation and how messages are transmi
 1. **Handshake:** The client and server connect and agree on capabilities.  
 2. **Discovery:** The client asks the server *what* it can do.  
 3. **Invocation:** The client asks the server to *do* something.
+
+We will look at these in logical order of steps below. 
 
 ### Step 1: The Handshake (Connection Establishment)
 
@@ -219,9 +238,9 @@ Establishing a connection in MCP involves both setting up the transport (STDIO, 
       "resources": {},  
       "prompts": {}  
     },  
-    "roots": \[  
+    "roots": [  
       { "uri": "file:///workspace", "name": "workspace" }  
-    \]  
+    ]  
   }  
 }
 ```
@@ -244,7 +263,7 @@ Establishing a connection in MCP involves both setting up the transport (STDIO, 
    }  
  }
 ```
-3. **Client initialized Notification:** After receiving a successful initialize result, the client sends an initialized **notification** (no id) to signal that the connection is fully established and ready for use.
+3. **Client initialized Notification:** After receiving a successful initialize result, the client sends an `initialized` notification (no id) to signal that the connection is fully established and ready for use.
 
 
 {{< mermaid >}}
@@ -279,10 +298,12 @@ MCP defines standard JSON-RPC methods for this:
 * **tools/list:** Retrieves the list of available tools (actions) the server can perform.  
 * **prompts/list:** Lists available prompt templates.
 
-Example: Listing Resources  
-The client sends a resources/list request to get the server's resource inventory.  
+**Example: Listing Resources**
+
+The client sends a `resources/list` request to get the server's resource inventory.  
+
 ```json
-// Client \-\> Server: discover available resources  
+// Client --> Server: discover available resources  
 {  
   "jsonrpc": "2.0",  
   "id": 1,  
@@ -290,37 +311,39 @@ The client sends a resources/list request to get the server's resource inventory
   "params": {}  
 }
 ```
+
 The server replies with a response containing a list of resource descriptors, including their uri, name, and mimeType.
+
 ```json
-// Server \-\> Client: list of resources (result of resources/list)  
+// Server --> Client: list of resources (result of resources/list)  
 {  
   "jsonrpc": "2.0",  
   "id": 1,  
   "result": {  
-    "resources": \[  
+    "resources": [  
       {  
         "uri": "demo://greeting.txt",  
         "name": "Greeting File",  
         "description": "A friendly greeting text file",  
         "mimeType": "text/plain"  
       }  
-  \_ \]  
+     ]  
   }  
 }
 ```
 
 A similar flow would be used with tools/list, where the server would return an array of tools, each with a name, description, and an inputSchema describing its required parameters.
 
-### **Step 3: Capability Invocation**
+### Step 3: Capability Invocation
 
-Once the client has discovered capabilities, it can **invoke** them as needed. This is done using methods like resources/read or tools/call.
+Once the client has discovered capabilities, it can **invoke** them as needed. This is done using methods like `resources/read` or `tools/call`.
 
-Example 1: Reading a Resource  
+**Example 1: Reading a Resource**
 
 Now that the client knows the resource `demo://greeting.txt` exists, it can send a resources/read request to retrieve its content.  
 
 ```json
-// Client \-\> Server: request to read a specific resource  
+// Client --> Server: request to read a specific resource  
 {  
   "jsonrpc": "2.0",  
   "id": 2,  
@@ -332,25 +355,25 @@ Now that the client knows the resource `demo://greeting.txt` exists, it can send
 If successful, the server returns a result containing the resource's content.
 
 ```json
-// Server \-\> Client: content of the resource (result of resources/read)  
+// Server --> Client: content of the resource (result of resources/read)  
 {  
   "jsonrpc": "2.0",  
   "id": 2,  
   "result": {  
-    "contents": \[  
+    "contents": [  
       {  
         "uri": "demo://greeting.txt",  
         "text": "Hello from MCP\!",  
         "mimeType": "text/plain"  
       }  
-    \]  
+    ]  
   }  
 }
 ```
 If the resource cannot be found, the server returns an error object instead of a result.
 
 ```json
-// Server \-\> Client: error response (resource not found)  
+// Server --> Client: error response (resource not found)  
 {  
  "jsonrpc": "2.0",  
   "id": 2,  
@@ -363,53 +386,44 @@ If the resource cannot be found, the server returns an error object instead of a
 
 The diagram below illustrates this full discover-and-read sequence for resources.
 
-{{<mermaid>}}  
-sequenceDiagram  
-V     title MCP Resource Access Sequence  
-    participant MCP-Client  
-    participant MCP-Server  
-    Note over MCP-Client,MCP-Server: MCP Session already established
+{{< mermaid >}}
+sequenceDiagram
+    title MCP Resource Access Sequence
+    participant MCP-Client
+    participant MCP-Server
 
-    MCP-Client-\>MCP-Server: resources/list Request
+    Note over MCP-Client,MCP-Server: MCP Session already established
 
-{"id": 1, "method": "resources/list", "params": {}}  
-    activate MCP-Server  
-    alt Success  
-        MCP-Server--\>MCP-Client: resources/list Response
+    MCP-Client->MCP-Server: resources/list Request<br>{"id": 1, "method": "resources/list", "params": {}}
+    activate MCP-Server
+    alt Success
+        MCP-Server-->MCP-Client: resources/list Response<br>{"id": 1, "result": {"resources": ["demo://greeting.txt", "demo://info.txt"]}}
+    else Failure
+        MCP-Server-->MCP-Client: resources/list Error Response<br>{"id": 1, "error": {"code": -32600, "message": "Invalid request"}}
+    end
+    deactivate MCP-Server
 
-{"id": 1, "result": {"resources": \["demo://greeting.txt", "demo://info.txt"\]}}  
-    else Failure  
-        MCP-Server--\>MCP-Client: resources/list Error Response
+    Note left of MCP-Client: Client processes resource list<br>and identifies needed URI
 
-{"id": 1, "error": {"code": \-32600, "message": "Invalid request"}}  
-    end  
-    deactivate MCP-Server  
-    Note left of MCP-Client: Client processes resource list
+    MCP-Client->MCP-Server: resources/read Request<br>{"id": 2, "method": "resources/read", "params": {"uri":"demo://greeting.txt"}}
+    activate MCP-Server
+    alt Success
+        MCP-Server-->MCP-Client: resources/read Response<br>{"id": 2, "result": {"contents": "Hello, World!"}}
+    else Failure
+        MCP-Server-->MCP-Client: resources/read Error Response<br>{"id": 2, "error": {"code": -32602, "message": "Resource not found"}}
+    end
+    deactivate MCP-Server
 
-and identifies needed URI
+    Note left of MCP-Client: Client processes resource content
+{{< /mermaid >}}
 
-    MCP-Client-\>MCP-Server: resources/read Request
 
-{"id": 2, "method": "resources/read", "params": {"uri":"demo://greeting.txt"}}  
-  S   activate MCP-Server  
-    alt Success  
-        MCP-Server--\>MCP-Client: resources/read Response
-
-{"id": 2, "result": {"contents": "Hello, World\!"}}  
-    else Failure  
-        MCP-Server--\>MCP-Client: resources/read Error Response
-
-{"id": 2, "error": {"code": \-32602, "message": "Resource not found"}}  
-s   end  
-    deactivate MCP-Server  
-    Note left of MCP-Client: Client processes resource content  
-{{\< /mermaid \>}}  
-
-Example 2: Calling a Tool  
+**Example 2: Calling a Tool**
 
 The invocation flow for tools is very similar. After discovering a tool (e.g., "echo") via tools/list, the client can invoke it using tools/call.  
+
 ```json
-// Client \-\> Server: invoke a tool (echo) via tools/call  
+// Client --> Server: invoke a tool (echo) via tools/call  
 {  
   "jsonrpc": "2.0",  
   "id": 3,  
@@ -424,19 +438,20 @@ The invocation flow for tools is very similar. After discovering a tool (e.g., "
 The server executes the tool and returns its output in the result field. The structure of the result is defined by the tool itself.
 
 ```json
-// Server \-\> Client: result of the echo tool  
+// Server --> Client: result of the echo tool  
 {  
   "jsonrpc": "2.0",  
   "id": 3,  
   "result": {  
-    "content": \[  
+    "content": [  
       { "type": "text", "text": "Echo: Testing 123" }  
-    \]  
+    ]  
   }  
 }
 ```
 
 And just like resources, if the tool fails or is not found, the server returns an error response.
+
 ```json
 {  
   "jsonrpc": "2.0",  
@@ -450,30 +465,25 @@ And just like resources, if the tool fails or is not found, the server returns a
 
 This sequence for tool invocation is visualized below.
 
-{{\< mermaid \>}}  
-sequenceDiagram  
-    title Tool Invocation Sequence (MCP Protocol)  
-    participant Client  
-    participant Server  
-    Note over Client,Server: MCP Session already established
+{{< mermaid >}}
+sequenceDiagram
+    title Tool Invocation Sequence (MCP Protocol)
+    participant Client
+    participant Server
 
-    Client-\>Server: tools/call Request
+    Note over Client,Server: MCP Session already established
 
-{"id": 3, "method": "tools/call", "params": {"name":"tool\_name", "arguments":{...}}}  
-    activate Server  
-    alt Successful Invocation  
-        Server--\>Client: tools/call Success Response
-
-{"id": 3, "result": {...}}  
-    \_     Note left of Client: Client processes tool result  
-    else Invocation Failed  
-        Server--\>Client: tools/call Error Response
-
-{"id": 3, "error": {"code": \-32602, "message": "Tool not found"}}  
-        Note left of Client: Client handles error  
-    end  
-    deactivate Server  
-{{\< /mermaid \>}}
+    Client->Server: tools/call Request<br>{"id": 3, "method": "tools/call", "params": {"name":"tool_name", "arguments":{...}}}
+    activate Server
+    alt Successful Invocation
+        Server-->Client: tools/call Success Response<br>{"id": 3, "result": {...}}
+        Note left of Client: Client processes tool result
+    else Invocation Failed
+        Server-->Client: tools/call Error Response<br>{"id": 3, "error": {"code": -32602, "message": "Tool not found"}}
+        Note left of Client: Client handles error
+    end
+    deactivate Server
+{{< /mermaid >}}
 
 This discover-and-invoke pattern applies similarly to prompts, where the client lists available prompt templates and invokes them with specific parameters. 
 
@@ -481,10 +491,26 @@ This discover-and-invoke pattern applies similarly to prompts, where the client 
 
 The MCP specification outlines key security principles that implementers **SHOULD** adhere to :
 
-- **User Consent and Control:** Users must be informed about and explicitly consent to data access and tool operations. Clear user interfaces for reviewing and authorizing actions are critical. Users should retain control over what is shared and executed.
+- **User Consent and Control:** Users must be informed about and explicitly consent to data access and tool operations. Clear user interfaces for reviewing and authorizing actions are critical. Users should retain control over what is shared and executed. As an example, A support agent asks, “Issue a refund for order 45677”. The host shows a confirmation UI with tool name, inputs, and side‑effects. Only on approval does the host send:
+  ```json
+  {
+    "jsonrpc": "2.0",
+    "id": 101,
+    "method": "tools/call",
+    "params": {
+      "name": "issue_refund",
+      "arguments": { "orderId": "45677", "amount": 129.90 }
+    }
+  }
+  ```
+  If the user cancels, no request is sent to the server.
+
 - **Data Privacy:** Host applications must obtain explicit user consent before exposing user data (e.g., through Resources) to servers. Sensitive data should be protected with appropriate access controls, both in transit and at rest.
+
 - **Tool Safety:** Tools represent potential arbitrary code execution paths and must be treated with caution. Tool descriptions provided by servers should not be implicitly trusted unless the server itself is trusted. Hosts **MUST** obtain explicit user consent before invoking any tool, and users should understand the tool's function beforehand.
+
 - **LLM Sampling Controls:** If the server utilizes the Sampling capability (requesting the client to perform LLM interactions), the user must explicitly approve such requests, controlling the prompt content and the visibility of results to the server.
+
 
 ## Security Mechanisms
 
@@ -508,7 +534,7 @@ It is crucial to understand that MCP standardizes the communication channel but 
 
 ## Looking Ahead to Part 3: Implementing an MCP Server
 
-With a solid understanding of MCP's technical architecture -- from message formats and transports to capability discovery and invocation -- we are ready to get our hands dirty in Part 3. In the next installment, we will **build a simple MCP server** step-by-step. This implementation will illustrate how to put the concepts into practice. Here's a quick preview of what we'll cover:
+We now have a solid understanding of MCP's technical architecture. Right from message formats and transports to capability discovery and invocation. We are now ready to get our hands dirty in Part 3. In the next blog post, we will **build a simple MCP server** step-by-step. This implementation will illustrate how to put the concepts into practice. Here's a quick preview of what we'll cover:
 
 1.  **Setting Up the Server Skeleton:** Initializing an MCP server (using an SDK or from scratch) and advertising a name and version.
 

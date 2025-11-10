@@ -1,269 +1,900 @@
 ---
-title: "Building a simple MCP Server"
-lastmod: 2025-05-09T14:29:22+10:00
-date: 2025-05-09T14:29:22+10:00
+title: "Building an MCP Server with Akka (Part 4)"
+lastmod: 2025-10-27T14:29:22+10:00
+date: 2025-10-27T14:29:22+10:00
 draft: false
 Author: Pradeep Loganathan
-tags: 
+tags:
   - ai
   - llm
   - integration
   - model-context-protocol
   - developer-tools
+  - java
+  - akka
 categories:
   - AI Architecture
   - Agent Systems
   - DevTools
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
-description:  "" 
-summary:  "This guide covers building an MCP server in C# (.NET) with NuGet package management, running it in VS Code, and integrating with GitHub Copilot for AI-assisted development." 
+description: "Learn how to build production-ready MCP servers using Akka Java SDK with declarative annotations, built-in service discovery, and seamless agent integration."
+summary: "This guide demonstrates building an MCP server using Akka Java SDK with annotation-based tool definitions, service discovery, and integration with both external MCP clients and Akka agents."
 ShowToc: true
 TocOpen: true
-images:
-  - images/mcp-server-cover.webp
-  - images/mcp-server-tools.png
-  - images/copilot-agent-mode.png
 cover:
-    image: "images/mcp-server-cover.webp"
-    alt: ""
-    caption: ""
-    relative: true # To use relative path for cover image, used in hugo Page-bundles
+    image: "/blog/model-context-protocol/build-a-mcp-server-dotnet/images/mcp-server-cover.webp"
+    alt: "Building MCP Server with Akka"
+    caption: "Building MCP Server with Akka"
+    relative: false
 series: ["Model Context Protocol"]
-weight: 3
+weight: 4
 ---
 
 {{< series-toc >}}
 
 ## Introduction
 
-In parts [one](https://pradeepl.com/blog/model-context-protocol/introduction-to-model-context-protocol/) and [two](https://pradeepl.com/blog/model-context-protocol/mcp-protocol-mechanics-and-architecture/) of this [series]({{< relref "/series/model-context-protocol/" >}}), we explored what Model Context Protocol (MCP) is, why it matters, and how it works under the hood. Now it's time to get practical: in this post, we'll walk through building a simple MCP server step-by-step, from scratch.
+This is Part 4 of the Model Context Protocol series, focused on building an MCP server with Akka and wiring it into an agentic system.
 
-We'll use a straightforward example that provides text manipulation tools, such as reversing strings, counting words, checking palindromes, and more. The code for this MCP server is available [here](https://github.com/PradeepLoganathan/simple-mcp-server).
+In previous posts of this [series]({{< relref "/series/model-context-protocol/" >}}), we explored the Model Context Protocol and also built an MCP server using [.NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server-dotnet/" >}}). Now, let's explore a more enterprise-focused approach to building MCP servers using the Akka Java SDK, which brings distributed systems capabilities and production-grade features to MCP server development.
+
+Akka's MCP implementation stands out with its declarative annotation-based approach, built-in service discovery, and seamless integration with Akka's agent system. This makes it particularly well-suited for building MCP servers that need to scale, integrate with existing microservices, or serve as tools for AI-powered agent workflows.
+
+Note: The MCP annotations and HTTP endpoint used in this post are provided by an Akka Java SDK extension in the accompanying repositories. They are not part of the upstream Anthropic MCP reference SDKs. The endpoint implements JSON-RPC 2.0 semantics compatible with MCP clients.
+
+## What Makes Akka's MCP Implementation Different?
+
+Unlike the traditional MCP SDK implementations we've seen, Akka's approach offers several unique advantages:
+
+1. **Declarative Tool Definition**: Tools are defined using simple annotations (`@McpTool`, `@McpResource`) rather than manual registration
+2. **Built-in HTTP Server**: Automatic HTTP/JSON-RPC endpoint exposure at `/mcp`
+3. **Service Discovery**: Seamless integration with Akka's service discovery for distributed deployments
+4. **Agent Integration**: Direct consumption by Akka agents using `RemoteMcpTools.fromService()`
+5. **Production Ready**: Built on Akka's battle-tested distributed systems framework
+6. **Multi-Client Support**: Serves both external MCP clients (Claude Desktop, VS Code) and internal Akka agents simultaneously
 
 ## What You'll Build
 
-We'll create an MCP server in C# (.NET) that provides the following string manipulation tools. The MCP server will use STDIO server transport for communication. We will integrate this MCP server into Github Copilot within Visual Studio Code.
+### The Bigger Picture: Agentic AI Triage System
+
+Imagine you're running a production microservices platform with dozens of services. When an incident occurs - payment gateway timeouts, database connection failures, authentication errors - you need rapid, intelligent triage. This is where our **Agentic AI Triage System** comes in.
+
+The complete triage system (available at [agentic-triage-system](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agentic-triage-system)) is a production-ready multi-agent incident response platform that orchestrates six specialized AI agents:
+
+1. **ClassifierAgent**: Classifies incidents by service, severity, and domain with confidence scores
+2. **EvidenceAgent**: Gathers evidence from logs, metrics, and observability tools
+3. **TriageAgent**: Performs systematic diagnosis using 5 Whys methodology and pattern analysis
+4. **KnowledgeBaseAgent**: Searches runbooks and historical incident reports
+5. **RemediationAgent**: Proposes staged remediation plans with rollback strategies
+6. **SummaryAgent**: Generates multi-audience summaries (executive, technical, customer support)
+
+The workflow orchestrates these agents in a systematic pipeline: **classify → gather_evidence → triage → query_knowledge_base → remediate → summarize → finalize**.
+
+### Where MCP Tools Fit In
+
+Here's the critical insight: **The EvidenceAgent needs access to real-world observability data** - logs from services, metrics from monitoring systems, correlation analysis across data sources. But we don't want to hardcode integrations with Datadog, Elasticsearch, Splunk, or other tools directly into our agent logic.
+
+This is where the **Model Context Protocol** shines. By exposing evidence gathering capabilities as MCP tools, we create a clean separation:
+
+- **The Agent**: Focuses on intelligent evidence collection strategy and analysis
+- **The MCP Server**: Handles the mechanics of fetching data from various sources
+
+The EvidenceAgent connects to our MCP server using Akka's native integration:
+
+```java
+@Component(id = "evidence-agent")
+public class EvidenceAgent extends Agent {
+    public Effect<String> gather(Request req) {
+        return effects()
+            .model(ModelProvider.openAi().withModelName("gpt-4o-mini"))
+            .mcpTools(
+                RemoteMcpTools.fromService("evidence-tools")
+                    .withAllowedToolNames("fetch_logs", "query_metrics", "correlate_evidence")
+            )
+            .systemMessage("You are an expert evidence collection agent...")
+            .userMessage("Gather evidence for incident in " + req.service())
+            .thenReply();
+    }
+}
+```
+
+When the AI model needs evidence, it can call these tools through the MCP protocol - completely abstracted from whether the data comes from local files, Datadog APIs, Elasticsearch queries, or SIEM systems.
+
+### What This Tutorial Builds
+
+In this tutorial, we'll build the **Evidence Tools MCP Server** that provides:
+
+**MCP Tools (Callable Functions):**
+
+- `fetch_logs`: Retrieve service logs with automatic error analysis and anomaly detection
+- `query_metrics`: Query performance metrics (error rates, latency, throughput, resource utilization)
+- `correlate_evidence`: Analyze relationships between logs and metrics to identify patterns
+
+**MCP Resources (URI-based Data Access):**
+
+- `kb://runbooks/{serviceName}`: Access troubleshooting runbooks and operational documentation
+
+**Infrastructure:**
+
+- HTTP endpoint at `/mcp` with JSON-RPC 2.0 protocol
+- Akka service discovery integration for seamless agent connection
+- Support for external MCP clients (Claude Desktop, VS Code)
+
+### From Sample to Production
+
+**In this sample**, we use file-based data sources (JSON files in `src/main/resources/`) to demonstrate the pattern. This makes the tutorial self-contained and easy to run locally without external dependencies.
+
+**In production**, you would replace these file-based implementations with secure API integrations:
+
+- **Datadog Integration**: Replace `fetch_logs` with Datadog Logs API calls using API keys
+- **Elasticsearch/OpenSearch**: Query logs and traces using the Elasticsearch REST API
+- **Prometheus/Grafana**: Fetch metrics using PromQL queries
+- **SIEM Systems**: Integrate with Splunk, Sumo Logic, or Azure Sentinel for security events
+- **APM Tools**: Connect to New Relic, Dynatrace, or AppDynamics for application performance data
+- **Cloud Provider APIs**: AWS CloudWatch, Azure Monitor, GCP Cloud Logging
+
+The beauty of the MCP architecture is that **agents don't need to change** when you swap implementations. The tools maintain the same interface - same names, same parameters, same response structure - whether reading from files or calling production APIs.
+
+**Why Build These as MCP Servers?**
+
+1. **Reusability**: These tools can be used by any MCP client - not just our triage system
+2. **Isolation**: Evidence gathering runs in its own service, with independent scaling and deployment
+3. **Security**: Centralized access control to sensitive observability data and API credentials
+4. **Flexibility**: Swap implementations (mock → staging → production) without changing agent code
+5. **Multi-Client**: The same MCP server serves both Akka agents and external tools like Claude Desktop
+
+**Repositories:**
+
+- **This Tutorial**: [agenticai-triage-mcp-tools](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agenticai-triage-mcp-tools) - MCP server for evidence gathering
+- **Triage System**: [agentic-triage-system](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agentic-triage-system) - Complete multi-agent incident response platform
+
+If you have the local repo checked out, the triage system lives at `akka-spovs/agentic-triage` and includes both the MCP implementation and a 5‑agent setup.
 
 ## Prerequisites
 
-Before we start, ensure you have:
+Before starting, ensure you have:
 
--   [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) installed.
--   [Visual Studio Code](https://code.visualstudio.com/) or your preferred IDE.
--   The [GitHub Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) extension installed and enabled in Visual Studio Code to seamlessly integrate and test your MCP tools.
+- **JDK 21** (Akka Java SDK requires Java 21)
+- **Maven 3.8+** for dependency management
+- **VS Code** or **Claude Desktop** for testing
+- Basic familiarity with Java annotations and Maven
+- Understanding of MCP concepts from previous posts in this series
 
+## Architecture Overview
 
-## Step 1: Setting up your MCP Project
+The Akka MCP implementation follows a microservices-oriented architecture:
 
-To get started, create a new directory for your MCP server and initialize it as a .NET console project:
-
-```bash
-dotnet new console -o simple-mcp-server
-cd simple-mcp-server
+```
+┌─────────────────────────────────────┐
+│  Triage Service (port 9100)         │
+│                                     │
+│  EvidenceAgent uses:                │
+│  RemoteMcpTools.fromService(        │
+│    "evidence-tools"                 │
+│  )                                  │
+└──────────────┬──────────────────────┘
+               │
+               │ Service Discovery
+               │ (dev-mode)
+               ↓
+┌─────────────────────────────────────┐
+│  Evidence Tools Service (port 9200) │
+│                                     │
+│  @McpEndpoint                       │
+│  - fetch_logs                       │
+│  - query_metrics                    │
+│  - correlate_evidence               │
+│  - kb://runbooks/{service}          │
+└─────────────────────────────────────┘
+               │
+               │ JSON-RPC 2.0
+               │ HTTP POST /mcp
+               ↓
+┌─────────────────────────────────────┐
+│  External MCP Clients               │
+│  - Claude Desktop                   │
+│  - VS Code / GitHub Copilot         │
+│  - Other MCP clients                │
+└─────────────────────────────────────┘
 ```
 
-Then add the necessary MCP NuGet package:
+## Quick Start (Local Dev)
 
-```bash
-dotnet add package ModelContextProtocol --prerelease
-dotnet add package Microsoft.Extensions.Hosting
+Below are generic steps; adapt paths to your repo layout.
+
+- Build and run the Evidence Tools MCP service (HTTP /mcp):
+  - Maven: `mvn -q -DskipTests exec:java` (if configured), or `mvn package && java -jar target/*-all.jar`
+  - Gradle: `./gradlew run` or `./gradlew installDist && ./build/install/<app>/bin/<app>`
+
+- Verify the MCP endpoint exposes capabilities (example HTTP POST):
+  ```bash
+  curl -sS http://localhost:9200/mcp \
+    -H 'Content-Type: application/json' \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
+  ```
+
+- Point your agents to the service (Akka): use `RemoteMcpTools.fromService("evidence-tools")` in your EvidenceAgent.
+
+- Optional: Integrate with Claude Desktop by launching the service via its config (see .NET post for Claude config template).
+
+## Step 1: Project Setup
+
+### Maven Configuration
+
+Create a new Maven project with the Akka Java SDK parent:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.akka</groupId>
+        <artifactId>akka-javasdk-parent</artifactId>
+        <version>3.5.4</version>
+    </parent>
+
+    <groupId>com.example.evidence</groupId>
+    <artifactId>agenticai-triage-mcp-tools</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>AgenticAI Triage MCP Tools</name>
+    <description>MCP service for incident triage evidence gathering</description>
+</project>
 ```
 
-The package `ModelContextProtocol` provides the core MCP libraries, types, and classes needed to build an MCP server in .NET. It includes the attributes and server infrastructure (`McpServerToolType`, `McpServerTool`, etc.) that help your C# methods become discoverable tools for MCP clients, such as LLMs or developer tools. We use the `Microsoft.Extensions.Hosting` NuGet package to provide a lightweight hosting framework for your MCP server. It simplifies running background services, configuring dependency injection, and managing the server lifecycle.
+The `akka-javasdk-parent` POM provides all necessary dependencies including:
 
-## Step 2: Implementing Your Tools
+- Akka HTTP server
+- MCP protocol support
+- JSON serialization (Jackson)
+- Service discovery
+- Logging infrastructure
 
+### Service Configuration
 
-Create a new file `MyTools.cs` in your project directory and paste the provided tools implementation. We'll create a bunch of string manipulation tools that can be used by the LLM.
+Create `src/main/resources/application.conf`:
 
-```csharp
-using System.ComponentModel;
-using System.Linq;
-using ModelContextProtocol.Server;
-
-namespace SimpleTools;
-
-[McpServerToolType]
-public class MyTools
-{
-    [McpServerTool, Description("Reverse a string")]
-    public string ReverseString(string input)
-    {
-        if (input is null) return string.Empty;
-
-        var chars = input.ToCharArray();
-        System.Array.Reverse(chars);
-        return new string(chars);
-    }
-
-    [McpServerTool, Description("Convert a string to upper-case")]
-    public string ToUpperCase(string input) => input?.ToUpperInvariant() ?? string.Empty;
-
-    [McpServerTool, Description("Convert a string to lower-case")]
-    public string ToLowerCase(string input) => input?.ToLowerInvariant() ?? string.Empty;
-
-    [McpServerTool, Description("Check if a string is a palindrome (ignoring case and non-letters)")]
-    public bool IsPalindrome(string input)
-    {
-        if (string.IsNullOrWhiteSpace(input)) return true;
-
-        var filtered = new string(input
-            .ToLowerInvariant()
-            .Where(char.IsLetterOrDigit)
-            .ToArray());
-
-        return filtered.SequenceEqual(filtered.Reverse());
-    }
-
-    [McpServerTool, Description("Count the number of words in a string (whitespace-separated)")]
-    public int CountWords(string input)
-    {
-        if (string.IsNullOrWhiteSpace(input)) return 0;
-
-        return input.Split((char[])null, StringSplitOptions.RemoveEmptyEntries).Length;
-    }
-
-    [McpServerTool, Description("Repeat a string N times")]
-    public string RepeatString(string input, int count)
-    {
-        if (input is null || count <= 0) return string.Empty;
-
-        return string.Concat(Enumerable.Repeat(input, count));
-    }
-
-    [McpServerTool, Description("Return a substring given start index and length")]
-    public string Substring(string input, int startIndex, int length)
-    {
-        if (string.IsNullOrEmpty(input)) return string.Empty;
-        if (startIndex < 0 || startIndex >= input.Length) return string.Empty;
-
-        return input.Substring(startIndex, Math.Min(length, input.Length - startIndex));
-    }
-
-    [McpServerTool, Description("Replace all occurrences of a substring with another substring")]
-    public string Replace(string input, string oldValue, string newValue)
-    {
-        if (input is null) return string.Empty;
-
-        return input.Replace(oldValue ?? string.Empty, newValue ?? string.Empty);
-    }
+```hocon
+# Service identification (critical for service discovery)
+akka.javasdk.dev-mode {
+  service-name = "evidence-tools"  # Must match RemoteMcpTools.fromService("evidence-tools")
+  http-port = 9200  # Unique port for this service
 }
 
+# Logging configuration
+akka.loglevel = "INFO"
+loggers = ["akka.event.slf4j.Slf4jLogger"]
+logging-filter = "akka.event.slf4j.Slf4jLoggingFilter"
+
+# HTTP server timeouts
+akka.http.server {
+  request-timeout = 60s
+  idle-timeout = 120s
+}
 ```
 
-The above code provides a bunch of string manipulation tools. But how does this C# class and its methods become a discoverable and usable set of tools for an MCP client like GitHub Copilot? The magic lies in a few key attributes from the `ModelContextProtocol.Server` namespace and `System.ComponentModel`:
+Key configuration points:
 
--   **`[McpServerToolType]`**: This attribute, placed above the `MyTools` class, signals to the MCP SDK that this class is a container for MCP tools. When the server starts, it knows to look inside classes marked this way.
--   **`McpServerTool`**: Applied to each public method within `MyTools` (like `ReverseString`, `ToUpperCase`, etc.), this attribute designates that specific method as an individual, callable MCP tool.
--   **`Description`**: This standard.NET attribute is crucial. It provides a human-readable, and more importantly, an LLM-readable description of what each tool does and what kind of input it expects. As we discussed in the earlier parts of this series, this descriptive metadata is what allows an AI model like GitHub Copilot to understand the purpose of each tool and decide when it's appropriate to use it to fulfill a user's request. Clear descriptions are fundamental to the 'why it matters' aspect of MCP -- they enable effective tool discovery and utilization by the AI.
+- `service-name`: Used by service discovery to locate this MCP server
+- `http-port`: The port where the MCP endpoint will be available
+- Timeouts are important for long-running tool calls
 
-These attributes work together to declaratively define your server's capabilities, making your C# code accessible and understandable within the Model Context Protocol ecosystem
+## Step 2: Building the MCP Endpoint
 
-## Step 3: Integrating Tools into MCP Server Host
+Let's build the MCP endpoint incrementally, starting with the basic structure and adding tools one by one. This approach will help you understand each component clearly.
 
+> **Note:** The complete implementation is available on [GitHub](https://github.com/PradeepLoganathan/akka-kata/blob/main/akka-spovs/agenticai-triage-mcp-tools/src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java). Here we'll walk through the key parts step by step.
 
-Modify your `Program.cs` file to host your MCP tools:
+### Step 2.1: Create the Basic MCP Endpoint Class
 
-```csharp
-using Microsoft.Extensions.Hosting;
-using ModelContextProtocol.Server;
+First, create the file `src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java` with the basic endpoint structure:
 
-var builder = Host.CreateEmptyApplicationBuilder(settings: null);
-builder.Services
-    .AddMcpServer()
-    .WithStdioServerTransport()
-    .WithTools<MyTools>();
+```java
+package com.pradeepl.evidence;
 
-await builder.Build().RunAsync();
+import akka.javasdk.annotations.Acl;
+import akka.javasdk.annotations.Description;
+import akka.javasdk.annotations.mcp.McpEndpoint;
+import akka.javasdk.annotations.mcp.McpTool;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Acl(allow = @Acl.Matcher(principal = Acl.Principal.ALL))
+@McpEndpoint(serverName = "evidence-tools", serverVersion = "1.0.0")
+public class EvidenceToolsEndpoint {
+
+    private static final Logger logger = LoggerFactory.getLogger(EvidenceToolsEndpoint.class);
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    // Tools will be added here
+}
 ```
 
-Let's examine the key lines in this setup:
+**Understanding the Annotations:**
 
--  **`var builder = Host.CreateEmptyApplicationBuilder(settings: null);`**: This initializes a minimal generic host without reading configuration or command-line arguments. It's well-suited for lightweight tools and test scenarios, like this simple MCP server, where full configuration infrastructure is not required.
--  **`builder.Services.AddMcpServer()`**: This extension method, provided by the `ModelContextProtocol` NuGet package, registers the essential MCP server services with the application's dependency injection container. This is the starting point for configuring an MCP server.
--  **`.WithStdioServerTransport()`**: This chained extension method configures the server to use Standard Input/Output (STDIO) for communication. STDIO is a simple and effective transport mechanism when the MCP client (like the MCP Inspector or a local AI agent) runs the server as a child process and communicates with it via its standard input and output streams. It's ideal for local development and testing as it doesn't require network port configuration or deal with firewall issues. This choice deliberately lowers the barrier to entry for getting started with MCP server development locally.
--  **`.WithTools<MyTools>()`**: This method registers a class that contains your tool implementations. Each public method in `MyTools` decorated with `[McpServerTool]` becomes a callable tool for MCP clients. This enables modular tool development and allows easy expansion of server capabilities without modifying core server logic.
+- **`@McpEndpoint(serverName = "evidence-tools", serverVersion = "1.0.0")`**
+  - Declares this class as an MCP server endpoint
+  - `serverName`: Identifier used by clients and service discovery (must match the `service-name` in `application.conf`)
+  - `serverVersion`: Version information exposed to clients via the MCP protocol
+  - Akka automatically creates an HTTP endpoint at `/mcp` that implements JSON-RPC 2.0
 
-The fluent configuration API (e.g., `AddMcpServer().WithStdioServerTransport().WithTools<MyTools>()`) provides a clean, readable, and declarative way to set up the server. This adheres to common builder patterns found in.NET, making the initialization process intuitive for developers familiar with the ecosystem.
+- **`@Acl(allow = @Acl.Matcher(principal = Acl.Principal.ALL))`**
+  - Access Control List that allows all clients to access this endpoint
+  - In production, you'd restrict this to authenticated principals
+  - Example: `@Acl(allow = @Acl.Matcher(principal = Acl.Principal.INTERNET))` for internet-facing endpoints
 
-## Step 4: Integrating with Github Copilot in VS Code 
+### Step 2.2: Add Your First MCP Tool - fetch_logs
 
-Integrating MCP servers directly within Visual Studio Code enhances your development experience, particularly when using AI-assisted tools like GitHub Copilot Chat.
+> **Understanding MCP Tools vs Resources**: If you're new to MCP concepts, review the fundamentals in our [.NET MCP post]({{< relref "/blog/model-context-protocol/build-a-mcp-server-dotnet/" >}}) which explains tools (executable functions) and resources (data access). The key difference: **Tools** are functions that AI agents can invoke to perform actions or computations, while **Resources** provide URI-based access to data or documents.
 
-### A. Configuring Your MCP Server with `mcp.json`
+Now let's add our first tool. Add this method to the `EvidenceToolsEndpoint` class:
 
-VS Code uses a dedicated configuration file called `mcp.json` to manage and run MCP servers. This file can be placed either in the `.vscode` directory of your project (for project-specific servers) or in your user settings (for globally available servers).
+```java
+@McpTool(
+    name = "fetch_logs",
+    description = "Fetch logs from the agentic AI triage system services. Returns recent log lines with automatic error analysis and anomaly detection."
+)
+public String fetchLogs(
+        @Description("Service name to fetch logs from (e.g., payment-service, checkout-service)")
+        String service,
+        @Description("Number of log lines to fetch (default: 200)")
+        int lines
+) {
+    logger.info("📝 MCP Tool: fetch_logs called - Service: {}, Lines: {}", service, lines);
 
-Here's an example of a minimal `.vscode/mcp.json` file configured for the MCP server we've built in this tutorial:
+    try {
+        // Read log file from classpath resources
+        String fileName = String.format("logs/%s.log", service);
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+
+        if (inputStream == null) {
+            ObjectNode errorResponse = mapper.createObjectNode();
+            errorResponse.put("error", String.format("No log file found for service: %s", service));
+            errorResponse.put("service", service);
+            return mapper.writeValueAsString(errorResponse);
+        }
+
+        String fullLogs = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        String[] allLines = fullLogs.split("\n");
+
+        // Return last N lines (most recent logs)
+        int startIndex = Math.max(0, allLines.length - lines);
+        int actualLines = Math.min(lines, allLines.length);
+
+        StringBuilder recentLogs = new StringBuilder();
+        for (int i = startIndex; i < allLines.length; i++) {
+            recentLogs.append(allLines[i]).append("\n");
+        }
+
+        // Build structured JSON response
+        ObjectNode response = mapper.createObjectNode();
+        response.put("logs", recentLogs.toString());
+        response.put("service", service);
+        response.put("linesReturned", actualLines);
+        response.put("linesRequested", lines);
+
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+
+    } catch (Exception e) {
+        logger.error("📝 Error in fetch_logs", e);
+        return String.format("{\"error\":\"Failed to fetch logs: %s\"}", e.getMessage());
+    }
+}
+```
+
+**Understanding `@McpTool`:**
+
+- **`@McpTool`** marks a method as an MCP tool that clients can invoke
+- **`name`**: The identifier clients use to call this tool (e.g., `"fetch_logs"`)
+- **`description`**: Critical for AI models - describes what the tool does and when to use it
+- **Method parameters** automatically become tool arguments in the MCP protocol
+- **`@Description`** on parameters helps AI understand what each argument is for
+- **Return value** becomes the tool's response to the client (typically JSON string)
+
+This tool fetches service logs from the classpath, returns the most recent N lines, and wraps them in a structured JSON response.
+
+### Step 2.3: Add Two More Tools
+
+Following the same pattern, add two additional tools to the endpoint class:
+
+**`query_metrics`** - Queries performance metrics (error rates, latency, CPU usage, etc.) based on a metrics expression and time range. It reads from pre-configured metrics JSON files and returns parsed data with insights.
+
+```java
+@McpTool(name = "query_metrics", description = "Query performance metrics...")
+public String queryMetrics(
+    @Description("Metrics expression") String expr,
+    @Description("Time range") String range
+) {
+    // Implementation: reads metrics JSON files, formats output
+    // See full code on GitHub
+}
+```
+
+**`correlate_evidence`** - Analyzes relationships between log findings and metric findings to identify temporal patterns, dependency failures, and resource exhaustion correlations. This demonstrates a tool that combines data from multiple sources.
+
+```java
+@McpTool(name = "correlate_evidence", description = "Correlate findings from logs and metrics...")
+public String correlateEvidence(
+    @Description("Description of log findings") String logFindings,
+    @Description("Description of metric findings") String metricFindings
+) {
+    // Implementation: analyzes correlations, timeline alignment
+    // See full code on GitHub
+}
+```
+
+**Key Points:**
+
+- Multiple tools can coexist in the same endpoint class
+- Each tool is independent with its own name, description, and parameters
+- Helper methods don't need annotations - they're just regular Java methods
+- The complete implementation with error handling is in the [GitHub repository](https://github.com/PradeepLoganathan/akka-kata/blob/main/akka-spovs/agenticai-triage-mcp-tools/src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java)
+
+### Step 2.4: Add an MCP Resource - Service Runbooks
+
+**MCP Resources vs Tools**: As explained in our [earlier posts]({{< relref "/blog/model-context-protocol/build-a-mcp-server-dotnet/" >}}), MCP defines two distinct concepts:
+
+- **Tools**: Executable functions that perform actions or computations (like `fetch_logs`, `query_metrics`)
+- **Resources**: URI-based access to data, documents, or content (like runbooks, configuration files, documentation)
+
+Resources are ideal for providing static or semi-static information that agents can reference. Let's add a resource for service runbooks:
+
+```java
+import akka.javasdk.annotations.mcp.McpResource;
+
+@McpResource(
+    uriTemplate = "kb://runbooks/{serviceName}",
+    name = "Service Runbook",
+    description = "Get troubleshooting runbook for a specific service",
+    mimeType = "text/markdown"
+)
+public String getRunbook(String serviceName) {
+    logger.info("📚 MCP Resource: getRunbook called - Service: {}", serviceName);
+
+    try {
+        String path = String.format("knowledge_base/%s-runbook.md", serviceName);
+        InputStream in = getClass().getClassLoader().getResourceAsStream(path);
+
+        if (in == null) {
+            return String.format("# Runbook Not Found\n\nNo runbook available for service: %s", serviceName);
+        }
+
+        return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+
+    } catch (Exception e) {
+        logger.error("📚 Error in getRunbook", e);
+        return String.format("# Error\n\nFailed to load runbook: %s", e.getMessage());
+    }
+}
+```
+
+**Understanding `@McpResource`:**
+
+- **`@McpResource`** exposes data through URI-based access (different from executable tools)
+- **`uriTemplate`**: URI pattern with variables (e.g., `kb://runbooks/{serviceName}`)
+  - Clients can access: `kb://runbooks/payment`, `kb://runbooks/checkout`, etc.
+- **`mimeType`**: Content type of the resource (e.g., `text/markdown`, `application/json`)
+- **Method parameters** are extracted from the URI template variables
+- Resources are ideal for providing documentation, configuration, or reference data
+
+### Step 2 Complete: What We've Built
+
+We've now created a complete MCP endpoint with multiple tools and resources. The full implementation with helper methods, error handling, log analysis, and metrics parsing is available in the [GitHub repository](https://github.com/PradeepLoganathan/akka-kata/blob/main/akka-spovs/agenticai-triage-mcp-tools/src/main/java/com/pradeepl/evidence/EvidenceToolsEndpoint.java).
+
+**Summary of components:**
+
+- ✅ **MCP Endpoint** with `@McpEndpoint` annotation and service discovery integration
+- ✅ **Three MCP Tools** (executable functions):
+  - `fetch_logs` - Retrieves service logs with error analysis (shown in detail)
+  - `query_metrics` - Queries performance metrics and alerts
+  - `correlate_evidence` - Analyzes relationships between logs and metrics
+- ✅ **One MCP Resource** (URI-based data access):
+  - `kb://runbooks/{serviceName}` - Access service troubleshooting runbooks
+- ✅ **HTTP Endpoint** automatically exposed at `/mcp` with JSON-RPC 2.0
+- ✅ **Structured JSON responses** for all tools
+- ✅ **Error handling** and comprehensive logging
+
+The pattern is clear: define the endpoint class, add `@McpTool` methods for executable functions, and add `@McpResource` methods for data access. Akka handles the rest - HTTP server, JSON-RPC protocol, service discovery, and client integration.
+
+## Step 3: Running the MCP Server
+
+### Build and Run
+
+```bash
+mvn compile exec:java
+```
+
+Look for startup logs:
+
+```
+INFO  akka.runtime.DiscoveryManager - Akka Runtime started at 127.0.0.1:9200
+INFO  ... - MCP endpoint component [...EvidenceToolsEndpoint], path [/mcp]
+```
+
+Your MCP server is now running and accessible at `http://localhost:9200/mcp`
+
+### Testing with curl
+
+Test the MCP endpoint directly:
+
+```bash
+# List available tools
+curl -s http://localhost:9200/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":"1","method":"tools/list","params":{}}' \
+  | jq
+
+# Call the fetch_logs tool
+curl -s http://localhost:9200/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc":"2.0",
+    "id":"2",
+    "method":"tools/call",
+    "params":{
+      "name":"fetch_logs",
+      "arguments":{"service":"payment-service","lines":100}
+    }
+  }' | jq
+```
+
+## Step 4: Integration with MCP Clients
+
+Now that our MCP server is running, let's integrate it with various MCP clients. The beauty of MCP is that the same server can be consumed by different clients - Claude CLI, Claude Desktop, VS Code, and even other Akka agents.
+
+### Using Claude CLI
+
+The simplest way to test your MCP server is with the Claude CLI tool. First, create an MCP configuration file in your project directory.
+
+Create `claude-mcp-config.json` in your project root:
 
 ```json
-//.vscode/mcp.json
 {
-    "servers": {
-        "simple-mcp-server": {
-            "type": "stdio",
-            "command": "dotnet",
-            "args": [
-                "run",
-                "--project",
-                "${workspaceFolder}/simple-mcp-server/simple-mcp-server.csproj"
-            ]
-        }
+  "mcpServers": {
+    "evidence-tools": {
+      "command": "node",
+      "args": [
+        "-e",
+        "const http = require('http'); process.stdin.on('data', data => { const req = http.request('http://localhost:9200/mcp', {method: 'POST', headers: {'Content-Type': 'application/json'}}, res => { let body = ''; res.on('data', chunk => body += chunk); res.on('end', () => console.log(body)); }); req.write(data); req.end(); });"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+This configuration uses a Node.js one-liner to bridge STDIO (which Claude CLI uses) to our HTTP endpoint at `http://localhost:9200/mcp`. This is a simple demo bridge; for production scenarios, prefer native transports supported by your SDK (e.g., SSE or WebSockets) or a hardened proxy.
+
+Now you can use Claude CLI with your MCP tools:
+
+```bash
+# Make sure your MCP server is running (mvn compile exec:java)
+
+# Start Claude CLI with your MCP configuration
+claude --mcp-config claude-mcp-config.json
+
+# In the Claude session, you can now use the tools:
+# "Fetch logs for payment-service and analyze the errors"
+# "Query error_rate metrics for the last 1 hour"
+# "Correlate the evidence from logs and metrics to identify the root cause"
+```
+
+**What happens:**
+
+1. Claude CLI loads your MCP configuration
+2. It discovers the `fetch_logs`, `query_metrics`, and `correlate_evidence` tools
+3. When you ask questions, Claude can intelligently decide to use these tools
+4. The tools call your Akka MCP server via HTTP
+5. Results are returned to Claude for analysis
+
+**Example Session:**
+
+```
+You: Investigate the payment service issues
+
+Claude: I'll help you investigate the payment service. Let me start by fetching
+the recent logs and checking the error metrics.
+
+[Uses fetch_logs tool with service="payment-service", lines=200]
+[Uses query_metrics tool with expr="error_rate", range="1h"]
+
+Based on the evidence gathered:
+
+1. **Log Analysis**: Found 8 errors in recent logs, including:
+   - Payment gateway timeouts (3 occurrences)
+   - Database connection refused errors (3 occurrences)
+
+2. **Metrics Analysis**:
+   - Error rate: 15.3% (elevated, threshold: 5.0%)
+   - 342 total errors in the last hour
+   - Primary issues: connection timeouts (156), database errors (89)
+
+Let me correlate these findings...
+
+[Uses correlate_evidence tool with findings from logs and metrics]
+
+**Root Cause Assessment**: The timeline shows payment gateway timeouts started
+at 14:28:45, followed by database connection failures at 14:29:15. This suggests
+a cascading failure pattern where gateway issues exhausted the connection pool...
+```
+
+### Claude Desktop Integration
+
+For persistent integration with Claude Desktop, create or edit the configuration file:
+
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%/Claude/claude_desktop_config.json`
+
+Use the same configuration as `claude-mcp-config.json` above. Restart Claude Desktop after editing the file.
+
+### VS Code / GitHub Copilot Integration
+
+Create `.vscode/mcp.json` in your project:
+
+```json
+{
+  "servers": {
+    "evidence-tools": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "-e",
+        "const http = require('http'); process.stdin.on('data', data => { const req = http.request('http://localhost:9200/mcp', {method: 'POST', headers: {'Content-Type': 'application/json'}}, res => { let body = ''; res.on('data', chunk => body += chunk); res.on('end', () => console.log(body)); }); req.write(data); req.end(); });"
+      ]
+    }
+  }
+}
+```
+
+Reload VS Code, open Copilot Chat in Agent mode, and the evidence tools will be available.
+
+## Step 5: Integration with Akka Agents
+
+One of Akka's unique features is seamless integration with its agent system. Here's how another Akka service can consume these MCP tools:
+
+```java
+package com.example.triage;
+
+import akka.javasdk.agent.Agent;
+import akka.javasdk.annotations.ComponentId;
+import akka.javasdk.annotations.Description;
+import akka.javasdk.client.RemoteMcpTools;
+
+@ComponentId("evidence-agent")
+public class EvidenceAgent extends Agent {
+
+    @Description("Gather evidence from logs and metrics")
+    public Effect<String> gatherEvidence(String incidentId, String serviceName) {
+        // Reference the remote MCP service by its service-name
+        var mcpTools = RemoteMcpTools.fromService("evidence-tools");
+
+        // Agents can now use these tools as part of their workflow
+        return effects()
+            .updateState(state.withMcpTools(mcpTools))
+            .reply("Evidence gathering configured for " + serviceName);
     }
 }
 ```
 
-Key fields in this configuration include:
+The agent discovers the `evidence-tools` service automatically in dev-mode using the `service-name` from `application.conf`. In production, this works through Kubernetes service discovery or configured endpoints.
 
--   **`"type": "stdio"`**: Specifies the transport protocol. (standard input/output)
--   **`"command": "dotnet"`**: The executable to run the server.
--   **`"args": [...]`**: Arguments to pass to the command. Here, it tells `dotnet` to run the project. 
+## Key Advantages of Akka's MCP Implementation
 
-This standardizes how MCP servers are integrated within VS Code, making it language-agnostic and easy to manage. This `mcp.json` configuration standardizes how different MCP servers, regardless of their implementation language (C#, Python, Node.js, etc.), are declared and launched by client applications like VS Code. The IDE doesn't need to know the specifics of how each server is built; it just needs this configuration to manage and communicate with them.
+Compared to the .NET and Java SDK implementations from previous posts, Akka's approach offers:
 
-Note: GitHub Copilot Chat “Agent mode” and MCP integration may be feature-gated or require preview builds. If you don’t see Agent mode or tools UI, ensure extensions are up to date and the feature is enabled in settings/insiders builds.
+### 1. Declarative vs. Imperative
 
-### B. Benefits of VS Code Integration
+**Traditional MCP SDK (Java):**
 
-Configuring an MCP server this way allows VS Code features, notably Copilot Chat when in "agent mode," to discover and utilize the tools provided by the custom server directly within the editor. This can significantly streamline development workflows by augmenting the AI assistant with domain-specific or project-specific tools. This direct support within VS Code signals a strategic effort to make MCP a fundamental part of the local developer environment, potentially fostering the creation of many small, specialized MCP servers.
+```java
+var getLogsTool = new McpServerFeatures.SyncToolSpecification(
+    new McpSchema.Tool("get_logs", "Return logs", schemaJson),
+    (exchange, arguments) -> {
+        // Handler implementation
+    }
+);
+server.tools(getLogsTool);
+```
 
-### C.  Quick Start: Using Your MCP Server with GitHub Copilot
+**Akka MCP:**
 
-After creating the `.vscode/mcp.json` file and restarting or reloading VS Code if necessary, you will see an option to start the server as in the screen shot below.
-![alt text](images/mcp.json.png)
+```java
+@McpTool(name = "fetch_logs", description = "Fetch logs from services")
+public String fetchLogs(String service, int lines) {
+    // Implementation
+}
+```
 
-Once the server has started and discovered the tools available in this MCP server.. you can follow the steps below.
+The Akka approach is more concise and maintainable.
 
-1.  Open the Chat view (e.g., with GitHub Copilot).
-2.  Switch to "Agent mode" (if available and supported by the Chat extension).
-![alt text](images/copilot-agent-mode.png)
-3.  There should be an option to select or view available tools, where "simple-mcp-server" and its tools (`ReverseString`, `CountWords`) would appear.
-![alt text](images/mcp-server-tools.png)
-4.  One could then interact with Copilot Chat, and it might choose to use these custom tools if relevant to the prompt.
-5. The below video is a simple example of using the MCP server we built with copilot chat in agent mode in Visual Studio Code.
+### 2. Built-in HTTP Server
 
-{{< youtube id="Cfh0ImwOziE" autoplay="true" color="white" modestbranding="true">}}
+Traditional MCP servers require external HTTP servers (Jetty, Kestrel). Akka includes its HTTP server, automatically exposing your endpoint at `/mcp`.
 
-This brief overview introduces the powerful capabilities of MCP integration with GitHub Copilot in VS Code, laying the groundwork for you to leverage custom tools in your everyday development tasks.
+### 3. Service Discovery
+
+Akka's service discovery allows distributed services to find and consume MCP tools without hardcoded URLs:
+
+```java
+// Automatically discovers service in dev-mode or production
+RemoteMcpTools.fromService("evidence-tools")
+```
+
+### 4. Resources Support
+
+Akka's `@McpResource` provides URI-based access to data:
+
+```java
+@McpResource(uriTemplate = "kb://runbooks/{serviceName}", ...)
+public String getRunbook(String serviceName) {
+    // Return runbook content
+}
+```
+
+Clients can access this as: `kb://runbooks/payment`
+
+### 5. Production-Grade Features
+
+- **Event Sourcing**: Tools can interact with event-sourced entities
+- **CQRS**: Separate read/write models for tool data
+- **Clustering**: Deploy multiple instances with built-in clustering
+- **Resilience**: Circuit breakers, timeouts, and retry policies
+- **Observability**: Built-in metrics, tracing, and logging
+
+## Deployment Considerations
+
+### Local Development
+
+```bash
+mvn compile exec:java
+```
+
+Services discover each other via `localhost` and configured ports.
+
+### Production Deployment
+
+1. **Containerize** the service:
+
+```bash
+mvn clean package
+docker build -t evidence-tools:1.0.0 .
+```
+
+2. **Deploy to Kubernetes** with service discovery:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: evidence-tools
+spec:
+  selector:
+    app: evidence-tools
+  ports:
+    - protocol: TCP
+      port: 9200
+      targetPort: 9200
+```
+
+3. **Configure service discovery**:
+
+```hocon
+akka.javasdk.production {
+  service-discovery {
+    method = "kubernetes-api"
+  }
+}
+```
+
+Akka automatically discovers services via Kubernetes DNS.
+
+### Multi-Instance Deployment
+
+Akka's clustering allows multiple instances:
+
+```bash
+# Deploy 3 replicas
+kubectl scale deployment evidence-tools --replicas=3
+```
+
+Requests are load-balanced automatically across instances.
+
+## Troubleshooting
+
+### Service Not Found
+
+**Issue:** Akka agent can't find MCP service
+
+**Solution:**
+
+1. Verify `service-name` in `application.conf` matches `RemoteMcpTools.fromService("...")`
+2. Check both services are running
+3. Ensure both are in dev-mode or both in production mode
+4. Check logs for service registration:
+
+   ```
+   INFO akka.runtime.DiscoveryManager - Service 'evidence-tools' registered
+   ```
+
+### Tools Not Appearing
+
+**Issue:** MCP clients don't see tools
+
+**Solution:**
+
+1. Verify `@McpEndpoint` annotation is present
+2. Check `@McpTool` methods are public
+3. Ensure server started successfully (check `/mcp` endpoint)
+4. Test with curl to verify tools are listed
+
+### Connection Issues
+
+**Issue:** Client can't connect to MCP endpoint
+
+**Solution:**
+
+1. Verify port is not blocked by firewall
+2. Check service is listening: `netstat -an | grep 9200`
+3. Verify HTTP endpoint: `curl http://localhost:9200/mcp`
+4. Check `akka.http.server` timeout settings
 
 ## What's Next?
 
-You now have a working MCP server with a set of string manipulation tools, ready for integration with clients like GitHub Copilot. This is a fantastic starting point! But the Model Context Protocol and its C# SDK offer much more depth for building sophisticated AI-powered applications. As you think about building more complex servers, here are some areas to explore:
+Your Akka MCP server is production-ready. Consider these enhancements:
 
--  **Dependency Injection for Richer Tools:** Our simple string tools were self-contained. However, real-world tools often need to interact with other services -- think databases, external APIs (like a weather service), or other business logic components. The MCP C# SDK supports dependency injection, allowing your tools to access these services. Even if tool methods are defined as `static`, you can inject services as parameters into these methods. For example, you could register an `HttpClient` or a custom `WeatherService` in your `Program.cs` and then have your MCP tool method accept it as an argument. The MCP runtime will resolve these dependencies from the configured dependency injection container when the tool is called.
-
--  **Exploring Other Transport Protocols (Beyond STDIO):** We used Standard Input/Output (STDIO) for our server, which is excellent for local development and tools run as child processes (like with the MCP Inspector or VS Code integration). However, for a server you want to deploy (like an Azure Function) or make accessible over a network, you'll need different transport protocols. Server-Sent Events (SSE) over HTTP is a common alternative supported by the MCP C# SDK. This is well-suited for web-based servers or scenarios where a single server instance needs to be accessible by multiple or remote clients, which aligns perfectly with hosting in environments like Azure Functions.
-
--  **Implementing Robust Error Handling:** As your tools become more complex and interact with external systems (which can sometimes fail or return unexpected data), robust error handling becomes critical. Your tool methods should use `try-catch` blocks to gracefully handle potential exceptions. The MCP C# SDK will typically translate unhandled exceptions thrown from your tool methods into standard JSON-RPC error responses, which the client can then interpret. Providing clear error messages helps in debugging and makes your server more reliable.
-
--  **Leveraging More MCP Concepts -- Resources and Prompts:** So far, we've focused on "Tools," which are invokable functions. The Model Context Protocol also defines other ways for servers to provide context to LLMs:
-
-    -  **Resources:** These are application-controlled data sources that an MCP server can expose. Think of these as data an LLM can read and use, like files, database content, or the current weather conditions from your planned weather provider, without necessarily performing a computational action.
-    -  **Prompts:** These are server-provided templates or workflows that can guide the LLM in how to best use the available tools or resources for specific tasks. Exploring these can allow you to build even richer and more context-aware interactions with AI models.
--  **Publishing and Deploying Your Server:** Once you've built a more complex server, like your weather provider, you'll want to deploy it. The.NET SDK offers capabilities for publishing your application, including containerization (e.g., using `dotnet publish /t:PublishContainer`), which can be useful for various hosting environments, including Azure Functions or other cloud services.
-
-By diving into these areas, you can build increasingly powerful and versatile MCP servers, truly unlocking the potential of connecting AI models to your specific data and capabilities. The journey from a simple string utility to a cloud-hosted weather information provider for LLMs is well within reach!
+- **Authentication**: Add JWT or API key authentication using Akka's ACL system
+- **Event Sourcing**: Persist tool invocations for audit trails
+- **Workflow Integration**: Combine MCP tools with Akka workflows
+- **Advanced Resources**: Expose streaming data, database views, or real-time feeds
+- **Multi-Tenancy**: Support multiple tenants with isolated data
+- **Observability**: Add OpenTelemetry tracing for tool calls
+- **Rate Limiting**: Protect tools with Akka's throttling capabilities
 
 ## Conclusion
 
-In this three-part series, we've explored the power and flexibility of the Model Context Protocol. You've learned what MCP is, its underlying architecture, and now how to build your own MCP server. With these foundational skills, you're ready to unlock endless possibilities by connecting powerful AI models to the rich contexts they need.
+Akka's MCP implementation brings enterprise-grade capabilities to MCP server development. The annotation-based approach is more concise than manual tool registration, the built-in HTTP server simplifies deployment, and service discovery enables true microservices architectures.
+
+### Key Takeaways
+
+1. **Declarative Tools**: `@McpTool` provides cleaner code than manual registration
+2. **HTTP First**: Built-in JSON-RPC endpoint at `/mcp`
+3. **Service Discovery**: Seamless integration across distributed services
+4. **Agent Integration**: Direct consumption by Akka agents for AI workflows
+5. **Production Ready**: Clustering, resilience, and observability built-in
+6. **Resource Support**: URI-based data access via `@McpResource`
+
+### Comparison Summary
+
+| Feature | .NET SDK | Java SDK | Akka SDK |
+|---------|----------|----------|----------|
+| Tool Definition | Attributes | Manual Registration | Annotations |
+| HTTP Server | Kestrel | Jetty | Akka HTTP (built-in) |
+| Transport | STDIO, SSE | STDIO, HTTP | HTTP/JSON-RPC |
+| Service Discovery | Manual | Manual | Automatic |
+| Agent Integration | External | External | Built-in |
+| Clustering | Manual | Manual | Built-in |
+| Production Features | ASP.NET Core | Spring/Jakarta EE | Akka Platform |
+
+Akka's approach is particularly well-suited for:
+
+- **Microservices architectures** with distributed MCP tools
+- **AI agent systems** needing tool orchestration
+- **Enterprise applications** requiring production-grade features
+- **Event-driven systems** with CQRS and event sourcing
+
+In the next post, we'll explore building a complete agentic workflow that orchestrates multiple MCP tools across distributed services using Akka's workflow engine.
+
+## Resources
+
+- [Akka Java SDK Documentation](https://doc.akka.io/java/)
+- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
+- [Previous: Building MCP Server in .NET]({{< relref "/blog/model-context-protocol/build-a-mcp-server-dotnet/" >}})
+- [GitHub Repository: agenticai-triage-mcp-tools](https://github.com/PradeepLoganathan/akka-kata/tree/main/akka-spovs/agenticai-triage-mcp-tools)
