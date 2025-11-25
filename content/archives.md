@@ -1,5 +1,5 @@
 ---
-title: "Archives"
+title: "Blog"
 layout: "archives"
 ---
 
