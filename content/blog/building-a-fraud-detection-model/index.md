@@ -165,7 +165,50 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 **NOTE**: The stratify parameter is added to the train_test_split function to ensure that the same ratio of target variable (Class) is maintained in both training and test datasets, This is especially important for Imbalanced datasets to avoid bias in the model due to uneven distribution of Class values in the datasets.
 
-With our data cleaned, scaled, and split, we've laid the groundwork for the next exciting phase: exploratory data analysis (EDA). This will help us uncover hidden patterns and relationships in the data, guiding us towards the best model for fraud detection.
+## Handling Class Imbalance: A Critical Step
+
+Before building and training our model, we need to address the severe class imbalance in our dataset. Our dataset has 284,807 legitimate transactions versus only 492 fraudulent ones. This is a ratio of roughly 580:1. Without proper balancing of the legitimate and the fraudulent transactions, the model could achieve >99% accuracy simply by predicting all transactions as legitimate and completely miss all fraud cases.
+
+### Understanding the Imbalance Problem
+
+A naive model trained on this imbalanced data without special handling will learn to predict the majority class (non-fraud) by default. This is why we need specialized techniques such as 
+
+1. **SMOTE (Synthetic Minority Over-sampling Technique)**: Generates synthetic samples of the minority class to balance the training set
+2. **Class Weights**: Assigns higher misclassification costs to the minority class during training
+3. **Threshold Tuning**: Adjusts the decision boundary to optimize for fraud detection rather than accuracy
+
+### Implementing Imbalance Handling Techniques
+
+Let's implement these complementary techniques in our model building process:
+
+```python
+from imblearn.over_sampling import SMOTE
+from sklearn.utils.class_weight import compute_class_weight
+
+# Apply SMOTE to balance the training set
+smote = SMOTE(random_state=42, k_neighbors=5)
+X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
+
+print(f"Original training set - Non-Fraud: {(y_train == 0).sum()}, Fraud: {(y_train == 1).sum()}")
+print(f"Balanced training set - Non-Fraud: {(y_train_balanced == 0).sum()}, Fraud: {(y_train_balanced == 1).sum()}")
+
+# Calculate class weights to penalize minority class misclassification
+class_weights = compute_class_weight('balanced', 
+                                     classes=np.unique(y_train), 
+                                     y=y_train)
+class_weight_dict = {0: class_weights[0], 1: class_weights[1]}
+print(f"Class weights: {class_weight_dict}")
+```
+
+### Why These Techniques Matter
+
+- **SMOTE** creates realistic synthetic minority samples by finding nearest neighbors in feature space
+- **Class Weights** automatically adjust the penalty for incorrect predictions, making fraudulent misclassifications more costly
+- Together, they prevent the model from simply predicting everything as non-fraudulent
+
+Now that we've balanced our training data and calculated class weights, we can proceed with building the model.
+
+With our data cleaned, scaled, split and balanced, we've laid the groundwork for the next exciting phase: exploratory data analysis (EDA). This will help us uncover hidden patterns and relationships in the data, guiding us towards the best model for fraud detection.
 
 ## Exploratory Data Analysis (EDA): Unveiling Hidden Patterns in Fraud
 
@@ -230,7 +273,7 @@ With our data thoroughly explored, it's time to unleash the power of machine lea
 
 ### Why Random Forest?
 
-* Handles Imbalance: Random Forests excel at dealing with imbalanced datasets like ours, where fraudulent transactions are far less common than legitimate ones.
+* Handles Imbalance (with proper techniques): While Random Forests have some built-in robustness through ensemble averaging, they work best when combined with techniques like SMOTE, class weights, and threshold tuning.
 * Ensemble Power: It combines the predictions of multiple decision trees, reducing the risk of overfitting and improving overall accuracy.
 * Feature Importance: Random Forests provide insights into which features are most important for fraud detection.
 
@@ -249,14 +292,9 @@ model.fit(X_train, y_train)
 
 In this code snippet, we create a Random Forest classifier with 100 decision trees (n_estimators=100). The random_state parameter ensures reproducibility of our results. We then train the model using the fit method, feeding it the training features (X_train) and corresponding labels (y_train).
 
-### Making Predictions
+### Making Predictions and Probability Outputs
 
-Now that our model is trained, let's see how well it performs on the test set (data it hasn't seen before)
-
-```python
-# Predict on the test set
-y_pred = model.predict(X_test)
-```
+Now that our model is trained on balanced data with class weights, we have both discrete predictions and probability scores. The probability scores are particularly valuable for imbalanced datasets as they allow us to adjust the decision threshold based on business requirements.
 
 ## Model Evaluation : Assessing Our Fraud-Fighting Arsenal
 
@@ -367,15 +405,115 @@ Evaluate precision and recall to understand the trade-off between catching all f
 Consider the F1-score as a balanced measure of overall performance.
 The ROC-AUC score provides a general idea of the model's discriminatory power.
 
-### Fine-tuning for Better Performance
+### Threshold Tuning for Imbalanced Data
 
-If the initial results aren't satisfactory, we can explore techniques like:
+The default decision threshold of 0.5 may not be optimal for imbalanced datasets. We can adjust the threshold to prioritize catching fraud cases (higher recall) or reducing false alarms (higher precision), depending on business requirements.
 
-* Resampling: Over-sampling the minority class or under-sampling the majority class.
-* Cost-sensitive learning: Assigning different misclassification costs to each class.
-* Ensemble methods: Combining multiple models to improve predictions.
+```python
+from sklearn.metrics import precision_recall_curve, f1_score
 
-By carefully evaluating our model and making necessary adjustments, we can refine it to become a powerful tool in the fight against fraud.
+# Find optimal threshold by evaluating precision-recall trade-off
+precision_scores, recall_scores, thresholds = precision_recall_curve(y_test, y_pred_proba)
+
+# Calculate F1-scores for each threshold
+f1_scores = 2 * (precision_scores * recall_scores) / (precision_scores + recall_scores + 1e-10)
+
+# Find threshold that maximizes F1-score
+optimal_idx = np.argmax(f1_scores)
+optimal_threshold = thresholds[optimal_idx] if optimal_idx < len(thresholds) else 0.5
+
+print(f"Optimal threshold: {optimal_threshold:.3f}")
+print(f"F1-Score at optimal threshold: {f1_scores[optimal_idx]:.4f}")
+
+# Apply custom threshold
+y_pred_tuned = (y_pred_proba >= optimal_threshold).astype(int)
+
+print(f"\n--- Default Threshold (0.5) ---")
+print(classification_report(y_test, y_pred))
+
+print(f"\n--- Optimized Threshold ({optimal_threshold:.3f}) ---")
+print(classification_report(y_test, y_pred_tuned))
+```
+
+This approach finds the threshold that maximizes the F1-score, providing a good balance between precision and recall. The comparison shows how threshold tuning can improve your model's performance on imbalanced data.
+
+### Further Fine-tuning Options
+
+If you want to fine-tune further, consider:
+
+* **Hyperparameter Tuning**: Adjust Random Forest parameters like `max_depth`, `min_samples_split`, or `n_estimators` using GridSearchCV
+* **Ensemble methods**: Combine multiple models (Gradient Boosting, XGBoost) for potentially better performance
+* **Advanced resampling**: Experiment with different SMOTE variations or hybrid approaches like SMOTETomek
+
+By carefully evaluating our model with proper imbalance handling techniques, we can refine it to become a powerful tool in the fight against fraud.
+
+## Feature Importance Analysis: Understanding What Matters
+
+One of the significant advantages of Random Forest models is their ability to provide feature importance scores. These scores tell us which features the model relies on most heavily when making fraud detection decisions. Understanding feature importance provides valuable insights into fraud patterns and helps with model interpretability.
+
+### Why Feature Importance Matters
+
+* **Model Transparency**: Understand why the model makes specific predictions
+* **Business Insights**: Identify which transaction characteristics are most indicative of fraud
+* **Feature Selection**: Determine if all 30 features are necessary or if a subset would suffice
+* **Domain Validation**: Confirm that the model's decision factors align with fraud detection domain knowledge
+
+### Extracting and Visualizing Feature Importance
+
+Let's examine which features are most important for our fraud detection model:
+
+```python
+# Extract feature importance from the trained model
+feature_importance_df = pd.DataFrame({
+    'feature': X_train_balanced.columns,
+    'importance': model.feature_importances_
+}).sort_values('importance', ascending=False)
+
+# Display top 20 important features
+print("Top 20 Most Important Features for Fraud Detection:")
+print(feature_importance_df.head(20).to_string(index=False))
+
+# Visualize feature importance
+plt.figure(figsize=(12, 8))
+top_features = feature_importance_df.head(15)
+plt.barh(range(len(top_features)), top_features['importance'])
+plt.yticks(range(len(top_features)), top_features['feature'])
+plt.xlabel('Importance Score')
+plt.ylabel('Feature')
+plt.title('Top 15 Most Important Features for Fraud Detection')
+plt.gca().invert_yaxis()
+plt.tight_layout()
+plt.show()
+
+# Calculate cumulative importance
+cumulative_importance = feature_importance_df['importance'].cumsum()
+cumulative_pct = (cumulative_importance / cumulative_importance.iloc[-1]) * 100
+
+print(f"\nCumulative Feature Importance:")
+print(f"Top 5 features account for: {cumulative_pct.iloc[4]:.2f}% of importance")
+print(f"Top 10 features account for: {cumulative_pct.iloc[9]:.2f}% of importance")
+print(f"Top 15 features account for: {cumulative_pct.iloc[14]:.2f}% of importance")
+```
+
+### Interpreting Feature Importance Results
+
+The output provides several valuable insights:
+
+* **Top Features**: The features listed first have the strongest predictive power for fraud detection
+* **Cumulative Importance**: Shows how many features are needed to capture most of the model's decision-making power
+* **Feature Interactions**: Random Forest captures complex interactions between features automatically
+* **Anonymized Features**: Since our features are anonymized (V1-V28), importance scores help us understand which PCA components are most relevant
+
+### Key Observations
+
+In fraud detection models, feature importance typically reveals:
+
+1. **Amount and Time patterns**: These raw features often rank highly as fraudsters exhibit different spending patterns
+2. **Specific PCA components**: Certain anonymized features (like V4, V10, V14) often emerge as critical for fraud detection
+3. **Non-linear relationships**: Features that matter only in specific combinations appear important in ensemble methods
+4. **Domain alignment**: Important features often align with known fraud indicators in the financial domain
+
+This analysis validates that our model is learning meaningful patterns rather than relying on noise or spurious correlations.
 
 ## Saving the Model: Preserving Our Fraud-Fighting Knowledge
 
