@@ -33,44 +33,27 @@ weight: 1
 
 {{< series-toc >}}
 
+Let's be honest: you can't build an AI system that does *real work* without solving a major engineering challenge first. LLMs like Claude and ChatGPT are frozen in time, with no access to your systems, no memory of recent events, and no ability to learn. Ask an LLM to explain an API, and it will do a great job. But ask it to *call* that API? It can't, not without custom wiring.
 
-The rapid advancement of Artificial Intelligence (AI), particularly Large Language Models (LLMs), has created a pressing need for standardized methods to connect these powerful models with the external world – data sources, APIs, and specialized tools. LLMs, like those powering ChatGPT or Anthropic’s Claude, are inherently limited to the static knowledge encoded in their training data or temporarily injected via prompts. Large Language Models (LLMs) like OpenAI's ChatGPT or Anthropic’s Claude have amazed the world with their ability to write code, summarize articles, generate reports, and answer questions. But what’s less obvious—and often misunderstood—is that these models don’t "know" anything new after their training ends.
+This creates a significant engineering bottleneck: to give an LLM any real-world capability, you have to build custom integration code for every single tool, API, or data source. This one-to-one approach is not scalable and leads to a fragile, unmanageable mess. 
 
-> **They can’t access your company’s data, check today’s weather, query a live API, or trigger an action unless you explicitly give them that ability.**
+Want your AI system to:
+* Look up live data (APIs, databases, file systems)?
+* Trigger real actions (send emails, update records, execute commands)?
+* Access context about what the user is actually working on?
+* Use specialized tools (code analyzers, orchestration platforms, CLIs)?
 
-LLMs are trained on massive datasets up to a certain cutoff date (for example, September 2024 or April 2025), and beyond that, they are essentially guessing based on patterns they learned. 
+**Each of these requires custom plumbing.** And this is where everything falls apart.
 
-So while an LLM might be able to explain what an API does, it can't call that API unless your application makes that possible. To perform meaningful real-world tasks, they need to:
+### The Problem with Custom Integrations
 
-* Access fresh data (e.g., live APIs, databases, or user inputs).
-* Trigger external actions (e.g., send emails, update records, call APIs),
-* Incorporate  Contextual information (e.g., what file or project the user is working on),
-* Use tools and services (e.g., code analysis platforms, orchestration engines, CLI tools).
+Imagine building a customer support chatbot for an e-commerce business. A customer asks, "Where's my order #45677?" An LLM can guess what to do, but it can't retrieve live order data without a connection to your system. So, you build an integration with your order management API.
 
-### Real-World Example: Order Lookup Chatbot in E-commerce
+But then, you need to add tracking information from a shipping provider, payment details from Stripe, and the ability to send email notifications. Each new capability requires more custom code, and soon your clean integration becomes a web of brittle connectors. Each system has a different API, authentication method, and error handling.
 
-Imagine you're building a customer support chatbot for an e-commerce business. A customer asks:
+This isn't just a problem for chatbots. A corporate knowledge assistant that's supposed to help employees answer questions might need to access internal documentation in Confluence, query a database for sales figures, and check a user's permissions in Active Directory. Without a standardized way to interact with these systems, you're back to building custom integrations for each one. Later in this series, we'll look at concrete coding examples, such as a log analysis tool that can query Datadog or Splunk.
 
-> *"Where's my order #45677?"*
-
-An LLM can guess what kind of data might be relevant and even describe what an API might look like. But it **can't actually retrieve live order data** unless you explicitly connect it to your system.
-
-So you build a quick integration between the model and your internal order management API. The bot can now fetch order status. Great.
-
-But then, someone wants to **include tracking information**---so you wire up a shipping provider like Sendle, ShipStation, or Australia Post. Then comes **payment integration**---maybe with Stripe or PayPal---to show refund status or receipts. Then **email or SMS notifications**, so the chatbot can update the customer proactively based on chat requests. Maybe even **inventory checks**, so the chatbot can suggest alternate products if something's out of stock.
-
-Suddenly, your clean one-to-one integration has become a web of brittle connectors:
-
--   Each system has a different API,
--   Some use OAuth, others use API keys,
--   You have to normalize response formats,
--   And you must carefully manage errors, retries, and security for each tool.
-
-It worked when it was just one API. But as the assistant's capabilities grow, you end up with a fragile, deeply-coupled mess of custom logic. Adding a new capability means weeks of engineering work---and testing all the old ones again.
-
-Integrating LLMs with external systems remains complex without standardization. Every new tool or API typically requires custom plumbing. This creates fragility, slows down innovation, and leads to vendor lock-in—where applications are tightly coupled to proprietary platforms, increasing switching costs and reducing long-term flexibility. These challenges have made it difficult to deploy AI systems that are both scalable and secure.
-
-MCP (Model Context Protocol), introduced by Anthropic, was designed specifically to solve this fragmentation. It provides a standardized, open interface for LLMs to interact with external tools and data sources—securely, modularly, and with minimal custom engineering. Think of it as a “USB-C” for AI tools: plug in a new capability, and it just works.
+This is where the **Model Context Protocol (MCP)** comes in.
 
 ## Why MCP? 
 
@@ -196,7 +179,7 @@ Now that we have a clear picture of the primary components namely the **Host, Cl
 
 ## Core Primitives of MCP
 
-MCP servers expose their capabilities using three core primitives: **Tools**, **Resources**, and **Prompts**. These primitives define how AI models interact with the external world---by performing actions, accessing data, or shaping behavior---with structured metadata and human-in-the-loop safeguards.
+MCP servers expose their capabilities using three core primitives: **Tools**, **Resources**, and **Prompts**. These primitives define how AI models interact with the external world by performing actions, accessing data, or shaping behavior---with structured metadata and human-in-the-loop safeguards.
 
 ### Tools 
 
@@ -214,7 +197,14 @@ Tools can be unsafe (they might execute code, send emails, make purchases, etc.)
 
 ### Resources
 
-Resources allow an MCP server to expose structured or unstructured data to the model. This could involve querying databases, accessing specific files or directories on a local filesystem, retrieving information from cloud storage platforms, or accessing specific data streams like customer logs. The server manages the secure retrieval and potential processing of this data based on client requests. Each resource is identified by a URI (e.g. file://, db://, http://). The server acts as a content provider. The client can request the content of a URI or list available URIs. Crucially, resources are selected by the application or user, not by the model directly. For instance, the user must choose which files or records to expose to the assistant. This ensures human oversight. The server may support searching for resources or filtering (for instance, a server could implement resources/search for keywords in documents). When a resource is fetched, the server returns its content, possibly with metadata like content type. Large resources might be chunked or streamed. Also, servers can support subscriptions.If a resource might change (e.g. a log file or an online data feed), the client can subscribe and the server will send notifications/resource_updated events with new content or diffs. Resource content is typically injected into the prompt as needed (often truncated or summarized if it’s too large, to fit the context window).
+Resources allow an MCP server to expose structured or unstructured data to the model. This could involve querying databases, accessing specific files or directories on a local filesystem, retrieving information from cloud storage platforms, or accessing specific data streams like customer logs. The server acts as a content provider, and can support a range of capabilities, including:
+
+- **Listing:** Discovering what resources are available.
+- **Reading:** Fetching the content of a specific resource.
+- **Searching:** Finding resources that match certain keywords.
+- **Subscriptions:** Receiving notifications when a resource changes.
+
+Crucially, resources are selected by the application or user, not by the model directly. This ensures human oversight and data privacy. Large resources are handled intelligently, with options for chunking, summarizing, or streaming to avoid overwhelming the model's context window.
 
 ### Prompts
 
@@ -298,16 +288,53 @@ sequenceDiagram
 
 In addition to this synchronous flow, MCP supports asynchronous Notifications. Servers can proactively send these messages to clients without a preceding request, typically to inform them about relevant state changes, such as the availability of a new tool or updates to a resource the client might be interested in. This allows for more dynamic interactions and keeps clients informed about the capabilities available through the server. Overall, MCP provides a structured protocol enabling AI agents to effectively plan sequences of actions, execute those steps by interacting with real systems via tools and resources, and adapt based on the information received. This completes our high-level overview of the Model Context Protocol. We've established why it's needed, what it does, and how its core primitives (tools, resources, and prompts) provide a powerful and extensible framework for AI agent interactions.
 
+## Why Now? The Convergence
+
+MCP didn't appear randomly. Three things converged in late 2024:
+
+1. **LLMs finally escaped the lab** — Claude, ChatGPT, Gemini became AI agents, not just chatbots. They needed to *do* things, not just talk about them.
+
+2. **Everyone built custom integrations** — Companies like Anthropic, OpenAI, and Google all independently hit the same problem: their AI systems needed standard ways to talk to tools. They were all solving the same problem separately.
+
+3. **Standardization became urgent** — The fragmentation got so bad that Anthropic said: "Let's just open-source a standard and invite everyone." And everyone said yes. That's rare.
+
+The timing matters. A year earlier, the AI landscape wasn't mature enough. A year later, we'd have even more vendor-specific solutions. But in late 2024, the moment was right.
+
+## What MCP Doesn't Do (And Why That Matters)
+
+MCP solves a real problem: standardizing how AI systems talk to tools. But it's not a magic solution, and it's worth being clear about its limits:
+
+- **MCP Doesn't Handle Access Control** : MCP says "here are the tools available." It doesn't say "this user can call this tool." That's still your job. Example: You expose a "delete_order" tool via MCP. MCP makes it discoverable and callable. But your backend still needs to check: "Is this user allowed to delete this order? Does it belong to their account?". If you get this wrong, you've got a security hole.
+
+- **MCP Doesn't Fix Hallucination** : An LLM might have access to the right tool but use it *wrong*. Example: You expose a `send_email` tool with parameters (recipient, subject, body). The AI might:
+  - Call it with the wrong recipient (hallucinated email address)
+  - Send the right message to the wrong person
+  - Construct a malicious prompt in the body
+ MCP gives access. It doesn't guarantee correct usage. That's still an LLM problem.
+
+- **You're Trading One Lock-in for Another** : MCP frees you from custom integration code. But you're betting on Claude, ChatGPT, or Gemini being around and not changing their APIs dramatically.Is that a good bet? Probably...these are major platforms. But it's worth acknowledging you're shifting risk, not eliminating it.
+
+- **Building Reliable Servers is Still Hard** : MCP defines the protocol. It doesn't define:
+  - How to retry failed API calls
+  - How to handle timeouts
+  - How to log errors
+  - How to monitor performance
+  - How to scale if the AI system calls your server 1000x per second
+
+ Your MCP server is still software. It needs to be robust, tested, and monitored.
+
+- **Performance Has a Cost** : Each tool invocation is another round-trip: AI system → your server → external API → your server → AI system. That's extra latency. For most use cases, fine. For real-time systems? You might notice.
+
+- **MCP Isn't Always Worth It** : If you're building a simple assistant that needs to call one API, MCP might be overkill. You could just write custom integration code in an afternoon.
+MCP shines when you have *many* tools, *many* AI consumers, and you want to avoid repeating integration work. It's an investment that pays off at scale.
+
+
 ## What's Next?
 
-------------
+Now that you have a high-level understanding of the "what" and "why" of MCP, you're ready to dive deeper. In the [**next post in this series**]({{< relref "/blog/model-context-protocol/mcp-protocol-mechanics-and-architecture/">}}), we'll explore the "how" by examining the protocol mechanics, including:
 
-Now that we've covered the why and what of the Model Context Protocol and its core primitives, we're ready to put theory into practice.
-In [**Part 2 of this series**]({{< relref "/blog/model-context-protocol/mcp-protocol-mechanics-and-architecture/">}}), we'll go under the hood to examine how MCP works at a protocol level. We will be looking at how
+- How messages are structured using JSON-RPC 2.0.
+- How stateful sessions are managed.
+- How transports like `stdio` and `HTTP + SSE` are used.
 
-- How messages are structured using JSON-RPC 2.0
-- How stateful sessions are maintained across multiple interactions
-- How transports like `stdio` and `HTTP + SSE` enable flexible deployment
-- What design choices make MCP secure, composable, and scalable
-
-Stay tuned for more deep dives into MCP, including hands-on examples of building MCP Servers and Clients, exploring real-world use cases, and best practices for integrating MCP into your AI applications. The journey to mastering AI integration with MCP is just beginning!
+Subsequent posts will then get into hands-on coding, where we'll build our own MCP Servers and Clients. Stay tuned!
