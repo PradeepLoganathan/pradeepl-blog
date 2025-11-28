@@ -208,13 +208,13 @@ MCP's design ensures the higher-level protocol (JSON-RPC + capabilities) remains
 
 ## Capabilities in MCP: Tools, Resources, and Prompts
 
-Now that we understand the communication foundation and how messages are transmitted, let's walk through an MCP session from start to finish. The lifecycle follows a logical order:
+Now that we understand the communication foundation and how messages are transmitted, let's walk through a typical MCP session. The lifecycle follows a logical order:
 
 1. **Handshake:** The client and server connect and agree on capabilities.  
 2. **Discovery:** The client asks the server *what* it can do.  
 3. **Invocation:** The client asks the server to *do* something.
 
-We will look at these in logical order of steps below. 
+Let's look at each of these steps in detail. 
 
 ### Step 1: The Handshake (Connection Establishment)
 
@@ -224,43 +224,43 @@ Establishing a connection in MCP involves both setting up the transport (STDIO, 
 
 ```json
 {  
-  "jsonrpc": "2.0",  
-  "id": "1",  
-  "method": "initialize",  
-  "params": {  
-    "protocolVersion": "1.0",  
-    "clientInfo": {  
-      "name": "ExampleHostApp",  
-      "version": "1.2.0"  
-    },  
-    "capabilities": {  
-      "tools": {},  
-      "resources": {},  
-      "prompts": {}  
-    },  
-    "roots": [  
-      { "uri": "file:///workspace", "name": "workspace" }  
-    ]  
-  }  
+  "jsonrpc": "2.0",  
+  "id": "1",  
+  "method": "initialize",  
+  "params": {  
+    "protocolVersion": "1.0",  
+    "clientInfo": {  
+      "name": "ExampleHostApp",  
+      "version": "1.2.0"  
+    },  
+    "capabilities": {  
+      "tools": {},  
+      "resources": {},  
+      "prompts": {}  
+    },  
+    "roots": [  
+      { "uri": "file:///workspace", "name": "workspace" }  
+    ]  
+  }  
 }
 ```
 2. **Server initialize Response:** The server responds with a JSON-RPC **response** containing its details, such as the capability types it supports (e.g., resources, tools) and server identification. This capability negotiation allows the client to adjust its behavior and is designed for backwards-compatibility.
 ```json
  {  
-   "jsonrpc": "2.0",  
-   "id": "1",  
-   "result": {  
-     "protocolVersion": "1.0",  
-     "capabilities": {  
-       "tools": {},  
-       "resources": {},  
-       "prompts": {}  
-     },  
-     "serverInfo": {  
-       "name": "SampleMCPServer",  
-       "version": "0.1.0"  
-     }  
-   }  
+  "jsonrpc": "2.0",  
+  "id": "1",  
+  "result": {  
+    "protocolVersion": "1.0",  
+    "capabilities": {  
+      "tools": {},  
+      "resources": {},  
+      "prompts": {}  
+    },  
+    "serverInfo": {  
+      "name": "SampleMCPServer",  
+      "version": "0.1.0"  
+    }  
+  }  
  }
 ```
 3. **Client initialized Notification:** After receiving a successful initialize result, the client sends an `initialized` notification (no id) to signal that the connection is fully established and ready for use.
@@ -305,10 +305,10 @@ The client sends a `resources/list` request to get the server's resource invento
 ```json
 // Client --> Server: discover available resources  
 {  
-  "jsonrpc": "2.0",  
-  "id": 1,  
-  "method": "resources/list",  
-  "params": {}  
+  "jsonrpc": "2.0",  
+  "id": 1,  
+  "method": "resources/list",  
+  "params": {}  
 }
 ```
 
@@ -317,18 +317,18 @@ The server replies with a response containing a list of resource descriptors, in
 ```json
 // Server --> Client: list of resources (result of resources/list)  
 {  
-  "jsonrpc": "2.0",  
-  "id": 1,  
-  "result": {  
-    "resources": [  
-      {  
-        "uri": "demo://greeting.txt",  
-        "name": "Greeting File",  
-        "description": "A friendly greeting text file",  
-        "mimeType": "text/plain"  
-      }  
-     ]  
-  }  
+  "jsonrpc": "2.0",  
+  "id": 1,  
+  "result": {  
+    "resources": [  
+      {  
+        "uri": "demo://greeting.txt",  
+        "name": "Greeting File",  
+        "description": "A friendly greeting text file",  
+        "mimeType": "text/plain"  
+      }  
+    ]  
+  }  
 }
 ```
 
@@ -345,10 +345,10 @@ Now that the client knows the resource `demo://greeting.txt` exists, it can send
 ```json
 // Client --> Server: request to read a specific resource  
 {  
-  "jsonrpc": "2.0",  
-  "id": 2,  
-  "method": "resources/read",  
-  "params": { "uri": "demo://greeting.txt" }  
+  "jsonrpc": "2.0",  
+  "id": 2,  
+  "method": "resources/read",  
+  "params": { "uri": "demo://greeting.txt" }  
 }
 ```
 
@@ -357,17 +357,17 @@ If successful, the server returns a result containing the resource's content.
 ```json
 // Server --> Client: content of the resource (result of resources/read)  
 {  
-  "jsonrpc": "2.0",  
-  "id": 2,  
-  "result": {  
-    "contents": [  
-      {  
-        "uri": "demo://greeting.txt",  
-        "text": "Hello from MCP\!",  
-        "mimeType": "text/plain"  
-      }  
-    ]  
-  }  
+  "jsonrpc": "2.0",  
+  "id": 2,  
+  "result": {  
+    "contents": [  
+      {  
+        "uri": "demo://greeting.txt",  
+        "text": "Hello from MCP\!",  
+        "mimeType": "text/plain"  
+      }  
+    ]  
+  }  
 }
 ```
 If the resource cannot be found, the server returns an error object instead of a result.
@@ -376,11 +376,11 @@ If the resource cannot be found, the server returns an error object instead of a
 // Server --> Client: error response (resource not found)  
 {  
  "jsonrpc": "2.0",  
-  "id": 2,  
-  "error": {  
-    "code": 404,  
-    "message": "Resource not found"  
-  }  
+  "id": 2,  
+  "error": {  
+    "code": 404,  
+    "message": "Resource not found"  
+  }  
 }
 ```
 
@@ -425,13 +425,13 @@ The invocation flow for tools is very similar. After discovering a tool (e.g., "
 ```json
 // Client --> Server: invoke a tool (echo) via tools/call  
 {  
-  "jsonrpc": "2.0",  
-  "id": 3,  
-  "method": "tools/call",  
-  "params": {  
-    "name": "echo",  
-    "arguments": { "message": "Testing 123" }  
-  }  
+  "jsonrpc": "2.0",  
+  "id": 3,  
+  "method": "tools/call",  
+  "params": {  
+    "name": "echo",  
+    "arguments": { "message": "Testing 123" }  
+  }  
 }
 ```
 
@@ -441,12 +441,12 @@ The server executes the tool and returns its output in the result field. The str
 // Server --> Client: result of the echo tool  
 {  
   "jsonrpc": "2.0",  
-  "id": 3,  
-  "result": {  
-    "content": [  
-      { "type": "text", "text": "Echo: Testing 123" }  
-    ]  
-  }  
+  "id": 3,  
+  "result": {  
+    "content": [  
+      { "type": "text", "text": "Echo: Testing 123" }  
+    ]  
+  }  
 }
 ```
 
@@ -454,12 +454,12 @@ And just like resources, if the tool fails or is not found, the server returns a
 
 ```json
 {  
-  "jsonrpc": "2.0",  
-  "id": 3,  
-  "error": {  
-    "code": 404,  
-    "message": "Tool not found"  
-  }  
+  "jsonrpc": "2.0",  
+  "id": 3,  
+  "error": {  
+    "code": 404,  
+    "message": "Tool not found"  
+  }  
 }
 ```
 
@@ -491,7 +491,7 @@ This discover-and-invoke pattern applies similarly to prompts, where the client 
 
 The MCP specification outlines key security principles that implementers **SHOULD** adhere to :
 
-- **User Consent and Control:** Users must be informed about and explicitly consent to data access and tool operations. Clear user interfaces for reviewing and authorizing actions are critical. Users should retain control over what is shared and executed. As an example, A support agent asks, “Issue a refund for order 45677”. The host shows a confirmation UI with tool name, inputs, and side‑effects. Only on approval does the host send:
+- **User Consent and Control:** Users must be informed about and explicitly consent to data access and tool operations. Clear user interfaces for reviewing and authorizing actions are critical. Users should retain control over what is shared and executed. As an example, A support agent asks, “Issue a refund for order 45677”. The host shows a confirmation UI with tool name, inputs, and side-effects. Only on approval does the host send:
   ```json
   {
     "jsonrpc": "2.0",

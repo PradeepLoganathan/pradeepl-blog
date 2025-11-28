@@ -70,6 +70,18 @@ MCP, introduced by Anthropic, is an **open protocol** designed to standardize th
 
 Because MCP is open and composable, it allows developers and tool vendors to build **plug-and-play connectors** that work across models and platforms. You can expose a payment API, a document store, or a CLI tool once and use it with any assistant that speaks the MCP protocol. Rather than building a new integration every time an AI model changes, you build once, plug in anywhere. By standardizing this interface, MCP shifts the developer's focus to designing smart, secure, and useful AI workflows without reinventing the wiring for every tool or data source.
 
+## Why Now? The Convergence
+
+MCP didn't appear randomly. Three things converged in late 2024:
+
+1. **LLMs finally escaped the lab** — Claude, ChatGPT, Gemini became AI agents, not just chatbots. They needed to *do* things, not just talk about them.
+
+2. **Everyone built custom integrations** — Companies like Anthropic, OpenAI, and Google all independently hit the same problem: their AI systems needed standard ways to talk to tools. They were all solving the same problem separately.
+
+3. **Standardization became urgent** — The fragmentation got so bad that Anthropic said: "Let's just open-source a standard and invite everyone." And everyone said yes. That's rare.
+
+The timing matters. A year earlier, the AI landscape wasn't mature enough. A year later, we'd have even more vendor-specific solutions. But in late 2024, the moment was right.
+
 ## The Growing MCP Ecosystem
 
 Since its introduction by Anthropic in late 2024 , MCP has rapidly gained traction, fostering a growing ecosystem around the standard.
@@ -287,18 +299,6 @@ sequenceDiagram
 {{< /mermaid >}}
 
 In addition to this synchronous flow, MCP supports asynchronous Notifications. Servers can proactively send these messages to clients without a preceding request, typically to inform them about relevant state changes, such as the availability of a new tool or updates to a resource the client might be interested in. This allows for more dynamic interactions and keeps clients informed about the capabilities available through the server. Overall, MCP provides a structured protocol enabling AI agents to effectively plan sequences of actions, execute those steps by interacting with real systems via tools and resources, and adapt based on the information received. This completes our high-level overview of the Model Context Protocol. We've established why it's needed, what it does, and how its core primitives (tools, resources, and prompts) provide a powerful and extensible framework for AI agent interactions.
-
-## Why Now? The Convergence
-
-MCP didn't appear randomly. Three things converged in late 2024:
-
-1. **LLMs finally escaped the lab** — Claude, ChatGPT, Gemini became AI agents, not just chatbots. They needed to *do* things, not just talk about them.
-
-2. **Everyone built custom integrations** — Companies like Anthropic, OpenAI, and Google all independently hit the same problem: their AI systems needed standard ways to talk to tools. They were all solving the same problem separately.
-
-3. **Standardization became urgent** — The fragmentation got so bad that Anthropic said: "Let's just open-source a standard and invite everyone." And everyone said yes. That's rare.
-
-The timing matters. A year earlier, the AI landscape wasn't mature enough. A year later, we'd have even more vendor-specific solutions. But in late 2024, the moment was right.
 
 ## What MCP Doesn't Do (And Why That Matters)
 
