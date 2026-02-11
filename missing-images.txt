@@ -1,0 +1,16 @@
+1. 12-factor-cloud-native-apps - Missing: 12-factor-apps.png
+  2. ai-model-inference-with-triton-inference-server - Missing: images/triton-architecture.png
+  3. cluster-api-capi - Missing: images/datacenter-racks.jpg
+  4. deep-dive-into-SBOM - Missing: images/sbom-cover.jpg
+  5. getting-started-with-terraform-on-azure-part-1 - Missing: cover.jpg
+  6. getting-started-with-terraform-on-azure-part-2 - Missing: cover.jpg
+  7. identifying-resources-and-designing-representations - Missing: images/REST-architectural-constraints.png
+  8. implementing-data-mesh-architecture - Missing: images/datamesh.png
+  9. kubernetes-healthchecks-in-aspnet - Missing: cover.jpg
+  10. migrating-from-sqlserver-postgres - Missing: images/cover.jpg
+  11. owin-katana-kestrel - Missing: images/owin-katana-kestrel.png
+  12. protocol-mechanics-and-architecture - Missing: images/cover.jpg
+  13. reactive-manifesto - Missing: 12-factor-apps.png
+  14. setting-up-snyk-webooks - Missing: images/snyk-webhook-setup.png
+  15. using-cluster-api-to-create-kubernetes-cluster-on-aws - Missing: possessed-photography-jIBMSMs4_kA-unsplash.jpg
+  16. web-application-caching-vulnerabilities - Missing: images/cover.jpg

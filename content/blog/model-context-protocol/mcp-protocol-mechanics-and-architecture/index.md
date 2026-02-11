@@ -117,9 +117,9 @@ By adopting JSON-RPC, MCP avoids reinventing fundamental RPC mechanisms. This st
 
 ## Structured JSON Messages in MCP
 
-As discussed above, all MCP communications are built on structured messages following the JSON-RPC 2.0 standard. Let's look at a compact example, followed by an explanation of each field.
+As discussed above, all MCP communications are built on structured messages following the JSON-RPC 2.0 standard. Let's look at a compact example of a request and a response, followed by an explanation of each field.
 
-Example: JSON-RPC Request (tools/call)
+**Example: JSON-RPC Request (tools/call)**
 ```json
 {
   "jsonrpc": "2.0",
@@ -134,19 +134,27 @@ Example: JSON-RPC Request (tools/call)
 }
 ```
 
-The above example is an MCP call for a tool called search_web with the parameter "latest AI news". Let us look at the key fields.
+**Example: JSON-RPC Response (Success)**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 123,
+  "result": {
+    "content": "The latest AI news is..."
+  }
+}
+```
 
-- **`jsonrpc` (version):** Specifies the protocol version (always "2.0" for JSON-RPC 2.0). This ensures both sides interpret the message format the same way.
-- **`id` (identifier):** A unique ID for pairing requests with responses. It can be a number or string and is omitted for one‑way notifications.
-- **`method`:** Name of the method or notification. Examples: `initialize`, `tools/list`, `tools/call`, `$/progress`, `$/cancelRequest`. Required for Requests and Notifications.
-- **`params` (or `payload`/`data`):** Inputs needed to perform the method (object or array). Optional if not needed.
-- **`result`:** Present on a successful Response; must not appear with `error`.
-- **`error`:** Present on a failed Response; must not appear with `result`. Contains:
-  - **`code`** (Integer): error type (standard JSON‑RPC codes or custom).
-  - **`message`** (String): short description of the error.
-  - **`data`** (optional): extra details.
+These examples illustrate the key fields that make up an MCP message:
 
-These fields make MCP messages self-descriptive. The presence or absence of fields determines the message type: a message with `method` and `id` is a Request; a message with `result` or `error` and an `id` is a Response; a message with `method` but no `id` is a Notification.
+- **`jsonrpc`:** Always "2.0". This tells the server to interpret the message using the JSON-RPC 2.0 standard.
+- **`id`:** A unique identifier for the request. The server will include the same `id` in its response, so the client can match the response to the original request. This is omitted for notifications, which are one-way messages that don't require a response.
+- **`method`:** The name of the method to be invoked on the server, such as `initialize`, `tools/list`, or `tools/call`.
+- **`params`:** A structured object containing the parameters for the method.
+- **`result`:** Included in a successful response, this field contains the data returned by the method.
+- **`error`:** If the request fails, the response will contain an `error` object instead of a `result` object. The `error` object includes a `code` and a `message` explaining the failure.
+
+The presence or absence of these fields determines the message type: a message with `method` and `id` is a Request; a message with `result` or `error` and an `id` is a Response; and a message with `method` but no `id` is a Notification.
 
 ## MCP Transport Layers and Connection Flows
 
