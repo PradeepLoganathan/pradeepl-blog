@@ -2,7 +2,7 @@
 title: "Setting up an Akka Cluster on AWS EKS"
 lastmod: 2026-02-11T14:54:34+10:00
 date: 2026-02-11T14:54:34+10:00
-draft: true
+draft: false
 Author: Pradeep Loganathan
 tags:
   - akka
