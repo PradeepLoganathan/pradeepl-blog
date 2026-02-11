@@ -23,26 +23,26 @@ images:
 ---
 
 
-# Akka SDK Agentic AI — Self-Managed Deployment on EKS
+# Akka SDK Agentic AI - Self-Managed Deployment on EKS
 
-The [Akka SDK](https://akka.io/) is a powerful toolkit for building distributed, resilient, and elastic applications on the JVM. Its actor model, cluster sharding, and event sourcing capabilities make it an excellent foundation for agentic AI workloads — systems where autonomous agents maintain durable state, coordinate with peers, and interact with LLMs to make decisions. Running these workloads in production requires infrastructure that matches Akka's distributed nature: a Kubernetes cluster spanning multiple availability zones, a persistent database for event journals and projections, a container registry, load balancing, and an observability stack to monitor cluster health.
+The [Akka SDK](https://akka.io/) is a powerful toolkit for building distributed, resilient, and elastic applications on the JVM. Its actor model, cluster sharding, and event sourcing capabilities make it an excellent foundation for building and running autonomous agentic AI workloads. Autonomous agents maintain durable state, coordinate with peers, and interact with LLMs to make decisions. Running these workloads in production requires infrastructure that matches Akka's distributed nature. This includes a Kubernetes cluster spanning multiple availability zones, a persistent database for event journals and projections, a container registry, load balancing, and an observability stack to monitor cluster health.
 
-This guide walks you through building that entire infrastructure on AWS from scratch, using EKS as the Kubernetes platform. By the end, you'll have a production-ready environment capable of running Akka-based agentic AI services with automatic cluster formation, horizontal autoscaling, and fault tolerance across availability zones.
+This guide walks you through building that entire infrastructure on AWS from scratch, using EKS as the Kubernetes platform. By the end, you'll have a production-ready environment capable of running Akka based agentic AI services with automatic cluster formation, horizontal autoscaling, and fault tolerance across availability zones.
 
 ## What We'll Build
 
 Here is the path we'll follow, from bare AWS account to a running Akka cluster:
 
-1. **Container Registry (ECR)** — Create a private Docker registry to store your Akka service images, with vulnerability scanning and lifecycle policies.
-2. **Kubernetes Cluster (EKS)** — Provision a multi-AZ EKS cluster with managed node groups sized for JVM workloads, VPC networking, and essential add-ons (CNI, CoreDNS, EBS CSI).
-3. **IAM Roles and Policies (Optional)** — Set up fine-grained AWS permissions using IRSA (IAM Roles for Service Accounts) for optional cluster add-ons like Velero (backups) and cert-manager (TLS certificates). Skip this step if you don't need cluster backups or automated certificate management.
-4. **PostgreSQL Database (RDS)** — Provision a Multi-AZ RDS PostgreSQL instance for Akka Persistence — the event journal, snapshot store, durable state, and projection offset tracking.
-5. **Build and Push** — Package your Akka service as a standalone container image and push it to ECR.
-6. **Kubernetes Manifests** — Define the namespace, RBAC, secrets, deployment, service, and ingress resources that make up the Akka application on Kubernetes.
-7. **Akka Cluster Bootstrap** — Configure Akka's cluster formation to use Kubernetes API discovery, wire up R2DBC persistence to RDS, and set up Split Brain Resolver for partition tolerance.
-8. **Deploy and Verify** — Install the Cluster Autoscaler and metrics-server, apply all manifests, and verify that the Akka cluster forms correctly.
-9. **Observability** — Set up Prometheus + Grafana or CloudWatch Container Insights for metrics, logs, and alerting.
-10. **Production Hardening** — Configure Horizontal Pod Autoscaling (with Akka-aware scale-down policies), Pod Disruption Budgets (for safe node maintenance), and Network Policies (to isolate Akka remoting traffic).
+1. **Container Registry (ECR)** - Create a private Docker registry to store your Akka service images, with vulnerability scanning and lifecycle policies.
+2. **Kubernetes Cluster (EKS)** - Provision a multi-AZ EKS cluster with managed node groups sized for JVM workloads, VPC networking, and essential add-ons (CNI, CoreDNS, EBS CSI).
+3. **IAM Roles and Policies (Optional)** - Set up fine-grained AWS permissions using IRSA (IAM Roles for Service Accounts) for optional cluster add-ons like Velero (backups) and cert-manager (TLS certificates). Skip this step if you don't need cluster backups or automated certificate management.
+4. **PostgreSQL Database (RDS)** - Provision a Multi-AZ RDS PostgreSQL instance for Akka Persistence. Akka persistence provides event journal, snapshot store, durable state, and projection offset tracking.
+5. **Build and Push** - Package your Akka service as a standalone container image and push it to ECR.
+6. **Kubernetes Manifests** - Define the namespace, RBAC, secrets, deployment, service, and ingress resources that make up the Akka application on Kubernetes.
+7. **Akka Cluster Bootstrap** - Configure Akka's cluster formation to use Kubernetes API discovery, wire up R2DBC persistence to RDS, and set up Split Brain Resolver for partition tolerance.
+8. **Deploy and Verify** - Install the Cluster Autoscaler and metrics server, apply all manifests, and verify that the Akka cluster forms correctly.
+9. **Observability** - Set up Prometheus + Grafana or CloudWatch Container Insights for metrics, logs, and alerting.
+10. **Production Hardening** - Configure Horizontal Pod Autoscaling (with Akka-aware scale-down policies), Pod Disruption Budgets (for safe node maintenance), and Network Policies (to isolate Akka remoting traffic).
 
 Each section is self-contained with the commands and YAML needed for that step, so you can also use individual sections as a reference for your own infrastructure setup.
 
@@ -50,16 +50,18 @@ Each section is self-contained with the commands and YAML needed for that step, 
 
 ## Architecture Overview
 
+This is the visual representation of what we are building at a very high level.
+
 ![AKKA AWS cluster architecture](images/akka-aws-cluster.png)
 
 **High-level architecture:**
-- **EKS Cluster** — Kubernetes control plane and worker nodes running Akka pods across 3 Availability Zones
-- **ECR** — Private container registry for Akka service Docker images
-- **RDS PostgreSQL** — Multi-AZ database for Akka Persistence (Event Sourcing, Key Value Entities, Projections)
-- **ALB** — Application Load Balancer for external HTTP/gRPC traffic
-- **CloudWatch / Prometheus** — Observability stack for logs, metrics, and alerts
+- **EKS Cluster** - Kubernetes control plane and worker nodes running Akka pods across 3 Availability Zones
+- **ECR** - Private container registry for Akka service Docker images
+- **RDS PostgreSQL** - Multi-AZ database for Akka Persistence (Event Sourcing, Key Value Entities, Projections)
+- **ALB** - Application Load Balancer for external HTTP/gRPC traffic
+- **CloudWatch / Prometheus** - Observability stack for logs, metrics, and alerts
 
-The key insight behind this architecture is that Akka clusters are stateful distributed systems. Unlike stateless web services that can be scaled and replaced freely, Akka Cluster members form a protocol-level membership group, distribute sharded entities across members, and coordinate through gossip protocols and remoting. This means the underlying infrastructure must provide stable networking between pods, consistent DNS resolution, topology-aware scheduling across availability zones, and graceful lifecycle management — all of which this guide configures explicitly.
+The key insight behind this architecture is that Akka clusters are stateful distributed systems. Unlike stateless web services that can be scaled and replaced freely, Akka Cluster members form a protocol-level membership group, distribute sharded entities across members, and coordinate through gossip protocols and remoting. This means the underlying infrastructure must provide stable networking between pods, consistent DNS resolution, topology-aware scheduling across availability zones, and graceful lifecycle management. This guide enables you to do this exactly.
 
 ---
 
@@ -81,23 +83,23 @@ For a non-production or learning setup, the `AdministratorAccess` managed policy
 Install the following tools on your workstation:
 
 ```bash
-# AWS CLI v2
+# AWS CLI v2 - Need to execute AWS commands
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip && sudo ./aws/install
 
-# eksctl — CLI for creating and managing EKS clusters
+# eksctl - CLI for creating and managing EKS clusters
 curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
 tar xz -C /tmp -f eksctl_$(uname -s)_amd64.tar.gz
 sudo mv /tmp/eksctl /usr/local/bin
 
-# kubectl — Kubernetes CLI
+# kubectl - Kubernetes CLI
 curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl && sudo mv kubectl /usr/local/bin
 
 # Helm (for Prometheus, ALB Controller, and other add-ons)
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-# Docker — required for building and pushing container images
+# Docker - required for building and pushing container images
 # Install via: https://docs.docker.com/engine/install/
 
 # Verify all tools
@@ -108,11 +110,13 @@ helm version
 docker --version
 ```
 
+Sometimes I really wish we standardized on using -- or nothing for the version command.
+
 ### Configure AWS Credentials
 
 ```bash
 aws configure
-# Enter your Access Key, Secret Key, default region (e.g., ap-southeast-2 for Sydney)
+# Enter your Access Key, Secret Key, default region (e.g., ap-south-1 for Mumbai)
 
 # Verify your identity
 aws sts get-caller-identity
@@ -122,17 +126,19 @@ aws sts get-caller-identity
 
 ## Part 1: Create the ECR Repository
 
-Amazon Elastic Container Registry (ECR) is a fully managed Docker container registry. You need an ECR repository to store your Akka service container images before deploying them to EKS. ECR integrates natively with EKS — worker nodes authenticate to ECR automatically via their IAM role, so no image pull secrets are needed.
+Amazon Elastic Container Registry (ECR) is a fully managed Docker container registry. You need an ECR repository to store your Akka service container images before deploying them to EKS. ECR integrates natively with EKS. EKS worker nodes authenticate to ECR automatically via their IAM role, so no image pull secrets are needed.
+When you push an image, ECR (backed by S3) automatically encrypts your data at rest using the AES-256 encryption algorithm. When you pull the image, AWS transparently decrypts it for you. This uses Server-Side Encryption with Amazon S3-Managed Keys (SSE-S3). No action is required from your side to rotate, manage, or secure these keys; AWS handles the complexity.
+If you have enabled "Enhanced Scanning" in your private registry settings, AWS uses Amazon Inspector. This is a more advanced engine that scans both OS packages and programming language packages (like Python, Java, Node.js libraries) for vulnerabilities. If you configure basic scanning it uses AWS's native scanning engine (historically based on the Clair open-source project). It checks your container images against a database of known vulnerabilities (CVEs) from sources like NVD.
 
 ```bash
-# Set your variables
-export AWS_REGION=ap-southeast-2
+# Set your variables so that they are used when needed as part of your AWS cli commands
+export AWS_REGION=ap-south-1
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export ECR_IMAGE_REPO_NAME="akka-agent-service"
 
 # Create ECR repository for your Akka service
-# - scanOnPush: automatically scans images for known CVEs on push
-# - AES256 encryption: encrypts images at rest using AWS-managed keys
+# scanOnPush: automatically scans images for known CVEs on push
+# AES256 encryption: encrypts images at rest using AWS-managed keys
 aws ecr create-repository \
   --repository-name ${ECR_IMAGE_REPO_NAME} \
   --region $AWS_REGION \
@@ -162,7 +168,7 @@ aws ecr put-lifecycle-policy \
   }'
 
 # Authenticate Docker to ECR
-# This token expires after 12 hours — you'll need to re-authenticate for subsequent pushes.
+# This token expires after 12 hours - you'll need to re-authenticate for subsequent pushes.
 aws ecr get-login-password --region $AWS_REGION | \
   docker login --username AWS --password-stdin \
   ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
@@ -174,13 +180,15 @@ aws ecr get-login-password --region $AWS_REGION | \
 
 This section provisions an EKS cluster with settings optimized for Akka workloads. Akka clusters require stable networking between pods (for remoting), access to the Kubernetes API (for cluster bootstrap discovery), and sufficient compute resources for JVM-based services.
 
+I am building this cluster in the Asia Pacific(Mumbai) region. Please ensure that you update the region and the availability zones to reflect your needs. 
+
 ```bash
 # Set your variables for the EKS cluster
-export AWS_REGION=ap-southeast-2
+export AWS_REGION="ap-south-1"
 export CLUSTER_NAME=akka-agent-cluster
 export K8S_VERSION="1.31"
 export NODEGROUP_NAME=akka-workers
-export INSTANCE_TYPE=m5.xlarge    # 4 vCPU, 16 GiB — good balance for Akka JVM workloads
+export INSTANCE_TYPE=m5.xlarge    # 4 vCPU, 16 GiB - good balance for Akka JVM workloads
 export MIN_SIZE=2
 export MAX_SIZE=6
 export DESIRED_CAPACITY=3
@@ -198,12 +206,13 @@ export NAT_GATEWAY_TYPE=HighlyAvailable
 
 # Spread across 3 AZs for resilience. Akka Cluster shards will be distributed
 # across these zones, so losing one AZ still leaves 2/3 of the cluster healthy.
-export AVAILABILITY_ZONES="ap-southeast-2a,ap-southeast-2b,ap-southeast-2c"
+export AVAILABILITY_ZONES="ap-south-1a,ap-south-1b,ap-south-1c"
 ```
 
 ### Cluster Config File
 
-> **Note:** `eksctl` natively supports environment variable substitution in YAML config files (the `${VAR}` syntax below). You do NOT need `envsubst` — just ensure the variables are exported before running `eksctl create cluster`.
+To provision the cluster, we will use a declarative ClusterConfig file. This approach is superior to using CLI flags because it serves as documentation for your infrastructure and allows for version control. The configuration below sets up a dedicated VPC, enables the necessary OIDC providers for service accounts, and configures the worker nodes. It is configured for a production-grade Akka architecture from day one. It includes Private Networking for security, OIDC/IRSA integration for fine-grained IAM permissions, and CloudWatch logging for deep observability. Note that I am using environment variables (e.g.,```${CLUSTER_NAME}```) to make this file dynamic, eksctl will automatically substitute these values from your shell environment when the command runs.
+Save this yaml definition as eks-cluster.yaml so that it can be used in the subsequent commands.
 
 ```yaml
 # eks-cluster.yaml
@@ -226,7 +235,7 @@ vpc:
     publicAccess: true       # Allows kubectl access from outside the VPC
     privateAccess: true      # Allows worker nodes to communicate with the API server privately
 
-# IAM configuration — enables IRSA (IAM Roles for Service Accounts)
+# IAM configuration - enables IRSA (IAM Roles for Service Accounts)
 # IRSA allows individual Kubernetes service accounts to assume specific IAM roles,
 # providing fine-grained AWS permissions without sharing node-level credentials.
 # This is required for the AWS Load Balancer Controller, Velero, and cert-manager.
@@ -244,7 +253,7 @@ managedNodeGroups:
     desiredCapacity: ${DESIRED_CAPACITY}
     volumeSize: 50                # GP3 root volume for worker nodes
     volumeType: gp3
-    privateNetworking: true       # Nodes deployed in private subnets — no public IPs
+    privateNetworking: true       # Nodes deployed in private subnets - no public IPs
     labels:
       role: akka-worker
       workload-type: jvm
@@ -257,14 +266,14 @@ managedNodeGroups:
         cloudWatch: true          # Enables CloudWatch Container Insights
         ebs: true                 # Required for EBS CSI driver (persistent volumes)
     availabilityZones:
-      - ap-southeast-2a
-      - ap-southeast-2b
-      - ap-southeast-2c
+      - ap-south-1a
+      - ap-south-1b
+      - ap-south-1c
 
 # EKS add-ons provide core cluster functionality.
 # These are AWS-managed and automatically updated.
 addons:
-  - name: vpc-cni               # Pod networking — assigns VPC IPs directly to pods
+  - name: vpc-cni               # Pod networking - assigns VPC IPs directly to pods
     version: latest
   - name: coredns               # Cluster DNS resolution
     version: latest
@@ -275,7 +284,7 @@ addons:
     wellKnownPolicies:
       ebsCSIController: true
 
-# Control plane logging — sends EKS API server logs to CloudWatch.
+# Control plane logging - sends EKS API server logs to CloudWatch.
 # Useful for auditing API access and debugging cluster-level issues.
 cloudWatch:
   clusterLogging:
@@ -288,6 +297,8 @@ cloudWatch:
 ```
 
 ### Create the Cluster
+
+We will use the eks-cluster.yaml created above to create the cluster.
 
 ```bash
 # Create the EKS cluster using the config file
@@ -308,12 +319,14 @@ kubectl cluster-info
 > - **You don't need Velero:** Cluster backups are a production best practice but not a prerequisite. You can add Velero later.
 > - **You don't need cert-manager:** The ALB Ingress in Part 6 uses an [AWS Certificate Manager (ACM)](https://aws.amazon.com/certificate-manager/) certificate directly via the `certificate-arn` annotation, which handles TLS termination at the load balancer without cert-manager. cert-manager is only needed if you want automated Let's Encrypt certificates managed inside the cluster (e.g., for internal mTLS or non-ALB ingress controllers like Nginx).
 
-This section creates IAM roles for optional cluster add-ons using IRSA (IAM Roles for Service Accounts) — a mechanism where Kubernetes service accounts are mapped to IAM roles via the OIDC provider created with the EKS cluster. This avoids giving broad AWS permissions to all pods on a node.
+This section creates IAM roles for optional cluster add-ons using IRSA (IAM Roles for Service Accounts). This enables a mechanism where Kubernetes service accounts are mapped to IAM roles via the OIDC provider created with the EKS cluster. This avoids giving broad AWS permissions to all pods on a node.
+
+The script below configures the security bridge between Kubernetes and AWS. Unlike standard IAM roles which are attached to a whole Node (giving every pod on that node the same permissions), this script creates a role that is cryptographically bound to the specific velero ServiceAccount. This ensures that only the backup tool can access your S3 backup bucket, adhering to the Principle of Least Privilege. In simple terms, it creates a secure "ID Badge" (IAM Role) that grants permission to manage backups, and then strictly configures the lock (Trust Policy) so that only the Velero application running inside your cluster can pick up that badge.
 
 ```bash
 # Get OIDC Issuer URL and construct the provider ARN
 # The OIDC provider was created by eksctl when we set `iam.withOIDC: true`.
-export AWS_REGION=ap-southeast-2
+export AWS_REGION=ap-south-1
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export CLUSTER_NAME=akka-agent-cluster
 
@@ -387,7 +400,7 @@ aws iam create-policy \
 
 # Create IAM role with IRSA trust policy
 # The "Condition" block restricts this role to only the "velero" service account
-# in the "velero" namespace — no other pod can assume this role.
+# in the "velero" namespace - no other pod can assume this role.
 VELERO_ROLE_NAME="${CLUSTER_NAME}-velero-role"
 cat > velero-assume-role-policy.json <<EOF
 {
@@ -429,7 +442,9 @@ rm velero-iam-policy.json velero-assume-role-policy.json
 
 [cert-manager](https://cert-manager.io/) automates TLS certificate management in Kubernetes. When configured with a DNS-01 solver, it creates temporary DNS TXT records in Route53 to prove domain ownership for Let's Encrypt certificate issuance. This IAM role grants cert-manager the permissions to manage those DNS records.
 
-> **Note:** If you're using the AWS ALB Ingress Controller with an ACM certificate (as configured in Part 6.6), TLS is terminated at the ALB and you do **not** need cert-manager. This role is only required if you want cert-manager to manage certificates inside the cluster (e.g., for Nginx ingress or internal service-to-service mTLS).
+While standard Let's Encrypt validation works by checking a file on your web server (HTTP-01), that method fails if your services are internal (private VPC) or if you need a wildcard certificate (e.g., *.example.com). In those cases, we must use the DNS-01 challenge. The below script authorizes cert-manager to perform that challenge. It grants the pod a temporary identity that allows it to talk to AWS Route53, create a temporary TXT record to prove you own the domain, and then clean it up—all automatically.
+
+> **Note:** If you're using the AWS ALB Ingress Controller with an ACM certificate (as configured in Part 6.6), TLS is terminated at the ALB and you do **not** need cert-manager. This role is only required if you want cert-manager to manage certificates inside the cluster (e.g., for Nginx ingress or internal service-to-service mTLS). This script assumes you still have the OIDC_PROVIDER_ARN and AWS_ACCOUNT_ID environment variables exported from the previous step. If you have opened a new terminal session since running the Velero setup, you will need to re-export those variables before running this.
 
 ```bash
 # Create IAM policy for Cert-Manager
@@ -510,17 +525,17 @@ Akka SDK services using Event Sourced Entities, Key Value Entities, Views, or Pr
 
 ```bash
 # Set your variables
-export AWS_REGION=ap-southeast-2
+export AWS_REGION=ap-south-1
 export CLUSTER_NAME=akka-agent-cluster
 
 # RDS Configuration
 export DB_INSTANCE_IDENTIFIER="akka-agent-db"
-export DB_INSTANCE_CLASS="db.r6g.large"     # 2 vCPU, 16 GiB RAM — memory-optimized for database workloads
+export DB_INSTANCE_CLASS="db.r6g.large"     # 2 vCPU, 16 GiB RAM - memory-optimized for database workloads
 export DB_ENGINE="postgres"
 export DB_ENGINE_VERSION="16.4"
 export DB_MASTER_USERNAME="akkaadmin"
 export DB_MASTER_PASSWORD="CHANGE_ME_strong_password_123!"  # See warning below
-export DB_ALLOCATED_STORAGE=50               # GiB — adjust based on expected event journal size
+export DB_ALLOCATED_STORAGE=50               # GiB - adjust based on expected event journal size
 export DB_STORAGE_TYPE="gp3"                 # gp3 provides consistent baseline IOPS without additional cost
 export DB_NAME="akkadb"
 export DB_BACKUP_RETENTION_PERIOD=7          # Days to retain automated backups
@@ -552,7 +567,7 @@ export PRIVATE_SUBNETS=$(aws ec2 describe-subnets \
 
 echo "Private Subnets: $PRIVATE_SUBNETS"
 
-# Get the EKS cluster security group — we'll allow inbound PostgreSQL traffic from this SG
+# Get the EKS cluster security group - we'll allow inbound PostgreSQL traffic from this SG
 export CLUSTER_SG=$(aws eks describe-cluster \
   --name ${CLUSTER_NAME} \
   --region $AWS_REGION \
@@ -565,7 +580,7 @@ echo "Cluster SG: $CLUSTER_SG"
 ### Create the Database
 
 ```bash
-# Create a DB subnet group — tells RDS which subnets to use
+# Create a DB subnet group - tells RDS which subnets to use
 # The --subnet-ids flag takes space-separated subnet IDs.
 aws rds create-db-subnet-group \
   --db-subnet-group-name akka-db-subnet-group \
@@ -617,7 +632,7 @@ aws rds wait db-instance-available \
   --db-instance-identifier ${DB_INSTANCE_IDENTIFIER} \
   --region $AWS_REGION
 
-# Get the RDS endpoint — you'll need this for the Kubernetes secrets
+# Get the RDS endpoint - you'll need this for the Kubernetes secrets
 export RDS_ENDPOINT=$(aws rds describe-db-instances \
   --db-instance-identifier ${DB_INSTANCE_IDENTIFIER} \
   --region $AWS_REGION \
@@ -714,7 +729,7 @@ echo "Image pushed: $ECR_IMAGE"
 
 With the EKS cluster and supporting AWS infrastructure in place, you can now deploy your Akka service. This section provides the Kubernetes YAML manifests for the application deployment, RBAC, secrets, services, and ingress.
 
-> **Important — Variable substitution:** Unlike `eksctl`, `kubectl apply` does **not** expand `${VAR}` expressions in YAML files. You must preprocess manifests with `envsubst` before applying them:
+> **Important - Variable substitution:** Unlike `eksctl`, `kubectl apply` does **not** expand `${VAR}` expressions in YAML files. You must preprocess manifests with `envsubst` before applying them:
 > ```bash
 > # Example: substitute environment variables and apply
 > envsubst < k8s/deployment.yml | kubectl apply -f -
@@ -723,7 +738,7 @@ With the EKS cluster and supporting AWS infrastructure in place, you can now dep
 
 Create all manifests in a `k8s/` directory.
 
-### 6.1 — Namespace
+### 6.1 - Namespace
 
 ```yaml
 # k8s/namespace.yml
@@ -736,7 +751,7 @@ metadata:
     app.kubernetes.io/part-of: akka-agent-platform
 ```
 
-### 6.2 — RBAC (Required for Akka Cluster Bootstrap)
+### 6.2 - RBAC (Required for Akka Cluster Bootstrap)
 
 Akka Cluster Bootstrap uses the Kubernetes API to discover peer pods and form an Akka cluster. The service account running your Akka pods needs permission to list and watch pods in its namespace. Without this, Akka nodes cannot discover each other and the cluster will not form.
 
@@ -767,7 +782,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 ```
 
-### 6.3 — Secrets
+### 6.3 - Secrets
 
 > **Important:** These YAML files contain `${VAR}` placeholders that must be substituted before applying. Use `envsubst < k8s/secrets.yml | kubectl apply -f -` or replace the values manually.
 
@@ -800,7 +815,7 @@ stringData:
 
 > **Production tip:** For robust secret management in EKS, use the [AWS Secrets Manager CSI Secrets Store driver](https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating_csi_driver.html). This syncs secrets from AWS Secrets Manager directly into Kubernetes, supports automatic rotation, and avoids storing secrets in YAML files or Git.
 
-### 6.4 — Deployment
+### 6.4 - Deployment
 
 ```yaml
 # k8s/deployment.yml
@@ -847,7 +862,7 @@ spec:
               cpu: "1000m"        # 1 vCPU
             limits:
               memory: "2Gi"
-              # Do NOT set CPU limits for JVM workloads — Linux CFS throttling
+              # Do NOT set CPU limits for JVM workloads - Linux CFS throttling
               # causes unpredictable latency spikes. The JVM expects consistent
               # CPU access for GC pauses and Akka scheduler ticks.
           # ---- Health Probes ----
@@ -874,19 +889,19 @@ spec:
               containerPort: 9000       # HTTP / gRPC endpoints for your application API
               protocol: TCP
             - name: management
-              containerPort: 8558       # Akka Management — health checks, cluster info, bootstrap
+              containerPort: 8558       # Akka Management - health checks, cluster info, bootstrap
               protocol: TCP
             - name: remoting
               containerPort: 25520      # Akka Cluster peer-to-peer communication (Artery)
               protocol: TCP
           # ---- Environment Variables ----
           env:
-            # Namespace — required by Akka Cluster Bootstrap for Kubernetes API discovery
+            # Namespace - required by Akka Cluster Bootstrap for Kubernetes API discovery
             - name: NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            # Pod name — useful for structured logging and debugging
+            # Pod name - useful for structured logging and debugging
             - name: POD_NAME
               valueFrom:
                 fieldRef:
@@ -912,7 +927,7 @@ spec:
                 secretKeyRef:
                   name: akka-db-credentials
                   key: DB_PASSWORD
-            # LLM API Keys (optional — for agentic AI workloads)
+            # LLM API Keys (optional - for agentic AI workloads)
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -930,11 +945,11 @@ spec:
 ```
 
 > **JVM tuning notes:**
-> - `InitialRAMPercentage=70` / `MaxRAMPercentage=70` — uses 70% of the container memory limit for heap, leaving 30% for JVM metaspace, thread stacks, NIO buffers, and OS overhead.
-> - `UseG1GC` with `MaxGCPauseMillis=200` — G1 garbage collector with a 200ms pause target, suitable for Akka's latency-sensitive message processing.
-> - `akka.coordinated-shutdown.exit-jvm=on` — ensures the JVM process exits after Akka coordinated shutdown completes, so Kubernetes detects the pod as terminated.
+> - `InitialRAMPercentage=70` / `MaxRAMPercentage=70` - uses 70% of the container memory limit for heap, leaving 30% for JVM metaspace, thread stacks, NIO buffers, and OS overhead.
+> - `UseG1GC` with `MaxGCPauseMillis=200` - G1 garbage collector with a 200ms pause target, suitable for Akka's latency-sensitive message processing.
+> - `akka.coordinated-shutdown.exit-jvm=on` - ensures the JVM process exits after Akka coordinated shutdown completes, so Kubernetes detects the pod as terminated.
 
-### 6.5 — Service (ClusterIP)
+### 6.5 - Service (ClusterIP)
 
 The ClusterIP service provides a stable internal DNS name (`akka-agent-service-svc.akka-agents.svc.cluster.local`) for other services in the cluster. It also exposes the management port for health checks used by the Ingress.
 
@@ -962,7 +977,7 @@ spec:
       protocol: TCP
 ```
 
-### 6.6 — Ingress (AWS ALB)
+### 6.6 - Ingress (AWS ALB)
 
 The AWS Application Load Balancer (ALB) provides external access to your Akka service. The AWS Load Balancer Controller watches for Kubernetes Ingress resources and provisions ALBs automatically.
 
@@ -1119,7 +1134,7 @@ akka {
 > **Key configuration details:**
 > - **Split Brain Resolver (SBR):** The `keep-majority` strategy ensures that during a network partition, the partition with the majority of nodes survives and the minority side downs itself. This prevents split-brain scenarios where two sub-clusters operate independently.
 > - **`required-contact-point-nr = 3`:** Prevents a single node from forming a cluster by itself. Set this to your initial replica count.
-> - **Environment variables** (`${?DB_HOST}`, etc.): The `?` prefix makes these optional at parse time — Akka will fail at runtime if they're missing, but the config file can be parsed without them.
+> - **Environment variables** (`${?DB_HOST}`, etc.): The `?` prefix makes these optional at parse time - Akka will fail at runtime if they're missing, but the config file can be parsed without them.
 
 ### Required Maven Dependencies
 
@@ -1279,7 +1294,7 @@ aws eks create-addon \
 
 ## Part 10: Horizontal Pod Autoscaler
 
-HPAs automatically adjust the number of pod replicas based on observed metrics. For Akka clusters, autoscaling must be configured carefully — Akka Cluster shards are distributed across members, and rapid scaling can trigger expensive shard rebalancing.
+HPAs automatically adjust the number of pod replicas based on observed metrics. For Akka clusters, autoscaling must be configured carefully - Akka Cluster shards are distributed across members, and rapid scaling can trigger expensive shard rebalancing.
 
 > **Prerequisite:** metrics-server must be installed (see Part 8).
 
@@ -1401,7 +1416,7 @@ spec:
 
 ---
 
-## Quick Reference — Key Commands
+## Quick Reference - Key Commands
 
 | Task | Command |
 |------|---------|
@@ -1428,7 +1443,7 @@ This section tears down all AWS and Kubernetes resources created in this guide. 
 
 ```bash
 # Set variables
-export AWS_REGION=ap-southeast-2
+export AWS_REGION=ap-south-1
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export CLUSTER_NAME=akka-agent-cluster
 export DB_INSTANCE_IDENTIFIER="akka-agent-db"
@@ -1514,7 +1529,7 @@ aws ecr delete-repository \
   --force \
   --region $AWS_REGION
 
-# ---- Step 7: Delete the EKS cluster (last — deletes VPC, subnets, NAT GWs, etc.) ----
+# ---- Step 7: Delete the EKS cluster (last - deletes VPC, subnets, NAT GWs, etc.) ----
 eksctl delete cluster --name ${CLUSTER_NAME} --region $AWS_REGION
 ```
 
