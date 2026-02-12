@@ -521,7 +521,7 @@ rm cert-manager-iam-policy.json cert-manager-assume-role-policy.json
 
 ## Part 4: Set Up RDS PostgreSQL
 
-Akka SDK services using Event Sourced Entities, Key Value Entities, Views, or Projections require a PostgreSQL database for durable state persistence. Akka stores its event journal, snapshots, durable state, and projection offsets in PostgreSQL. This section provisions an Amazon RDS PostgreSQL instance configured for production use with Multi-AZ replication, encryption at rest, and automated backups.
+While Akka actors run in memory, they require a durable backing store to persist their events (the "Write Side") and offset data for projections (the "Read Side").Akka SDK services using Event Sourced Entities, Key Value Entities, Views, or Projections require a PostgreSQL database for durable state persistence. Akka stores its event journal, snapshots, durable state, and projection offsets in PostgreSQL. Critically, for security, this database will not have a public IP address. It will reside in the Private Subnets of our VPC.  The script below provisions an Amazon RDS PostgreSQL instance configured for production use with Multi-AZ replication, encryption at rest, and automated backups. Ithandles the "plumbing" required to make this work. It identifies the VPC created by eksctl, creates a specialized Security Group that allows ingress traffic from our EKS pods, and provisions a Multi-AZ RDS instance that is accessible only from within the cluster.
 
 ```bash
 # Set your variables
@@ -548,6 +548,10 @@ export DB_BACKUP_RETENTION_PERIOD=7          # Days to retain automated backups
 The RDS instance must be placed in the same VPC as the EKS cluster so that pods can reach the database over the private network. We retrieve the VPC, private subnets, and cluster security group from the EKS cluster that `eksctl` created.
 
 ```bash
+# ... (Previous variable exports remain the same) ...
+
+### Get VPC and Subnet Info
+
 # Get the VPC ID created by eksctl
 export VPC_ID=$(aws eks describe-cluster \
   --name ${CLUSTER_NAME} \
@@ -557,24 +561,22 @@ export VPC_ID=$(aws eks describe-cluster \
 
 echo "VPC ID: $VPC_ID"
 
-# Get private subnet IDs (for the DB subnet group)
-# RDS requires subnets in at least 2 AZs for Multi-AZ deployments.
+# Get the VPC CIDR - We will allow all IPs in this VPC to talk to the DB (safe for private subnets)
+export VPC_CIDR=$(aws ec2 describe-vpcs \
+  --vpc-ids $VPC_ID \
+  --region $AWS_REGION \
+  --query "Vpcs[0].CidrBlock" \
+  --output text)
+
+# Get private subnet IDs using the standard K8s internal-elb tag
 export PRIVATE_SUBNETS=$(aws ec2 describe-subnets \
   --filters "Name=vpc-id,Values=$VPC_ID" \
-            "Name=tag:Name,Values=*Private*" \
+            "Name=tag:kubernetes.io/role/internal-elb,Values=1" \
   --query "Subnets[*].SubnetId" \
   --output text)
 
 echo "Private Subnets: $PRIVATE_SUBNETS"
 
-# Get the EKS cluster security group - we'll allow inbound PostgreSQL traffic from this SG
-export CLUSTER_SG=$(aws eks describe-cluster \
-  --name ${CLUSTER_NAME} \
-  --region $AWS_REGION \
-  --query "cluster.resourcesVpcConfig.clusterSecurityGroupId" \
-  --output text)
-
-echo "Cluster SG: $CLUSTER_SG"
 ```
 
 ### Create the Database
@@ -592,17 +594,18 @@ aws rds create-db-subnet-group \
 # This SG will only allow inbound PostgreSQL (port 5432) from EKS worker nodes.
 export RDS_SG=$(aws ec2 create-security-group \
   --group-name akka-rds-sg \
-  --description "Allow PostgreSQL from EKS cluster" \
+  --description "Allow PostgreSQL from EKS VPC" \
   --vpc-id $VPC_ID \
   --region $AWS_REGION \
   --query "GroupId" --output text)
 
-# Allow inbound PostgreSQL (5432) from the EKS cluster security group only
+# Allow inbound PostgreSQL (5432) from the entire VPC CIDR
+# This ensures pods from any Node Group (managed or self-managed) can connect
 aws ec2 authorize-security-group-ingress \
   --group-id $RDS_SG \
   --protocol tcp \
   --port 5432 \
-  --source-group $CLUSTER_SG \
+  --cidr $VPC_CIDR \
   --region $AWS_REGION
 
 # Create the RDS PostgreSQL instance
@@ -688,9 +691,17 @@ CREATE TABLE IF NOT EXISTS akka_projection_management (
 
 ## Part 5: Build and Push the Akka Service Image
 
+With the database configured and the Kubernetes cluster running, our infrastructure is now complete. We have finished provisioning the Control Plane and Data Plane. You now have a fully operational EKS cluster with private networking, OIDC identity integration, and a dedicated multi-AZ PostgreSQL database. The "plumbing" is done. We have successfully built a production-grade 'landing zone' capable of supporting stateful, distributed applications.
+
+We can now focus on the Workload. Unlike traditional deployments where you might copy JAR files to a server, we will package the entire application runtime into a Docker image using the Maven ```standalone``` profile. This ensures our service is self-contained and identical across dev, stage, and production environments.
+
 ### Build the Standalone Image
 
-The Akka SDK provides a `standalone` Maven profile that packages your service as a self-contained container image without requiring the Akka Platform operator. This is the correct profile for self-managed deployments.
+In this step, we will:
+
+1. Build the container image using Maven.
+2. Authenticate with your private ECR registry.
+3. Tag and push the immutable artifact to AWS.
 
 In your Akka SDK project directory:
 
@@ -711,18 +722,23 @@ aws ecr get-login-password --region $AWS_REGION | \
   docker login --username AWS --password-stdin \
   ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 
-# Tag the image for ECR
-export IMAGE_TAG="1.0.0"  # Use semantic versioning or git SHA for traceability
-export ECR_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_IMAGE_REPO_NAME}:${IMAGE_TAG}"
+# Instead of guessing the local tag, we grab the Image ID of the most recent build.
+# (This assumes the last built image is your service).
+LOCAL_IMAGE_ID=$(docker images --format "{{.ID}}" | head -n 1)
 
-docker tag your-service:local-tag $ECR_IMAGE
+# Construct the full ECR address
+TARGET_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${SERVICE_VERSION}"
 
-# Push to ECR
-docker push $ECR_IMAGE
+echo "Tagging local image $LOCAL_IMAGE_ID as:"
+echo "    $TARGET_IMAGE"
+docker tag $LOCAL_IMAGE_ID $TARGET_IMAGE
 
-echo "Image pushed: $ECR_IMAGE"
+docker push $TARGET_IMAGE
+echo "Image pushed: $TARGET_IMAGE"
 ```
 
+> Note: If you are running this in a shared environment where other builds might be happening, explicitly find your local image name (defined in your pom.xml) and replace the automatic ```LOCAL_IMAGE_ID``` detection with:
+```docker tag your-artifact-id:1.0-SNAPSHOT $TARGET_IMAGE```
 ---
 
 ## Part 6: Kubernetes Manifests for the Akka Service
@@ -934,6 +950,10 @@ spec:
                   name: llm-api-keys
                   key: OPENAI_API_KEY
                   optional: true
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # JVM tuning flags
             - name: JAVA_TOOL_OPTIONS
               value: >-
@@ -963,15 +983,16 @@ metadata:
   labels:
     app: akka-agent-service
 spec:
-  type: ClusterIP
+  clusterIP: None  # This makes it "Headless"
+  publishNotReadyAddresses: true # Allow discovery before the pod is fully Ready
   selector:
     app: akka-agent-service
   ports:
-    - name: http
-      port: 9000
-      targetPort: 9000
+    - name: remoting
+      port: 25520
+      targetPort: 25520
       protocol: TCP
-    - name: management
+      - name: management
       port: 8558
       targetPort: 8558
       protocol: TCP
@@ -981,9 +1002,20 @@ spec:
 
 The AWS Application Load Balancer (ALB) provides external access to your Akka service. The AWS Load Balancer Controller watches for Kubernetes Ingress resources and provisions ALBs automatically.
 
-**Install the AWS Load Balancer Controller first:**
+**Prerequisite: Subnet Tags** The controller relies on specific tags to discover your VPC subnets. `eksctl` usually adds these automatically, but verify they exist if you are having issues:
+
+- **Public Subnets (for internet-facing ALBs):** Must have the tag `kubernetes.io/role/elb: 1`
+- **Private Subnets (for internal ALBs):** Must have the tag `kubernetes.io/role/internal-elb: 1`
+
+**Step 1 - Install the AWS Load Balancer Controller first:**
 
 ```bash
+# Set variables
+export CLUSTER_NAME="akka-agent-cluster"
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export AWS_REGION="ap-south-1"
+
+# Add the EKS Helm chart repo
 helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 
@@ -1013,7 +1045,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
 
-**Then create the Ingress resource:**
+**Step 2 - Create the Ingress resource:**
 
 ```yaml
 # k8s/ingress.yml
@@ -1026,10 +1058,16 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing    # "internal" for private access only
     alb.ingress.kubernetes.io/target-type: ip             # Routes directly to pod IPs (requires VPC CNI)
+    # HTTPS Configuration
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:<region>:<account>:certificate/<cert-id>  # REPLACE
+    # Health Checks - CRITICAL for Akka
+    # We point the ALB health check to Akka Management's dedicated health port (8558)
+    # instead of the main traffic port (9000)
     alb.ingress.kubernetes.io/healthcheck-path: /ready
     alb.ingress.kubernetes.io/healthcheck-port: "8558"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/success-codes: "200"
 spec:
   rules:
     - host: agents.yourdomain.com    # REPLACE with your actual domain
@@ -1042,6 +1080,19 @@ spec:
                 name: akka-agent-service-svc
                 port:
                   number: 9000
+```
+
+Now apply the ingress
+
+```bash
+# Remember to substitute your variables if you used placeholders!
+kubectl apply -f k8s/ingress.yml
+```
+
+Once applied, it will take 2-5 minutes for AWS to provision the load balancer. You can get the public URL with:
+
+```bash
+kubectl get ingress -n akka-agents
 ```
 
 ---
@@ -1060,8 +1111,15 @@ akka {
   actor.provider = cluster
   remote.artery {
     canonical {
-      # The hostname is automatically resolved by the pod's own IP.
-      # Port 25520 matches the "remoting" container port in the Deployment.
+      # CRITICAL: We must advertise the Pod's actual IP address to peers.
+      # Relying on hostname resolution in K8s can sometimes resolve to 127.0.0.1
+      # which breaks cluster formation.
+      hostname = ${?POD_IP}
+      port = 25520
+    }
+    # Bind to all interfaces for incoming traffic
+    bind {
+      hostname = "0.0.0.0"
       port = 25520
     }
   }
@@ -1122,7 +1180,10 @@ akka {
   }
 
   cluster {
+    # If a node joins but fails to get a response from seed nodes, shut it down
+    # so Kubernetes can restart it.
     shutdown-after-unsuccessful-join-seed-nodes = 60s
+    # Split Brain Resolver (SBR) protects against network partitions
     downing-provider-class = "akka.cluster.sbr.SplitBrainResolverProvider"
     split-brain-resolver {
       active-strategy = keep-majority
