@@ -1,41 +1,30 @@
 {{- define "main" }}
 
 {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+
+<div class="home-hero">
+    <h1>{{ site.Params.author }}</h1>
+    <p class="home-tagline">{{ site.Params.profileMode.title | default "Software engineering notes & explorations" }}</p>
+</div>
+
 {{- $featured := where $pages "Params.categories" "intersect" (slice "featured") }}
 
 {{- if gt (len $featured) 0 }}
-<section class="featured-home">
-    <header class="page-header">
-        <h2>Featured</h2>
-        <a href="/blog/categories/featured/" title="See all featured posts">See all</a>
-    </header>
-    <div class="post-list">
+<section class="home-section">
+    <h2 class="home-section-title">Featured</h2>
+    <ul class="post-list-minimal">
         {{- range first 6 $featured }}
-        <article class="post-entry">
-            <header class="entry-header">
-                <h3>
-                    {{- .Title }}
-                    {{- if .Draft }}<sup><span class="entry-isdraft">&nbsp;&nbsp;[draft]</span></sup>{{- end }}
-                </h3>
-            </header>
-            {{- if (.Params.summary) }}
-            <div class="entry-content">
-                <p>{{ .Summary | plainify | htmlUnescape | truncate 120 }}</p>
-            </div>
-            {{- end }}
-            <footer class="entry-footer">
-                <span class="entry-date">{{ .Date.Format "Jan 2, 2006" }}</span>
-                {{- if site.Params.ShowReadingTime }}
-                <span class="entry-separator">•</span>
-                <span class="entry-reading-time">{{ .ReadingTime }} min read</span>
-                {{- end }}
-            </footer>
-            <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
-        </article>
+        <li>
+            <a href="{{ .Permalink }}">
+                <span class="post-list-title">{{ .Title }}</span>
+                <span class="post-list-date">{{ .Date.Format "Jan 2006" }}</span>
+            </a>
+        </li>
         {{- end }}
-    </div>
+    </ul>
+    <a href="/blog/categories/featured/" class="see-all-link">See all featured posts &rarr;</a>
 </section>
-{{- end }}{{/* end featured */}}
+{{- end }}
 
 {{- $recentPages := slice }}
 {{- range $pages }}
@@ -51,37 +40,20 @@
 {{- end }}
 
 {{- if gt (len $recentPages) 0 }}
-<section class="recent-posts-home">
-    <header class="page-header">
-        <h2>Recent Posts</h2>
-        <a href="/blog/" title="See all posts">See all</a>
-    </header>
-    <div class="post-list">
-        {{- range first 8 $recentPages }}
-        <article class="post-entry">
-            <header class="entry-header">
-                <h3>
-                    {{- .Title }}
-                    {{- if .Draft }}<sup><span class="entry-isdraft">&nbsp;&nbsp;[draft]</span></sup>{{- end }}
-                </h3>
-            </header>
-            {{- if (.Params.summary) }}
-            <div class="entry-content">
-                <p>{{ .Summary | plainify | htmlUnescape | truncate 120 }}</p>
-            </div>
-            {{- end }}
-            <footer class="entry-footer">
-                <span class="entry-date">{{ .Date.Format "Jan 2, 2006" }}</span>
-                {{- if site.Params.ShowReadingTime }}
-                <span class="entry-separator">•</span>
-                <span class="entry-reading-time">{{ .ReadingTime }} min read</span>
-                {{- end }}
-            </footer>
-            <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
-        </article>
+<section class="home-section">
+    <h2 class="home-section-title">Recent</h2>
+    <ul class="post-list-minimal">
+        {{- range first 10 $recentPages }}
+        <li>
+            <a href="{{ .Permalink }}">
+                <span class="post-list-title">{{ .Title }}</span>
+                <span class="post-list-date">{{ .Date.Format "Jan 2006" }}</span>
+            </a>
+        </li>
         {{- end }}
-    </div>
+    </ul>
+    <a href="/archives/" class="see-all-link">See all posts &rarr;</a>
 </section>
-{{- end }}{{/* end recent posts */}}
+{{- end }}
 
-{{- end }}{{/* end main */}}
+{{- end }}

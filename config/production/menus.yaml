@@ -3,9 +3,9 @@ main:
     pageref: /search
     weight: 10
   - name: Blog
-    pageref: /archives
+    url: /
     weight: 20
-  - name: slides
+  - name: Slides
     url: /slides
     weight: 30
   - name: Books

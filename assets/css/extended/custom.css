@@ -1,8 +1,16 @@
-/* Header alignment with content */
+/* ============================================
+   Layout & Width
+   ============================================ */
+
+/* Sticky header */
 .header {
     max-width: calc(var(--main-width) + var(--gap) * 30);
     margin-left: auto;
     margin-right: auto;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: inherit;
 }
 
 .nav {
@@ -14,45 +22,31 @@
     position: relative;
 }
 
-/* Increase the default width of the page. */
+/* Wide main for side TOC layout (see sidetoc.css) */
 .main {
     max-width: calc(var(--main-width) + var(--gap) * 30);
 }
-/* Increase less for the home page.
-This will eventually replace the following two rules. But for now
-the browser support for :has is not widespread yet.
-.main:has(.first-entry) {
-    max-width: calc(var(--main-width) + var(--gap) * 10);
-}
-*/
+
 .post-entry {
     max-width: calc(var(--main-width) + var(--gap) * 10);
     margin-left: auto;
     margin-right: auto;
 }
+
 .first-entry {
     max-width: calc(var(--main-width) + var(--gap) * 10);
     margin-left: auto;
     margin-right: auto;
 }
 
+/* ============================================
+   Post Content
+   ============================================ */
 
-/* Increase the width of images placed in home info. */
-.home-info .entry-content img {
-    width: 100%;
-    max-width: fit-content;
-    border-radius: 2%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 10px;
-}
-
-/* Increase the font of summary text. */
 .post-entry .entry-content {
     font-size: 18px;
 }
 
-/* Set a limit on the width of post images and align them center. */
 .post-single .entry-cover {
     max-width: fit-content;
     margin-left: auto;
@@ -62,212 +56,150 @@ the browser support for :has is not widespread yet.
 .post-content img {
     margin: auto;
 }
+
 .post-content figcaption {
-  text-align: center;
+    text-align: center;
 }
 
-/* Featured section on Home */
-.featured-home {
-    margin: 3rem auto 4rem auto;
-    max-width: calc(var(--main-width) + var(--gap) * 6);
-    padding: 0 var(--gap);
-}
-.featured-home .page-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
+/* Post header refinements */
+.post-header {
     margin-bottom: 2rem;
-}
-.featured-home .page-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 0;
-}
-.featured-home .page-header a {
-    font-size: 0.95rem;
-    text-decoration: none;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-}
-.featured-home .page-header a:hover {
-    opacity: 1;
 }
 
-.featured-home .post-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
+.post-title {
+    font-size: 2.25rem;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
 }
-.featured-home .post-entry {
-    position: relative;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2rem;
-    transition: all 0.3s ease;
-    background: var(--entry);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-.featured-home .post-entry:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-    border-color: var(--primary);
-}
-.featured-home .post-entry .entry-header h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.4;
-    margin: 0;
-    color: var(--primary);
-}
-.featured-home .post-entry .entry-content {
-    flex: 1;
+
+.post-description {
+    font-size: 1.1rem;
     color: var(--secondary);
     line-height: 1.6;
-    font-size: 0.95rem;
-}
-.featured-home .post-entry .entry-content p {
-    margin: 0;
-}
-.featured-home .post-entry .entry-footer {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--secondary);
-    opacity: 0.8;
-    padding-top: 0.5rem;
-    border-top: 1px solid var(--border);
-}
-.featured-home .post-entry .entry-separator {
-    opacity: 0.5;
-}
-
-/* Reduce bottom spacing on homepage */
-.home-info {
     margin-bottom: 1rem;
 }
 
-/* Profile mode improvements */
-.profile {
-    padding: 3rem 0 2rem 0;
+.post-header .post-meta {
+    margin-bottom: 1rem;
 }
 
-/* Recent Posts section on Home */
-.recent-posts-home {
-    margin: 2rem auto 4rem auto;
-    max-width: calc(var(--main-width) + var(--gap) * 6);
+.post-tags {
+    margin-top: 0.75rem;
+}
+
+/* ============================================
+   Homepage — Minimal Hero + Text List
+   ============================================ */
+
+.home-hero {
+    max-width: var(--main-width);
+    margin: 4rem auto 3rem auto;
     padding: 0 var(--gap);
 }
 
-.recent-posts-home .page-header {
+.home-hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.home-tagline {
+    font-size: 1.15rem;
+    color: var(--secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.home-section {
+    max-width: var(--main-width);
+    margin: 0 auto 3rem auto;
+    padding: 0 var(--gap);
+}
+
+.home-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--secondary);
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.post-list-minimal {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.post-list-minimal li {
+    border-bottom: 1px solid var(--border);
+}
+
+.post-list-minimal li:last-child {
+    border-bottom: none;
+}
+
+.post-list-minimal a {
     display: flex;
-    align-items: baseline;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.recent-posts-home .page-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 0;
-}
-
-.recent-posts-home .page-header a {
-    font-size: 0.95rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
     text-decoration: none;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-}
-
-.recent-posts-home .page-header a:hover {
-    opacity: 1;
-}
-
-.recent-posts-home .post-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.recent-posts-home .post-entry {
-    position: relative;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2rem;
-    transition: all 0.3s ease;
-    background: var(--entry);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    display: flex;
-    flex-direction: column;
+    color: var(--primary);
+    transition: color 0.15s ease;
     gap: 1rem;
 }
 
-.recent-posts-home .post-entry:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-    border-color: var(--primary);
+.post-list-minimal a:hover {
+    color: var(--secondary);
 }
 
-.recent-posts-home .post-entry .entry-header h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
+.post-list-title {
+    font-weight: 500;
     line-height: 1.4;
-    margin: 0;
+}
+
+.post-list-date {
+    font-size: 0.85rem;
+    color: var(--secondary);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.see-all-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--secondary);
+    transition: color 0.15s ease;
+}
+
+.see-all-link:hover {
     color: var(--primary);
 }
 
-.recent-posts-home .post-entry .entry-content {
-    flex: 1;
-    color: var(--secondary);
-    line-height: 1.6;
-    font-size: 0.95rem;
-}
+/* ============================================
+   Post Footer & Spacing
+   ============================================ */
 
-.recent-posts-home .post-entry .entry-content p {
-    margin: 0;
-}
-
-.recent-posts-home .post-entry .entry-footer {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--secondary);
-    opacity: 0.8;
-    padding-top: 0.5rem;
-    border-top: 1px solid var(--border);
-}
-
-.recent-posts-home .post-entry .entry-separator {
-    opacity: 0.5;
-}
-
-
-/* Blog post footer spacing improvements */
 .post-footer {
     margin-top: 4rem;
 }
 
-/* Author/About "Connect with me" section */
 .post-single .connect-cta {
     margin-top: 4rem !important;
     margin-bottom: 2rem !important;
 }
 
-/* Post navigation (prev/next) */
 .post-single .paginav {
     margin-top: 2rem;
     margin-bottom: 4rem;
     padding: 2rem 0;
 }
 
-/* Related posts section - add spacing above the heading */
 .post-single .related-posts {
     margin-top: 4rem;
     padding-top: 2rem;
@@ -299,69 +231,49 @@ the browser support for :has is not widespread yet.
     color: var(--tertiary);
 }
 
-/* Floating share buttons sidebar */
-.share-buttons-floating {
-    position: fixed;
-    left: calc((100vw - var(--main-width) - var(--gap) * 30) / 2 - 80px);
-    top: 200px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    z-index: 50;
-}
+/* ============================================
+   Inline Share Buttons (post footer)
+   ============================================ */
 
-.share-buttons-floating .share-btn {
+.share-inline {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    transition: all 0.3s ease;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+}
+
+.share-inline-label {
+    font-size: 0.85rem;
+    color: var(--secondary);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.share-inline-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.share-inline-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.share-inline-links a:hover {
     color: var(--primary);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.share-buttons-floating .share-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.share-buttons-floating .share-twitter:hover {
-    background: #1DA1F2;
-    border-color: #1DA1F2;
-    color: white;
-}
-
-.share-buttons-floating .share-linkedin:hover {
-    background: #0A66C2;
-    border-color: #0A66C2;
-    color: white;
-}
-
-.share-buttons-floating .share-facebook:hover {
-    background: #1877F2;
-    border-color: #1877F2;
-    color: white;
-}
-
-.share-buttons-floating .share-reddit:hover {
-    background: #FF4500;
-    border-color: #FF4500;
-    color: white;
-}
-
-.share-buttons-floating .share-email:hover {
-    background: #777;
-    border-color: #777;
-    color: white;
-}
-
-.share-buttons-floating svg {
-    width: 20px;
-    height: 20px;
+.share-inline-links svg {
+    width: 16px;
+    height: 16px;
 }
 
 /* Comments section */
@@ -372,7 +284,88 @@ the browser support for :has is not widespread yet.
     border-top: 1px solid var(--border);
 }
 
-/* Slides page styling */
+/* ============================================
+   Connect CTA (end of posts)
+   ============================================ */
+
+.connect-cta {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.connect-cta-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.connect-cta-author img {
+    border-radius: 50%;
+}
+
+.connect-cta-author-info h4 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.connect-cta-author-info p {
+    margin: 0;
+    color: var(--secondary);
+}
+
+.connect-cta-social h5 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: var(--secondary);
+}
+
+.connect-cta-social ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.connect-cta-social a {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+.footer {
+    max-width: var(--main-width);
+    margin: 0 auto;
+    padding: 2rem var(--gap);
+    font-size: 0.85rem;
+    color: var(--secondary);
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+.footer a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: var(--primary);
+}
+
+/* ============================================
+   Slides Page
+   ============================================ */
+
 .slides-page {
     max-width: calc(var(--main-width) + var(--gap) * 6);
     margin: 0 auto;
@@ -398,24 +391,20 @@ the browser support for :has is not widespread yet.
 
 .slides-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 4rem;
 }
 
 .slide-card {
-    position: relative;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 6px;
     background: var(--entry);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    transition: all 0.3s ease;
     overflow: hidden;
+    transition: border-color 0.2s ease;
 }
 
 .slide-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
     border-color: var(--primary);
 }
 
@@ -429,7 +418,7 @@ the browser support for :has is not widespread yet.
 
 .slide-thumbnail {
     width: 100%;
-    height: 200px;
+    height: 160px;
     background: var(--code-bg);
     display: flex;
     align-items: center;
@@ -441,23 +430,18 @@ the browser support for :has is not widespread yet.
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.slide-card:hover .slide-thumbnail img {
-    transform: scale(1.05);
 }
 
 .slide-content {
-    padding: 1.5rem;
+    padding: 1rem 1.25rem 1.25rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.4rem;
 }
 
 .slide-title {
-    font-size: 1.25rem;
+    font-size: 1.05rem;
     font-weight: 600;
     margin: 0;
     color: var(--primary);
@@ -466,20 +450,19 @@ the browser support for :has is not widespread yet.
 
 .slide-description {
     color: var(--secondary);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.85rem;
+    line-height: 1.5;
     margin: 0;
 }
 
-/* Mobile responsive */
 @media screen and (max-width: 768px) {
     .slides-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1.25rem;
     }
 
     .slide-thumbnail {
-        height: 180px;
+        height: 140px;
     }
 
     .slides-page .page-header h1 {
@@ -487,7 +470,10 @@ the browser support for :has is not widespread yet.
     }
 }
 
-/* Books page styling */
+/* ============================================
+   Books Page
+   ============================================ */
+
 .books-page {
     max-width: calc(var(--main-width) + var(--gap) * 6);
     margin: 0 auto;
@@ -513,24 +499,20 @@ the browser support for :has is not widespread yet.
 
 .books-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 4rem;
 }
 
 .book-card {
-    position: relative;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 6px;
     background: var(--entry);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    transition: all 0.3s ease;
     overflow: hidden;
+    transition: border-color 0.2s ease;
 }
 
 .book-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
     border-color: var(--primary);
 }
 
@@ -544,7 +526,7 @@ the browser support for :has is not widespread yet.
 
 .book-cover {
     width: 100%;
-    min-height: 380px;
+    min-height: 340px;
     background: var(--code-bg);
     display: flex;
     align-items: center;
@@ -556,25 +538,20 @@ the browser support for :has is not widespread yet.
 .book-cover img {
     max-width: 100%;
     height: auto;
-    max-height: 380px;
+    max-height: 340px;
     object-fit: contain;
-    transition: transform 0.3s ease;
-}
-
-.book-card:hover .book-cover img {
-    transform: scale(1.05);
 }
 
 .book-content {
-    padding: 1.5rem;
+    padding: 1rem 1.25rem 1.25rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.4rem;
 }
 
 .book-title {
-    font-size: 1.25rem;
+    font-size: 1.05rem;
     font-weight: 600;
     margin: 0;
     color: var(--primary);
@@ -583,38 +560,36 @@ the browser support for :has is not widespread yet.
 
 .book-description {
     color: var(--secondary);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.85rem;
+    line-height: 1.5;
     margin: 0;
     flex: 1;
 }
 
 .book-details-link {
-    color: var(--primary);
-    font-weight: 500;
-    font-size: 0.9rem;
-    margin-top: auto;
+    color: var(--secondary);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
     display: inline-block;
-    transition: color 0.2s ease;
+    transition: color 0.15s ease;
 }
 
 .book-card:hover .book-details-link {
-    color: var(--tertiary);
+    color: var(--primary);
 }
 
-/* Mobile responsive for books */
 @media screen and (max-width: 768px) {
     .books-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1.25rem;
     }
 
     .book-cover {
-        min-height: 320px;
+        min-height: 300px;
     }
 
     .book-cover img {
-        max-height: 320px;
+        max-height: 300px;
     }
 
     .books-page .page-header h1 {
@@ -622,7 +597,10 @@ the browser support for :has is not widespread yet.
     }
 }
 
-/* Individual Book Page Styling */
+/* ============================================
+   Individual Book Page
+   ============================================ */
+
 .book-single {
     max-width: calc(var(--main-width) + var(--gap) * 12);
     margin: 0 auto;
@@ -636,7 +614,6 @@ the browser support for :has is not widespread yet.
     align-items: start;
 }
 
-/* Book Cover Sidebar */
 .book-single-cover {
     position: sticky;
     top: 2rem;
@@ -648,11 +625,10 @@ the browser support for :has is not widespread yet.
 .book-cover-wrapper {
     background: var(--code-bg);
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--border);
     display: flex;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .book-cover-wrapper img {
@@ -662,7 +638,6 @@ the browser support for :has is not widespread yet.
     border-radius: 4px;
 }
 
-/* Buy Section */
 .book-buy-section {
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -703,7 +678,6 @@ the browser support for :has is not widespread yet.
     transform: translateY(-1px);
 }
 
-/* Preview Button */
 .preview-button {
     width: 100%;
     display: flex;
@@ -731,7 +705,6 @@ the browser support for :has is not widespread yet.
     height: 20px;
 }
 
-/* Book Content Area */
 .book-single-content {
     display: flex;
     flex-direction: column;
@@ -753,7 +726,6 @@ the browser support for :has is not widespread yet.
     line-height: 1.5;
 }
 
-/* Reviews Section */
 .book-reviews h2,
 .book-about h2 {
     font-size: 1.75rem;
@@ -801,7 +773,6 @@ the browser support for :has is not widespread yet.
     font-style: italic;
 }
 
-/* Book Description */
 .book-description {
     color: var(--content);
     line-height: 1.7;
@@ -927,7 +898,6 @@ the browser support for :has is not widespread yet.
     position: relative;
 }
 
-/* Mobile responsive for book single page */
 @media screen and (max-width: 1024px) {
     .book-single-container {
         grid-template-columns: 1fr;
@@ -982,133 +952,12 @@ the browser support for :has is not widespread yet.
     }
 }
 
-/* Responsive Navigation - Hamburger Menu */
+/* ============================================
+   Responsive Navigation — Hamburger Menu
+   ============================================ */
+
 .menu-button {
     display: none;
-}
-
-/* Mobile share button (FAB) */
-.share-mobile-container {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 100;
-}
-
-.share-fab {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: var(--theme);
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.share-fab:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-.share-fab .share-icon {
-    display: block;
-}
-
-.share-fab .close-icon {
-    display: none;
-}
-
-.share-mobile-container.active .share-fab .share-icon {
-    display: none;
-}
-
-.share-mobile-container.active .share-fab .close-icon {
-    display: block;
-}
-
-.share-mobile-menu {
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    opacity: 0;
-    transform: translateY(20px);
-    pointer-events: none;
-    transition: all 0.3s ease;
-}
-
-.share-mobile-container.active .share-mobile-menu {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: all;
-}
-
-.share-mobile-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--entry);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    color: var(--primary);
-}
-
-.share-mobile-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.share-mobile-btn.share-twitter:hover {
-    background: #1DA1F2;
-    border-color: #1DA1F2;
-    color: white;
-}
-
-.share-mobile-btn.share-linkedin:hover {
-    background: #0A66C2;
-    border-color: #0A66C2;
-    color: white;
-}
-
-.share-mobile-btn.share-facebook:hover {
-    background: #1877F2;
-    border-color: #1877F2;
-    color: white;
-}
-
-.share-mobile-btn.share-reddit:hover {
-    background: #FF4500;
-    border-color: #FF4500;
-    color: white;
-}
-
-.share-mobile-btn.share-email:hover {
-    background: #777;
-    border-color: #777;
-    color: white;
-}
-
-/* Hide floating share buttons on tablets and smaller screens */
-@media screen and (max-width: 1200px) {
-    .share-buttons-floating {
-        display: none;
-    }
-
-    .share-mobile-container {
-        display: block;
-    }
 }
 
 @media screen and (max-width: 768px) {
@@ -1158,7 +1007,6 @@ the browser support for :has is not widespread yet.
         text-decoration: none;
     }
 
-    /* Hamburger button */
     .menu-button {
         display: inline-flex;
         align-items: center;
@@ -1178,11 +1026,14 @@ the browser support for :has is not widespread yet.
         stroke: currentColor;
     }
 
-    /* Hide language switcher on mobile inside the logo-switches */
     .logo-switches {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+    }
+
+    .home-hero h1 {
+        font-size: 2rem;
     }
 }
 
@@ -1197,341 +1048,120 @@ the browser support for :has is not widespread yet.
 }
 
 /* ============================================
-   About Page Styling
+   About Page
    ============================================ */
 
 .about-page {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-/* Hero Section */
-.about-hero {
-    text-align: center;
-    padding: 3rem 0 4rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 3rem;
-}
-
-.about-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--primary);
-}
-
-.about-tagline {
-    font-size: 1.25rem;
-    color: var(--secondary);
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-}
-
-.about-intro {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: var(--content);
     max-width: 700px;
     margin: 0 auto;
 }
 
-/* About Sections */
+.about-hero {
+    padding: 2rem 0 2.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+}
+
+.about-hero h1 {
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary);
+    line-height: 1.25;
+}
+
+.about-tagline {
+    font-size: 1.1rem;
+    color: var(--secondary);
+    line-height: 1.6;
+}
+
 .about-section {
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.about-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
 .about-section h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
     color: var(--primary);
 }
 
-.section-intro {
-    font-size: 1.1rem;
-    color: var(--secondary);
-    margin-bottom: 2rem;
-    line-height: 1.6;
+.about-section p {
+    line-height: 1.75;
+    color: var(--content);
+    margin-bottom: 0.75rem;
 }
 
-.about-content {
+.about-section p:last-child {
+    margin-bottom: 0;
+}
+
+.about-section a {
+    color: var(--primary);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+.about-prose {
+    font-size: 1.05rem;
     line-height: 1.8;
 }
 
-.about-content p {
-    margin-bottom: 1rem;
+.about-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
 }
 
-.linkedin-link {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 500;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.2s ease;
-}
-
-.linkedin-link:hover {
-    border-bottom-color: var(--primary);
-}
-
-/* Books Grid */
-.about-books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.about-book-card {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    background: var(--entry);
-}
-
-.about-book-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-color: var(--primary);
-}
-
-.about-book-cover {
-    width: 100%;
-    aspect-ratio: 3/4;
-    overflow: hidden;
-    background: var(--code-bg);
-}
-
-.about-book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.about-book-info {
-    padding: 1.5rem;
-}
-
-.about-book-info h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: var(--content);
-}
-
-.about-book-info p {
-    font-size: 0.95rem;
-    color: var(--secondary);
-    line-height: 1.5;
-}
-
-/* Slides Grid */
-.about-slides-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.about-slide-card {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    background: var(--entry);
-    padding: 1.5rem;
-}
-
-.about-slide-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-color: var(--primary);
-}
-
-.about-slide-icon {
-    width: 100%;
-    aspect-ratio: 16/9;
-    overflow: hidden;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    background: var(--code-bg);
-}
-
-.about-slide-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.about-slide-info h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: var(--content);
-}
-
-.about-slide-info p {
-    font-size: 0.9rem;
-    color: var(--secondary);
-    line-height: 1.5;
-}
-
-/* Interests Grid */
-.about-interests-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.interest-card {
-    text-align: center;
-    padding: 2rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--entry);
-    transition: all 0.3s ease;
-}
-
-.interest-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-color: var(--primary);
-}
-
-.interest-icon {
-    margin-bottom: 1rem;
-    color: var(--primary);
-}
-
-.interest-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 0.75rem;
-    color: var(--content);
-}
-
-.interest-card p {
-    font-size: 0.95rem;
-    color: var(--secondary);
+.about-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
     line-height: 1.6;
+    color: var(--secondary);
 }
 
-/* Social Links */
-.about-social-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
+.about-list li:last-child {
+    border-bottom: none;
 }
 
-.social-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 2rem;
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    text-decoration: none;
-    color: var(--content);
-    background: var(--entry);
-    transition: all 0.3s ease;
+.about-list li a {
     font-weight: 500;
 }
 
-.social-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.social-link svg {
-    width: 24px;
-    height: 24px;
-}
-
-.social-linkedin:hover {
-    border-color: #0077b5;
-    color: #0077b5;
-}
-
-.social-github:hover {
-    border-color: #333;
-    color: #333;
-}
-
-.social-twitter:hover {
-    border-color: #1da1f2;
-    color: #1da1f2;
-}
-
-/* Dark mode adjustments for social links */
-.dark .social-github:hover {
-    border-color: #fff;
-    color: #fff;
-}
-
-/* CTA Buttons */
-.section-cta {
-    text-align: center;
-    margin-top: 2rem;
-}
-
-.cta-button {
+.about-more-link {
     display: inline-block;
-    padding: 0.875rem 2rem;
-    background: var(--primary);
-    color: var(--theme);
-    border-radius: 8px;
-    text-decoration: none;
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--secondary);
+}
+
+.about-connect-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.about-connect-links a {
     font-weight: 500;
-    transition: all 0.3s ease;
-    border: 2px solid var(--primary);
 }
 
-.cta-button:hover {
-    background: var(--tertiary);
-    border-color: var(--tertiary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.about-link-sep {
+    color: var(--tertiary);
 }
 
-/* Podcast Section */
-.about-podcast {
-    text-align: center;
-    padding: 2rem;
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-}
-
-/* Responsive Design */
 @media screen and (max-width: 768px) {
     .about-hero h1 {
-        font-size: 2rem;
-    }
-
-    .about-tagline {
-        font-size: 1.1rem;
+        font-size: 1.75rem;
     }
 
     .about-section h2 {
-        font-size: 1.5rem;
-    }
-
-    .about-books-grid,
-    .about-slides-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .about-social-links {
-        flex-direction: column;
-    }
-
-    .social-link {
-        width: 100%;
-        justify-content: center;
+        font-size: 1.3rem;
     }
 }

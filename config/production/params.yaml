@@ -60,7 +60,7 @@ ShowCategories: true
 ShowDate: true
 ShowPostNavLinks: true
 ShowCodeCopyButtons: true
-hideFooter: true
+hideFooter: false
 ShowRssButtonInSectionTermList: true
 ShowFullTextinRSS: true
 UseHugoToc: true
@@ -113,8 +113,8 @@ fuseOpts:
     - content
 
 profileMode:
-  enabled: true
-  title: Notes from my journey designing and building amazing systems with amazing teams
+  enabled: false
+  title: Software engineering notes & explorations
   subtitle: Software engineering notes
   imageUrl: Pradeep-Loganathan.jpeg
   imageTitle: Pradeep Loganathan

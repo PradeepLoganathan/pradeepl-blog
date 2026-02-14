@@ -32,12 +32,12 @@
     {{- partial "connect.html" . -}}
 
     <footer class="post-footer">
+        {{ if (.Param "ShowShareButtons") }}
+        {{ partial "share-buttons.html" . }}
+        {{ end }}
         {{ partial "post_nav_links.html" . }}
         {{ if (.Param "ShowRelatedPosts") }}
         {{ partial "related.html" . }}
-        {{ end }}
-        {{ if (.Param "ShowShareButtons") }}
-        {{ partial "share-buttons.html" . }}
         {{ end }}
         {{ partial "comments.html" . }}
     </footer>

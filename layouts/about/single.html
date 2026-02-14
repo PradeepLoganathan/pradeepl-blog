@@ -1,161 +1,79 @@
 {{ define "main" }}
 
 <div class="about-page">
-  <!-- Hero Section -->
   <section class="about-hero">
-    <div class="about-hero-content">
-      <h1>Hi, I'm Pradeep Loganathan</h1>
-      <p class="about-tagline">Software engineer, architect, and author passionate about cloud-native technologies, DevOps, and AI.</p>
-      <p class="about-intro">{{ .Content }}</p>
+    <h1>Hi, I'm Pradeep Loganathan</h1>
+    <p class="about-tagline">Software engineer, architect, and author passionate about cloud-native technologies, DevOps, and AI.</p>
+  </section>
+
+  <section class="about-section">
+    <div class="about-prose">
+      {{ .Content }}
     </div>
   </section>
 
-  <!-- Professional Summary -->
-  <section class="about-section about-professional">
+  <section class="about-section">
     <h2>Professional Background</h2>
-    <div class="about-content">
-      <p>I'm a software engineering leader with deep expertise in cloud architecture, microservices, and DevOps practices. I help organizations build scalable, resilient systems and guide teams in adopting modern engineering practices.</p>
-      <p>For my complete career history and professional experience, visit my
-        <a href="https://www.linkedin.com/in/pradeeploganathan/" target="_blank" rel="noopener" class="linkedin-link">
-          LinkedIn profile
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-left: 4px;">
-            <path d="M19 19h-3v-5.3c0-1.1 0-2.5-1.5-2.5s-1.7 1.2-1.7 2.4V19h-3V9h2.9v1.3h.1c.4-.8 1.4-1.5 2.8-1.5 3 0 3.6 2 3.6 4.5V19zM7 8c-1 0-1.8-.8-1.8-1.8S6 4.4 7 4.4s1.8.8 1.8 1.8S8 8 7 8zm1.5 11h-3V9h3v10zM20.5 2h-17C2.7 2 2 2.7 2 3.5v17c0 .8.7 1.5 1.5 1.5h17c.8 0 1.5-.7 1.5-1.5v-17c0-.8-.7-1.5-1.5-1.5z"/>
-          </svg>
-        </a>
-      </p>
-    </div>
+    <p>I'm a software engineering leader with deep expertise in cloud architecture, microservices, and DevOps practices. I help organizations build scalable, resilient systems and guide teams in adopting modern engineering practices.</p>
+    <p>For my complete career history, visit my <a href="https://www.linkedin.com/in/pradeeploganathan/" target="_blank" rel="noopener">LinkedIn profile</a>.</p>
   </section>
 
-  <!-- Books Section -->
   {{- $books := where site.Pages "Section" "books" }}
   {{- if gt (len $books) 0 }}
-  <section class="about-section about-books">
+  <section class="about-section">
     <h2>Books</h2>
-    <p class="section-intro">I've authored books on cloud-native technologies and modern software engineering practices.</p>
-    <div class="about-books-grid">
+    <p>I've authored books on cloud-native technologies and modern software engineering.</p>
+    <ul class="about-list">
       {{ range $books.ByWeight }}
         {{ if .Params.cover }}
-        <a href="{{ .RelPermalink }}" class="about-book-card">
-          {{ $cover := "" }}
-          {{ if .Resources }}
-              {{ $coverResource := .Resources.GetMatch (.Params.cover.image) }}
-              {{ if $coverResource }}
-                  {{ $cover = $coverResource.RelPermalink }}
-              {{ end }}
-          {{ end }}
-          {{ if not $cover }}
-              {{ $cover = .Params.cover.image | safeURL }}
-          {{ end }}
-          <div class="about-book-cover">
-            <img src="{{ $cover }}" alt="{{ .Params.cover.alt | default .Title }}" loading="lazy">
-          </div>
-          <div class="about-book-info">
-            <h3>{{ .Title }}</h3>
-            <p>{{ .Params.description }}</p>
-          </div>
-        </a>
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a> &mdash; {{ .Params.description }}</li>
         {{ end }}
       {{ end }}
-    </div>
-    <div class="section-cta">
-      <a href="/books/" class="cta-button">View All Books →</a>
-    </div>
+    </ul>
   </section>
   {{- end }}
 
-  <!-- Speaking & Conferences Section -->
   {{- $slides := site.Data.slides_folders }}
   {{- if $slides }}
-  <section class="about-section about-speaking">
-    <h2>Speaking & Conferences</h2>
-    <p class="section-intro">I enjoy sharing knowledge through conference talks and presentations on software architecture and cloud technologies.</p>
-    <div class="about-slides-grid">
-      {{ range first 3 $slides }}
-      <a href="/slides/{{ .folder }}/index.html" class="about-slide-card">
-        <div class="about-slide-icon">
-          <img src="{{ .icon }}" alt="{{ .title }}" loading="lazy">
-        </div>
-        <div class="about-slide-info">
-          <h3>{{ .title }}</h3>
-          <p>{{ .description }}</p>
-        </div>
-      </a>
+  <section class="about-section">
+    <h2>Speaking</h2>
+    <p>I share knowledge through conference talks on software architecture and cloud technologies.</p>
+    <ul class="about-list">
+      {{ range first 4 $slides }}
+      <li><a href="/slides/{{ .folder }}/index.html">{{ .title }}</a> &mdash; {{ .description }}</li>
       {{ end }}
-    </div>
-    <div class="section-cta">
-      <a href="/slides/" class="cta-button">View All Presentations →</a>
-    </div>
+    </ul>
+    <a href="/slides/" class="about-more-link">All presentations &rarr;</a>
   </section>
   {{- end }}
 
-  <!-- Podcast Section -->
   {{- $episodes := where site.Pages "Section" "episodes" }}
   {{- if gt (len $episodes) 0 }}
-  <section class="about-section about-podcast">
+  <section class="about-section">
     <h2>Podcast</h2>
-    <p class="section-intro">I host conversations with industry experts about software engineering, architecture, and technology trends.</p>
-    <div class="section-cta">
-      <a href="/episodes/" class="cta-button">Listen to Episodes →</a>
-    </div>
+    <p>I host conversations with industry experts about software engineering, architecture, and technology trends. <a href="/episodes/">Listen to episodes &rarr;</a></p>
   </section>
   {{- end }}
 
-  <!-- Beyond the Code Section -->
-  <section class="about-section about-interests">
+  <section class="about-section">
     <h2>Beyond the Code</h2>
-    <p class="section-intro">When I'm not writing code or exploring new technologies, you'll find me:</p>
-    <div class="about-interests-grid">
-      <div class="interest-card">
-        <div class="interest-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="2"></circle>
-            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-          </svg>
-        </div>
-        <h3>Biking</h3>
-        <p>Exploring trails and roads on two wheels. There's something meditative about long rides that helps clear the mind and spark new ideas.</p>
-      </div>
-      <div class="interest-card">
-        <div class="interest-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="10" r="3"></circle>
-            <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"></path>
-          </svg>
-        </div>
-        <h3>Traveling</h3>
-        <p>Discovering new cultures, cuisines, and perspectives around the world. Travel broadens horizons and reminds us of the diversity that makes our world fascinating.</p>
-      </div>
-    </div>
+    <p>When I'm not writing code or exploring new technologies, you'll find me on two wheels exploring trails and roads, or discovering new cultures and cuisines around the world. Long rides and travel both have a way of clearing the mind and sparking new ideas.</p>
   </section>
 
-  <!-- Let's Connect Section -->
-  <section class="about-section about-connect">
-    <h2>Let's Connect</h2>
-    <p class="section-intro">I'm always happy to connect with fellow developers, architects, and technology enthusiasts.</p>
-    <div class="about-social-links">
-      <a href="https://www.linkedin.com/in/pradeeploganathan/" target="_blank" rel="noopener" class="social-link social-linkedin">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-        <span>LinkedIn</span>
-      </a>
-      <a href="https://github.com/pradeeploganathan" target="_blank" rel="noopener" class="social-link social-github">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-        <span>GitHub</span>
-      </a>
+  <section class="about-section">
+    <h2>Connect</h2>
+    <p>I'm always happy to connect with fellow developers, architects, and technology enthusiasts.</p>
+    <p class="about-connect-links">
+      <a href="https://www.linkedin.com/in/pradeeploganathan/" target="_blank" rel="noopener">LinkedIn</a>
+      <span class="about-link-sep">&middot;</span>
+      <a href="https://github.com/pradeeploganathan" target="_blank" rel="noopener">GitHub</a>
       {{- if site.Params.social }}
         {{- if site.Params.social.twitter }}
-        <a href="https://twitter.com/{{ site.Params.social.twitter }}" target="_blank" rel="noopener" class="social-link social-twitter">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-          </svg>
-          <span>Twitter/X</span>
-        </a>
+        <span class="about-link-sep">&middot;</span>
+        <a href="https://twitter.com/{{ site.Params.social.twitter }}" target="_blank" rel="noopener">X</a>
         {{- end }}
       {{- end }}
-    </div>
+    </p>
   </section>
 </div>
 
