@@ -3,11 +3,13 @@ title: Pradeep Loganathan's Blog
 description: My technical notes and thoughts on software engineering, programming, and life.
 keywords:
   - Pradeep Loganathan
+  - software engineering
+  - cloud-native
   - kubernetes
-  - Devops
-  - GitOps
-  - ArgoCD
-  - FluxCD
+  - AI
+  - agentic systems
+  - microservices
+  - DevOps
 
 author: Pradeep Loganathan
 comments: true

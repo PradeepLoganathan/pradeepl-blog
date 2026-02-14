@@ -1,4 +1,6 @@
 <!-- General Open Graph Metadata -->
+{{/* Resolve description: page description > page summary > site description */}}
+{{ $desc := .Description | default .Summary | default site.Params.description }}
 {{/* Resolve best image for OG: params.images[0] > cover.image > site fallback; handle page-bundle relative paths */}}
 {{ $img := "" }}
 {{ with .Params.images }}{{ if gt (len .) 0 }}{{ $first := index . 0 }}{{ if ne $first "" }}{{ $img = $first }}{{ end }}{{ end }}{{ end }}
@@ -28,7 +30,8 @@
 <meta property="og:url" content="{{ .Permalink }}" />
 <meta property="og:site_name" content="{{ site.Title }}" />
 <meta property="og:title" content="{{ .Title }}" />
-<meta property="og:description" content="{{ .Description | default .Summary }}" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:description" content="{{ $desc }}" />
 <meta property="og:image" content="{{ $og }}" />
 <meta property="og:image:secure_url" content="{{ $og | replaceRE "^http:" "https:" }}" />
 {{ $alt := (or .Params.cover.alt .Title) }}
@@ -60,7 +63,7 @@
 <!-- Twitter Card Metadata -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ .Title }}">
-<meta name="twitter:description" content="{{ .Description | default .Summary }}">
+<meta name="twitter:description" content="{{ $desc }}">
 <meta name="twitter:image" content="{{ $og }}">
 <meta name="twitter:image:src" content="{{ $og }}">
 <meta name="twitter:image:alt" content="{{ $alt }}">
