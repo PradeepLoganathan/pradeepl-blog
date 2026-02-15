@@ -7,18 +7,28 @@
 {{ if and (eq $img "") .Params.cover.image }}{{ $img = .Params.cover.image }}{{ end }}
 {{ if and (eq $img "") (site.Params.opengraph.image) }}{{ $img = site.Params.opengraph.image }}{{ end }}
 {{ $og := "" }}
+{{ $ogWidth := 1200 }}
+{{ $ogHeight := 630 }}
 {{ if $img }}
   {{ $s := printf "%v" $img }}
   {{ if or (hasPrefix $s "http://") (hasPrefix $s "https://") }}
     {{ $og = $s }}
-  {{ else if hasPrefix $s "/" }}
-    {{ $og = (absURL $s) }}
   {{ else }}
-    {{ if .Params.cover.relative }}
-      {{ $og = printf "%s%s" .Permalink (strings.TrimPrefix "/" $s) }}
-    {{ else }}
-      {{ with .Page.Resources.GetMatch $s }}
+    {{/* Try to get as a page resource so we can resize for LinkedIn/OG */}}
+    {{ with $.Resources.GetMatch $s }}
+      {{ if ne .MediaType.SubType "svg" }}
+        {{ $processed := .Fill "1200x630 Center" }}
+        {{ $og = $processed.Permalink }}
+        {{ $ogWidth = $processed.Width }}
+        {{ $ogHeight = $processed.Height }}
+      {{ else }}
         {{ $og = .Permalink }}
+      {{ end }}
+    {{ else }}
+      {{ if hasPrefix $s "/" }}
+        {{ $og = (absURL $s) }}
+      {{ else if $.Params.cover.relative }}
+        {{ $og = printf "%s%s" $.Permalink (strings.TrimPrefix "/" $s) }}
       {{ else }}
         {{ $og = (absURL $s) }}
       {{ end }}
@@ -34,6 +44,8 @@
 <meta property="og:description" content="{{ $desc }}" />
 <meta property="og:image" content="{{ $og }}" />
 <meta property="og:image:secure_url" content="{{ $og | replaceRE "^http:" "https:" }}" />
+<meta property="og:image:width" content="{{ $ogWidth }}" />
+<meta property="og:image:height" content="{{ $ogHeight }}" />
 {{ $alt := (or .Params.cover.alt .Title) }}
 <meta property="og:image:alt" content="{{ $alt }}" />
 
