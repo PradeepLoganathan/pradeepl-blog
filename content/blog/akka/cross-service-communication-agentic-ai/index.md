@@ -263,7 +263,7 @@ Most organizations add AI as a separate layer — an "AI service" that wraps an 
 
 In this design, the agent is a first-class Akka component. It is invoked through the `ComponentClient`, the same mechanism used for entities and views. It uses `@FunctionTool` methods that call other services through the same `HttpClientProvider` used for any inter-service communication. Its tools include the same deterministic categorization logic used by the heuristic mode. The LLM is not replacing the existing architecture — it is *orchestrating* it.
 
-The critical proof point: both modes produce the same output contract. The recommendation-service calls the analysis-service and receives an `AnalysisSummary`. It does not know whether that summary was produced by keyword matching or by GPT-4. The contract is identical. This means:
+The critical proof point: both modes produce the same output contract. The recommendation-service calls the analysis-service and receives an `AnalysisSummary`. It does not know whether that summary was produced by keyword matching or by an LLM. The contract is identical. The demo uses OpenAI's GPT-4 as the backing model, but the architecture is LLM-agnostic — swap in Claude, Gemini, Mistral, or a self-hosted model and nothing outside the agent configuration changes. This means:
 
 - **Testing is contract-based** — You test the output shape, not the implementation.
 - **Fallback is trivial** — Switch from agent mode to heuristic mode via configuration. The rest of the system is unaffected.
@@ -435,6 +435,8 @@ void shouldRecommendTravelCardForHighTravelSpend() {
 The recommendation-service makes synchronous HTTP calls to the analysis-service, which calls the statement-service. In a traditional microservices architecture, you might reach for a message broker here — publish analysis results to a topic, have the recommendation-service consume them asynchronously.
 
 For this use case, synchronous is the right choice. The recommendation endpoint needs analysis results *now* to respond to the caller. There is no benefit to eventual consistency here — the user is waiting for recommendations. The synchronous chain is simpler to reason about, simpler to debug (one request ID flows through all three services), and the Akka platform provides the resilience guarantees (circuit breaking, retries, timeouts) that you would otherwise need a service mesh for.
+
+> **Watch for tail-latency amplification.** In a synchronous chain, end-to-end latency is the *sum* of every hop. A p99 spike in the statement-service becomes a p99 spike for every upstream caller. Set explicit per-call timeouts (e.g., 2 s for statement-service, 5 s for analysis-service) so that one slow dependency fails fast instead of stalling the entire chain. Pair timeouts with a retry budget — for example, at most one retry per call and a circuit breaker that opens after a handful of consecutive failures. Without a budget, retries on every hop multiply geometrically: one retry at each of three hops turns a single request into eight attempts, amplifying load on an already struggling service.
 
 Asynchronous communication shines when services need to react to events without blocking a caller — order fulfillment, notification dispatch, analytics ingestion. The choice is architectural, not ideological.
 

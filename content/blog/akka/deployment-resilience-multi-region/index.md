@@ -89,6 +89,8 @@ white-bush-8904.gcp-us-east1.akka.services
 
 The `--enable-cors` flag configures CORS headers — essential when browser-based clients (like our mobile banking shell) call the API directly.
 
+> **Production note:** `--enable-cors` allows all origins. In production, restrict the `Access-Control-Allow-Origin` header to your specific frontend domains (e.g., `https://app.yourbank.com`) to prevent unauthorized cross-origin requests.
+
 ### Seeding Data
 
 The statement-service and product-service require seed data. Our endpoint design anticipated this:

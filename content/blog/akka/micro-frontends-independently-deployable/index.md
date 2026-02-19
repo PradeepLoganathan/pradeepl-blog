@@ -173,6 +173,8 @@ The registry reads the file on every request — it does not cache. This is deli
 
 The simplicity is the point. The registry is a file server with a single endpoint. In production, this could be an S3 bucket, a CloudFront distribution, or a database-backed API. The protocol is what matters: an HTTP endpoint that returns a JSON manifest.
 
+> **Production hardening:** Keep the S3 bucket private and serve bundles through CloudFront with an Origin Access Identity (or Origin Access Control). Use signed URLs or signed cookies to prevent unauthorized hotlinking of your bundles. Pin the manifest endpoint behind authentication so only your shell can discover micro-app locations. If you are not on AWS, the same principle applies: private storage + CDN edge auth + scoped access tokens.
+
 ## The CDN: Versioned Static Hosting
 
 The CDN serves pre-built micro-app bundles. Its directory structure encodes the versioning scheme:

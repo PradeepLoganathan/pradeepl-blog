@@ -149,7 +149,7 @@ There is a more interesting possibility: what if the LLM were just another compo
 
 In the banking demo we will build in this series, the analysis-service has two modes. In heuristic mode, it categorizes transactions using deterministic keyword matching — fast, predictable, no external dependencies. In agent mode, it uses an LLM with function tools to perform the same analysis — slower, more nuanced, requires an API key.
 
-The critical design decision is that both modes produce the same output: an `AnalysisSummary` with categories, top merchants, and insights. The recommendation-service calls the analysis-service and receives a summary. It does not know or care whether that summary was produced by a rules engine or by GPT-4. The contract is the same.
+The critical design decision is that both modes produce the same output: an `AnalysisSummary` with categories, top merchants, and insights. The recommendation-service calls the analysis-service and receives a summary. It does not know or care whether that summary was produced by a rules engine or by an LLM. The contract is the same. The demo happens to use OpenAI's GPT-4, but the architecture is LLM-agnostic — any model that can call function tools will work without changing the surrounding services.
 
 The LLM-powered agent uses function tools — annotated methods that the LLM can invoke during its reasoning. One tool fetches transactions from the statement-service (using the same `HttpClientProvider` as any other inter-service call). Another tool categorizes transactions using the same deterministic logic as the heuristic mode. The agent orchestrates these tools, but the tools themselves are the same building blocks used by the rest of the system.
 
