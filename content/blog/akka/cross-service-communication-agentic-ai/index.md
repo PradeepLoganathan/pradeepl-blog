@@ -63,7 +63,11 @@ var response = statementClient
 
 **GrpcClientProvider** — For inter-service gRPC communication. Same concept as HttpClientProvider but for gRPC services.
 
-The key insight is that inter-service calls use the service's deployed name as the only addressing mechanism. There are no URLs to configure, no environment variables to manage across environments, no service discovery infrastructure to maintain. When the analysis-service needs data from the statement-service, it asks for "statement-service" and the platform does the rest.
+The key insight is that inter-service calls use the service's deployed name as the only addressing mechanism. This deserves emphasis, because what it eliminates is substantial.
+
+In a typical Kubernetes-based microservices deployment, connecting service A to service B requires: a Kubernetes Service resource, a DNS name or environment variable that A reads, environment-specific configuration (the URL differs between dev, staging, and production), possibly a service mesh like Istio or Linkerd for mTLS and retries, and health checks to detect when B is unavailable. Each of these is a configuration surface — a thing that can be wrong, stale, or misconfigured. Every production incident postmortem folder contains at least one story about a wrong URL, a missing environment variable, or a DNS record that pointed to a decommissioned host.
+
+Akka's model eliminates this entire category. `httpClientProvider.httpClientFor("statement-service")` is not a convenience wrapper around the same infrastructure. It is a fundamentally different approach: the application expresses *intent* ("I need to talk to statement-service") and the platform handles *mechanism* (TLS, load balancing, service resolution, retries, circuit breaking). The same code works in local development and in production with zero configuration changes. There is no `application-dev.yml` with different URLs.
 
 ## The Analysis Service: Dual-Mode Processing
 
@@ -251,7 +255,21 @@ public String categorizeTransaction(
 
 The `@Description` annotations provide the LLM with parameter semantics. The LLM reads the function descriptions and parameter descriptions to decide when and how to call each tool. This is the standard function-calling pattern — but embedded within Akka's runtime, the tools benefit from the platform's supervision, logging, and lifecycle management.
 
-The dual-mode design is deliberate. The heuristic mode runs without any LLM dependency — no API keys, no external calls, deterministic results. This is the default for demos and testing. The agent mode demonstrates the same architectural patterns with AI reasoning, showing how the Akka Agent construct integrates LLM capabilities into the same event-driven service mesh.
+### AI as Peer, Not Layer
+
+The dual-mode design reveals something important about how AI should fit into enterprise architectures.
+
+Most organizations add AI as a separate layer — an "AI service" that wraps an LLM API, called by other services as a special case. The AI service has different deployment patterns, different failure modes, different scaling characteristics. It is architecturally foreign.
+
+In this design, the agent is a first-class Akka component. It is invoked through the `ComponentClient`, the same mechanism used for entities and views. It uses `@FunctionTool` methods that call other services through the same `HttpClientProvider` used for any inter-service communication. Its tools include the same deterministic categorization logic used by the heuristic mode. The LLM is not replacing the existing architecture — it is *orchestrating* it.
+
+The critical proof point: both modes produce the same output contract. The recommendation-service calls the analysis-service and receives an `AnalysisSummary`. It does not know whether that summary was produced by keyword matching or by GPT-4. The contract is identical. This means:
+
+- **Testing is contract-based** — You test the output shape, not the implementation.
+- **Fallback is trivial** — Switch from agent mode to heuristic mode via configuration. The rest of the system is unaffected.
+- **Adoption is incremental** — Start with deterministic logic. Add the agent when you are ready. Swap back if the LLM is unreliable. No architectural changes.
+
+This is what "AI as peer" means in practice: the LLM participates in the same service mesh, uses the same communication patterns, and produces the same contracts as every other component. It is a pluggable strategy, not a foundational dependency.
 
 ## The Recommendation Service: Rules Engine
 
@@ -420,11 +438,52 @@ For this use case, synchronous is the right choice. The recommendation endpoint 
 
 Asynchronous communication shines when services need to react to events without blocking a caller — order fulfillment, notification dispatch, analytics ingestion. The choice is architectural, not ideological.
 
+### Why Not a Message Broker?
+
+Readers with Kafka experience will feel an itch here. Three services forming a call chain? Surely this should be an event pipeline: the statement-service publishes transactions to a topic, the analysis-service consumes and categorizes them, the recommendation-service consumes the analysis and generates recommendations. Decoupled, asynchronous, scalable.
+
+For this use case, that would be the wrong architecture. Consider the user's experience: they open the recommendations tab and expect to see personalized product suggestions. With synchronous HTTP, they get a response in milliseconds. With an event pipeline, they see... nothing, until the pipeline catches up. The analysis might not have processed their latest statement yet. The recommendation might be based on stale data.
+
+Asynchronous event pipelines excel when consumers do not need results immediately — analytics aggregation, notification dispatch, data warehouse ingestion. They excel when the producer and consumer have different lifecycles and should not block each other. But when the user is waiting for a response, synchronous is not just simpler — it is correct.
+
+The Akka platform provides the resilience guarantees (circuit breaking, retries, timeouts) that would otherwise motivate a broker. And because each service is independently deployable with its own event journal, there is no shared-state coupling that a broker would decouple. The services are already decoupled through their API contracts. Adding a broker would add operational complexity (topic management, consumer groups, offset tracking, dead letter queues) without solving a problem that exists.
+
+The principle: choose the communication pattern that matches the consistency requirement. Synchronous for request-response workflows where the caller needs the result. Asynchronous for fire-and-forget or fan-out workflows where the producer should not wait.
+
 ### In-Memory vs. Event-Sourced Storage
 
 The analysis-service stores results in a `ConcurrentHashMap` rather than an event-sourced entity. This is a deliberate trade-off: analysis results are derivable. Given the same statement data and the same categorization rules, you get the same result. There is no value in maintaining an event journal for derived data.
 
 If the analysis logic changes, you want to regenerate results — not replay old events that would produce outdated insights. The in-memory cache is appropriate for a demo; in production, you might use a time-limited cache or a view projection, but the principle holds: store events for authoritative state, use caches for derived computations.
+
+### Testability as an Architectural Consequence
+
+The refactoring that moved HTTP fetching into endpoints and made `HeuristicCategorizer` and `RecommendationEngine` into pure functions over data was not a testing convenience. It was an architectural decision with testing as a natural consequence.
+
+The categorizer takes a JSON string and returns an `AnalysisSummary`. The engine takes a JSON string and returns a list of `Recommendation`. No HTTP clients to mock, no service dependencies to stub, no database connections to configure. Unit tests pass JSON literals directly:
+
+```java
+@Test
+void shouldRecommendHealthInsuranceForHighHealthSpend() {
+    String analysisJson = """
+        {
+          "totalSpend": 1000.0,
+          "categories": [
+            {"category": "Health", "total": 250.0, "percentage": 25.0}
+          ],
+          "insights": []
+        }
+        """;
+
+    List<Recommendation> recs = RecommendationEngine
+        .generateRecommendations("acc-1001", "stmt-2025-12", analysisJson);
+
+    assertTrue(recs.stream()
+        .anyMatch(r -> "health_insurance_basic".equals(r.productId())));
+}
+```
+
+This testability is not unique to this codebase — it is a general consequence of the event-sourced, pure-function architecture. When state transitions are pure folds over events (Part 1), they are testable without infrastructure. When business logic is a pure function over data (this post), it is testable without mocking. When I/O is pushed to the edges (endpoints), the core logic is deterministic. The architecture *produces* testability. You do not need to engineer it separately.
 
 ## The Service Communication Graph
 
@@ -456,6 +515,10 @@ Every arrow is a platform-managed HTTP call using service names. No hardcoded UR
 
 ## What's Next
 
-In [Part 3]({{< ref "/blog/akka/deployment-resilience-multi-region" >}}), we'll take these services from local development to the Akka Platform. We'll cover the deployment workflow, service exposure with CORS, and explore Akka's multi-region replication capabilities — how the same event-sourced entities we built in Part 1 can replicate across regions for global resilience and low-latency access.
+We now have four services that communicate through platform-managed HTTP, with business logic isolated as pure functions and AI integrated as a peer component. The question that remains: does this hold up in production?
+
+In [Part 3]({{< ref "/blog/akka/deployment-resilience-multi-region" >}}), we deploy to the Akka Platform and discover that the `httpClientProvider.httpClientFor("statement-service")` pattern works identically in production — zero configuration changes. We will examine how the runtime distributes entities across replicas, how failure recovery works through event replay, and how the same event-sourced entities we built in Part 1 become the foundation for multi-region replication.
+
+In [Part 4]({{< ref "/blog/akka/micro-frontends-independently-deployable" >}}), we complete the independence story by building micro-frontends — manifest-driven, CDN-hosted Web Components that extend the same decoupling philosophy to the UI layer. From event journal to browser pixel, every component becomes independently deployable.
 
 The [complete source code](https://github.com/PradeepLoganathan/microsvs-microapp) is available on GitHub.
