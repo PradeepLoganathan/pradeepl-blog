@@ -13,3 +13,6 @@ settings.json
 
 resources
 resources/**
+
+# Claude Code project memory
+CLAUDE.md

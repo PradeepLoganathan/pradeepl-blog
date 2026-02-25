@@ -12,23 +12,20 @@ tags:
   - actor-model
   - distributed-systems
   - architecture
-  - micro-frontends
 categories:
   - akka
   - architecture
 description: "Why most microservice architectures carry monolithic thinking into distributed systems — and how event sourcing, the actor model, and platform-managed infrastructure offer a fundamentally different way to build."
-summary: "A manifesto for event-native microservices: why CRUD is a category error, entities are the true unit of distribution, AI should be a peer not a layer, and independence should extend from database to UI pixel."
+summary: "A manifesto for event-native microservices: why CRUD is a category error, entities are the true unit of distribution, AI should be a peer not a layer, and platform-managed infrastructure enables true service independence."
 ShowToc: true
 TocOpen: true
 images:
-  - "images/cover.png"
-cover:
-  image: "images/cover.png"
-  alt: "Beyond CRUD - Event-Native Microservices"
-  caption: "A manifesto for building enterprise microservices that are conceptually honest about how distributed systems work"
-  relative: true
+  - 
 series: ["Building Resilient Microservices with Akka"]
+weight: 1
 ---
+
+{{< series-toc >}}
 
 Something is wrong with the way we build microservices.
 
@@ -157,45 +154,13 @@ This is AI as a *peer*, a component that participates in the same service mesh, 
 
 For enterprises adopting AI, this matters enormously. Instead of building a parallel AI infrastructure, you extend your existing service architecture to include LLM-powered components alongside deterministic ones. Testing is straightforward, you test the contract, not the implementation. Fallback is trivial, switch from agent mode to heuristic mode and the system keeps working. The AI capability is additive, not foundational.
 
-## The Frontend Is a Microservice Too
-
-We spent the last decade decoupling the backend. Services are independently deployable, independently scalable, independently evolvable. Teams own their services end-to-end.
-
-But look at the frontend. Most organizations still ship a monolithic web or mobile application. Every team's UI changes go into the same build pipeline, the same release train, the same app store submission. The frontend is where independence goes to die.
-
-Micro-frontends fix this, but most implementations add enormous complexity, webpack Module Federation with shared dependencies, runtime container orchestration, CSS isolation battles. The complexity often exceeds what teams are willing to accept.
-
-There is a simpler approach that mirrors the backend's architecture. In our banking demo, the mobile shell application does not know what UI components exist at compile time. At runtime, it fetches a manifest from a registry, a JSON file that lists available micro-apps, their versions, and their CDN locations. The shell loads each micro-app as a Web Component, a standard browser API, and renders it into the page.
-
-```
-Shell fetches manifest → discovers "statement-analysis" v2.0.0
-Shell injects <script src="cdn/statement-analysis/2.0.0/main.js">
-Browser registers <mf-statement-analysis> custom element
-Shell creates element and appends to DOM
-Micro-app renders independently, calls its own backend services
-```
-
-Want to update the analysis UI? Build the new version, publish it to the CDN, update the manifest. Users see the new version on their next page load. No app store review. No coordinated release with other teams. No risk to the statement-details or recommendations micro-apps.
-
-This is the backend decoupling philosophy applied to the frontend. The manifest is the frontend's equivalent of service discovery. The CDN is the frontend's equivalent of the container registry. The Web Component is the frontend's equivalent of the API contract, a custom HTML element with attributes, encapsulated from everything around it.
-
-When you combine this with the backend architecture, event-sourced entities, platform-managed service discovery, independently deployable services, the entire system, from database event to UI pixel, is independently deployable. A team can change how a transaction is categorized (backend logic), how the analysis is displayed (micro-app UI), and how the data flows between them (service communication), without coordinating with any other team, without touching any other service, without risking any other feature.
-
-This is what "microservices" was supposed to mean. Not just backend decomposition, but *system-wide independence*.
-
 ## What We Will Build
 
-This series builds a banking platform that embodies these principles. The system comprises four backend microservices, a micro-frontend shell with independently deployable UI components, and platform services that tie them together:
+This series builds a banking platform that embodies these principles. The system comprises four backend microservices and platform services that tie them together. Here is what the deployed system looks like on the Akka Platform:
+
+![Akka Platform — Deployed services for the microapp-demo project](images/akka-platform-services-dashboard.png)
 
 ```
-                    Mobile Shell (Ionic Angular)
-                    ├── <mf-statement-details>
-                    ├── <mf-statement-analysis>
-                    └── <mf-recommendations>
-                           │
-            ┌──────────────┼──────────────────────┐
-            │              │                      │
-            v              v                      v
     statement-service  analysis-service  recommendation-service
     [EventSourced]     [Heuristic + Agent]  [Rules Engine]
     [CQRS Views]       [HttpClientProvider]  [HttpClientProvider]
@@ -218,8 +183,6 @@ This series builds a banking platform that embodies these principles. The system
 
 **The product-service** manages a financial product catalog with event sourcing and tombstone deletes, demonstrating how to handle entity deletion in an append-only event model.
 
-**The mobile shell** dynamically loads micro-app web components from a CDN based on a runtime manifest, enabling independent UI deployment with version switching.
-
 The complete source code is available on [GitHub](https://github.com/PradeepLoganathan/microsvs-microapp).
 
 ## The Series
@@ -230,11 +193,9 @@ The complete source code is available on [GitHub](https://github.com/PradeepLoga
 
 **[Part 3: Deployment, Resilience & Multi-Region]({{< ref "/blog/akka/deployment-resilience-multi-region" >}})**, We take the system to production. The deployment workflow, service discovery in action, entity distribution across replicas, failure recovery through event replay, and the path to multi-region replication where event-sourced entities become globally distributed.
 
-**Part 4: Micro-Frontends, Independently Deployable from Database to Pixel**, We complete the independence story. Manifest-driven micro-app discovery, Web Components as the integration contract, CDN-hosted versioned bundles, live version switching, and the full-stack architecture where every layer, from event journal to UI component, is independently deployable.
-
 ---
 
-The architectural choices compound. Event sourcing enables fearless deployment and multi-region replication. The actor model enables entity-level distribution and failure isolation. Platform-managed discovery eliminates configuration drift. AI-as-peer enables graceful adoption without architectural upheaval. Micro-frontends extend independence to the UI.
+The architectural choices compound. Event sourcing enables fearless deployment and multi-region replication. The actor model enables entity-level distribution and failure isolation. Platform-managed discovery eliminates configuration drift. AI-as-peer enables graceful adoption without architectural upheaval.
 
 Individually, each of these is a useful technique. Together, they form a coherent philosophy: **build systems that are honest about how distribution works, that preserve history instead of destroying it, and that achieve independence at every layer of the stack.**
 

@@ -26,7 +26,10 @@ cover:
   caption: "Platform-managed service discovery and AI-powered analysis with Akka SDK"
   relative: true
 series: ["Building Resilient Microservices with Akka"]
+weight: 3
 ---
+
+{{< series-toc >}}
 
 In [Part 1]({{< ref "/blog/akka/event-sourcing-cqrs-with-akka" >}}), we built event-sourced entities with CQRS views, the foundational data layer of our banking demo. But microservices do not exist in isolation. The real value of a decomposed architecture comes from services collaborating: the analysis-service needs transaction data from the statement-service, and the recommendation-service needs analysis results to suggest financial products.
 
@@ -520,7 +523,5 @@ Every arrow is a platform-managed HTTP call using service names. No hardcoded UR
 We now have four services that communicate through platform-managed HTTP, with business logic isolated as pure functions and AI integrated as a peer component. The question that remains: does this hold up in production?
 
 In [Part 3]({{< ref "/blog/akka/deployment-resilience-multi-region" >}}), we deploy to the Akka Platform and discover that the `httpClientProvider.httpClientFor("statement-service")` pattern works identically in production, zero configuration changes. We will examine how the runtime distributes entities across replicas, how failure recovery works through event replay, and how the same event-sourced entities we built in Part 1 become the foundation for multi-region replication.
-
-In [Part 4]({{< ref "/blog/akka/micro-frontends-independently-deployable" >}}), we complete the independence story by building micro-frontends, manifest-driven, CDN-hosted Web Components that extend the same decoupling philosophy to the UI layer. From event journal to browser pixel, every component becomes independently deployable.
 
 The [complete source code](https://github.com/PradeepLoganathan/microsvs-microapp) is available on GitHub.

@@ -26,8 +26,9 @@ cover:
   alt: "Micro-frontends with independently deployable UI components"
   caption: "Independently deployable from database to pixel — micro-frontends that mirror the backend's decoupling philosophy"
   relative: true
-series: ["Building Resilient Microservices with Akka"]
 ---
+
+{{< series-toc >}}
 
 In [Part 1]({{< ref "/blog/akka/event-sourcing-cqrs-with-akka" >}}), we built event-sourced entities that capture every state change as an immutable fact. In [Part 2]({{< ref "/blog/akka/cross-service-communication-agentic-ai" >}}), we wired services together with platform-managed discovery, no URLs, no configuration. In [Part 3]({{< ref "/blog/akka/deployment-resilience-multi-region" >}}), we deployed to production and explored multi-region replication.
 

@@ -26,7 +26,10 @@ cover:
   caption: "From local development to globally distributed, resilient microservices with Akka"
   relative: true
 series: ["Building Resilient Microservices with Akka"]
+weight: 4
 ---
+
+{{< series-toc >}}
 
 In [Part 1]({{< ref "/blog/akka/event-sourcing-cqrs-with-akka" >}}), we built event-sourced entities with CQRS views. In [Part 2]({{< ref "/blog/akka/cross-service-communication-agentic-ai" >}}), we wired services together with `HttpClientProvider` and added AI-powered analysis. Everything worked locally with `mvn compile exec:java`.
 
@@ -72,6 +75,10 @@ recommendation-service   Ready    3
 
 Each service runs with 3 replicas by default. The Akka runtime distributes entity instances across replicas, entity `stmt-2025-12` might live on replica 1, while `stmt-2026-01` lives on replica 2. The `ComponentClient` and `HttpClientProvider` route requests to the correct replica transparently.
 
+The Akka Platform console provides a visual overview of the deployed services, their status, replica count, and region:
+
+![Akka Platform — Project services dashboard showing all services running with 3 replicas in gcp-us-east1](images/akka-platform-services-dashboard.png)
+
 ### Exposing Services
 
 By default, deployed services are only accessible to other services in the same project. To expose a service to external callers:
@@ -103,6 +110,10 @@ curl -X POST https://<product-host>/products/seed
 These endpoints are idempotent by design (recall the `if (currentState() != null) return effects().reply(done())` pattern from Part 1). You can call them multiple times safely, the second call finds existing entities and returns success without emitting duplicate events.
 
 ## Service Discovery in Action
+
+The Akka Platform console shows the project structure — each service and its components (entities, views, endpoints) are visible at a glance:
+
+![Akka Platform — Project tree showing services and their components](images/akka-platform-project-tree.png)
 
 The most satisfying moment in deployment is when cross-service communication works without any configuration changes.
 
@@ -330,12 +341,8 @@ Akka Platform (GCP us-east1)
 
 Four services, twelve replicas, zero hardcoded URLs, immutable event journals, derived read models, platform-managed service discovery, and a path to multi-region replication that requires no application code changes.
 
-## What's Next
+## Wrapping Up
 
-The backend is now deployed, resilient, and ready for global distribution. But the independence story is incomplete, the frontend still needs the same treatment.
+Four services, event-sourced from the ground up, communicating through platform-managed discovery, deployed to production with entity distribution and failure recovery, and a clear path to multi-region replication. The architectural choices compound: immutability enables fearless deployment, the actor model enables entity-level distribution, and platform-managed infrastructure eliminates configuration drift.
 
-In [Part 4]({{< ref "/blog/akka/micro-frontends-independently-deployable" >}}), we build micro-frontends that mirror the backend's decoupling philosophy. A manifest registry serves as the frontend's service discovery. A CDN hosts versioned bundles like a frontend container registry. Web Components provide a framework-agnostic integration contract. Version switching happens by editing a JSON file, no rebuild, no app store review, no coordinated release.
-
-From event journal to browser pixel, every layer becomes independently deployable.
-
-The [complete source code](https://github.com/PradeepLoganathan/microsvs-microapp) is available on GitHub, including all four backend services, the mobile shell, micro-apps, platform services, tests, and deployment scripts.
+The [complete source code](https://github.com/PradeepLoganathan/microsvs-microapp) is available on GitHub, including all four backend services, platform services, tests, and deployment scripts.

@@ -5,20 +5,26 @@
   {{ $series = index . 0 }}
 {{ end }}
 {{ if $series }}
-  {{/* Collect all pages in this series, exclude drafts, sort by weight */}}
-  {{ $pages := where $page.Site.RegularPages "Params.series" "intersect" (slice $series) }}
-  {{ $pages = where $pages "Draft" false }}
-  {{ $pages = sort $pages "Weight" "asc" }}
+  {{/* Collect all pages in this series, sort by weight */}}
+  {{ $matched := slice }}
+  {{ range $p := site.Pages }}
+    {{ with $p.Params.series }}
+      {{ if in . $series }}
+        {{ $matched = $matched | append $p }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  {{ $matched = sort $matched "Weight" "asc" }}
 
   <nav class="series-toc" aria-label="Series navigation" style="border:1px solid var(--secondary, #ddd); padding:0.75rem 1rem; border-radius:8px; background:var(--code-bg, #fafafa); margin:0.5rem 0 1rem 0;">
     <div class="series-title" style="font-weight:700; margin-bottom:0.5rem;">Series: {{ $series }}</div>
     <ol class="series-list" style="margin:0; padding-left:1.25rem;">
-      {{ range $i, $p := $pages }}
+      {{ range $matched }}
         <li style="margin:0.15rem 0;">
-          {{ if eq $p.RelPermalink $page.RelPermalink }}
-            <span style="font-weight:700;">{{ $p.Title }}</span>
+          {{ if eq .RelPermalink $page.RelPermalink }}
+            <span style="font-weight:700;">{{ .Title }}</span>
           {{ else }}
-            <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
           {{ end }}
         </li>
       {{ end }}

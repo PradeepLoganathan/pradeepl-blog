@@ -26,7 +26,10 @@ cover:
   caption: "Building immutable, event-sourced microservices with Akka SDK"
   relative: true
 series: ["Building Resilient Microservices with Akka"]
+weight: 2
 ---
+
+{{< series-toc >}}
 
 In the [introduction to this series]({{< ref "/blog/akka/beyond-crud-event-native-microservices" >}}), we argued that most microservice architectures carry a fundamental error: they treat mutable database rows as the source of truth, destroying history with every UPDATE statement. We proposed a correction, event sourcing, where state is a derived value computed from an immutable log of facts.
 
@@ -514,8 +517,6 @@ The patterns in this post, event sourcing, CQRS, sealed events, tombstone delete
 **Cross-service communication without shared state**, Because each entity owns its event stream and state is never shared through a database, services can communicate through well-defined APIs without hidden coupling. In [Part 2]({{< ref "/blog/akka/cross-service-communication-agentic-ai" >}}), the analysis-service will call the statement-service using `HttpClientProvider`, platform-managed service discovery by name, no URLs, no configuration. The same event-driven architecture also enables an LLM-powered Akka Agent that uses function tools to orchestrate services, demonstrating AI as a peer component rather than a bolt-on layer.
 
 **Fearless deployment and multi-region replication**, Because state is derived from events through a pure fold, deploying a new version of a service does not require data migration. The new code replays the same events and builds its own state. This same property enables multi-region replication: events replicated to another region are applied by the same fold to produce consistent state. In [Part 3]({{< ref "/blog/akka/deployment-resilience-multi-region" >}}), we will deploy to the Akka Platform and explore how entity distribution, failure recovery, and global replication all rest on the event journal we built here.
-
-**Frontend independence**, Because the backend services are truly independent, no shared database, no coordinated releases, the frontend can be decomposed to match. In [Part 4]({{< ref "/blog/akka/micro-frontends-independently-deployable" >}}), we build micro-frontends as Web Components loaded from a manifest, completing the independence story from event journal to UI pixel.
 
 The architectural choices compound. The immutability established here is not a local optimization, it is the property that makes distribution, replication, and independent deployment viable at every layer of the stack.
 
