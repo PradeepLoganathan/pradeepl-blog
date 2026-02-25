@@ -1,5 +1,5 @@
 ---
-title: "Building Resilient Microservices with Akka — Part 4: Micro-Frontends — Independently Deployable from Database to Pixel"
+title: "Micro-Frontends — Independently Deployable from Database to Pixel"
 lastmod: 2026-02-19T10:00:00+10:00
 date: 2026-02-19T10:00:00+10:00
 draft: true
@@ -28,7 +28,6 @@ cover:
   relative: true
 ---
 
-{{< series-toc >}}
 
 In [Part 1]({{< ref "/blog/akka/event-sourcing-cqrs-with-akka" >}}), we built event-sourced entities that capture every state change as an immutable fact. In [Part 2]({{< ref "/blog/akka/cross-service-communication-agentic-ai" >}}), we wired services together with platform-managed discovery, no URLs, no configuration. In [Part 3]({{< ref "/blog/akka/deployment-resilience-multi-region" >}}), we deployed to production and explored multi-region replication.
 

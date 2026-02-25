@@ -24,8 +24,6 @@ cover:
     caption: "Knative Fundamentals"
     relative: true
 comments: true
-images:
- 
 
 ---
 

@@ -7,13 +7,11 @@ comments: true
 toc: true
 showToc: true
 TocOpen: false
-categories: 
+categories:
   - "azure"
-tags: 
+tags:
   - Azure
   - Eventdriven
-categories: 
-  - "azure"
 summary: "Azure Event Grid is an eventing back plane that enables event-driven and reactive programming. In this blog post series we will understand Azure Event Grid and look at developing an event driven application using Azure Event Grid as the backplane"
 # description: "Azure Event Grid is an eventing back plane that enables event-driven and reactive programming. In this blog post series we will understand Azure Event Grid and look at developing an event driven application using Azure Event Grid as the backplane"
 cover:

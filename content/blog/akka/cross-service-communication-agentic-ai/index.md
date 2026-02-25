@@ -1,5 +1,5 @@
 ---
-title: "Building Resilient Microservices with Akka — Part 2: Cross-Service Communication & Agentic AI"
+title: "Building Resilient Microservices with Akka — Part 3: Cross-Service Communication & Agentic AI"
 lastmod: 2026-02-18T16:00:00+10:00
 date: 2026-02-18T16:00:00+10:00
 draft: true
@@ -26,12 +26,12 @@ cover:
   caption: "Platform-managed service discovery and AI-powered analysis with Akka SDK"
   relative: true
 series: ["Building Resilient Microservices with Akka"]
-weight: 3
+weight: 4
 ---
 
 {{< series-toc >}}
 
-In [Part 1]({{< ref "/blog/akka/event-sourcing-cqrs-with-akka" >}}), we built event-sourced entities with CQRS views, the foundational data layer of our banking demo. But microservices do not exist in isolation. The real value of a decomposed architecture comes from services collaborating: the analysis-service needs transaction data from the statement-service, and the recommendation-service needs analysis results to suggest financial products.
+In [Part 1]({{< ref "/blog/akka/event-sourcing-cqrs-with-akka" >}}), we built event-sourced entities — the foundational data layer of our banking demo. In [Part 2]({{< ref "/blog/akka/views-cqrs-read-write-optimization" >}}), we separated reads from writes with CQRS views, building denormalized projections that serve queries independently of the write path. But microservices do not exist in isolation. The real value of a decomposed architecture comes from services collaborating: the analysis-service needs transaction data from the statement-service, and the recommendation-service needs analysis results to suggest financial products.
 
 This is where distributed systems get interesting, and where many architectures stumble. Hardcoded URLs break in production. Service meshes add operational complexity. Message brokers introduce eventual consistency that requires careful design.
 
@@ -272,6 +272,8 @@ The critical proof point: both modes produce the same output contract. The recom
 - **Fallback is trivial**, Switch from agent mode to heuristic mode via configuration. The rest of the system is unaffected.
 - **Adoption is incremental**, Start with deterministic logic. Add the agent when you are ready. Swap back if the LLM is unreliable. No architectural changes.
 
+Because the agent is an Akka component, it gets the same resilience guarantees as any other component. If the LLM provider is down, the platform's circuit breaker opens and the endpoint can fall back to heuristic mode. If the agent throws an exception, the entity's state is unaffected — the failure is isolated. The agent benefits from the same supervision, logging, and lifecycle management as entities and views.
+
 This is what "AI as peer" means in practice: the LLM participates in the same service mesh, uses the same communication patterns, and produces the same contracts as every other component. It is a pluggable strategy, not a foundational dependency.
 
 ## The Recommendation Service: Rules Engine
@@ -461,34 +463,9 @@ The analysis-service stores results in a `ConcurrentHashMap` rather than an even
 
 If the analysis logic changes, you want to regenerate results, not replay old events that would produce outdated insights. The in-memory cache is appropriate for a demo; in production, you might use a time-limited cache or a view projection, but the principle holds: store events for authoritative state, use caches for derived computations.
 
-### Testability as an Architectural Consequence
+### Testability as Pure Functions
 
-The refactoring that moved HTTP fetching into endpoints and made `HeuristicCategorizer` and `RecommendationEngine` into pure functions over data was not a testing convenience. It was an architectural decision with testing as a natural consequence.
-
-The categorizer takes a JSON string and returns an `AnalysisSummary`. The engine takes a JSON string and returns a list of `Recommendation`. No HTTP clients to mock, no service dependencies to stub, no database connections to configure. Unit tests pass JSON literals directly:
-
-```java
-@Test
-void shouldRecommendHealthInsuranceForHighHealthSpend() {
-    String analysisJson = """
-        {
-          "totalSpend": 1000.0,
-          "categories": [
-            {"category": "Health", "total": 250.0, "percentage": 25.0}
-          ],
-          "insights": []
-        }
-        """;
-
-    List<Recommendation> recs = RecommendationEngine
-        .generateRecommendations("acc-1001", "stmt-2025-12", analysisJson);
-
-    assertTrue(recs.stream()
-        .anyMatch(r -> "health_insurance_basic".equals(r.productId())));
-}
-```
-
-This testability is not unique to this codebase, it is a general consequence of the event-sourced, pure-function architecture. When state transitions are pure folds over events (Part 1), they are testable without infrastructure. When business logic is a pure function over data (this post), it is testable without mocking. When I/O is pushed to the edges (endpoints), the core logic is deterministic. The architecture *produces* testability. You do not need to engineer it separately.
+The testability of pure functions over data, discussed in [Part 2]({{< ref "/blog/akka/views-cqrs-read-write-optimization" >}}), applies here as well. The categorizer and engine take JSON strings and return typed results — no HTTP mocking, no service stubs, no database fixtures. `RecommendationEngine.generateRecommendations(accountId, statementId, analysisJson)` is literally "pass a string, get a list." The architecture pushes I/O to the edges (endpoints) and keeps the core logic deterministic.
 
 ## The Service Communication Graph
 
@@ -522,6 +499,8 @@ Every arrow is a platform-managed HTTP call using service names. No hardcoded UR
 
 We now have four services that communicate through platform-managed HTTP, with business logic isolated as pure functions and AI integrated as a peer component. The question that remains: does this hold up in production?
 
-In [Part 3]({{< ref "/blog/akka/deployment-resilience-multi-region" >}}), we deploy to the Akka Platform and discover that the `httpClientProvider.httpClientFor("statement-service")` pattern works identically in production, zero configuration changes. We will examine how the runtime distributes entities across replicas, how failure recovery works through event replay, and how the same event-sourced entities we built in Part 1 become the foundation for multi-region replication.
+In [Part 4]({{< ref "/blog/akka/deployment-resilience-multi-region" >}}), we deploy to the Akka Platform and discover that the `httpClientProvider.httpClientFor("statement-service")` pattern works identically in production — zero configuration changes. Same code, same service names, one-command deployment.
+
+In [Part 5]({{< ref "/blog/akka/platform-internals-multi-region-resilience" >}}), we go beneath the deployment surface to explore how the platform distributes entities across replicas, recovers from failures through event replay, and replicates across regions.
 
 The [complete source code](https://github.com/PradeepLoganathan/microsvs-microapp) is available on GitHub.
