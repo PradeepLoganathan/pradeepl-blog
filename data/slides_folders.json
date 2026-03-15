@@ -6,14 +6,8 @@
     "icon": "/slides/APRA-An-introduction/images/APRA.png"
   },
   {
-    "folder": "Agentic-AI-Actor-Model-one",
-    "title": "Agentic AI",
-    "description": "The Actor Model Imperative",
-    "icon": "/slides/Agentic-AI-Actor-Model-one/images/Agentic-AI-Market.png"
-  },
-  {
     "folder": "Agentic-AI-Actor-Model",
-    "title": "Agentic AI",
+    "title": "Agentic AI - The Actor Model Imperative",
     "description": "The Actor Model Imperative",
     "icon": "/slides/Agentic-AI-Actor-Model/images/Agentic-AI-Market.png"
   },
@@ -31,20 +25,20 @@
   },
   {
     "folder": "Snyk-developer-security",
-    "title": "Snyk developer security",
+    "title": "Snyk Developer Security",
     "description": "Presentation on Snyk developer security",
     "icon": "/slides/Snyk-developer-security/images/Slide1.png"
   },
   {
     "folder": "datamesh-cns-nz",
-    "title": "datamesh cns nz",
-    "description": "Presentation on datamesh cns nz",
+    "title": "Data Mesh",
+    "description": "Presentation on Data Mesh",
     "icon": "/slides/datamesh-cns-nz/images/Slide1.png"
   },
   {
     "folder": "gitops-techgig-seminar",
-    "title": "gitops techgig seminar",
-    "description": "Presentation on gitops techgig seminar",
+    "title": "GitOps",
+    "description": "Presentation on GitOps",
     "icon": "/slides/gitops-techgig-seminar/images/Slide1.png"
   },
   {
