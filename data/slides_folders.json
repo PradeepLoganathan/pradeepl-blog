@@ -1,44 +1,56 @@
 [
   {
     "folder": "APRA-An-introduction",
-    "title": "APRA An Introduction",
-    "description": "An overview of APRA and its regulatory framework.",
+    "title": "Introduction to APRA and its Regulatory Process",
+    "description": "Presentation on Introduction to APRA and its Regulatory Process",
     "icon": "/slides/APRA-An-introduction/images/APRA.png"
   },
   {
+    "folder": "Agentic-AI-Actor-Model-one",
+    "title": "Agentic AI",
+    "description": "The Actor Model Imperative",
+    "icon": "/slides/Agentic-AI-Actor-Model-one/images/Agentic-AI-Market.png"
+  },
+  {
+    "folder": "Agentic-AI-Actor-Model",
+    "title": "Agentic AI",
+    "description": "The Actor Model Imperative",
+    "icon": "/slides/Agentic-AI-Actor-Model/images/Agentic-AI-Market.png"
+  },
+  {
+    "folder": "Agentic-AI-Skills",
+    "title": "Skills in Agentic AI",
+    "description": "Portable capability packages for agents",
+    "icon": "/slides/Agentic-AI-Skills/images/cover.svg"
+  },
+  {
     "folder": "Model-Context-Protocol-MCP",
-    "title": "Model Context Protocol MCP",
-    "description": "Exploring the Model Context Protocol in detail.",
-    "icon": "/slides/Model-Context-Protocol-MCP/images/mcp-simplified.png"
+    "title": "Model Context Protocol (MCP)",
+    "description": "Presentation on Model Context Protocol (MCP)",
+    "icon": "/slides/Model-Context-Protocol-MCP/images/MCP-interaction.png"
   },
   {
     "folder": "Snyk-developer-security",
-    "title": "Snyk Developer Security",
-    "description": "Best practices and tools for developer security with Snyk.",
+    "title": "Snyk developer security",
+    "description": "Presentation on Snyk developer security",
     "icon": "/slides/Snyk-developer-security/images/Slide1.png"
   },
   {
     "folder": "datamesh-cns-nz",
-    "title": "Datamesh CNS NZ",
-    "description": "Data mesh concepts and implementations in CNS New Zealand.",
+    "title": "datamesh cns nz",
+    "description": "Presentation on datamesh cns nz",
     "icon": "/slides/datamesh-cns-nz/images/Slide1.png"
   },
   {
     "folder": "gitops-techgig-seminar",
-    "title": "GitOps Techgig Seminar",
-    "description": "Seminar on GitOps practices and tools.",
+    "title": "gitops techgig seminar",
+    "description": "Presentation on gitops techgig seminar",
     "icon": "/slides/gitops-techgig-seminar/images/Slide1.png"
   },
   {
     "folder": "policy-as-code",
-    "title": "Policy as Code",
-    "description": "Introduction to Policy as Code methodology.",
+    "title": "Policy as Code: Transforming Governance in the Cloud Era",
+    "description": "A deep dive into Policy as Code (PaC) for cloud governance.",
     "icon": "/slides/policy-as-code/images/what-is-pac.jpg"
-  },
-    {
-    "folder": "Agentic-AI-Actor-Model",
-    "title": "Agentic AI & Actor Model",
-    "description": "Exploring the Agentic AI and Actor Model in software development.",
-    "icon": "/slides/Agentic-AI-Actor-Model/images/agentic-ai-arch.png"    
   }
 ]
