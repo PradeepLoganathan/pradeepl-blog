@@ -179,6 +179,59 @@ pre code {
   line-height: inherit;
 }
 
+/* Override highlight.js syntax colours for dark code blocks */
+pre .hljs-attr,
+pre .hljs-attribute {
+  color: #e2e8f0;           /* keys / attributes — near-white */
+}
+
+pre .hljs-string,
+pre .hljs-addition {
+  color: #a5d6a7;           /* strings — soft green */
+}
+
+pre .hljs-keyword,
+pre .hljs-selector-tag {
+  color: #ce93d8;           /* keywords — soft purple */
+}
+
+pre .hljs-number,
+pre .hljs-literal {
+  color: #f0c674;           /* numbers/booleans — warm yellow */
+}
+
+pre .hljs-comment,
+pre .hljs-quote {
+  color: #6b7280;           /* comments — muted grey */
+  font-style: italic;
+}
+
+pre .hljs-title,
+pre .hljs-section,
+pre .hljs-name {
+  color: #93c5fd;           /* headings / names — light blue */
+}
+
+pre .hljs-type,
+pre .hljs-built_in {
+  color: #fca5a5;           /* types — soft red */
+}
+
+pre .hljs-variable,
+pre .hljs-template-variable,
+pre .hljs-symbol {
+  color: #fbbf24;           /* variables — amber */
+}
+
+pre .hljs-bullet,
+pre .hljs-link {
+  color: #67e8f9;           /* list bullets / links — cyan */
+}
+
+pre .hljs-meta {
+  color: #9ca3af;           /* meta / directives — grey */
+}
+
 /* ============================================================
    Tables
    ============================================================ */
