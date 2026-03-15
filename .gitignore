@@ -16,3 +16,8 @@ resources/**
 
 # Claude Code project memory
 CLAUDE.md
+
+# excalidraw files
+*.excalidraw
+
+plans/

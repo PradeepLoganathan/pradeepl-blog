@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D7377"/>
+      <stop offset="20%" style="stop-color:#14A085"/>
+      <stop offset="40%" style="stop-color:#00B4D8"/>
+      <stop offset="60%" style="stop-color:#0077BE"/>
+      <stop offset="80%" style="stop-color:#5A189A"/>
+      <stop offset="100%" style="stop-color:#7209B7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <text x="640" y="320" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="64" font-weight="800" fill="white">Skills in Agentic AI</text>
+  <text x="640" y="400" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="32" font-weight="400" fill="rgba(255,255,255,0.85)">Portable capability packages for agents</text>
+</svg>
