@@ -1,0 +1,84 @@
+<div class="book-signup-box">
+    <div class="book-signup-content">
+        <h3>Get a Free Preview of Chapter 1</h3>
+        <p>Join 500+ engineers learning to build reliable AI. I'll send you <strong>"Chapter 1: The Agentic AI Illusion"</strong> immediately, plus weekly tips on Akka, agents, and trust engineering.</p>
+        
+        <!-- Buttondown Integration -->
+        <form 
+            action="https://buttondown.com/api/emails/embed-subscribe/pradeep" 
+            method="post" 
+            target="popupwindow" 
+            onsubmit="window.open('https://buttondown.com/pradeep', 'popupwindow')" 
+            class="book-signup-form"
+        >
+            <input type="email" name="email" id="bd-email" placeholder="Enter your email address" required aria-label="Email Address">
+            <button type="submit" class="signup-button">Download Chapter 1 (PDF)</button>
+        </form>
+        <p class="signup-privacy">No spam. One-click unsubscribe. Reliable engineering only.</p>
+    </div>
+</div>
+
+<style>
+.book-signup-box {
+    background: var(--code-bg);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.book-signup-content h3 {
+    margin-top: 0;
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.book-signup-content p {
+    margin-bottom: 1.5rem;
+}
+
+.book-signup-form {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.book-signup-form input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid var(--tertiary);
+    border-radius: 6px;
+    background: var(--theme);
+    color: var(--content);
+}
+
+.signup-button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+.signup-button:hover {
+    opacity: 0.9;
+}
+
+.signup-privacy {
+    font-size: 0.8rem !important;
+    opacity: 0.7;
+    margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+    .book-signup-form {
+        flex-direction: column;
+    }
+}
+</style>

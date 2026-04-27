@@ -1,8 +1,9 @@
 ---
 title: "Serverless On Kubernetes With Knative"
-weight: 1
+weight: 2
 isbn: "9781763612907"
 release_date: "2025-02-28"
+preview_count: 39
 tags:
   - "Serverless"
   - "Kubernetes"

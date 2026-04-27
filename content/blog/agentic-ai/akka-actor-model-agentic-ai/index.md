@@ -1,6 +1,6 @@
 ---
 title: "The Akka Actor Model: A Foundation for Concurrent AI Agents"
-lastmod: 2025-09-16T16:31:35+10:00
+lastmod: 2026-04-05T10:00:00+10:00
 date: 2025-09-16T16:31:35+10:00
 draft: false
 Author: Pradeep Loganathan
@@ -15,7 +15,6 @@ categories:
   - agentic-ai
   - akka
   - architecture
-#slug: kubernetes/introduction-to-open-policy-agent-opa/
 description: "Why Akka’s actor model is a natural runtime for scalable, stateful AI agents—and how to wire one up with supervision, backpressure, and tool use."
 summary: "Use Akka’s actor model to run thousands of concurrent, stateful AI agents with isolation, supervision, and backpressure—plus a minimal Java example."
 ShowToc: true
@@ -26,12 +25,14 @@ cover:
     image: "images/cover.jpg"
     alt: "Akka actor model for agentic AI"
     caption: "Actors, messages, and supervision powering agentic AI"
-    relative: true # To use relative path for cover image, used in hugo Page-bundles
+    relative: true
 mermaid: true
 series: ["Agentic AI"]
 ---
 
-In [Part 1]({{< ref "/blog/agentic-ai/agentic-ai-from-copilots-to-agents/" >}}), we explored the shift from simple, stateless copilots to more sophisticated, stateful agents. We demonstrated how an LLM can act as an autonomous planner, generating multi-step execution plans using the Observe-Think-Act pattern. We also explored how agents can integrate with real-world tools through the Model Context Protocol, transforming conceptual plans into actual actions. We defined an agent as an autonomous entity with a persistent internal state, a planning loop, and the ability to use external tools. This internal state encompassing memory, goals, and conversation history is what gives an agent its personality and purpose. Building one agent in isolation is simple. Building a system that can reliably manage thousands of them, each with its own unique state and long-running tasks, is a monumental challenge. This is where most conventional architectures begin to break down. So, how do we build a system that can reliably and concurrently manage not one, but thousands of these stateful, independent agents? 
+{{< figure src="/books/building-trustworthy-agentic-ai-systems/building-trustworthy-agentic-ai-systems-book-cover.png" link="/books/building-trustworthy-agentic-ai-systems/" target="_blank" caption="Coming May 2026: Building Trustworthy Agentic AI Systems. Pre-order now!" >}}
+
+In [Part 1]({{< ref "/blog/agentic-ai/agentic ai-from-copilots-to-agents/" >}}), we explored the shift from simple, stateless copilots to more sophisticated, stateful agents. We demonstrated how an LLM can act as an autonomous planner, generating multi-step execution plans using the Observe-Think-Act pattern. We also explored how agents can integrate with real-world tools through the Model Context Protocol, transforming conceptual plans into actual actions. We defined an agent as an autonomous entity with a persistent internal state, a planning loop, and the ability to use external tools. This internal state encompassing memory, goals, and conversation history is what gives an agent its personality and purpose. Building one agent in isolation is simple. Building a system that can reliably manage thousands of them, each with its own unique state and long-running tasks, is a monumental challenge. This is where most conventional architectures begin to break down. So, how do we build a system that can reliably and concurrently manage not one, but thousands of these stateful, independent agents? 
 
 The answer does not include locks or complex threading logic, but a powerful architectural pattern: the Actor Model.
 
