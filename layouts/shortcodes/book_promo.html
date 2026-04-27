@@ -1,0 +1,71 @@
+{{- $slug := .Get "book" -}}
+{{- $page := site.GetPage (printf "/books/%s" $slug) -}}
+{{- if not $page -}}
+    {{- errorf "book_promo: could not find /books/%s (called from %s)" $slug .Page.File.Path -}}
+{{- end -}}
+
+{{- $title := .Get "title" | default $page.Title -}}
+{{- $pitch := .Get "pitch" | default $page.Params.description -}}
+{{- $cover := .Get "cover" | default $page.Params.cover.image -}}
+{{- $bookLink := $page.RelPermalink -}}
+
+{{- $firstBuy := index ($page.Params.buy_links | default slice) 0 -}}
+{{- $ctaText := .Get "cta_text" | default (or (and $firstBuy $firstBuy.button_text) "Learn more") -}}
+{{- $ctaUrl := .Get "cta_url" | default (or (and $firstBuy $firstBuy.url) $bookLink) -}}
+
+<aside class="book-promo">
+    <a href="{{ $bookLink }}" class="book-promo-cover" aria-label="{{ $title }}">
+        <img src="{{ $cover }}" alt="{{ $title }} cover" loading="lazy">
+    </a>
+    <div class="book-promo-body">
+        <h4 class="book-promo-title"><a href="{{ $bookLink }}">{{ $title }}</a></h4>
+        {{- with $pitch }}<p class="book-promo-pitch">{{ . }}</p>{{ end }}
+        <a href="{{ $ctaUrl }}" class="book-promo-cta">{{ $ctaText }} &rarr;</a>
+    </div>
+</aside>
+
+<style>
+.book-promo {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    background: var(--code-bg);
+}
+.book-promo-cover { flex-shrink: 0; display: block; }
+.book-promo-cover img {
+    width: 90px;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.book-promo-body { flex: 1; min-width: 0; }
+.book-promo-title {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.05rem;
+    line-height: 1.3;
+}
+.book-promo-title a { color: var(--primary); text-decoration: none; }
+.book-promo-pitch {
+    margin: 0 0 0.6rem 0;
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+.book-promo-cta {
+    display: inline-block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+}
+.book-promo-cta:hover { text-decoration: underline; }
+@media (max-width: 500px) {
+    .book-promo { flex-direction: column; text-align: center; }
+    .book-promo-cover img { width: 110px; }
+}
+</style>
