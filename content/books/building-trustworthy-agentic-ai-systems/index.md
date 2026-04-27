@@ -13,6 +13,8 @@ tags:
 cover:
   image: "/books/building-trustworthy-agentic-ai-systems/building-trustworthy-agentic-ai-systems-book-cover.png"
   alt: "Cover of Building Trustworthy Agentic AI Systems"
+images:
+  - "/og-images/building-trustworthy-agentic-ai-systems.png"
 description: "The definitive guide to building reliable, predictable, and observable multi-agent systems using the Actor Model and Akka SDK."
 buy_links:
   - name: "Pre-order"
